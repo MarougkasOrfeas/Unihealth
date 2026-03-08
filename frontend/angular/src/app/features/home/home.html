@@ -1,0 +1,53 @@
+<a routerLink="/feedback" class="feedback-card">
+    <div class="feedback-icon-wrap">
+        <mat-icon class="feedback-icon">rate_review</mat-icon>
+    </div>
+
+    <div class="feedback-text">
+        <h3>UniHealth Survey</h3>
+        <p>Help us improve your experience by sharing your feedback.</p>
+    </div>
+
+    <mat-icon class="feedback-arrow">arrow_forward</mat-icon>
+</a>
+<div class="container mt-4">
+    <!-- Title and View All Link in the Same Row -->
+    <div class="title-container">
+        <h2 class="section-title">Latest News</h2>
+        <a routerLink="/all-news" class="view-all-link">
+            View All <span class="arrow">→</span>
+        </a>
+    </div>
+
+    <!-- Scrollable News Carousel with Arrows -->
+    <div class="news-carousel-wrapper">
+        <!-- Left Arrow -->
+        <button class="carousel-btn left" (click)="prevSlide()" *ngIf="!isAtStart">&#10094;</button>
+
+        <div class="news-carousel-container" #carousel>
+            <div class="news-grid">
+                <div *ngFor="let feed of rssFeeds$ | async" class="news-card" (click)="openLink(feed.link)">
+                    <img [src]="feed.imageUrl || 'assets/placeholder-image.png'" class="news-img" alt="Feed Image"/>
+                    <div class="news-body">
+                        <h5 class="news-title">{{ feed.title }}</h5>
+                        <p class="news-summary">{{ feed.summary }}</p>
+                        <p class="news-date">{{ feed.publishedDate | date: 'dd-MM-yyyy HH:mm' }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Arrow -->
+        <button class="carousel-btn right" (click)="nextSlide()" *ngIf="!isAtEnd">&#10095;</button>
+    </div>
+</div>
+
+<section class="trending-section">
+    <h3>
+        <mat-icon>trending_up</mat-icon>
+        TRENDING
+    </h3>
+
+    <div class="trending-container">
+    </div>
+</section>

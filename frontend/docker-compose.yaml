@@ -1,0 +1,21 @@
+services:
+  unihealth-frontend-dev:
+    image: node:24.11.1-alpine3.22
+    container_name: unihealth-frontend-dev
+    hostname: unihealth-frontend-dev
+    user: "${UID:-1000}:${GID:-1000}"
+    stdin_open: true
+    tty: true
+    working_dir: /app
+    ports:
+      - '4200:4200'
+    volumes:
+      - ./angular/:/app
+    networks:
+      - unihealth
+    command: sh -c "npm install && npm start"
+
+networks:
+  unihealth:
+    name: unihealth
+    external: true

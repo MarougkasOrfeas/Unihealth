@@ -1,0 +1,76 @@
+<div class="top-banner">
+    <div class="banner-left">
+        <a href="https://www.uniwa.gr/" target="_blank">
+            <img ngSrc="assets/uniwa-logo.png"
+                 class="header-logo"
+                 alt="UNIWA Logo" width="80" height="80">
+        </a>
+    </div>
+
+    <div class="banner-text">{{ 'header.top.banner.text' | translate }}
+    </div>
+</div>
+<mat-toolbar class="app-toolbar mat-elevation-z2" data-testid="app-toolbar">
+    <div class="toolbar-left">
+        <div class="brand-block">
+            <a mat-button class="page-logo" data-testid="nav-logo">
+                UNI<span class="health-text">HEALTH</span>
+            </a>
+            <div class="brand-subtitle">{{ 'header.subtitle' | translate }}</div>
+        </div>
+    </div>
+
+    <div class="toolbar-spacer"></div>
+
+    <div class="toolbar-right" data-testid="toolbar-icons">
+        <button mat-button [matMenuTriggerFor]="sectionsMenu" class="section-switcher">
+            Browse
+            <mat-icon>keyboard_arrow_down</mat-icon>
+        </button>
+
+        <mat-menu #sectionsMenu="matMenu">
+            <button mat-menu-item>
+                <mat-icon>home</mat-icon>
+                <span>Home</span>
+            </button>
+            <button mat-menu-item routerLink="/rss-feed">
+                <mat-icon>rss_feed</mat-icon>
+                <span>Health News</span>
+            </button>
+            <button mat-menu-item routerLink="/topics">
+                <mat-icon>category</mat-icon>
+                <span>Topics</span>
+            </button>
+            <button mat-menu-item routerLink="/advice">
+                <mat-icon>favorite</mat-icon>
+                <span>Advice & Tips</span>
+            </button>
+            <button mat-menu-item routerLink="/blood-tests">
+                <mat-icon>biotech</mat-icon>
+                <span>Blood Tests</span>
+            </button>
+        </mat-menu>
+
+        <button mat-icon-button matTooltip="Help" data-testid="btn-help">
+            <mat-icon>help_outline</mat-icon>
+        </button>
+
+        <button mat-icon-button matTooltip="Language" data-testid="btn-language">
+            <mat-icon>public</mat-icon>
+        </button>
+
+        <button mat-icon-button matTooltip="Settings" data-testid="btn-settings">
+            <mat-icon>settings</mat-icon>
+        </button>
+
+        <div class="user-pill">
+            <span class="letter-button">{{ calculateIconLetter() }}</span>
+            <span class="user-name">{{ username() }}</span>
+        </div>
+
+        <button mat-icon-button (click)="logout()" matTooltip="Logout" data-testid="btn-logout">
+            <mat-icon>logout</mat-icon>
+        </button>
+    </div>
+</mat-toolbar>
+

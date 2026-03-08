@@ -1,0 +1,83 @@
+:host {
+  display: block;
+  flex: 1;
+  min-height: 0;
+}
+
+.shell {
+  height: 100%;
+}
+
+mat-sidenav-container {
+  height: 100%;
+}
+
+.sidenav {
+  width: 270px;
+  border-right: 1px solid #e5e7eb;
+  background: #ffffff;
+}
+
+mat-sidenav-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: #f6f8fb;
+}
+
+mat-sidenav-content > mat-toolbar {
+  flex: 0 0 auto;
+}
+
+.content {
+  flex: 1;
+  min-height: 0;
+  padding: 16px 24px;
+  overflow: auto;
+}
+
+.nav-accordion {
+  padding: 8px;
+}
+
+.nav-accordion .mat-expansion-panel {
+  margin-bottom: 12px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.nav-accordion .mat-expansion-panel-header mat-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+}
+
+.mat-nav-list a.mat-list-item {
+  transition: background-color 0.15s ease;
+  border-radius: 6px;
+}
+
+.mat-nav-list a.mat-list-item:hover {
+  background-color: #f3f4f6 !important;
+}
+
+.nav-panel-admin mat-icon {
+  color: #6b7280;
+}
+
+.nav-panel-overview mat-icon {
+  color: #2F5DA8;
+}
+
+.nav-panel-health-information mat-icon {
+  color: #298140;
+}
+
+.nav-panel-wellness mat-icon {
+  color: #e16624;
+}
+
+.nav-panel-health-assistant mat-icon {
+  color: #7c3aed; // purple (assistant / AI feeling)
+}

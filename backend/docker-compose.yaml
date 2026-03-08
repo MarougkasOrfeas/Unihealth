@@ -1,0 +1,21 @@
+services:
+  unihealth-backend-dev:
+    image: maven:3.9.11-eclipse-temurin-25-alpine
+    container_name: unihealth-backend-dev
+    hostname: unihealth-backend-dev
+    user: "${UID:-1000}:${GID:-1000}"
+    environment:
+      - MAVEN_OPTS=-Dmaven.repo.local=/app/.m2/repository
+    stdin_open: true
+    tty: true
+    working_dir: /app
+    volumes:
+      - ./:/app
+    networks:
+      - unihealth
+    command: sh -c "mvn clean spring-boot:run"
+
+networks:
+  unihealth:
+    name: unihealth
+    external: true

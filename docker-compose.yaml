@@ -1,0 +1,431 @@
+services:
+  unihealth-db:
+    image: postgres:18.1-alpine3.22
+    container_name: unihealth-db
+    hostname: unihealth-db
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DATABASES=uniwa_c1,uniwa_c2,keycloak
+    configs:
+      - source: start_db
+        target: /usr/local/bin/entrypoint.sh
+        mode: 0755
+    volumes:
+      - unihealth-db:/var/lib/postgresql/data
+    networks:
+      - unihealth
+    entrypoint: /usr/local/bin/entrypoint.sh
+
+  unihealth-keycloak:
+    image: quay.io/keycloak/keycloak:26.0.7
+    container_name: unihealth-keycloak
+    hostname: unihealth-keycloak
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_HTTP_ENABLED=true
+      - KC_PROXY=edge
+      - KC_PROXY_HEADERS=xforwarded
+      - KC_HOSTNAME_STRICT=false
+      - KC_HTTP_RELATIVE_PATH=/keycloak
+      - KC_DB=postgres
+      - KC_DB_URL_HOST=unihealth-db
+      - KC_DB_URL_PORT=5432
+      - KC_DB_USERNAME=postgres
+      - KC_DB_PASSWORD=postgres
+      - KC_SPI_EVENTS_LISTENER_EMAIL_EXCLUDE_EVENTS=UPDATE_PASSWORD,UPDATE_TOTP,LOGIN_ERROR
+      - OTP_ENABLED=false
+    configs:
+      - source: keycloak_entrypoint
+        target: /opt/keycloak/bin/keycloak-entrypoint.sh
+        mode: 0755
+      - source: keycloak_configure
+        target: /opt/keycloak/bin/configure-keycloak.sh
+        mode: 0755
+      - source: theme_properties
+        target: /opt/keycloak/themes/unihealth/login/theme.properties
+      - source: theme_messages_en
+        target: /opt/keycloak/themes/unihealth/login/messages/messages_en.properties
+      - source: theme_messages_de
+        target: /opt/keycloak/themes/unihealth/login/messages/messages_de.properties
+    depends_on:
+      - unihealth-db
+    networks:
+      - unihealth
+    entrypoint: /opt/keycloak/bin/keycloak-entrypoint.sh
+    ports:
+      - '8081:8080'
+
+  unihealth-mail:
+    image: maildev/maildev:2.2.1
+    container_name: unihealth-mail
+    hostname: unihealth-mail
+    ports:
+      - '1080:1080'
+      - '1025:1025'
+    command: [ "maildev", "--ip", "0.0.0.0", "--web", "1080", "--smtp", "1025" ]
+    networks:
+      - unihealth
+
+volumes:
+  unihealth-db:
+
+networks:
+  unihealth:
+    name: unihealth
+
+configs:
+  start_db:
+    content: |
+      #!/bin/bash
+      set -e
+
+      # Function to handle shutdown signals
+      shutdown() {
+        echo "Shutting down PostgreSQL..."
+        kill -TERM "$$POSTGRES_PID" 2>/dev/null || true
+        wait "$$POSTGRES_PID"
+        exit 0
+      }
+
+      # Trap SIGTERM and SIGINT signals
+      trap shutdown SIGTERM SIGINT
+
+      # Start PostgreSQL in the background
+      docker-entrypoint.sh postgres &
+      POSTGRES_PID=$$!
+
+      # Wait for PostgreSQL to be ready
+      if [ -n "$$POSTGRES_DATABASES" ]; then
+        echo "Running database initialization for: $$POSTGRES_DATABASES"
+
+        until pg_isready -U "$$POSTGRES_USER" -h localhost; do
+          echo "Waiting for PostgreSQL to be ready..."
+          sleep 2
+        done
+
+        # Split comma-separated POSTGRES_DATABASES and create each database
+        IFS=',' read -ra DB_ARRAY <<< "$$POSTGRES_DATABASES"
+        for db_name in "$${DB_ARRAY[@]}"; do
+          # Trim whitespace
+          db_name=$$(echo "$$db_name" | xargs)
+
+          if psql -U "$$POSTGRES_USER" -lqt | cut -d \| -f 1 | grep -qw "$$db_name"; then
+            echo "Database '$$db_name' already exists."
+          else
+            psql -U "$$POSTGRES_USER" -c "CREATE DATABASE \"$$db_name\";"
+            echo "Database '$$db_name' created successfully."
+          fi
+        done
+
+        echo "Database initialization completed."
+      fi
+
+      # Wait for PostgreSQL process to finish
+      wait $$POSTGRES_PID
+  keycloak_entrypoint:
+    content: |
+      #!/bin/bash
+      set -euo pipefail
+
+      /opt/keycloak/bin/kc.sh start &
+      KC_PID=$$!
+
+      trap 'kill -TERM "$$KC_PID" 2>/dev/null || true' TERM INT
+
+      /opt/keycloak/bin/configure-keycloak.sh
+
+      wait "$$KC_PID"
+  keycloak_configure:
+    content: |
+      #!/bin/bash
+      set -euo pipefail
+
+      KCADM="/opt/keycloak/bin/kcadm.sh"
+      CONF="/tmp/kcadm.conf"
+      REALM="unihealth"
+      SERVER_URL="http://127.0.0.1:8080$${KC_HTTP_RELATIVE_PATH:-/keycloak}"
+      OTP_ENABLED=$${OTP_ENABLED:-true}
+      BROWSER_FLOW="browser with required otp"
+      if [ "$$OTP_ENABLED" != "true" ]; then
+        BROWSER_FLOW="browser without otp"
+      fi
+
+      echo "Waiting for Keycloak to be ready..."
+      until "$$KCADM" config credentials --server "$$SERVER_URL" --realm master \
+        --user "$$KEYCLOAK_ADMIN" --password "$$KEYCLOAK_ADMIN_PASSWORD" \
+        --client admin-cli --config "$$CONF"; do
+        sleep 5
+      done
+
+      if ! "$$KCADM" get "realms/$$REALM" --config "$$CONF" >/dev/null 2>&1; then
+        "$$KCADM" create realms -s realm="$$REALM" -s enabled=true -s sslRequired=none \
+          --config "$$CONF"
+      fi
+
+      "$$KCADM" update "realms/$$REALM" \
+        -s enabled=true \
+        -s sslRequired=none \
+        -s accessTokenLifespan=1800 \
+        -s clientSessionIdleTimeout=3600 \
+        -s clientSessionMaxLifespan=86400 \
+        -s refreshTokenMaxReuse=0 \
+        -s ssoSessionIdleTimeout=3600 \
+        -s ssoSessionMaxLifespan=86400 \
+        -s resetPasswordAllowed=true \
+        -s 'passwordPolicy=length(8) and upperCase(1) and lowerCase(1) and digits(1) and specialChars(1) and regexPattern(^\S+$)' \
+        -s bruteForceProtected=true \
+        -s permanentLockout=false \
+        -s maxFailureWaitSeconds=900 \
+        -s minimumQuickLoginWaitSeconds=60 \
+        -s waitIncrementSeconds=60 \
+        -s quickLoginCheckMilliSeconds=1000 \
+        -s maxDeltaTimeSeconds=43200 \
+        -s failureFactor=5 \
+        -s loginTheme=unihealth \
+        -s accountTheme=unihealth \
+        -s internationalizationEnabled=true \
+        -s 'supportedLocales=["el","en"]' \
+        -s defaultLocale=el \
+        -s actionTokenGeneratedByUserLifespan=86400 \
+        -s 'attributes."refresh.token.type"=jwt' \
+        -s 'smtpServer.host=unihealth-mail' \
+        -s 'smtpServer.port=1025' \
+        -s 'smtpServer.from=noreply@unihealth.gr' \
+        -s 'smtpServer.fromDisplayName=UniHealth' \
+        -s 'smtpServer.auth=false' \
+        -s 'smtpServer.ssl=false' \
+        -s 'smtpServer.starttls=false' \
+        -s otpPolicyType=totp \
+        -s otpPolicyAlgorithm=HmacSHA1 \
+        -s otpPolicyDigits=6 \
+        -s otpPolicyPeriod=30 \
+        -s otpPolicyLookAheadWindow=1 \
+        -s 'otpSupportedApplications=["totpAppGoogleName","totpAppMicrosoftAuthenticatorName"]' \
+        --config "$$CONF"
+
+      "$$KCADM" update events/config -r "$$REALM" \
+        -s 'eventsListeners=["jboss-logging","email"]' \
+        -s eventsEnabled=true \
+        -s 'enabledEventTypes=["LOGIN", "UPDATE_CREDENTIAL"]' \
+        --config "$$CONF"
+
+      CURRENT_PROFILE="$$("$$KCADM" get "realms/$$REALM/users/profile" --config "$$CONF")"
+      if ! echo "$$CURRENT_PROFILE" | grep -q '"name" : "tenant"'; then
+        echo "$$CURRENT_PROFILE" \
+          | sed 's/"attributes" *: *\[/"attributes" : [ { "name" : "tenant", "displayName" : "Tenant", "permissions" : { "view" : [ "admin", "user" ], "edit" : [ "admin" ] }, "multivalued" : false },/' \
+          | "$$KCADM" update "realms/$$REALM/users/profile" -r "$$REALM" -f - --config "$$CONF"
+      fi
+
+      ensure_required_action() {
+        local alias="$$1"
+        local enabled="$$2"
+        local default_action="$$3"
+        local priority="$$4"
+
+        if "$$KCADM" get "authentication/required-actions/$$alias" -r "$$REALM" --config "$$CONF" >/dev/null 2>&1; then
+          "$$KCADM" update "authentication/required-actions/$$alias" -r "$$REALM" -s enabled="$$enabled" \
+            -s defaultAction="$$default_action" -s priority="$$priority" --config "$$CONF"
+        else
+          "$$KCADM" create "authentication/required-actions" -r "$$REALM" \
+            -s alias="$$alias" -s providerId="$$alias" -s enabled="$$enabled" \
+            -s defaultAction="$$default_action" -s priority="$$priority" --config "$$CONF"
+        fi
+      }
+
+      ensure_required_action VERIFY_EMAIL true true 10
+      ensure_required_action UPDATE_PASSWORD true false 20
+      ensure_required_action CONFIGURE_TOTP $$OTP_ENABLED $$OTP_ENABLED 30
+
+      ensure_flow() {
+        local alias="$$1"
+        local description="$$2"
+        local top_level="$$3"
+        "$$KCADM" create authentication/flows -r "$$REALM" \
+          -s alias="$$alias" \
+          -s description="$$description" \
+          -s providerId=basic-flow \
+          -s topLevel="$$top_level" \
+          -s builtIn=false \
+          --config "$$CONF" || true
+      }
+
+      ensure_flow "browser with required otp" "Browser based authentication with required OTP" true
+      ensure_flow "browser without otp" "Browser based authentication without OTP" true
+
+      ensure_execution() {
+        local flow="$$1"
+        local provider="$$2"
+        local exists
+        local flow_path
+        flow_path="$$(printf '%s' "$$flow" | sed 's/ /%20/g')"
+        exists="$$( "$$KCADM" get authentication/flows/"$$flow_path"/executions -r "$$REALM" --config "$$CONF" \
+          | grep -F "\"providerId\" : \"$$provider\"" || true )"
+        if [ -z "$$exists" ]; then
+          "$$KCADM" create authentication/flows/"$$flow_path"/executions/execution -r "$$REALM" \
+            -s provider="$$provider" --config "$$CONF"
+        fi
+      }
+
+      ensure_subflow() {
+        local flow="$$1"
+        local alias="$$2"
+        local requirement="$$3"
+        local priority="$$4"
+        local exists
+        local flow_path
+        flow_path="$$(printf '%s' "$$flow" | sed 's/ /%20/g')"
+        exists="$$( "$$KCADM" get authentication/flows/"$$flow_path"/executions -r "$$REALM" --config "$$CONF" \
+          | grep -F "\"displayName\" : \"$$alias\"" || true )"
+        if [ -z "$$exists" ]; then
+          if ! "$$KCADM" create authentication/flows/"$$flow_path"/executions/flow -r "$$REALM" \
+            -s alias="$$alias" -s type=basic-flow -s provider=basic-flow -s requirement="$$requirement" -s priority="$$priority" --config "$$CONF"; then
+            echo "Failed to create subflow '$$alias' under '$$flow'. Retrying check..."
+          fi
+          exists="$$( "$$KCADM" get authentication/flows/"$$flow_path"/executions -r "$$REALM" --config "$$CONF" \
+            | grep -F "\"displayName\" : \"$$alias\"" || true )"
+          if [ -z "$$exists" ]; then
+            echo "Subflow '$$alias' still missing under '$$flow'."
+            exit 1
+          fi
+        fi
+      }
+
+      ensure_execution "browser with required otp" "auth-cookie"
+      ensure_execution "browser with required otp" "identity-provider-redirector"
+      ensure_subflow "browser with required otp" "browser with required otp forms" ALTERNATIVE 30
+      ensure_execution "browser with required otp forms" "auth-username-password-form"
+      ensure_execution "browser with required otp forms" "auth-otp-form"
+      ensure_execution "browser without otp" "auth-cookie"
+      ensure_execution "browser without otp" "identity-provider-redirector"
+      ensure_subflow "browser without otp" "browser without otp forms" ALTERNATIVE 30
+      ensure_execution "browser without otp forms" "auth-username-password-form"
+
+      get_execution_id() {
+        local flow="$$1"
+        local match="$$2"
+        local flow_path
+        flow_path="$$(printf '%s' "$$flow" | sed 's/ /%20/g')"
+        "$$KCADM" get authentication/flows/"$$flow_path"/executions -r "$$REALM" --config "$$CONF" \
+          | tr '\n' ' ' \
+          | sed 's/}, {/\n{/g' \
+          | while IFS= read -r line; do
+              if printf '%s\n' "$$line" | grep -F "\"providerId\" : \"$$match\"" >/dev/null 2>&1 \
+                || printf '%s\n' "$$line" | grep -F "\"displayName\" : \"$$match\"" >/dev/null 2>&1 \
+                || printf '%s\n' "$$line" | grep -F "\"flowAlias\" : \"$$match\"" >/dev/null 2>&1; then
+                printf '%s\n' "$$line" | sed -n 's/.*"id" : "\([^"]*\)".*/\1/p'
+                return 0
+              fi
+            done
+      }
+
+      update_exec() {
+        local flow="$$1"
+        local match="$$2"
+        local requirement="$$3"
+        local priority="$$4"
+        local exec_id
+        exec_id="$$(get_execution_id "$$flow" "$$match")"
+        if [ -n "$$exec_id" ]; then
+          local flow_path
+          flow_path="$$(printf '%s' "$$flow" | sed 's/ /%20/g')"
+          printf '{"id":"%s","requirement":"%s","priority":%s}\n' \
+            "$$exec_id" "$$requirement" "$$priority" \
+            | "$$KCADM" update authentication/flows/"$$flow_path"/executions -r "$$REALM" \
+              -f - --config "$$CONF"
+        fi
+      }
+
+      update_exec "browser with required otp" "auth-cookie" ALTERNATIVE 10
+      update_exec "browser with required otp" "identity-provider-redirector" ALTERNATIVE 20
+      update_exec "browser with required otp" "browser with required otp forms" ALTERNATIVE 30
+      update_exec "browser with required otp forms" "auth-username-password-form" REQUIRED 10
+      update_exec "browser with required otp forms" "auth-otp-form" REQUIRED 20
+      update_exec "browser without otp" "auth-cookie" ALTERNATIVE 10
+      update_exec "browser without otp" "identity-provider-redirector" ALTERNATIVE 20
+      update_exec "browser without otp" "browser without otp forms" ALTERNATIVE 30
+      update_exec "browser without otp forms" "auth-username-password-form" REQUIRED 10
+
+      "$$KCADM" update "realms/$$REALM" -s browserFlow="$$BROWSER_FLOW" --config "$$CONF"
+      ensure_required_action CONFIGURE_TOTP $$OTP_ENABLED $$OTP_ENABLED 30
+
+      client_id="$$( $$KCADM get clients -r "$$REALM" -q clientId=unihealth-client --config "$$CONF" \
+        | sed -n 's/.*"id" : "\(.*\)".*/\1/p' | sed -n '1p')"
+
+      if [ -z "$$client_id" ]; then
+        "$$KCADM" create clients -r "$$REALM" \
+          -s clientId=unihealth-client \
+          -s protocol=openid-connect \
+          -s enabled=true \
+          -s publicClient=true \
+          -s directAccessGrantsEnabled=true \
+          -s standardFlowEnabled=true \
+          -s 'redirectUris=["*"]' \
+          -s 'webOrigins=["*"]' \
+          --config "$$CONF"
+      else
+        "$$KCADM" update "clients/$$client_id" -r "$$REALM" \
+          -s protocol=openid-connect \
+          -s enabled=true \
+          -s publicClient=true \
+          -s directAccessGrantsEnabled=true \
+          -s standardFlowEnabled=true \
+          -s 'redirectUris=["*"]' \
+          -s 'webOrigins=["*"]' \
+          --config "$$CONF"
+      fi
+
+      client_id="$$( $$KCADM get clients -r "$$REALM" -q clientId=unihealth-client --config "$$CONF" \
+        | sed -n 's/.*"id" : "\(.*\)".*/\1/p' | sed -n '1p')"
+
+      existing_mapper="$$( $$KCADM get clients/$$client_id/protocol-mappers/models -r "$$REALM" --config "$$CONF" \
+        | grep -F '"name" : "tenant"' || true )"
+      if [ -z "$$existing_mapper" ]; then
+        "$$KCADM" create "clients/$$client_id/protocol-mappers/models" -r "$$REALM" \
+          -s name=tenant \
+          -s protocol=openid-connect \
+          -s protocolMapper=oidc-usermodel-attribute-mapper \
+          -s 'config."user.attribute"=tenant' \
+          -s 'config."claim.name"=tenant' \
+          -s 'config."jsonType.label"=String' \
+          -s 'config."id.token.claim"=true' \
+          -s 'config."access.token.claim"=true' \
+          -s 'config."userinfo.token.claim"=true' \
+          -s 'config."multivalued"=false' \
+          --config "$$CONF"
+      fi
+
+      echo "Configuration completed!"
+  theme_properties:
+    content: |
+      parent=keycloak.v2
+      import=common/keycloak
+  theme_messages_en:
+    content: |
+      doForgotPassword=Reset password and Authenticator?
+      loginOtpOneTime=One-time code
+      invalidUserMessage=Invalid username/email or password.
+      invalidPasswordMinLowerCaseCharsMessage=Invalid password: must contain at least 1 lower case character.
+      invalidPasswordMinUpperCaseCharsMessage=Invalid password: must contain at least 1 upper case character.
+      invalidPasswordMinDigitsMessage=Invalid password: must contain at least 1 numerical digit.
+      invalidPasswordMinSpecialCharsMessage=Invalid password: must contain at least 1 special character.
+      invalidPasswordRegexPatternMessage=Password must not contain whitespace characters.
+      resetPasswordMessage=Please change your password. The password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one digit, one special character and no whitespaces.
+      configureTotpMessage=You need to set up Mobile Authenticator to activate your account. If you have already configured TOTP, you can skip this guide.
+      totpAppFreeOTPName=
+  theme_messages_de:
+    content: |
+      doForgotPassword=Passwort und Authenticator zurücksetzen?
+      loginOtpOneTime=One-time Code
+      invalidUserMessage=Ungültiger Benutzername/E-Mail oder Passwort.
+      invalidPasswordMinLowerCaseCharsMessage=Ungültiges Passwort: Es muss mindestens 1 Kleinbuchstaben beinhalten.
+      invalidPasswordMinUpperCaseCharsMessage=Ungültiges Passwort: Es muss mindestens 1 Großbuchstaben beinhalten.
+      invalidPasswordMinDigitsMessage=Ungültiges Passwort: Es muss mindestens 1 Zahl beinhalten.
+      invalidPasswordMinSpecialCharsMessage=Ungültiges Passwort: Es muss mindestens 1 Sonderzeichen beinhalten.
+      invalidPasswordRegexPatternMessage=Das Passwort darf keine Leerzeichen enthalten.
+      resetPasswordMessage=Bitte ändern Sie Ihr Passwort. Das Passwort muss mindestens 8 Zeichen lang sein, mindestens einen Großbuchstaben, einen Kleinbuchstaben, eine Ziffer und ein Sonderzeichen enthalten und darf keine Leerzeichen enthalten.
+      configureTotpMessage=Sie müssen eine Mehrfachauthentifizierung einrichten, um das Benutzerkonto zu aktivieren. Wenn Sie TOTP bereits konfiguriert haben, können Sie diese Anleitung überspringen.
+      totpAppFreeOTPName=

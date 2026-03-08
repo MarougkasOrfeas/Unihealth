@@ -1,0 +1,15 @@
+<nav class="bc" aria-label="Breadcrumb" data-testid="breadcrumb-nav">
+    <a mat-button class="bc-link" routerLink="/home" data-testid="breadcrumb-home">
+        <mat-icon fontSet="material-symbols-outlined">home</mat-icon>
+    </a>
+
+    @for (c of crumbs(); track $index; let last = $last) {
+    <mat-icon class="bc-sep" fontSet="material-symbols-outlined">chevron_right</mat-icon>
+
+      @if (last) {
+        <span class="bc-current" data-testid="breadcrumb-current">{{ c.label }}</span>
+      } @else {
+        <a mat-button class="bc-link" [routerLink]="c.url" data-testid="breadcrumb-link">{{ c.label }}</a>
+      }
+    }
+</nav>

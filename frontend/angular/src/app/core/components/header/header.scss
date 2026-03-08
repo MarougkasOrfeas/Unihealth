@@ -1,0 +1,98 @@
+.top-banner {
+  background: #ADD8E6;
+  color: #333;
+  display: flex;
+  align-items: center;
+  padding: 8px 20px;
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 500;
+}
+
+.banner-left {
+  display: flex;
+  align-items: center;
+}
+
+.header-logo {
+  height: 40px;
+  width: auto;
+}
+
+.banner-text {
+  flex: 1;
+  text-align: center;
+  margin-right: 40px;
+}
+
+.app-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: 72px;
+  padding: 0 16px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.toolbar-left,
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toolbar-spacer {
+  flex: 1;
+}
+
+.page-logo {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.brand-subtitle {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-left: 14px;
+}
+
+.health-text {
+  color: #2F5DA8;
+}
+
+.section-switcher {
+  border-radius: 999px;
+  padding-inline: 14px;
+  background: #eef6fb;
+}
+
+.user-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 6px;
+  padding: 4px 10px 4px 4px;
+  border-radius: 999px;
+}
+
+.letter-button {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #8ba4fa;
+  font-weight: 700;
+}
+
+.user-name {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.shell {
+  height: calc(100vh - 72px);
+}
+

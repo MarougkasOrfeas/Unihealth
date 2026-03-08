@@ -1,0 +1,84 @@
+groups:
+  - name: ui_labels
+    description: Translations for the ui
+    forceUpdate: true
+languages:
+  - name: Greek
+    locale: el
+  - name: English
+    locale: en
+translations:
+  ################################################################################:
+  # GREEK translations:
+  ################################################################################:
+  - group: ui_labels
+    locale: el
+    keys:
+      # Header
+      - header.title: UNIHEALTH
+      - header.subtitle: Students personal health and wellbeing hub
+      - header.top.banner.text: Αυτός ο ιστότοπος απευθύνεται σε φοιτητές του Πανεπιστημίου Δυτικής Αττικής (UNIWA)
+
+      # Side Navigation
+      - side.admin: Administration
+      - side.admin.users: Users
+      - side.admin.roles: Roles
+      - side.admin.groups: Groups
+      - side.overview: Overview
+      - side.overview.profile: Profile Overview
+      - side.overview.plans: My Plans
+      - side.overview.blood.tests: My Blood Tests
+      - side.health: Health Information
+      - side.health.news: Health News
+      - side.health.topics: Health Topics
+      - side.health.advice: Advice & Tips
+      - side.wellness: Wellness & Lifestyle
+      - side.wellness.recipes: Healthy Recipes
+      - side.wellness.fitness: Fitness & Workout
+      - side.wellness.mental: Mental Wellbeing
+
+      # Footer
+      - unihealth.footer.cookies-policy: Πολιτική Cookies
+      - unihealth.footer.privacy-policy: Πολιτική Απορρήτου
+      - unihealth.footer.terms-of-use: Όροι Χρήσης
+      - unihealth.footer.advertising-policy: Πολιτική Διαφήμισης
+      - unihealth.footer.copyright-text: © 2026 UniHealth. Δημιουργήθηκε από το Uniwa.
+      - unihealth.footer.version: Έκδοση
+
+  ################################################################################:
+  # ENGLISH translations:
+  ################################################################################:
+  - group: ui_labels
+    locale: en
+    keys:
+      # Header
+      - header.title: UNIHEALTH
+      - header.subtitle: Κέντρο προσωπικής υγείας και ευεξίας φοιτητών
+      - header.top.banner.text: This site is intended for university students of UNIWA
+
+      # Side Navigation
+      - side.admin: Administration
+      - side.admin.users: Users
+      - side.admin.roles: Roles
+      - side.admin.groups: Groups
+      - side.overview: Overview
+      - side.overview.profile: Profile Overview
+      - side.overview.plans: My Plans
+      - side.overview.blood.tests: My Blood Tests
+      - side.health: Health Information
+      - side.health.news: Health News
+      - side.health.topics: Health Topics
+      - side.health.advice: Advice & Tips
+      - side.wellness: Wellness & Lifestyle
+      - side.wellness.recipes: Healthy Recipes
+      - side.wellness.fitness: Fitness & Workout
+      - side.wellness.mental: Mental Wellbeing
+
+      # Footer
+      - unihealth.footer.cookies-policy: Cookies Policy
+      - unihealth.footer.privacy-policy: Privacy Policy
+      - unihealth.footer.terms-of-use: Terms of Use
+      - unihealth.footer.advertising-policy: Advertising Policy
+      - unihealth.footer.copyright-text: © 2026 UniHealth. Created by Uniwa.
+      - unihealth.footer.version: Version
+

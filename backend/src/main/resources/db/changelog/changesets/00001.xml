@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd">
+
+    <changeSet author="uniwa" id="unihealth_00001">
+        <createTable tableName="t_user">
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="created_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="varchar(1000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(1000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lastname" type="varchar(1000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="firstname" type="varchar(1000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="language_id" type="varchar(36)">
+                <constraints references="lex_language(id)" foreignKeyName="fk_user_language_id" nullable="false"/>
+            </column>
+            <column name="email_sent_no_login_since" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex tableName="t_user" indexName="idx_user_username" unique="true">
+            <column name="username"/>
+        </createIndex>
+
+        <createIndex tableName="t_user" indexName="idx_user_email" unique="true">
+            <column name="email"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

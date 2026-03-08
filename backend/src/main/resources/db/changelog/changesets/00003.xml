@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd">
+
+    <changeSet author="uniwa" id="unihealth_00003">
+        <createTable tableName="t_rss_feed">
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="created_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="title" type="varchar(1000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="summary" type="varchar(4000)"/>
+            <column name="link" type="varchar(2000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image_url" type="varchar(2000)"/>
+            <column name="published_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="source_name" type="varchar(500)"/>
+        </createTable>
+
+        <createIndex tableName="t_rss_feed" indexName="idx_rss_feed_published_date">
+            <column name="published_date"/>
+        </createIndex>
+
+        <createIndex tableName="t_rss_feed" indexName="idx_rss_feed_source_name">
+            <column name="source_name"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

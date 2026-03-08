@@ -1,0 +1,37 @@
+server {
+  listen 8080;
+
+  # Serve the static files of the frontend.
+  location / {
+    root   /usr/share/nginx/html;
+    try_files $uri $uri/ /index.html;
+
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self'; script-src-attr 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self' data: https:; base-uri 'self'; frame-ancestors 'none'; object-src 'none';" always;
+  }
+
+  location /api {
+    client_max_body_size ${CLIENT_MAX_BODY_SIZE};
+    proxy_pass           http://${BACKEND_HOST}:${BACKEND_PORT};
+    proxy_set_header     X-Forwarded-Host $host:$server_port;
+    proxy_set_header     X-Forwarded-Server $host;
+    proxy_set_header     X-Real-IP $remote_addr;
+    proxy_set_header     X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header     X-Forwarded-Proto $scheme;
+  }
+
+  location /keycloak/realms/unihealth/account {
+    return 302 /;
+  }
+
+  location /keycloak {
+    client_max_body_size ${CLIENT_MAX_BODY_SIZE};
+    proxy_pass           http://${KEYCLOAK_HOST}:${KEYCLOAK_PORT};
+    proxy_set_header     X-Forwarded-Host $host:$server_port;
+    proxy_set_header     X-Forwarded-Server $host;
+    proxy_set_header     X-Real-IP $remote_addr;
+    proxy_set_header     X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header     X-Forwarded-Proto $scheme;
+  }
+}
+
+server_tokens off;

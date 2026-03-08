@@ -1,0 +1,16 @@
+<div data-testid="confirm-dialog">
+  <h2 mat-dialog-title data-testid="confirm-dialog-title">{{ (data.title | translate) ?? 'Warnung' }}</h2>
+  <!-- top-right X -->
+  <button mat-icon-button aria-label="Schließen" [mat-dialog-close]="false" data-testid="btn-dialog-close">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<mat-divider></mat-divider>
+<mat-dialog-content data-testid="confirm-dialog-message"> {{ (data.message | translate) ?? '' }}</mat-dialog-content>
+<mat-dialog-actions align="end" data-testid="confirm-dialog-actions">
+  <button mat-button [mat-dialog-close]="false" data-testid="btn-dialog-cancel">{{ (data.cancelText | translate) ?? 'Abbrechen' }}</button>
+  <button mat-raised-button type="button" color="warn" [mat-dialog-close]="true" data-testid="btn-dialog-confirm">
+    {{ (data.confirmText | translate) ?? 'Bestätigen' }}
+  </button>
+</mat-dialog-actions>
