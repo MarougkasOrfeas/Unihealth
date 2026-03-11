@@ -19,6 +19,9 @@ translations:
       - header.subtitle: Students personal health and wellbeing hub
       - header.top.banner.text: Αυτός ο ιστότοπος απευθύνεται σε φοιτητές του Πανεπιστημίου Δυτικής Αττικής (UNIWA)
 
+      - global.back: Πίσω
+      - global.back.tooltip: Πηγάινω Πίσω
+
       # Side Navigation
       - side.admin: Administration
       - side.admin.users: Users
@@ -36,6 +39,21 @@ translations:
       - side.wellness.recipes: Healthy Recipes
       - side.wellness.fitness: Fitness & Workout
       - side.wellness.mental: Mental Wellbeing
+
+      # Users
+      - user.management.title: Χρήστες
+      - user.management.action.create: Προσθήκη Χρήστη
+      - user.management.tooltip.create: Πάτα για να προσθέσεις ένα Χρήστη
+
+      # Groups
+      - group.management.title: Σχολές
+      - group.management.action.create: Προσθήκη Σχολής
+      - user.management.tooltip.create: Πάτα για να προσθέσεις μια Σχολή
+
+      # Departments
+      - department.management.title: Τμήματα
+      - department.management.action.create: Προσθήκη Τμήματος
+      - department.management.tooltip.create: Πάτα για να προσθέσεις ένα Τμήμα
 
       # Footer
       - unihealth.footer.cookies-policy: Πολιτική Cookies
@@ -56,6 +74,9 @@ translations:
       - header.subtitle: Κέντρο προσωπικής υγείας και ευεξίας φοιτητών
       - header.top.banner.text: This site is intended for university students of UNIWA
 
+      - global.back: Back
+      - global.back.tooltip: Go Back
+
       # Side Navigation
       - side.admin: Administration
       - side.admin.users: Users
@@ -73,6 +94,21 @@ translations:
       - side.wellness.recipes: Healthy Recipes
       - side.wellness.fitness: Fitness & Workout
       - side.wellness.mental: Mental Wellbeing
+
+      # Users
+      - user.management.title: Users
+      - user.management.action.create: Add User
+      - user.management.tooltip.create: Press to Add a User
+
+      # Groups
+      - group.management.title: Schools
+      - group.management.action.create: Add School
+      - user.management.tooltip.create: Press to add School
+
+      # Departments
+      - department.management.title: Departments
+      - department.management.action.create: Add Department
+      - department.management.tooltip.create: Press to Add Department
 
       # Footer
       - unihealth.footer.cookies-policy: Cookies Policy

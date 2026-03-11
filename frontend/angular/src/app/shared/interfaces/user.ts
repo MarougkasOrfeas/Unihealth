@@ -1,5 +1,18 @@
-import {BaseEntity} from "./baseEntity";
+export interface User {
+    id?: string;
+    username: string;
+    email: string;
+    firstname: string;
+    lastname: string;
+    language: string;
+    lastLogin: string;
+    status: string;
+    role: string;
+    department: string;
+}
 
-export interface User extends BaseEntity{
-
+export enum UserStatus {
+    DEACTIVATED,
+    ACTIVE,
+    UNVERIFIED
 }

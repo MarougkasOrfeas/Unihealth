@@ -6,6 +6,68 @@
                       https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd">
 
     <changeSet author="uniwa" id="unihealth_00001">
+        <!-- Group Table -->
+        <createTable tableName="t_group">
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="created_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(250)"/>
+            <column name="active" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <!-- Department Table -->
+        <createTable tableName="t_department">
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="created_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(1000)"/>
+            <column name="active" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="group_id" type="varchar(36)">
+                <constraints nullable="false"
+                             references="t_group(id)"
+                             foreignKeyName="fk_department_group_id"/>
+            </column>
+        </createTable>
+        <!-- User Table -->
         <createTable tableName="t_user">
             <column name="id" type="varchar(36)">
                 <constraints primaryKey="true"/>
@@ -25,20 +87,47 @@
             <column name="version" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="username" type="varchar(1000)">
+            <column name="username" type="varchar(30)">
                 <constraints nullable="false"/>
             </column>
-            <column name="email" type="varchar(1000)">
+            <column name="email" type="varchar(300)">
                 <constraints nullable="false"/>
             </column>
-            <column name="lastname" type="varchar(1000)">
+            <column name="lastname" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="firstname" type="varchar(1000)">
+            <column name="firstname" type="varchar(50)">
                 <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="phone_number" type="varchar(30)">
+                <constraints nullable="true"/>
             </column>
             <column name="status" type="varchar(50)">
                 <constraints nullable="false"/>
+            </column>
+            <column name="role" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_login" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="deactivate_after" type="date">
+                <constraints nullable="true"/>
+            </column>
+            <column name="deactivation_mode" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deactivate_on" type="timestamp">
+            </column>
+            <column name="deactivated_due_to_inactivity" type="boolean" defaultValueBoolean="false">
+            </column>
+            <column name="reactivated_on" type="timestamp">
+            </column>
+            <column name="deactivation_reason" type="varchar(255)">
+            </column>
+            <column name="reactivation_reason" type="varchar(255)">
+            </column>
+            <column name="scheduled_deactivation_reason" type="varchar(255)">
             </column>
             <column name="language_id" type="varchar(36)">
                 <constraints references="lex_language(id)" foreignKeyName="fk_user_language_id" nullable="false"/>
@@ -46,7 +135,25 @@
             <column name="email_sent_no_login_since" type="boolean" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>
+            <column name="department_id" type="varchar(36)">
+                <constraints nullable="true"
+                             references="t_department(id)"
+                             foreignKeyName="fk_user_department_id"/>
+            </column>
         </createTable>
+
+
+        <createIndex tableName="t_group" indexName="idx_group_name" unique="true">
+            <column name="name"/>
+        </createIndex>
+
+        <createIndex tableName="t_department" indexName="idx_department_group_id">
+            <column name="group_id"/>
+        </createIndex>
+
+        <createIndex tableName="t_department" indexName="idx_department_name">
+            <column name="name"/>
+        </createIndex>
 
         <createIndex tableName="t_user" indexName="idx_user_username" unique="true">
             <column name="username"/>
@@ -54,6 +161,10 @@
 
         <createIndex tableName="t_user" indexName="idx_user_email" unique="true">
             <column name="email"/>
+        </createIndex>
+
+        <createIndex tableName="t_user" indexName="idx_user_department_id">
+            <column name="department_id"/>
         </createIndex>
     </changeSet>
 </databaseChangeLog>

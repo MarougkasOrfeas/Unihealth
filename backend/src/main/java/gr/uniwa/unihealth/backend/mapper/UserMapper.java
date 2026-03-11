@@ -16,24 +16,48 @@ public abstract class UserMapper extends BaseUpdatableEntityMapper<UserDTO, User
   @InheritConfiguration(name = "mapDtoToUpdatableEntityConfig")
   @Mapping(target = "status",
       expression = "java(gr.uniwa.unihealth.backend.model.enums.UserStatus.UNVERIFIED)")
+  @Mapping(target = "role",
+      expression = "java(gr.uniwa.unihealth.backend.model.enums.UserRoles.USER)")
+  @Mapping(target = "lastLogin", ignore = true)
   @Mapping(target = "emailSentNoLoginSince", ignore = true)
+  @Mapping(target = "deactivateOn", ignore = true)
+  @Mapping(target = "deactivatedDueToInactivity", ignore = true)
   @Mapping(target = "language", ignore = true)
+  @Mapping(target = "deactivationReason", ignore = true)
+  @Mapping(target = "reactivationReason", ignore = true)
+  @Mapping(target = "department", ignore = true)
   public abstract User mapForCreate(UserDTO dto);
 
   @InheritConfiguration(name = "mapDtoToUpdatableEntityConfig")
   @Mapping(target = "status", ignore = true)
+  @Mapping(target = "role", ignore = true)
+  @Mapping(target = "lastLogin", ignore = true)
   @Mapping(target = "emailSentNoLoginSince", ignore = true)
+  @Mapping(target = "deactivateOn", ignore = true)
+  @Mapping(target = "deactivatedDueToInactivity", ignore = true)
   @Mapping(target = "language", ignore = true)
+  @Mapping(target = "deactivationReason", ignore = true)
+  @Mapping(target = "reactivationReason", ignore = true)
+  @Mapping(target = "department", ignore = true)
   public abstract void mapForUpdate(UserDTO dto, @MappingTarget User entity);
 
 
   @Override
   @Mapping(target = "language", ignore = true)
+  @Mapping(target = "group", ignore = true)
+  @Mapping(target = "department", ignore = true)
   public abstract UserDTO mapToDTO(User entity);
 
   @AfterMapping
   protected void afterMapToDTO(User entity, @MappingTarget UserDTO dto) {
     dto.setLanguage(entity.getLanguage().getId());
+    if (entity.getDepartment() != null) {
+      dto.setDepartment(entity.getDepartment().getName());
+
+      if (entity.getDepartment().getGroup() != null) {
+        dto.setGroup(entity.getDepartment().getGroup().getName());
+      }
+    }
   }
 
   @AfterMapping

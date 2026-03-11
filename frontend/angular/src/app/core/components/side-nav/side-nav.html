@@ -6,7 +6,14 @@
         [opened]="!(isHandset$ | async)"
         data-testid="sidenav"
     >
-
+        <button
+            mat-icon-button
+            class="sidenav-edge-close"
+            aria-label="Close navigation"
+            (click)="sidenav.toggle()"
+            data-testid="btn-sidenav-edge-close">
+            <mat-icon>keyboard_double_arrow_left</mat-icon>
+        </button>
         <mat-accordion class="nav-accordion" [multi]="true" data-testid="nav-accordion">
             <mat-expansion-panel data-testid="nav-panel-admin" class="nav-panel-overview">
                 <mat-expansion-panel-header data-testid="nav-panel-admin-header">
@@ -17,19 +24,19 @@
                 </mat-expansion-panel-header>
 
                 <mat-nav-list class="nav-compact" data-testid="nav-list-admin">
-                    <a mat-list-item routerLink="/admin/users" (click)="closeIfHandset(sidenav)"
+                    <a mat-list-item routerLink="/users" (click)="closeIfHandset(sidenav)"
                        data-testid="nav-link-admin-users">
                         <mat-icon matListItemIcon>people</mat-icon>
                         <span matListItemTitle class="sidenav-label">Users</span>
                     </a>
 
-                    <a mat-list-item routerLink="/admin/roles" (click)="closeIfHandset(sidenav)"
+                    <a mat-list-item routerLink="/departments" (click)="closeIfHandset(sidenav)"
                        data-testid="nav-link-admin-roles">
-                        <mat-icon matListItemIcon>badge</mat-icon>
-                        <span matListItemTitle class="sidenav-label">Roles</span>
+                        <mat-icon matListItemIcon>business</mat-icon>
+                        <span matListItemTitle class="sidenav-label">Departments</span>
                     </a>
 
-                    <a mat-list-item routerLink="/admin/groups" (click)="closeIfHandset(sidenav)"
+                    <a mat-list-item routerLink="/groups" (click)="closeIfHandset(sidenav)"
                        data-testid="nav-link-admin-groups">
                         <mat-icon matListItemIcon>groups</mat-icon>
                         <span matListItemTitle class="sidenav-label">Groups</span>

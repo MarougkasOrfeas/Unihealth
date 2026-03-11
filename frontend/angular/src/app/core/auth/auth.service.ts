@@ -1,11 +1,12 @@
 import {inject, Injectable} from '@angular/core';
 import {OAuthEvent, OAuthService} from 'angular-oauth2-oidc';
-import {catchError, debounceTime, filter, from, mergeMap, Observable, of, Subject} from 'rxjs';
+import {catchError, debounceTime, filter, from, map, mergeMap, Observable, of, Subject} from 'rxjs';
 import {environment} from '../../../environments/environment';
 import {UserService} from '../../shared/services/user.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {AutoLogoutService} from './auto-logout.service';
 import {BeforeUnloadService} from '../../shared/services/beforeunload.service';
+import {UNIHEALTH_CONSTANTS} from "../../shared/constants/unihealth.constants";
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
@@ -88,17 +89,24 @@ export class AuthService {
                     const isAfterLogin = url.searchParams.get(this.afterLoginParamName) === 'true';
 
                     if (isAfterLogin) {
-                        // return this.userService.justLoggedIn().pipe(
-                        //     map(() => {
-                        //       url.searchParams.delete(this.afterLoginParamName);
-                        //       window.history.replaceState({}, '', url.toString());
-                        //       return true;
-                        //     }),
-                        //     catchError(() => {
-                        //       return of(false);
-                        //     }),
-                        // );
-                        return of(false);
+                        return this.userService.justLoggedIn().pipe(
+                            map(() => {
+                                url.searchParams.delete(this.afterLoginParamName);
+                                window.history.replaceState({}, '', url.toString());
+
+                                return true;
+                            }),
+                            catchError(() => {
+                                this.snackBar.open('Ein unerwarteter Fehler ist aufgetreten.', 'OK', {
+                                    duration: UNIHEALTH_CONSTANTS.TOAST.DURATION_MS,
+                                    horizontalPosition: UNIHEALTH_CONSTANTS.TOAST.HORIZONTAL_POSITION,
+                                    verticalPosition: UNIHEALTH_CONSTANTS.TOAST.VERTICAL_POSITION,
+                                    panelClass: [`unihealth-snackbar-error`],
+                                });
+
+                                return of(false);
+                            }),
+                        );
                     } else {
                         return of(true);
                     }

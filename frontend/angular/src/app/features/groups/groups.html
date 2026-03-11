@@ -1,0 +1,32 @@
+<!-- Header section -->
+<div class="toolbar-row" data-testid="section-group-header">
+    <h1 class="page-title" data-testid="group-title">{{ 'group.management.title' | translate }}</h1>
+    <span class="actions" data-testid="section-fee-header-actions">
+    <span class="btn-wrapper" [matTooltip]="'group.management.tooltip.create' | translate" matTooltipPosition="above">
+      <button mat-button class="add-group-btn" data-testid="btn-group-create" (click)="onCreate()">
+        <mat-icon>add</mat-icon>
+          {{ 'group.management.action.create' | translate }}
+      </button>
+    </span>
+    <span class="btn-wrapper" [matTooltip]="'global.back.tooltip' | translate" matTooltipPosition="above">
+      <button mat-stroked-button color="warn" class="delete-btn" (click)="onCancel()" data-testid="btn-cancel">
+          <mat-icon>arrow_back</mat-icon>
+          {{ 'global.back' | translate }}
+      </button>
+    </span>
+  </span>
+</div>
+
+<app-table
+    [columns]="columns"
+    [data]="groups"
+    [totalElements]="totalElements"
+    [pageSize]="currentPageSize"
+    [loading]="isLoading"
+    [facetOptions]="facetOptions"
+    [facetSelection]="facetSelection"
+    (pageChange)="onPageChange($event)"
+    (sortChange)="onSortChange($event)"
+    (facetOpened)="onFacetOpened($event)"
+    (facetChange)="onFacetChange($event)">
+</app-table>

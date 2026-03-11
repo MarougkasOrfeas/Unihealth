@@ -39,7 +39,6 @@
 .toolbar-right {
   display: flex;
   align-items: center;
-  gap: 10px;
 }
 
 .toolbar-spacer {
@@ -94,5 +93,50 @@
 
 .shell {
   height: calc(100vh - 72px);
+}
+
+@media (max-width: 700px) {
+
+  .user-name {
+    font-size: 0;
+  }
+
+  .user-pill {
+    gap: 0;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 570px) {
+  .brand-subtitle {
+    font-size: 0;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .section-switcher {
+    min-width: 0 !important;
+    min-height: 0 !important;
+    width: 24px;
+    height: 24px;
+    font-size: 0;
+    padding-inline: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .section-switcher .mdc-button__label {
+    display: none;
+  }
+
+  .section-switcher .mat-icon {
+    margin: 0;
+  }
+
+  mat-toolbar.app-toolbar.mat-toolbar.mat-toolbar-single-row {
+    padding: 0 !important;
+  }
+
 }
 

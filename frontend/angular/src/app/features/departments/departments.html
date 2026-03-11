@@ -1,0 +1,33 @@
+<!-- Header section -->
+<div class="toolbar-row" data-testid="section-department-header">
+    <h1 class="page-title" data-testid="department-title">{{ 'department.management.title' | translate }}</h1>
+    <span class="actions" data-testid="section-fee-header-actions">
+    <span class="btn-wrapper" [matTooltip]="'department.management.tooltip.create' | translate"
+          matTooltipPosition="above">
+      <button mat-button class="add-department-btn" data-testid="btn-department-create" (click)="onCreate()">
+        <mat-icon>add</mat-icon>
+          {{ 'department.management.action.create' | translate }}
+      </button>
+    </span>
+    <span class="btn-wrapper" [matTooltip]="'global.back.tooltip' | translate" matTooltipPosition="above">
+      <button mat-stroked-button color="warn" class="delete-btn" (click)="onCancel()" data-testid="btn-cancel">
+          <mat-icon>arrow_back</mat-icon>
+          {{ 'global.back' | translate }}
+      </button>
+    </span>
+  </span>
+</div>
+
+<app-table
+    [columns]="columns"
+    [data]="departments"
+    [totalElements]="totalElements"
+    [pageSize]="currentPageSize"
+    [loading]="isLoading"
+    [facetOptions]="facetOptions"
+    [facetSelection]="facetSelection"
+    (pageChange)="onPageChange($event)"
+    (sortChange)="onSortChange($event)"
+    (facetOpened)="onFacetOpened($event)"
+    (facetChange)="onFacetChange($event)">
+</app-table>

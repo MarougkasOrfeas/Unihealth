@@ -12,6 +12,34 @@ mat-sidenav-container {
   height: 100%;
 }
 
+.sidenav-edge-close {
+  display: none;
+}
+
+@media (max-width: 980px) {
+  .sidenav-edge-close {
+    display: flex;
+
+    width: 100%;
+    height: 40px;
+
+    align-items: center;
+    justify-content: center;
+
+    border-bottom: 2px solid #e5e7eb;
+    border-radius: 0;
+
+    background: #ffffff;
+
+    cursor: pointer;
+  }
+
+  .sidenav-edge-close .mat-icon {
+    font-size: 22px;
+  }
+
+}
+
 .sidenav {
   width: 270px;
   border-right: 1px solid #e5e7eb;
@@ -19,8 +47,8 @@ mat-sidenav-container {
 }
 
 mat-sidenav-content {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
   min-height: 0;
   background: #f6f8fb;
 }

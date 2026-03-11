@@ -1,0 +1,34 @@
+<button class="trigger" mat-icon-button [ngClass]="selected.size ? 'active' : 'inactive'" #tr="matMenuTrigger"
+        [matMenuTriggerFor]="menu"
+        [matMenuTriggerRestoreFocus]="false"
+        (click)="$event.stopPropagation()"
+        (menuOpened)="onMenuOpened()"
+        aria-label="Filter">
+    <mat-icon>filter_list</mat-icon>
+</button>
+
+<mat-menu #menu="matMenu" [overlapTrigger]="false" [hasBackdrop]="true">
+    <!-- IMPORTANT: stop clicks inside from bubbling and accidentally closing things -->
+    <div class="panel" (click)="$event.stopPropagation()">
+        @if (searchable) {
+            <mat-form-field appearance="outline" class="search">
+                <input #searchInput matInput [formControl]="searchCtrl" placeholder="Εισαγάγετε όρο φίλτρου..."/>
+            </mat-form-field>
+        }
+
+        <div class="list">
+            @for (opt of filteredOptions; track opt) {
+                <div class="opt">
+                    <mat-checkbox [checked]="selected.has(opt)" (change)="toggle(opt, $event.checked!)">
+                        {{ opt }}
+                    </mat-checkbox>
+                </div>
+            }
+        </div>
+
+        <div class="footer">
+            <button mat-stroked-button type="button" (click)="clear()">Απορρίπτω</button>
+            <button mat-stroked-button type="button" (click)="selectAll()">Επιλέξτε όλα</button>
+        </div>
+    </div>
+</mat-menu>

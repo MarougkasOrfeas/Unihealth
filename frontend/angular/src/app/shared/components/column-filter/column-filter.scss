@@ -1,0 +1,41 @@
+.trigger {
+  margin-left: 6px;
+}
+
+.panel {
+  padding: 10px 12px;
+  width: 260px;
+  background: #ffffff !important;
+}
+
+.search {
+  width: 100%;
+}
+
+.list {
+  max-height: 240px;
+  margin-top: 8px;
+  padding-right: 6px;
+}
+
+.opt {
+  display: flex;
+  align-items: center;
+}
+
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.active {
+  opacity: 1;
+  color: #000;
+}
+
+.inactive {
+  opacity: .55;
+}

@@ -10,6 +10,7 @@ import gr.uniwa.unihealth.backend.dto.UserDTO;
 import gr.uniwa.unihealth.backend.exception.ExceptionUtils;
 import gr.uniwa.unihealth.backend.mapper.UserMapper;
 import gr.uniwa.unihealth.backend.model.User;
+import gr.uniwa.unihealth.backend.model.enums.DeactivationMode;
 import gr.uniwa.unihealth.backend.model.enums.UserStatus;
 import gr.uniwa.unihealth.backend.repository.UserRepository;
 import gr.uniwa.unihealth.backend.service.UserService;
@@ -17,6 +18,7 @@ import gr.uniwa.unihealth.backend.service.client.KeycloakAdminClient;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.keycloak.representations.idm.EventRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -30,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Implementation for {@link UserService}.
@@ -63,9 +65,6 @@ public class UserServiceImpl extends BaseUpdatableServiceImpl<UserDTO, User>
 
   /**
    * Initialization method.
-   *
-   * @throws ExecutionException
-   * @throws InterruptedException
    */
   @PostConstruct
   public void init() {
@@ -99,7 +98,7 @@ public class UserServiceImpl extends BaseUpdatableServiceImpl<UserDTO, User>
         userDTO.setFirstname(adminFirstname);
         userDTO.setLastname(adminLastname);
         userDTO.setLanguage(languageDTO.getId());
-
+        userDTO.setDeactivationMode(DeactivationMode.AUTOMATIC);
         create(userDTO);
       });
     }, "UserServiceImpl.init");
@@ -142,7 +141,6 @@ public class UserServiceImpl extends BaseUpdatableServiceImpl<UserDTO, User>
     User user = readerService.findEntityById(id, true);
     UserDTO userDTO = mapper.mapToDTO(user);
     // Delete user from database
-    // Note: UserGroupRole and Role entries will be cascade deleted due to ON DELETE CASCADE constraints
     super.delete(id);
 
     userRepository.flush();
@@ -167,14 +165,14 @@ public class UserServiceImpl extends BaseUpdatableServiceImpl<UserDTO, User>
         getUserStatus(userRepresentation.isEnabled(), userRepresentation.isEmailVerified()));
 
     //In case user was previously deactivated due to prolonged inactivity and then reactivated, they would be deactivated again after 21 days if no login performed.
-    //userEntity.setDeactivateAfter(null);
+    userEntity.setDeactivateAfter(null);
 
     //Retrieve latest login data. Create a timeframe to check.
     keycloakAdminClient.getKeycloakUserEvents(userRepresentation.getId(), List.of("LOGIN"), 0, 1,
         null, null).stream().findFirst().map(EventRepresentation::getTime).ifPresent(timestamp -> {
       LocalDateTime lastLoginTime =
           Instant.ofEpochMilli(timestamp).atZone(ZoneOffset.UTC).toLocalDateTime();
-      //userEntity.setLastLogin(lastLoginTime);
+      userEntity.setLastLogin(lastLoginTime);
     });
 
     userRepository.save(userEntity);
@@ -210,20 +208,20 @@ public class UserServiceImpl extends BaseUpdatableServiceImpl<UserDTO, User>
 
   @Override
   public String suggestUsername(String firstname, String lastname) {
-    //    String usernamePrefix = StringUtils.capitalize(firstname.substring(0, 1)) + lastname;
-    //    List<String> availableUsernames = userRepository.findUsernameStartsWith(usernamePrefix);
-    //    if (CollectionUtils.isEmpty(availableUsernames)) {
-    //      return usernamePrefix + ThreadLocalRandom.current().nextInt(0, 10000);
-    //    }
-    //    List<Integer> availableUsernameSuffixes =
-    //        availableUsernames.stream().map(u -> u.split("\\d{4}")).map(s -> Integer.valueOf(s[1]))
-    //            .toList();
-    //    int suffix = ThreadLocalRandom.current().nextInt(0, 10000);
-    //    while (availableUsernameSuffixes.contains(suffix)) {
-    //      suffix = ThreadLocalRandom.current().nextInt(0, 10000);
-    //    }
-    //    return usernamePrefix + suffix;
-    return "";
+    String usernamePrefix = StringUtils.capitalize(firstname.substring(0, 1)) + lastname;
+    List<String> availableUsernames = userRepository.findUsernameStartsWith(usernamePrefix);
+    if (CollectionUtils.isEmpty(availableUsernames)) {
+      return usernamePrefix + ThreadLocalRandom.current().nextInt(0, 10000);
+    }
+    List<Integer> availableUsernameSuffixes =
+        availableUsernames.stream().map(u -> u.split("\\d{4}")).map(s -> Integer.valueOf(s[1]))
+            .toList();
+    int suffix = ThreadLocalRandom.current().nextInt(0, 10000);
+    while (availableUsernameSuffixes.contains(suffix)) {
+      suffix = ThreadLocalRandom.current().nextInt(0, 10000);
+    }
+    return usernamePrefix + suffix;
+
   }
 
   @Override
@@ -241,9 +239,9 @@ public class UserServiceImpl extends BaseUpdatableServiceImpl<UserDTO, User>
     //    }
 
     userToChange.setStatus(UserStatus.DEACTIVATED);
-    //    userToChange.setDeactivatedDueToInactivity(deactivatedDueToInactivity);
-    //    userToChange.setDeactivateOn(null);
-    //    userToChange.setDeactivationReason(reason);
+    userToChange.setDeactivatedDueToInactivity(deactivatedDueToInactivity);
+    userToChange.setDeactivateOn(null);
+    userToChange.setDeactivationReason(reason);
     userRepository.save(userToChange);
     userRepository.flush();
     keycloakAdminClient.setUserStatus(userToChange.getUsername(), false);
@@ -256,14 +254,14 @@ public class UserServiceImpl extends BaseUpdatableServiceImpl<UserDTO, User>
     } else {
       userToChange.setStatus(UserStatus.UNVERIFIED);
     }
-    //    if (userToChange.isDeactivatedDueToInactivity()) {
-    //      userToChange.setDeactivateOn(LocalDateTime.now().plusDays(deactivateAfterDays));
-    //      userToChange.setDeactivatedDueToInactivity(false);
-    //    }
-    //    userToChange.setReactivatedOn(LocalDateTime.now());
-    //    userToChange.setDeactivationMode(DeactivationMode.AUTOMATIC);
-    //    userToChange.setDeactivateAfter(null);
-    //    userToChange.setReactivationReason(reason);
+    if (userToChange.isDeactivatedDueToInactivity()) {
+      userToChange.setDeactivateOn(LocalDateTime.now().plusDays(deactivateAfterDays));
+      userToChange.setDeactivatedDueToInactivity(false);
+    }
+    userToChange.setReactivatedOn(LocalDateTime.now());
+    userToChange.setDeactivationMode(DeactivationMode.AUTOMATIC);
+    userToChange.setDeactivateAfter(null);
+    userToChange.setReactivationReason(reason);
     userRepository.save(userToChange);
     userRepository.flush();
     keycloakAdminClient.setUserStatus(userToChange.getUsername(), true);

@@ -1,0 +1,33 @@
+<!-- Header section -->
+<div class="toolbar-row" data-testid="section-user-header">
+    <h1 class="page-title" data-testid="user-title">{{ 'user.management.title' | translate }}</h1>
+    <span class="actions" data-testid="section-fee-header-actions">
+    <span class="btn-wrapper" [matTooltip]="'user.management.tooltip.create' | translate" matTooltipPosition="above">
+      <button mat-button class="add-user-btn" data-testid="btn-user-create" (click)="onCreate()">
+        <mat-icon>add</mat-icon>
+          {{ 'user.management.action.create' | translate }}
+      </button>
+    </span>
+    <span class="btn-wrapper" [matTooltip]="'global.back.tooltip' | translate" matTooltipPosition="above">
+      <button mat-stroked-button color="warn" class="delete-btn" (click)="onCancel()" data-testid="btn-cancel">
+          <mat-icon>arrow_back</mat-icon>
+          {{ 'global.back' | translate }}
+      </button>
+    </span>
+  </span>
+</div>
+
+<app-table
+    [columns]="columns"
+    [data]="users"
+    [totalElements]="totalElements"
+    [pageSize]="currentPageSize"
+    [loading]="isLoading"
+    [facetOptions]="facetOptions"
+    [facetSelection]="facetSelection"
+    (pageChange)="onPageChange($event)"
+    (sortChange)="onSortChange($event)"
+    (facetOpened)="onFacetOpened($event)"
+    (facetChange)="onFacetChange($event)">
+</app-table>
+
