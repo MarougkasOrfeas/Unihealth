@@ -10,6 +10,10 @@ export const UNIHEALTH_CONSTANTS = {
         SUGGEST_USERNAME: '/user/_suggest_username',
         CHECK_USERNAME_EXISTS: '/user/_check_username_exists',
     },
+    RSS_API: {
+        BASE: '/rss',
+        HOME: '/rss/_home'
+    },
 
     TRANSLATION_API: {
         BASE: '/translation',

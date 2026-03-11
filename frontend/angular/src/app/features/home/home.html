@@ -10,35 +10,48 @@
 
     <mat-icon class="feedback-arrow">arrow_forward</mat-icon>
 </a>
+
 <div class="container mt-4">
-    <!-- Title and View All Link in the Same Row -->
     <div class="title-container">
         <h2 class="section-title">Latest News</h2>
+
         <a routerLink="/all-news" class="view-all-link">
-            View All <span class="arrow">→</span>
+            View all <span class="arrow">→</span>
         </a>
     </div>
 
-    <!-- Scrollable News Carousel with Arrows -->
     <div class="news-carousel-wrapper">
-        <!-- Left Arrow -->
-        <button class="carousel-btn left" (click)="prevSlide()" *ngIf="!isAtStart">&#10094;</button>
-
-        <div class="news-carousel-container" #carousel>
+        <div class="news-carousel-container" #carousel (scroll)="checkScrollPosition()">
             <div class="news-grid">
                 <div *ngFor="let feed of rssFeeds$ | async" class="news-card" (click)="openLink(feed.link)">
-                    <img [src]="feed.imageUrl || 'assets/placeholder-image.png'" class="news-img" alt="Feed Image"/>
+                    <img
+                        [src]="feed.imageUrl || 'assets/placeholder-image.png'"
+                        class="news-img"
+                        alt="Feed Image"
+                    />
+
                     <div class="news-body">
                         <h5 class="news-title">{{ feed.title }}</h5>
-                        <p class="news-summary">{{ feed.summary }}</p>
+                        <p class="news-summary">{{ feed.shortSummary }}</p>
                         <p class="news-date">{{ feed.publishedDate | date: 'dd-MM-yyyy HH:mm' }}</p>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Right Arrow -->
-        <button class="carousel-btn right" (click)="nextSlide()" *ngIf="!isAtEnd">&#10095;</button>
+    <div class="news-controls">
+        @if (!(isAtStart && isAtEnd)) {
+            <button class="news-nav-btn" (click)="prevSlide()" [disabled]="isAtStart">
+                <span class="nav-arrow">←</span>
+                Previous
+            </button>
+
+            <button class="news-nav-btn" (click)="nextSlide()" [disabled]="isAtEnd">
+                Next
+                <span class="nav-arrow">→</span>
+            </button>
+        }
     </div>
 </div>
 
@@ -48,6 +61,5 @@
         TRENDING
     </h3>
 
-    <div class="trending-container">
-    </div>
+    <div class="trending-container"></div>
 </section>

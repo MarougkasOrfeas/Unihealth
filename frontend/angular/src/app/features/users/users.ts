@@ -10,6 +10,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatTooltip} from "@angular/material/tooltip";
 import {TranslatePipe} from "@ngx-translate/core";
 import {MatButton} from "@angular/material/button";
+import {Router} from "@angular/router";
 
 interface UserRow {
     id: string;
@@ -84,7 +85,7 @@ export class Users implements OnInit {
         status: new Set<string>()
     };
 
-    constructor(private userService: UserService) {
+    constructor(private userService: UserService, private readonly router: Router,) {
     }
 
     ngOnInit(): void {
@@ -96,6 +97,7 @@ export class Users implements OnInit {
     }
 
     onCancel() {
+        this.router.navigateByUrl('/');
     }
 
     onPageChange(event: PageEvent): void {

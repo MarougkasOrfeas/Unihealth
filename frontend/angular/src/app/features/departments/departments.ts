@@ -10,6 +10,7 @@ import {MatButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {TranslatePipe} from "@ngx-translate/core";
 import {MatTooltip} from "@angular/material/tooltip";
+import {Router} from "@angular/router";
 
 
 interface DepartmentRow {
@@ -67,7 +68,7 @@ export class Departments implements OnInit {
         description: new Set<string>(),
     };
 
-    constructor(private departmentService: DepartmentService) {
+    constructor(private departmentService: DepartmentService, private readonly router: Router,) {
     }
 
     ngOnInit(): void {
@@ -103,6 +104,7 @@ export class Departments implements OnInit {
     }
 
     onCancel() {
+        this.router.navigateByUrl('/');
     }
 
     private loadDepartments(): void {

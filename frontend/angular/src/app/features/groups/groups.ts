@@ -10,6 +10,7 @@ import {MatButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {TranslatePipe} from "@ngx-translate/core";
 import {MatTooltip} from "@angular/material/tooltip";
+import {Router} from "@angular/router";
 
 interface GroupRow {
     id: string;
@@ -67,7 +68,7 @@ export class Groups implements OnInit {
         description: new Set<string>(),
     };
 
-    constructor(private groupService: GroupService) {
+    constructor(private groupService: GroupService, private readonly router: Router,) {
     }
 
     ngOnInit(): void {
@@ -104,6 +105,7 @@ export class Groups implements OnInit {
     }
 
     onCancel() {
+        this.router.navigateByUrl('/');
     }
 
     private loadGroups(): void {
