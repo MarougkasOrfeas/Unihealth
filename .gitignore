@@ -1,0 +1,9 @@
+target
+.angular
+node_modules
+/frontend/frontend.iml
+.idea
+
+/backend/.m2
+/data
+/backend/tools
