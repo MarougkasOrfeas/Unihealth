@@ -10,6 +10,19 @@ export const routes: Routes = [
         data: {breadcrumb: 'Home'},
     },
     {
+        path: 'health-news',
+        data: {breadcrumb: 'Health News'},
+        children: [
+            {
+                path: '',
+                pathMatch: 'full',
+                loadComponent: () =>
+                    import('./features/health-news/health-news').then((m) => m.HealthNews),
+                data: {breadcrumb: "Today's Health News"},
+            }
+        ],
+    },
+    {
         path: 'users',
         data: {breadcrumb: 'Users'},
         children: [

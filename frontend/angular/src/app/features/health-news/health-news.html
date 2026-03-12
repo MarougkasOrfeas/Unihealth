@@ -1,0 +1,83 @@
+<div class="health-news-page">
+    <div class="page-header">
+        <div>
+            <h1>Today's Health News</h1>
+            <p>Browse all available health news articles.</p>
+        </div>
+    </div>
+
+    @if (isLoading) {
+        <div class="state-message">
+            Loading health news...
+        </div>
+    } @else if (feeds.length === 0) {
+        <div class="state-message">
+            No health news found.
+        </div>
+    } @else {
+        <div class="news-grid">
+            @for (feed of feeds; track trackByFeed($index, feed)) {
+                <a
+                    class="news-card"
+                    [href]="feed.link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    @if (feed.imageUrl) {
+                        <img
+                            class="news-card__image"
+                            [src]="feed.imageUrl"
+                            [alt]="feed.title"
+                        />
+                    } @else {
+                        <div class="news-card__image news-card__image--placeholder"></div>
+                    }
+
+                    <div class="news-card__content">
+                        <h3 class="news-card__title">
+                            {{ feed.title }}
+                        </h3>
+
+                        @if (feed.summary) {
+                            <p class="news-card__description">
+                                {{ feed.summary }}
+                            </p>
+                        }
+
+                        <div class="news-card__meta">
+                            @if (feed.sourceName) {
+                                <span>{{ feed.sourceName }}</span>
+                            }
+
+                            @if (feed.publishedDate) {
+                                <span>{{ feed.publishedDate | date:'dd/MM/yyyy' }}</span>
+                            }
+                        </div>
+                    </div>
+                </a>
+            }
+        </div>
+
+        <div class="pagination">
+            <button
+                type="button"
+                (click)="prevPage()"
+                [disabled]="pageNumber === 0 || isLoading"
+            >
+                Previous
+            </button>
+
+            <span class="pagination-info">
+                Page {{ pageNumber + 1 }} of {{ totalPages }}
+             </span>
+
+            <button
+                type="button"
+                (click)="nextPage()"
+                [disabled]="pageNumber + 1 >= totalPages || isLoading"
+            >
+                Next
+            </button>
+        </div>
+    }
+</div>

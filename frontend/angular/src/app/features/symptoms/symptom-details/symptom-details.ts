@@ -1,5 +1,5 @@
 import {Component, inject, signal} from "@angular/core";
-import {ActivatedRoute, RouterLink} from "@angular/router";
+import {ActivatedRoute} from "@angular/router";
 import {SymptomItemDetail} from "../../../shared/interfaces/symptom-item-detail";
 import {SymptomService} from "../../../shared/services/symptom.service";
 import {CommonModule} from "@angular/common";
@@ -9,7 +9,6 @@ import {CommonModule} from "@angular/common";
     standalone: true,
     imports: [
         CommonModule,
-        RouterLink
     ],
     templateUrl: './symptom-details.html',
     styleUrl: './symptom-details.scss'
