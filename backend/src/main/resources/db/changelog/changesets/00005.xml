@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd">
+
+    <changeSet id="unihealth_00005" author="uniwa">
+        <createTable tableName="t_symptom_item">
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="created_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="title" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="slug" type="varchar(200)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="starting_letter" type="varchar(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="brief" type="varchar(1000)"/>
+            <column name="overview_text" type="text"/>
+            <column name="symptoms_text" type="text"/>
+            <column name="do_text" type="text"/>
+            <column name="dont_text" type="text"/>
+            <column name="see_doctor_if_text" type="text"/>
+            <column name="treatment_text" type="text"/>
+            <column name="causes_text" type="text"/>
+            <column name="display_order" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active" type="boolean" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="idx_symptom_item_letter_order"
+                     tableName="t_symptom_item">
+            <column name="starting_letter"/>
+            <column name="display_order"/>
+        </createIndex>
+
+        <createIndex indexName="idx_symptom_item_active"
+                     tableName="t_symptom_item">
+            <column name="active"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

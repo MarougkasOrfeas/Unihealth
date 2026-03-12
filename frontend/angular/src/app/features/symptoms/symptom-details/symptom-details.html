@@ -1,0 +1,80 @@
+<div class="symptom-detail-page">
+    @if (loading()) {
+        <div class="loading-state">Loading...</div>
+    } @else if (symptom()) {
+        <div class="detail-content">
+            <h1>{{ symptom()!.title }}</h1>
+
+            @if (symptom()!.brief) {
+                <p class="lead">{{ symptom()!.brief }}</p>
+            }
+
+            @if (symptom()!.overviewText) {
+                <section class="content-section">
+                    <h2>Overview</h2>
+                    <p>{{ symptom()!.overviewText }}</p>
+                </section>
+            }
+
+            @if (symptom()!.symptomsText) {
+                <section class="content-section">
+                    <h2>Symptoms</h2>
+                    <ul>
+                        @for (line of asLines(symptom()!.symptomsText); track line) {
+                            <li>{{ line.replace('- ', '') }}</li>
+                        }
+                    </ul>
+                </section>
+            }
+
+            @if (symptom()!.doText) {
+                <section class="content-box do-box">
+                    <h2>Do</h2>
+                    <ul>
+                        @for (line of asLines(symptom()!.doText); track line) {
+                            <li>{{ line.replace('- ', '') }}</li>
+                        }
+                    </ul>
+                </section>
+            }
+
+            @if (symptom()!.dontText) {
+                <section class="content-box dont-box">
+                    <h2>Don't</h2>
+                    <ul>
+                        @for (line of asLines(symptom()!.dontText); track line) {
+                            <li>{{ line.replace('- ', '') }}</li>
+                        }
+                    </ul>
+                </section>
+            }
+
+            @if (symptom()!.seeDoctorIfText) {
+                <section class="content-box see-box">
+                    <h2>See a doctor if</h2>
+                    <ul>
+                        @for (line of asLines(symptom()!.seeDoctorIfText); track line) {
+                            <li>{{ line.replace('- ', '') }}</li>
+                        }
+                    </ul>
+                </section>
+            }
+
+            @if (symptom()!.treatmentText) {
+                <section class="content-section">
+                    <h2>Treatment</h2>
+                    <p>{{ symptom()!.treatmentText }}</p>
+                </section>
+            }
+
+            @if (symptom()!.causesText) {
+                <section class="content-section">
+                    <h2>Causes</h2>
+                    <p>{{ symptom()!.causesText }}</p>
+                </section>
+            }
+        </div>
+    } @else {
+        <div class="loading-state">Symptom not found.</div>
+    }
+</div>

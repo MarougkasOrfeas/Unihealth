@@ -1,0 +1,45 @@
+<div class="symptoms-page">
+    <div class="search-box">
+        <mat-icon>search</mat-icon>
+        <input
+            type="text"
+            [ngModel]="searchTerm()"
+            (ngModelChange)="searchTerm.set($event)"
+            placeholder="Search symptoms"
+        />
+    </div>
+
+    <div class="alphabet-nav">
+        @for (letter of alphabet; track letter) {
+            <button
+                type="button"
+                [disabled]="!availableLetters().includes(letter)"
+                [class.disabled]="!availableLetters().includes(letter)"
+                (click)="scrollToLetter(letter)">
+                {{ letter }}
+            </button>
+        }
+    </div>
+
+    @if (loading()) {
+        <div class="loading-state">Loading symptoms...</div>
+    } @else {
+        <div class="symptom-sections">
+            @for (letter of alphabet; track letter) {
+                @if (getSymptomsByLetter(letter).length > 0) {
+                    <section class="letter-section" [id]="'letter-' + letter">
+                        <div class="letter-badge">{{ letter }}</div>
+
+                        <div class="symptom-list">
+                            @for (item of groupedSymptoms()[letter]; track item.id) {
+                                <a class="symptom-row" [routerLink]="['/symptoms', item.slug]">
+                                    <div class="symptom-title">{{ item.title }}</div>
+                                </a>
+                            }
+                        </div>
+                    </section>
+                }
+            }
+        </div>
+    }
+</div>

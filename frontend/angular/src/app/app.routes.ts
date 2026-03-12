@@ -44,6 +44,24 @@ export const routes: Routes = [
                 data: {breadcrumb: 'Overview'},
             }
         ]
+    },
+    {
+        path: 'symptoms',
+        data: {breadcrumb: 'Symptoms'},
+        children: [
+            {
+                path: '',
+                pathMatch: 'full',
+                loadComponent: () => import('./features/symptoms/symptoms').then((m) => m.Symptoms),
+                data: {breadcrumb: 'Symptoms A to Z'},
+            },
+            {
+                path: ':slug',
+                pathMatch: 'full',
+                loadComponent: () => import('./features/symptoms/symptom-details/symptom-details').then((m) => m.SymptomDetails),
+                data: {breadcrumb: 'Details'},
+            },
+        ]
     }
 
 ];

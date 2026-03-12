@@ -63,6 +63,28 @@ translations:
       - unihealth.footer.copyright-text: © 2026 UniHealth. Δημιουργήθηκε από το Uniwa.
       - unihealth.footer.version: Έκδοση
 
+      - unihealth.footer.legal-title: Νομικά
+      - unihealth.footer.support-title: Υποστήριξη
+      - unihealth.footer.university-title: Πανεπιστήμιο
+      - unihealth.footer.cookies-policy: Πολιτική Cookies
+      - unihealth.footer.privacy-policy: Πολιτική Απορρήτου
+      - unihealth.footer.terms-of-use: Όροι Χρήσης
+      - unihealth.footer.advertising-policy: Πολιτική Διαφήμισης
+      - unihealth.footer.accessibility: Προσβασιμότητα
+      - unihealth.footer.faq: Συχνές Ερωτήσεις
+      - unihealth.footer.contact-support: Επικοινωνία Υποστήριξης
+      - unihealth.footer.report-issue: Αναφορά Προβλήματος
+      - unihealth.footer.student-support: Υποστήριξη Φοιτητών
+      - unihealth.footer.uniwa: Πανεπιστήμιο Δυτικής Αττικής
+      - unihealth.footer.student-services: Φοιτητικές Υπηρεσίες
+      - unihealth.footer.health-office: Γραφείο Υγείας
+      - unihealth.footer.campus-info: Πληροφορίες Πανεπιστημιούπολης
+      - unihealth.footer.disclaimer: Οι πληροφορίες του UniHealth παρέχονται για ενημερωτικούς και εκπαιδευτικούς σκοπούς και δεν αντικαθιστούν επαγγελματική ιατρική συμβουλή. Σε περίπτωση επείγοντος περιστατικού καλέστε το 112 ή το 166.
+      - unihealth.footer.emergency: "Επείγοντα: 112 | 166"
+      - unihealth.footer.copyright-text: "© 2026 UniHealth. Δημιουργήθηκε από το Uniwa."
+      - unihealth.footer.version: Έκδοση
+
+
   ################################################################################:
   # ENGLISH translations:
   ################################################################################:

@@ -1,0 +1,135 @@
+
+.symptoms-page {
+  width: 98% !important;
+  padding: 24px;
+}
+
+.page-header {
+  margin-bottom: 28px;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  font-size: 0.95rem;
+  color: #4b5563;
+}
+
+.breadcrumb a {
+  color: #1565c0;
+  text-decoration: none;
+}
+
+.page-header h1 {
+  margin: 0 0 16px;
+  font-size: 3rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.page-header p {
+  max-width: 620px;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: #374151;
+  margin: 0;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 26px;
+  padding: 14px 16px;
+  background: #ffffff;
+  border: 1px solid #dbe2ea;
+  border-radius: 12px;
+}
+
+.search-box mat-icon {
+  color: #6b7280;
+}
+
+.search-box input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  background: transparent;
+}
+
+.alphabet-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 41px;
+  margin-bottom: 28px;
+  justify-content: center;
+}
+
+.alphabet-nav button {
+  border: none;
+  background: transparent;
+  color: #1565c0;
+  font-size: 1.05rem;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+
+.alphabet-nav button.disabled {
+  color: #9ca3af;
+  text-decoration: none;
+  cursor: default;
+}
+
+.letter-section {
+  margin-bottom: 28px;
+  border: 1px solid #d8dee7;
+  background: #fff;
+}
+
+.letter-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 62px;
+  height: 54px;
+  background: #1565c0;
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.symptom-list {
+  padding: 18px 22px 20px;
+}
+
+.symptom-row {
+  display: block;
+  padding: 14px 0;
+  text-decoration: none;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.symptom-title {
+  font-size: 1.1rem;
+  color: #1565c0;
+  text-decoration: underline;
+}
+
+.loading-state {
+  padding: 30px 0;
+  color: #6b7280;
+}
+
+@media (max-width: 768px) {
+  .symptoms-page {
+    padding: 16px;
+  }
+
+  .page-header h1 {
+    font-size: 2.2rem;
+  }
+}
