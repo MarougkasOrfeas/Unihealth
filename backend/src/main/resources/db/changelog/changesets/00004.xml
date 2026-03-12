@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd">
+
+    <changeSet author="uniwa" id="unihealth_00004">
+        <createTable tableName="t_unihealth_assistant_item">
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="created_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="title" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="brief" type="varchar(2000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="section" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="display_order" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="action_label" type="varchar(100)"/>
+            <column name="action_value" type="varchar(500)"/>
+            <column name="icon" type="varchar(100)"/>
+        </createTable>
+
+        <createIndex indexName="idx_unihealth_assistant_section_active_order"
+                     tableName="t_unihealth_assistant_item">
+            <column name="section"/>
+            <column name="active"/>
+            <column name="display_order"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

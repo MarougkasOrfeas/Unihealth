@@ -1,7 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {RouterLink} from "@angular/router";
 import {RssFeedService} from "../../shared/services/rss-feed.service";
-import {AsyncPipe, DatePipe, NgForOf, NgIf} from "@angular/common";
+import {AsyncPipe, DatePipe, NgForOf} from "@angular/common";
 import {map, Observable} from "rxjs";
 import {MatIcon} from "@angular/material/icon";
 import {RssFeed} from "../../shared/interfaces/rss-feed";
@@ -17,7 +17,6 @@ interface HomeRssFeed extends RssFeed {
         DatePipe,
         NgForOf,
         AsyncPipe,
-        NgIf,
         MatIcon
     ],
     templateUrl: './home.html',

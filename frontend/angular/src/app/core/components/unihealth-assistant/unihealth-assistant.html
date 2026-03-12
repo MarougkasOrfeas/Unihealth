@@ -1,0 +1,177 @@
+<div class="assistant-dialog">
+    <div class="assistant-header">
+        <div class="assistant-header-text">
+            <h2>UniHealth Assistant</h2>
+            <p>Πανεπιστήμιο Δυτικής Αττικής</p>
+        </div>
+
+        <button type="button" class="close-btn" (click)="close()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+
+    <div class="assistant-search-wrap">
+        <mat-icon>search</mat-icon>
+        <input
+            type="text"
+            [ngModel]="searchTerm()"
+            (ngModelChange)="searchTerm.set($event)"
+            placeholder="Αναζήτηση σε ερωτήσεις, υπηρεσίες, επαφές..."
+        />
+    </div>
+
+    <div class="assistant-tabs">
+        <button type="button" [class.active]="activeSection() === 'faq'" (click)="setSection('faq')">
+            FAQ
+        </button>
+        <button type="button" [class.active]="activeSection() === 'services'" (click)="setSection('services')">
+            Υπηρεσίες
+        </button>
+        <button type="button" [class.active]="activeSection() === 'emergency'" (click)="setSection('emergency')">
+            Επείγοντα
+        </button>
+        <button type="button" [class.active]="activeSection() === 'clinics'" (click)="setSection('clinics')">
+            Κλινικές
+        </button>
+    </div>
+
+    <div class="assistant-content">
+        @if (activeSection() === 'faq') {
+            <div class="section-block">
+                <h3>Συχνές Ερωτήσεις</h3>
+
+                @if (filteredFaq().length > 0) {
+                    @for (item of filteredFaq(); track item.id) {
+                        <div class="faq-card">
+                            <div class="faq-question">{{ item.title }}</div>
+
+                            @if (item.brief) {
+                                <div class="faq-answer">{{ item.brief }}</div>
+                            }
+
+                            @if (item.content && item.content !== item.brief) {
+                                <button type="button" class="expand-btn" (click)="toggleExpanded(item)">
+                                    {{ item.expanded ? 'Λιγότερα' : 'Περισσότερα' }}
+                                </button>
+                            }
+
+                            @if (item.expanded && item.content) {
+                                <div class="faq-details">{{ item.content }}</div>
+                            }
+                        </div>
+                    }
+                } @else {
+                    <div class="empty-state">Δεν βρέθηκαν αποτελέσματα.</div>
+                }
+            </div>
+        }
+
+        @if (activeSection() === 'services') {
+            <div class="section-block">
+                <h3>🏥 Υπηρεσίες υγείας Πανεπιστημίου</h3>
+
+                @if (filteredServices().length > 0) {
+                    @for (item of filteredServices(); track item.id) {
+                        <div class="info-card">
+                            <div class="info-title">{{ item.title }}</div>
+
+                            @if (item.brief) {
+                                <div class="info-subtitle">{{ item.brief }}</div>
+                            }
+
+                            @if (item.content && item.content !== item.brief) {
+                                <button type="button" class="expand-btn" (click)="toggleExpanded(item)">
+                                    {{ item.expanded ? 'Λιγότερα' : 'Περισσότερα' }}
+                                </button>
+                            }
+
+                            @if (item.expanded && item.content) {
+                                <div class="faq-details">{{ item.content }}</div>
+                            }
+
+                            @if (item.actionLabel && item.actionValue) {
+                                <a class="action-link" [href]="item.actionValue">
+                                    {{ item.actionLabel }}
+                                </a>
+                            }
+                        </div>
+                    }
+                } @else {
+                    <div class="empty-state">Δεν βρέθηκαν αποτελέσματα.</div>
+                }
+            </div>
+        }
+
+        @if (activeSection() === 'emergency') {
+            <div class="section-block">
+                <h3>📞 Χρήσιμα Τηλέφωνα</h3>
+
+                @if (filteredEmergencyContacts().length > 0) {
+                    @for (item of filteredEmergencyContacts(); track item.id) {
+                        <div class="info-card important">
+                            <div class="info-title">{{ item.title }}</div>
+
+                            @if (item.brief) {
+                                <div class="info-subtitle">{{ item.brief }}</div>
+                            }
+
+                            @if (item.content && item.content !== item.brief) {
+                                <button type="button" class="expand-btn" (click)="toggleExpanded(item)">
+                                    {{ item.expanded ? 'Λιγότερα' : 'Περισσότερα' }}
+                                </button>
+                            }
+
+                            @if (item.expanded && item.content) {
+                                <div class="faq-details">{{ item.content }}</div>
+                            }
+
+                            @if (item.actionLabel && item.actionValue) {
+                                <a class="action-link emergency" [href]="item.actionValue">
+                                    {{ item.actionLabel }}
+                                </a>
+                            }
+                        </div>
+                    }
+                } @else {
+                    <div class="empty-state">Δεν βρέθηκαν αποτελέσματα.</div>
+                }
+            </div>
+        }
+
+        @if (activeSection() === 'clinics') {
+            <div class="section-block">
+                <h3>📍 Κοντινές Κλινικές</h3>
+
+                @if (filteredClinics().length > 0) {
+                    @for (item of filteredClinics(); track item.id) {
+                        <div class="info-card">
+                            <div class="info-title">{{ item.title }}</div>
+
+                            @if (item.brief) {
+                                <div class="info-subtitle">{{ item.brief }}</div>
+                            }
+
+                            @if (item.content && item.content !== item.brief) {
+                                <button type="button" class="expand-btn" (click)="toggleExpanded(item)">
+                                    {{ item.expanded ? 'Λιγότερα' : 'Περισσότερα' }}
+                                </button>
+                            }
+
+                            @if (item.expanded && item.content) {
+                                <div class="faq-details">{{ item.content }}</div>
+                            }
+
+                            @if (item.actionLabel && item.actionValue) {
+                                <a class="action-link" [href]="item.actionValue">
+                                    {{ item.actionLabel }}
+                                </a>
+                            }
+                        </div>
+                    }
+                } @else {
+                    <div class="empty-state">Δεν βρέθηκαν αποτελέσματα.</div>
+                }
+            </div>
+        }
+    </div>
+</div>
