@@ -50,6 +50,11 @@ export class Home implements OnInit {
         setTimeout(() => this.checkScrollPosition(), 0);
     }
 
+    onImageError(event: Event): void {
+        const img = event.target as HTMLImageElement;
+        img.src = 'assets/placeholder.jpg';
+    }
+
     openLink(url: string) {
         window.open(url, '_blank');
     }

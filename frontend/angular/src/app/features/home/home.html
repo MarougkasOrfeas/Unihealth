@@ -28,6 +28,10 @@
                         [src]="feed.imageUrl || 'assets/placeholder-image.png'"
                         class="news-img"
                         alt="Feed Image"
+                        loading="lazy"
+                        width="320"
+                        height="180"
+                        (error)="onImageError($event)"
                     />
 
                     <div class="news-body">

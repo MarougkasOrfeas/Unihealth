@@ -70,8 +70,22 @@ services:
     networks:
       - unihealth
 
+  unihealth-redis:
+    image: redis:7-alpine
+    container_name: unihealth-redis
+    hostname: unihealth-redis
+    ports:
+      - '6379:6379'
+    command: redis-server --appendonly yes
+    volumes:
+      - unihealth-redis:/data
+    networks:
+      - unihealth
+    restart: unless-stopped
+
 volumes:
   unihealth-db:
+  unihealth-redis:
 
 networks:
   unihealth:

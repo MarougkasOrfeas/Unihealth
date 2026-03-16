@@ -16,6 +16,8 @@ import gr.uniwa.unihealth.backend.service.client.RssClient;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -49,6 +51,7 @@ public class RssFeedReaderServiceImpl extends BaseReaderServiceImpl<RssFeedDTO, 
     }, "RssFeedReaderServiceImpl.init");
   }
 
+  @Cacheable(value = "allRssFeedsPage", key = "@rssCacheKeyHelper.pageKey(#predicate, #pageable)")
   @Override
   public Page<RssFeedDTO> findAll(Predicate predicate, Pageable pageable) {
     BooleanExpression lastSevenDaysPredicate =
@@ -60,6 +63,7 @@ public class RssFeedReaderServiceImpl extends BaseReaderServiceImpl<RssFeedDTO, 
     return repository.findAll(finalPredicate, pageable).map(mapper::mapToDTO);
   }
 
+  @CacheEvict(value = {"allRssFeedsPage", "rssRelevantFeedsHomePage"}, allEntries = true)
   @Override
   public List<RssFeedDTO> refreshFeeds() {
     List<RssFeed> feedsToSave = new ArrayList<>();
@@ -79,6 +83,8 @@ public class RssFeedReaderServiceImpl extends BaseReaderServiceImpl<RssFeedDTO, 
     return savedFeeds.stream().map(mapper::mapToDTO).toList();
   }
 
+  @Cacheable(value = "rssRelevantFeedsHomePage",
+      key = "@rssCacheKeyHelper.relevantFeedsKey(#limit)")
   @Override
   public List<RssFeedDTO> findRelevantFeeds(int limit) {
     Pageable pageable = org.springframework.data.domain.PageRequest.of(0, limit);
