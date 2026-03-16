@@ -49,4 +49,8 @@ public class UserDTO extends BaseUpdatableDTO {
   private String deactivationReason;
 
   private String reactivationReason;
+
+  private boolean healthProfileCompleted;
+  
+  private LocalDateTime healthProfileCompletedOn;
 }

@@ -2,7 +2,6 @@ import {Routes} from '@angular/router';
 import {UNIHEALTH_CONSTANTS} from "./shared/constants/unihealth.constants";
 
 export const routes: Routes = [
-
     {path: '', redirectTo: UNIHEALTH_CONSTANTS.ROUTE_HOME, pathMatch: 'full'},
     {
         path: UNIHEALTH_CONSTANTS.ROUTE_HOME,
@@ -54,6 +53,18 @@ export const routes: Routes = [
                 path: '',
                 pathMatch: 'full',
                 loadComponent: () => import('./features/departments/departments').then((m) => m.Departments),
+                data: {breadcrumb: 'Overview'},
+            }
+        ]
+    },
+    {
+        path: 'profile',
+        data: {breadcrumb: 'Profile'},
+        children: [
+            {
+                path: '',
+                pathMatch: 'full',
+                loadComponent: () => import('./features/profile/profile').then((m) => m.Profile),
                 data: {breadcrumb: 'Overview'},
             }
         ]

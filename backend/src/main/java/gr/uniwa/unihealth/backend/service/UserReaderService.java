@@ -16,4 +16,6 @@ public interface UserReaderService extends BaseReaderService<UserDTO> {
    * @return the details of the currently logged in user
    */
   UserDTO findLoggedInUser();
+
+  boolean isHealthProfileCompleted();
 }

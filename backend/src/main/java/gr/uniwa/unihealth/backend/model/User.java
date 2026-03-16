@@ -44,6 +44,12 @@ public class User extends BaseUpdatableEntity {
   @Column(name = "last_login")
   private LocalDateTime lastLogin;
 
+  @Column(name = "health_profile_completed")
+  private boolean healthProfileCompleted;
+
+  @Column(name = "health_profile_completed_on")
+  private LocalDateTime healthProfileCompletedOn;
+
   @Column(name = "deactivate_after")
   private LocalDate deactivateAfter;
 

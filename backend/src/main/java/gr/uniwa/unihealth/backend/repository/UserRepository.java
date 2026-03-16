@@ -73,4 +73,6 @@ public interface UserRepository extends BaseRepository<User> {
   List<String> findUsernameStartsWith(String prefix);
 
   List<User> findByDepartmentIdIn(List<String> departmentIds);
+
+  Optional<Boolean> findHealthProfileCompletedByUsername(String username);
 }

@@ -35,6 +35,14 @@ export class UserService extends BaseService<User> {
         return this.httpClient.put(UserEndpoints.JUST_LOGGED_IN_USER_URI, {responseType: 'text',}) as Observable<string>;
     }
 
+    isHealthProfileCompleted(): Observable<boolean> {
+        return this.httpClient.get<boolean>(`${this.basePath}/_health_profile_completed`);
+    }
+
+    getUser(): Observable<User> {
+        return this.httpClient.get<User>(`${this.basePath}/_me`);
+    }
+
     setUserStatus(id: string, newUserStatus: UserStatus, deactivationReason: string | null): Observable<SetUserStatusAnswer> {
         return this.httpClient.put<SetUserStatusAnswer>(UserEndpoints.SET_USER_STATUS_URI, {
             id: id,

@@ -1,0 +1,29 @@
+import {BaseEntity} from "./baseEntity";
+
+export interface HealthProfileDTO extends BaseEntity {
+    dateOfBirth?: Date | string | null;
+    gender?: Gender | null;
+    heightCm?: number | null;
+    weightKg?: number | null;
+    hasFoodAllergies: boolean;
+    foodAllergiesDetails?: string | null;
+    hasChronicConditions: boolean;
+    chronicConditionsDetails?: string | null;
+    primaryGoal?: PrimaryGoal | null;
+}
+
+export enum Gender {
+    MALE = 'MALE',
+    FEMALE = 'FEMALE',
+    OTHER = 'OTHER'
+}
+
+export enum PrimaryGoal {
+    EAT_HEALTHIER = "EAT_HEALTHIER",
+    IMPROVE_FITNESS = "IMPROVE_FITNESS",
+    MANAGE_WEIGHT = "MANAGE_WEIGHT",
+    SLEEP_BETTER = "SLEEP_BETTER",
+    REDUCE_STRESS = "REDUCE_STRESS",
+    GENERAL_WELLBEING = "GENERAL_WELLBEING",
+
+}

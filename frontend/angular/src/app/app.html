@@ -1,14 +1,18 @@
 @if (loggedIn()) {
-    <div class="app-shell">
-        <app-header></app-header>
+    @if (isFirstTime()) {
+        <app-health-profile-form></app-health-profile-form>
+    } @else {
+        <div class="app-shell">
+            <app-header></app-header>
 
-        <div class="app-main">
-            <app-side-nav></app-side-nav>
+            <div class="app-main">
+                <app-side-nav></app-side-nav>
+            </div>
+
+            <button class="health-assistant-fab" (click)="openHealthAssistant()">
+                <mat-icon>health_and_safety</mat-icon>
+            </button>
+            <app-footer></app-footer>
         </div>
-
-        <button class="health-assistant-fab" (click)="openHealthAssistant()">
-            <mat-icon>health_and_safety</mat-icon>
-        </button>
-        <app-footer></app-footer>
-    </div>
+    }
 }

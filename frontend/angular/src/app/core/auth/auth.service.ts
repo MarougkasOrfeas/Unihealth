@@ -1,4 +1,4 @@
-import {inject, Injectable} from '@angular/core';
+import {computed, inject, Injectable, signal} from '@angular/core';
 import {OAuthEvent, OAuthService} from 'angular-oauth2-oidc';
 import {catchError, debounceTime, filter, from, map, mergeMap, Observable, of, Subject} from 'rxjs';
 import {environment} from '../../../environments/environment';
@@ -19,6 +19,14 @@ export class AuthService {
     private logoutSubject = new Subject<boolean>();
     private refreshSubject = new Subject<void>();
     private initialized = false;
+
+    readonly healthProfileCompleted = signal<boolean | null>(null);
+
+    readonly isFirstTime = computed(() => this.healthProfileCompleted() === false);
+
+    setHealthProfileCompleted(completed: boolean): void {
+        this.healthProfileCompleted.set(completed);
+    }
 
     /**
      * User service inject to manage user update.
@@ -90,7 +98,10 @@ export class AuthService {
 
                     if (isAfterLogin) {
                         return this.userService.justLoggedIn().pipe(
-                            map(() => {
+                            mergeMap(() => this.userService.isHealthProfileCompleted()),
+                            map((completed: boolean) => {
+                                this.healthProfileCompleted.set(completed);
+
                                 url.searchParams.delete(this.afterLoginParamName);
                                 window.history.replaceState({}, '', url.toString());
 
@@ -108,7 +119,16 @@ export class AuthService {
                             }),
                         );
                     } else {
-                        return of(true);
+                        return this.userService.isHealthProfileCompleted().pipe(
+                            map((completed: boolean) => {
+                                this.healthProfileCompleted.set(completed);
+                                return true;
+                            }),
+                            catchError(() => {
+                                this.healthProfileCompleted.set(false);
+                                return of(true);
+                            }),
+                        );
                     }
                 } else {
                     this.oauthService.initCodeFlow();

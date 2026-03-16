@@ -8,6 +8,7 @@ import {AuthService} from "./core/auth/auth.service";
 import {MatIcon} from "@angular/material/icon";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {UniHealthAssistantComponent} from "./core/components/unihealth-assistant/unihealth-assistant";
+import {HealthProfileFormComponent} from "./core/components/health-profile-form/health-profile-form";
 
 @Component({
     selector: 'app-root',
@@ -16,6 +17,7 @@ import {UniHealthAssistantComponent} from "./core/components/unihealth-assistant
         Header,
         SideNav,
         MatIcon,
+        HealthProfileFormComponent,
     ],
     templateUrl: './app.html',
     styleUrl: './app.scss'
@@ -29,6 +31,8 @@ export class App {
     protected assistantOpen = signal(false);
 
     private assistantDialogRef: MatDialogRef<UniHealthAssistantComponent> | null = null;
+
+    isFirstTime = this.authService.isFirstTime;
 
     constructor() {
         forkJoin([

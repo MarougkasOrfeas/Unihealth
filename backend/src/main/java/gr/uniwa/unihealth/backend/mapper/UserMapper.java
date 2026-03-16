@@ -26,6 +26,8 @@ public abstract class UserMapper extends BaseUpdatableEntityMapper<UserDTO, User
   @Mapping(target = "deactivationReason", ignore = true)
   @Mapping(target = "reactivationReason", ignore = true)
   @Mapping(target = "department", ignore = true)
+  @Mapping(target = "healthProfileCompleted", ignore = true)
+  @Mapping(target = "healthProfileCompletedOn", ignore = true)
   public abstract User mapForCreate(UserDTO dto);
 
   @InheritConfiguration(name = "mapDtoToUpdatableEntityConfig")
@@ -39,6 +41,8 @@ public abstract class UserMapper extends BaseUpdatableEntityMapper<UserDTO, User
   @Mapping(target = "deactivationReason", ignore = true)
   @Mapping(target = "reactivationReason", ignore = true)
   @Mapping(target = "department", ignore = true)
+  @Mapping(target = "healthProfileCompleted", ignore = true)
+  @Mapping(target = "healthProfileCompletedOn", ignore = true)
   public abstract void mapForUpdate(UserDTO dto, @MappingTarget User entity);
 
 

@@ -12,6 +12,7 @@ interface HomeRssFeed extends RssFeed {
 
 @Component({
     selector: 'app-home',
+    standalone: true,
     imports: [
         RouterLink,
         DatePipe,

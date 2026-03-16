@@ -1,0 +1,151 @@
+<div class="profile-page" *ngIf="user as u; else loading">
+    <div class="profile-card">
+        <div class="card-header">
+            <span class="section-badge">Unihealth</span>
+            <div class="title-block">
+                <h2>My Profile</h2>
+                <p class="subtitle">
+                    Manage your account details, personal preferences, and health profile settings.
+                </p>
+            </div>
+        </div>
+
+        <div class="profile-body">
+            <main class="profile-content" [formGroup]="form">
+
+                <section id="overview" class="content-section">
+                    <div class="section-header">
+                        <h3>Profile Overview</h3>
+                        <p>Review and update your personal account information.</p>
+                    </div>
+
+                    <div class="details-card">
+                        <div class="details-grid">
+                            <div class="detail-row">
+                                <div class="detail-label">Username</div>
+                                <div class="detail-value">{{ u.username }}</div>
+                            </div>
+
+                            <div class="detail-row">
+                                <div class="detail-label">Full Name</div>
+                                <div class="detail-value">
+                                    <ng-container *ngIf="!editMode; else nameEdit">
+                                        {{ u.firstname }} {{ u.lastname }}
+                                    </ng-container>
+
+                                    <ng-template #nameEdit>
+                                        <div class="name-grid">
+                                            <input type="text" formControlName="firstname" placeholder="First name"/>
+                                            <input type="text" formControlName="lastname" placeholder="Last name"/>
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </div>
+
+                            <div class="detail-row">
+                                <div class="detail-label">Email</div>
+                                <div class="detail-value">
+                                    <ng-container *ngIf="!editMode; else emailEdit">
+                                        {{ u.email }}
+                                    </ng-container>
+
+                                    <ng-template #emailEdit>
+                                        <input type="email" formControlName="email" placeholder="Email"/>
+                                    </ng-template>
+                                </div>
+                            </div>
+
+                            <div class="detail-row">
+                                <div class="detail-label">Member Since</div>
+                                <div class="detail-value">{{ u.createdOn }}</div>
+                            </div>
+                        </div>
+
+                        <div class="section-actions">
+                            <button *ngIf="!editMode" class="primary-btn" (click)="onEdit()">
+                                Edit Profile
+                            </button>
+
+                            <ng-container *ngIf="editMode">
+                                <button class="primary-btn" (click)="onSave()" [disabled]="form.invalid">
+                                    Save
+                                </button>
+                                <button class="secondary-btn" (click)="onCancel()">
+                                    Cancel
+                                </button>
+                            </ng-container>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="preferences" class="content-section">
+                    <div class="section-header">
+                        <h3>Preferences</h3>
+                        <p>Choose how you want to receive updates and notifications.</p>
+                    </div>
+
+                    <div class="settings-card">
+                        <div class="settings-item">
+                            <span>Unsubscribe from News Feeds</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox"/>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+
+                        <div class="settings-item">
+                            <span>Enable Notifications</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox"/>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="health-form" class="content-section">
+                    <div class="section-header">
+                        <h3>Health Form</h3>
+                        <p>Manage your medical and wellness profile details.</p>
+                    </div>
+
+                    <div class="action-card">
+                        <p>Your health profile is active and can be updated at any time.</p>
+                        <button class="primary-btn" (click)="onEditHealthForm()">Edit Form</button>
+                    </div>
+                </section>
+
+                <section id="security" class="content-section">
+                    <div class="section-header">
+                        <h3>Security &amp; Account</h3>
+                        <p>Keep your account secure and manage account actions.</p>
+                    </div>
+
+                    <div class="security-card">
+                        <button class="primary-btn">Logout</button>
+                        <button class="secondary-btn">Deactivate Account</button>
+                        <button class="danger-btn">Delete Account</button>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+</div>
+
+<ng-template #loading>
+    <div class="profile-page">
+        <div class="profile-card">
+            <div class="card-header">
+                <span class="section-badge">Unihealth</span>
+                <div class="title-block">
+                    <h2>My Profile</h2>
+                    <p class="subtitle">Loading your profile information...</p>
+                </div>
+            </div>
+
+            <div class="state-message">
+                Loading profile…
+            </div>
+        </div>
+    </div>
+</ng-template>

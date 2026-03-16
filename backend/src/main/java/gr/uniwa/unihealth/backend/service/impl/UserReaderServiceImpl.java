@@ -32,6 +32,13 @@ public class UserReaderServiceImpl extends BaseReaderServiceImpl<UserDTO, User>
   }
 
   @Override
+  public boolean isHealthProfileCompleted() {
+    return repository.findHealthProfileCompletedByUsername(
+            authenticationContext.getCurrentUsername())
+        .orElseThrow(() -> new QDoesNotExistException("Could not find logged in user."));
+  }
+
+  @Override
   protected UserMapper getMapper() {
     return mapper;
   }

@@ -61,6 +61,13 @@ public class UserController {
     return readerService.findById(id);
   }
 
+  @GetMapping("_me")
+  @Operation(summary = "Returns the currently logged in user",
+      description = "Returns the application user record of the currently authenticated user.")
+  public UserDTO findMe() {
+    return readerService.findLoggedInUser();
+  }
+
   @Operation(summary = "Finds all Users.",
       description = "Returns the data of the available Users along with pagination information.")
   @PostMapping("_page")
@@ -107,5 +114,12 @@ public class UserController {
       description = "A username provided by the user is checked for existing already for another user record available in the database.")
   private boolean checkUsernameExists(@RequestParam String username) {
     return service.checkUsernameExists(username);
+  }
+
+  @GetMapping("_health_profile_completed")
+  @Operation(summary = "Returns whether the logged in user has completed the health profile",
+      description = "Returns true if the currently authenticated user has completed the health profile, otherwise false.")
+  public boolean isHealthProfileCompleted() {
+    return readerService.findLoggedInUser().isHealthProfileCompleted();
   }
 }
