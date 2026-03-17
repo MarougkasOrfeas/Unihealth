@@ -1,6 +1,6 @@
 import {Component, inject, OnInit} from "@angular/core";
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
-import {Router, RouterLink} from "@angular/router";
+import {Router} from "@angular/router";
 import {NgIf} from "@angular/common";
 import {UserService} from "../../shared/services/user.service";
 import {User} from "../../shared/interfaces/user";
@@ -11,7 +11,6 @@ import {AuthService} from "../../core/auth/auth.service";
     standalone: true,
     imports: [
         ReactiveFormsModule,
-        RouterLink,
         NgIf
     ],
     templateUrl: "./profile.html",
@@ -67,7 +66,7 @@ export class Profile implements OnInit {
 
         const value = this.form.getRawValue();
 
-        this.user = {
+        const updatedUser = {
             ...this.user,
             firstname: value.firstname ?? '',
             lastname: value.lastname ?? '',
@@ -76,7 +75,15 @@ export class Profile implements OnInit {
 
         this.editMode = false;
 
-        // later you will call update API here
+        this.userService.update(this.user.id, updatedUser).subscribe({
+            next: () => {
+                this.user = updatedUser;
+                this.editMode = false;
+            },
+            error: (err) => {
+                console.error('Failed to update profile', err);
+            }
+        });
     }
 
     onCancel(): void {
@@ -95,4 +102,7 @@ export class Profile implements OnInit {
         this.router.navigate(['/profile']);
     }
 
+    onLogout(): void {
+        this.authService.logout();
+    }
 }
