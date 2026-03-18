@@ -5,3 +5,10 @@ export interface GroupDTO extends BaseEntity {
     description: string;
     departments: string[];
 }
+
+export interface UniGroupOption {
+    id?: string;
+    name: string;
+    description?: string | null;
+    active?: boolean;
+}

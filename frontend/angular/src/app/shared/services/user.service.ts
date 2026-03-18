@@ -52,10 +52,10 @@ export class UserService extends BaseService<User> {
     }
 
     suggestUsername(firstname: string, lastname: string): Observable<string> {
-        return this.httpClient.post(UserEndpoints.SUGGEST_USERNAME_URI, {
+        return this.httpClient.post<string>(UserEndpoints.SUGGEST_USERNAME_URI, {
             firstname,
             lastname
-        }, {responseType: 'text' as const});
+        });
     }
 
     checkUsernameExists(username: string): Observable<boolean> {

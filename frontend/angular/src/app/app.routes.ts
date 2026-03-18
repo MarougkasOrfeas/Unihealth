@@ -30,6 +30,12 @@ export const routes: Routes = [
                 pathMatch: 'full',
                 loadComponent: () => import('./features/users/users').then((m) => m.Users),
                 data: {breadcrumb: 'Overview'},
+            },
+            {
+                path: 'create',
+                pathMatch: 'full',
+                loadComponent: () => import('./features/users/create-user/create-user').then((m) => m.CreateUser),
+                data: {breadcrumb: 'Create User'},
             }
         ]
     },

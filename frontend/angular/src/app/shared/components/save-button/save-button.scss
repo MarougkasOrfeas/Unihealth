@@ -1,0 +1,15 @@
+.btn-wrapper {
+  display: inline-block; // allows tooltip even when button disabled
+}
+
+.save-btn {
+    background-color: #2F5DA8 !important;
+    color: white !important;
+    border-radius: 4px !important;
+}
+
+:host ::ng-deep button.mat-mdc-raised-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: grayscale(30%);
+}

@@ -26,4 +26,6 @@ public interface DepartmentRepository extends BaseRepository<Department> {
   Optional<Department> findByNameIgnoreCase(String name);
 
   List<Department> findByGroupIdIn(List<String> groupIds);
+
+  List<Department> findByActiveTrueAndGroupActiveTrueAndGroupNameOrderByNameAsc(String groupName);
 }

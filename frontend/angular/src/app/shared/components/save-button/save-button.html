@@ -1,0 +1,19 @@
+<span
+  class="btn-wrapper"
+  [matTooltip]="tooltip ?? ''"
+  [matTooltipDisabled]="!tooltip"
+  matTooltipPosition="above"
+>
+  <button
+    mat-raised-button
+    [color]="color"
+    type="button"
+    [disabled]="disabled"
+    (click)="onClick($event)"
+    [attr.aria-disabled]="disabled"
+    class="save-btn"
+  >
+    <mat-icon>save</mat-icon>
+    {{ 'global.save' | translate }}
+  </button>
+</span>

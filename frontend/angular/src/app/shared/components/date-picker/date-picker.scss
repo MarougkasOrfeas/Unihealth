@@ -1,0 +1,30 @@
+.date-input {
+  width: 100%;
+}
+:host ::ng-deep .mat-mdc-form-field-error-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0;
+}
+
+:host input::placeholder {
+  opacity: 0;
+  font-size: 0.8em;
+  text-align: center;
+}
+
+:host input:focus::placeholder {
+  color: #46483b;
+  opacity: 0.65;
+  font-size: 0.8em;
+  text-align: center;
+}
+
+// .mat-mdc-form-field-icon-suffix {
+//   align-self: center !important;
+//   height: 100% !important;
+// }
+
+// .mat-mdc-icon-button.mat-mdc-button-base {
+//   align-self: center !important;
+// }

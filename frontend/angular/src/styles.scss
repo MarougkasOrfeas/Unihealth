@@ -1,7 +1,20 @@
+@use '@angular/material' as mat;
+
+@include mat.form-field-density(-4);
+
 html, body {
   height: 100%;
   margin: 0;
   font-size: 14px;
+}
+
+.page-title {
+  font-family: Roboto Regular, sans-serif;
+  font-size: 26px;
+  font-weight: 400;
+  margin-left: 20px;
+  margin-top: 25px;
+  margin-bottom: 0;
 }
 
 
@@ -12,7 +25,144 @@ html, body {
   border-radius: 4px !important;
 }
 
+.mat-mdc-form-field {
+  width: 100%;
+}
 
+.mat-mdc-text-field-wrapper.mdc-text-field--outlined {
+  background-color: #fff !important;
+  border-radius: 4px;
+}
+
+/* Fix the actual outlined border colors */
+.mat-mdc-form-field .mdc-notched-outline__leading,
+.mat-mdc-form-field .mdc-notched-outline__notch,
+.mat-mdc-form-field .mdc-notched-outline__trailing {
+  border-color: grey !important;
+  border-width: 0.5px !important;
+}
+
+.mat-mdc-form-field .mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above{
+  transform: translateY(-2.5em) scale(0.75) !important;
+}
+
+.mat-mdc-form-field.mat-form-field-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+
+/* Hover */
+.mat-mdc-form-field:hover .mdc-notched-outline__leading,
+.mat-mdc-form-field:hover .mdc-notched-outline__notch,
+.mat-mdc-form-field:hover .mdc-notched-outline__trailing {
+  border-color: #8c94a3 !important;
+}
+
+/* Focus */
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
+  border-color: #3f51b5 !important;
+  border-width: 1px !important;
+}
+
+/* Input + select text */
+.mat-mdc-input-element,
+.mat-mdc-select-value,
+.mat-mdc-select-min-line,
+.mat-mdc-select-value-text {
+  color: #1f2937 !important;
+  font-size: 14px;
+  line-height: 1.4;
+  caret-color: #3f51b5;
+  margin-left: 2px;
+}
+
+.mat-mdc-select-arrow-wrapper {
+  height: 24px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  margin-right: 5px;
+}
+
+
+/* Focused label */
+.mat-mdc-form-field.mat-focused .mdc-floating-label {
+  color: #3f51b5 !important;
+}
+
+/* Remove weird inherited transparency */
+.mdc-text-field,
+.mat-mdc-text-field-wrapper,
+.mat-mdc-form-field-flex,
+.mat-datepicker-content, .mat-calendar{
+  background-color: #fff !important;
+}
+
+.mat-datepicker-toggle button,
+.mat-mdc-icon-button {
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  line-height: 1;
+}
+
+/* Make the calendar icon match field alignment better */
+.mat-datepicker-toggle svg,
+.mat-datepicker-toggle mat-icon,
+.mat-mdc-form-field-icon-suffix mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+}
+
+/* Hint / subscript */
+.mat-mdc-form-field-subscript-wrapper,
+.mat-mdc-form-field-hint-wrapper,
+.mat-mdc-form-field-error-wrapper {
+  margin-top: 4px;
+  min-height: 18px;
+}
+
+/* Hint text */
+.mat-mdc-form-field-hint,
+.mat-mdc-form-field-required-marker {
+  color: #6b7280 !important;
+  font-size: 12px;
+}
+
+/* ERROR STATE */
+.mat-mdc-form-field.mat-form-field-invalid .mdc-notched-outline__leading,
+.mat-mdc-form-field.mat-form-field-invalid .mdc-notched-outline__notch,
+.mat-mdc-form-field.mat-form-field-invalid .mdc-notched-outline__trailing {
+  border-color: #d32f2f !important;
+}
+
+.mat-mdc-form-field.mat-form-field-invalid .mdc-floating-label,
+.mat-mdc-form-field.mat-form-field-invalid .mat-mdc-input-element,
+.mat-mdc-form-field.mat-form-field-invalid .mat-mdc-select-value-text,
+.mat-mdc-form-field.mat-form-field-invalid .mat-mdc-form-field-error,
+.mat-mdc-form-field.mat-form-field-invalid .mat-mdc-form-field-required-marker {
+  color: #d32f2f !important;
+}
+
+.mat-mdc-form-field-error {
+  color: #d32f2f !important;
+  font-size: 12px;
+}
+
+/* Disabled state */
+.mat-mdc-form-field.mat-form-field-disabled .mat-mdc-text-field-wrapper {
+  background-color: #f5f7fa !important;
+}
+
+.mat-mdc-form-field.mat-form-field-disabled .mat-mdc-input-element,
+.mat-mdc-form-field.mat-form-field-disabled .mat-mdc-select-value-text {
+  color: #9aa3b2 !important;
+}
 
 
 

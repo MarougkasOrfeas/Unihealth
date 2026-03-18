@@ -1,0 +1,105 @@
+<form [formGroup]="form" [appUnsavedChangesBeforeUnload]="form.dirty" data-testid="create-user-form">
+
+    <div class="toolbar-row" data-testid="create-user-toolbar">
+        <h1 class="page-title" data-testid="create-user-title">Δημιουργία χρήστη</h1>
+
+        <span class="actions">
+            <app-save-button [disabled]="form.invalid || form.pending"
+                             [tooltip]="(form.invalid || form.pending) ? 'Παρακαλώ ελέγξτε τα πεδία' : undefined"
+                             (save)="onSave()"
+                             data-testid="btn-save">
+            </app-save-button>
+            <span class="btn-wrapper" matTooltip="Επιστροφή στους χρήστες" matTooltipPosition="above">
+              <button mat-stroked-button color="warn" class="delete-btn" (click)="onCancel()" data-testid="btn-cancel">
+                  <mat-icon>cancel</mat-icon>
+                  Ακύρωση
+
+              </button>
+            </span>
+        </span>
+    </div>
+    <div class="form-container" data-testid="create-user-form-container">
+        <h3 class="page-subtitle" data-testid="section-user-settings">Ρυθμίσεις χρήστη</h3>
+        <mat-divider class="divider-space"></mat-divider>
+        <div class="user-settings">
+            <div class="user-settings-row">
+                <div class="username-block">
+                    <app-text-input label="Όνομα χρήστη" [disabled]="form.controls.activateUsernameSuggestion.value" [required]="true" [submitted]="submitted" [maxlength]="20"
+                                    tooltip="Μοναδικό όνομα χρήστη για σύνδεση" [control]="form.controls.username" (blur)="checkUsernameExists()" data-testid="input-username"/>
+                    <mat-checkbox class="user-management-checkbox" formControlName="activateUsernameSuggestion" data-testid="check-suggest-username"
+                                  matTooltip="Το όνομα χρήστη δημιουργείται αυτόματα από το σύστημα μετά την εισαγωγή ονόματος και επωνύμου.">
+                        Αυτόματη πρόταση ονόματος χρήστη
+                    </mat-checkbox>
+                </div>
+                <app-constant-select label="Προτιμώμενη γλώσσα" [control]="form.controls.language"
+                                     [options]="languageOptions" [required]="true" [submitted]="submitted"
+                                     tooltip="Γλώσσα για το email ενεργοποίησης/απενεργοποίησης του λογαριασμού"
+                                     data-testid="select-language"></app-constant-select>
+
+            </div>
+
+            <mat-radio-group class="deactivation-radio-group" formControlName="deactivationMode" data-testid="radio-deactivation-mode">
+                <mat-label class="field-label">Επιλογές απενεργοποίησης</mat-label>
+                <mat-radio-button class="radio-option field-label" value="automatic" data-testid="radio-automatic">Αυτόματα</mat-radio-button>
+                <div class="scheduled-row">
+                    <mat-radio-button class="radio-option field-label" value="scheduled" data-testid="radio-scheduled">Προγραμματισμένα</mat-radio-button>
+                    <app-date-picker label="Απενεργοποίηση στις *" [control]="form.controls.deactivateAfter"
+                                     [required]="form.controls.deactivationMode.value === 'scheduled'" [submitted]="submitted"
+                                     [min]="today"
+                                     placeholder="ΗΗ.ΜΜ.ΕΕΕΕ"
+                                     tooltip="Ημερομηνία απενεργοποίησης του χρήστη"
+                                     class="deactivation-date"
+                                     data-testid="input-deactivation-date"></app-date-picker>
+                    <app-text-input label="Αιτιολόγηση" [control]="form.controls.scheduledDeactivationReason" tooltip="Προαιρετική αιτιολόγηση για την απενεργοποίηση"
+                                    [maxlength]="255" class="deactivation-reason"
+                                    data-testid="input-deactivation-reason">
+                    </app-text-input>
+                </div>
+            </mat-radio-group>
+        </div>
+
+        <!-- Personal Information Section -->
+        <h3 class="page-subtitle" data-testid="section-personal-info">Στοιχεία χρήστη</h3>
+        <mat-divider class="divider-space"></mat-divider>
+        <div class="personal-info-flex">
+            <app-text-input label="Όνομα" [required]="true" [submitted]="submitted" [maxlength]="50"
+                            tooltip="Όνομα του χρήστη" [control]="form.controls.firstname"
+                            data-testid="input-firstname"/>
+            <app-text-input label="Επώνυμο" [required]="true" [submitted]="submitted" [maxlength]="50"
+                            tooltip="Επώνυμο του χρήστη" [control]="form.controls.lastname"
+                            data-testid="input-lastname"/>
+            <app-text-input label="Διεύθυνση email" [required]="true" [submitted]="submitted"
+                            tooltip="Email του χρήστη" [control]="form.controls.email" type="email"
+                            [maxlength]="255" data-testid="input-email"/>
+            <app-text-input label="Τηλέφωνο" tooltip="Τηλέφωνο του χρήστη"
+                            type="phone" [control]="form.controls.phoneNumber" [maxlength]="30" data-testid="input-phonenumber"/>
+        </div>
+    </div>
+
+    <div class="form-container">
+        <h3 class="page-subtitle" data-testid="section-group-department">Σχολή και Τμήμα</h3>
+        <mat-divider class="divider-space"></mat-divider>
+
+        <div class="group-department-flex">
+            <app-constant-select
+                label="Ομάδα"
+                [control]="form.controls.group"
+                [options]="groupOptions"
+                [required]="true"
+                [submitted]="submitted"
+                tooltip="Επιλέξτε ομάδα"
+                data-testid="select-group">
+            </app-constant-select>
+
+            <app-constant-select
+                label="Τμήμα"
+                [control]="form.controls.department"
+                [options]="departmentOptions"
+                [required]="true"
+                [submitted]="submitted"
+                tooltip="Επιλέξτε τμήμα"
+                data-testid="select-department">
+            </app-constant-select>
+        </div>
+    </div>
+</form>

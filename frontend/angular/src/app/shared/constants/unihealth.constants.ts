@@ -30,4 +30,11 @@ export const UNIHEALTH_CONSTANTS = {
         VERTICAL_POSITION: 'bottom' as const,
         ACTION_LABEL: 'Schließen',
     },
+
+    PATTERNS: {
+        PHONE_PTN: String.raw`^\+?(\(\+?\d+\)|\d+)([\s\-\/]{0,1}(\(\d+\)|\d+))*?(;ext=\d{3,6})?$`,
+        EMAIL_PTN: String.raw`^(?!.*?\.\.)[a-zA-Z0-9\._+-]{1,64}@[a-zA-Z0-9\.-]+\.+[a-zA-Z]{2,}$`,
+        USERNAME_PTN: String.raw`^[a-zA-Z0-9\._-]+$`,
+        FIRSTNAME_LASTNAME_PTN: new RegExp(String.raw`^\p{L}+(?:[ '-]\p{L}+)*$`, 'u'),
+    }
 }

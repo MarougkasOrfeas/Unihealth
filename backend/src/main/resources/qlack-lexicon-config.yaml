@@ -21,6 +21,10 @@ translations:
 
       - global.back: Πίσω
       - global.back.tooltip: Πηγάινω Πίσω
+      - global.language.el: Ελληνικά
+      - global.language.en: Αγγλικά
+      - global.save: Αποθήκευση
+      - global.save.tooltip: Πάτα για Αποθήκευση
 
       # Side Navigation
       - side.admin: Administration
@@ -98,6 +102,10 @@ translations:
 
       - global.back: Back
       - global.back.tooltip: Go Back
+      - global.language.el: Greek
+      - global.language.en: English
+      - global.save: Save
+      - global.save.tooltip: Press to Save
 
       # Side Navigation
       - side.admin: Administration

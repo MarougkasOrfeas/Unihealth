@@ -5,3 +5,12 @@ export interface DepartmentDTO extends BaseEntity {
     description: string;
     users: string[];
 }
+
+export interface DepartmentOption {
+    id?: string;
+    name: string;
+    description?: string | null;
+    active?: boolean;
+    groupName?: string | null;
+}
+

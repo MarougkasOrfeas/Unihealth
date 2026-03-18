@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -70,5 +71,21 @@ public class DepartmentController {
   @PutMapping("_set_group_status")
   public boolean setGroupStatus(@RequestBody SetGroupStatusCommand setGroupStatusCommand) {
     return service.setGroupStatus(setGroupStatusCommand.id(), setGroupStatusCommand.active());
+  }
+
+  @Operation(summary = "Finds all active Departments.",
+      description = "Returns the data of all active Departments.")
+  @GetMapping("_active")
+  public List<DepartmentDTO> findAllActive() {
+    return readerService.findAllActive();
+  }
+
+  @Operation(
+      summary = "Finds all active Departments by Group name.",
+      description = "Returns the data of all active Departments that belong to the given active Group name."
+  )
+  @GetMapping("_active/by-group/{groupName}")
+  public List<DepartmentDTO> findAllActiveByGroupName(@PathVariable String groupName) {
+    return readerService.findAllActiveByGroupName(groupName);
   }
 }

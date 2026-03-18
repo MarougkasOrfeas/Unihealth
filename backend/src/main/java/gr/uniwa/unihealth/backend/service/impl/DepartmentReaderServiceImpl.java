@@ -48,6 +48,14 @@ public class DepartmentReaderServiceImpl extends BaseReaderServiceImpl<Departmen
     return page;
   }
 
+  @Override
+  public List<DepartmentDTO> findAllActiveByGroupName(String groupName) {
+    return repository.findByActiveTrueAndGroupActiveTrueAndGroupNameOrderByNameAsc(groupName)
+        .stream()
+        .map(mapper::mapToDTO)
+        .toList();
+  }
+
   private void addUsers(List<DepartmentDTO> departments) {
     if (departments == null || departments.isEmpty()) {
       return;

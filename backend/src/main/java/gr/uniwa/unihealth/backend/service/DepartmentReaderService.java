@@ -12,4 +12,6 @@ public interface DepartmentReaderService extends BaseReaderService<DepartmentDTO
    * @return List of active groups.
    */
   List<DepartmentDTO> findAllActive();
+
+  List<DepartmentDTO> findAllActiveByGroupName(String groupName);
 }

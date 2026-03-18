@@ -1,0 +1,24 @@
+<mat-form-field class="flex-item date-input" subscriptSizing="dynamic" appearance="outline" [matTooltip]="tooltip ?? ''"
+                [matTooltipDisabled]="!tooltip" matTooltipPosition="above" hideRequiredMarker="true">
+  <mat-label class="field-label">{{ label }}</mat-label>
+
+  <input matInput [matDatepicker]="picker" [formControl]="control" [min]="min" [max]="max" [placeholder]="placeholder ?? ''" (dateInput)="onDateInput()"
+         (dateChange)="onDateInput()"/>
+
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+
+  <mat-error>
+    @if (showError('matDatepickerParse')) {
+      Ungültiges Datumsformat
+    } @else if (showError('matDatepickerMin')) {
+      Datum liegt in der Vergangenheit.
+    } @else if (showError('matDatepickerMax')) {
+      Datum ist zu spät
+    } @else if (showGenericError()) {
+      {{ genericErrorMessage() }}
+    } @else if (showError('required')) {
+        Pflichtfeld
+    }
+  </mat-error>
+</mat-form-field>

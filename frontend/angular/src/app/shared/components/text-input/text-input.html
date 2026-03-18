@@ -1,0 +1,42 @@
+<mat-form-field class="flex-item text-input" subscriptSizing="dynamic" [matTooltip]="tooltip ?? ''"
+                [matTooltipDisabled]="!tooltip" matTooltipPosition="above" appearance="outline" hideRequiredMarker="true"
+                [attr.data-testid]="'field-' + label">
+    <mat-label class="field-label">
+        {{ label }}
+        @if (required) {
+            <span class="required-marker">*</span>
+        }
+    </mat-label>
+    <input matInput [formControl]="control"
+           [type]="type" [attr.autocomplete]="autocomplete"
+           (blur)="blur.emit()"
+           [attr.maxlength]="maxlength ?? null"
+           [attr.inputMode]="inputMode"
+           [attr.pattern]="pattern"
+           [attr.data-testid]="'input-' + label" />
+    <mat-error data-testid="field-error">
+        @if (showError('backend')) {
+            {{ control.getError('backend') }}
+        } @else if (showError('required')) {
+            Υποχρεωτικό πεδίο
+        } @else if (showError('email')) {
+            Μη έγκυρη διεύθυνση email
+        } @else if (showError('minlength')) {
+            Δεν καλύπτεται το ελάχιστο μήκος των {{ control.getError('minlength')?.requiredLength }} χαρακτήρων
+        } @else if (showError('maxlength')) {
+            Υπέρβαση μέγιστου μήκους {{ maxlength }} χαρακτήρων
+        } @else if (showError('pattern')) {
+            @if (patternErrorKey) {
+                @switch (patternErrorKey) {
+                    @case ('taxIdNoDigit') { Το φορολογικό ΑΦΜ πρέπει να περιέχει τουλάχιστον ένα ψηφίο }
+                    @case ('vatRateInvalid') { Μη έγκυρος συντελεστής ΦΠΑ (0–100, έως 2 δεκαδικά ψηφία) }
+                    @default { Μη έγκυρη τιμή. }
+                }
+            } @else {
+                Μη έγκυρη τιμή.
+            }
+        } @else if (showGenericError()) {
+            {{ genericErrorMessage() }}
+        }
+    </mat-error>
+</mat-form-field>

@@ -93,7 +93,7 @@ export class Users implements OnInit {
     }
 
     onCreate() {
-
+        this.router.navigateByUrl('/users/create');
     }
 
     onCancel() {

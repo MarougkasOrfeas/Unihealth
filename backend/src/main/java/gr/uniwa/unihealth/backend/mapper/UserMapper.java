@@ -1,8 +1,11 @@
 package gr.uniwa.unihealth.backend.mapper;
 
+import com.eurodyn.qlack.common.exception.QDoesNotExistException;
 import com.eurodyn.qlack.fuse.lexicon.repository.LanguageRepository;
 import gr.uniwa.unihealth.backend.dto.UserDTO;
+import gr.uniwa.unihealth.backend.model.Department;
 import gr.uniwa.unihealth.backend.model.User;
+import gr.uniwa.unihealth.backend.repository.DepartmentRepository;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,6 +14,9 @@ public abstract class UserMapper extends BaseUpdatableEntityMapper<UserDTO, User
 
   @Autowired
   private LanguageRepository languageRepository;
+
+  @Autowired
+  private DepartmentRepository departmentRepository;
 
   @Override
   @InheritConfiguration(name = "mapDtoToUpdatableEntityConfig")
@@ -67,6 +73,21 @@ public abstract class UserMapper extends BaseUpdatableEntityMapper<UserDTO, User
   @AfterMapping
   protected void afterMapToEntity(UserDTO dto, @MappingTarget User entity) {
     entity.setLanguage(languageRepository.getReferenceById(dto.getLanguage()));
+
+    if (dto.getDepartment() == null || dto.getDepartment().isBlank()) {
+      throw new QDoesNotExistException("Department does not exist");
+    }
+
+    Department department = departmentRepository.findByNameIgnoreCase(dto.getDepartment())
+        .orElseThrow(() -> new QDoesNotExistException("Department does not exist"));
+
+    if (dto.getGroup() != null && !dto.getGroup().isBlank()) {
+      if (department.getGroup() == null || !dto.getGroup().equals(department.getGroup().getName())) {
+        throw new IllegalArgumentException("Department does not belong to the selected group");
+      }
+    }
+
+    entity.setDepartment(department);
   }
 
 }

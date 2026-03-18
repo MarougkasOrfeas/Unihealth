@@ -76,9 +76,9 @@ public class UserController {
         controllerUtils.getPredicateAndPageable(requestBody, User.class);
 
     Predicate predicateToUse = predicateAndPageable.getKey();
-
-    UserDTO loggedInUser = readerService.findLoggedInUser();
-    predicateToUse = QUser.user.id.eq(loggedInUser.getId()).and(predicateAndPageable.getKey());
+//
+//    UserDTO loggedInUser = readerService.findLoggedInUser();
+//    predicateToUse = QUser.user.id.eq(loggedInUser.getId()).and(predicateAndPageable.getKey());
 
 
     return readerService.findAll(predicateToUse, predicateAndPageable.getValue());

@@ -1,0 +1,16 @@
+<mat-form-field class="flex-item constant-select" subscriptSizing="dynamic" appearance="outline"
+    [matTooltip]="tooltip ?? ''" [matTooltipDisabled]="!tooltip" matTooltipPosition="above">
+    <mat-label class="field-label">{{ label }}</mat-label>
+
+    <mat-select [formControl]="control">
+        @for (opt of options; track opt.key) {
+        <mat-option [value]="opt.key">{{ opt.label | translate}}</mat-option>
+        }
+    </mat-select>
+
+    <mat-error>
+        @if (showError('required')) {
+        Pflichtfeld
+        }
+    </mat-error>
+</mat-form-field>
