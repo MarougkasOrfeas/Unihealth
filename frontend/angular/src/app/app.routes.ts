@@ -72,6 +72,12 @@ export const routes: Routes = [
                 pathMatch: 'full',
                 loadComponent: () => import('./features/profile/profile').then((m) => m.Profile),
                 data: {breadcrumb: 'Overview'},
+            },
+            {
+                path: 'form',
+                pathMatch: 'full',
+                loadComponent: () => import('./features/profile/complete-health-profile-form/complete-health-profile-form').then((m) => m.CompleteHealthProfileForm),
+                data: {breadcrumb: 'My Form'},
             }
         ]
     },

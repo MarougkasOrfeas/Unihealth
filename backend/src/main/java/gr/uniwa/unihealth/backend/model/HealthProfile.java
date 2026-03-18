@@ -46,4 +46,7 @@ public class HealthProfile extends BaseUpdatableEntity {
   @Enumerated(EnumType.STRING)
   @Column(name = "primary_goal")
   private PrimaryGoal primaryGoal;
+
+  @OneToOne(mappedBy = "healthProfile")
+  private OptionalHealthProfile optionalProfile;
 }

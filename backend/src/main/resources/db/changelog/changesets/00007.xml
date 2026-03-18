@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd">
+
+    <changeSet id="unihealth_00007" author="uniwa">
+        <createTable tableName="t_optional_health_profile">
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="created_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="health_profile_id" type="varchar(36)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="sleep_quality" type="varchar(50)"/>
+            <column name="stress_level" type="varchar(50)"/>
+            <column name="study_load" type="varchar(50)"/>
+            <column name="activity_level" type="varchar(50)"/>
+            <column name="exercise_frequency_per_week" type="int"/>
+            <column name="diet_type" type="varchar(50)"/>
+            <column name="meal_regularity" type="varchar(50)"/>
+            <column name="hydration_level" type="varchar(50)"/>
+            <column name="fitness_level" type="varchar(50)"/>
+            <column name="has_physical_limitations" type="boolean"/>
+            <column name="physical_limitations_details" type="varchar(50)"/>
+            <column name="preferred_routine_time" type="varchar(50)"/>
+            <column name="preferred_content_type" type="varchar(50)"/>
+            <column name="wellness_focus" type="varchar(50)"/>
+
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="t_optional_health_profile"
+                baseColumnNames="health_profile_id"
+                referencedTableName="t_health_profile"
+                referencedColumnNames="id"
+                constraintName="fk_optional_health_profile_health_profile"
+                onDelete="CASCADE"/>
+
+
+    </changeSet>
+</databaseChangeLog>

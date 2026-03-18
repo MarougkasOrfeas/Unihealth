@@ -99,7 +99,7 @@ export class Profile implements OnInit {
     }
 
     onEditHealthForm(): void {
-        this.router.navigate(['/profile']);
+        this.router.navigate(['/profile/form']);
     }
 
     onLogout(): void {

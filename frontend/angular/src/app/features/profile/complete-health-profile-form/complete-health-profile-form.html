@@ -1,0 +1,509 @@
+<div class="complete-health-profile-form">
+
+    <!-- Base profile section -->
+    <section class="form-section">
+        <div class="section-header">
+            <h2>General Health Profile</h2>
+        </div>
+
+        @if (loading) {
+            <div class="state-message">Loading...</div>
+        } @else if (!isEditingBase) {
+            <div class="profile-view">
+                <div class="view-grid">
+                    <div class="view-item">
+                        <span class="view-label">Date of Birth</span>
+                        <span class="view-value">{{ baseForm.value.dateOfBirth || '-' }}</span>
+                    </div>
+
+                    <div class="view-item">
+                        <span class="view-label">Gender</span>
+                        <span class="view-value">{{ baseForm.value.gender || '-' }}</span>
+                    </div>
+
+                    <div class="view-item">
+                        <span class="view-label">Height (cm)</span>
+                        <span class="view-value">{{ baseForm.value.heightCm ?? '-' }}</span>
+                    </div>
+
+                    <div class="view-item">
+                        <span class="view-label">Weight (kg)</span>
+                        <span class="view-value">{{ baseForm.value.weightKg ?? '-' }}</span>
+                    </div>
+
+                    <div class="view-item">
+                        <span class="view-label">Food Allergies</span>
+                        <span class="view-value">{{ baseForm.value.hasFoodAllergies ? 'Yes' : 'No' }}</span>
+                    </div>
+
+                    <div class="view-item">
+                        <span class="view-label">Chronic Conditions</span>
+                        <span class="view-value">{{ baseForm.value.hasChronicConditions ? 'Yes' : 'No' }}</span>
+                    </div>
+
+                    @if (baseForm.value.hasFoodAllergies) {
+                        <div class="view-item full-width">
+                            <span class="view-label">Food Allergies Details</span>
+                            <span class="view-value">{{ baseForm.value.foodAllergiesDetails || '-' }}</span>
+                        </div>
+                    }
+
+                    @if (baseForm.value.hasChronicConditions) {
+                        <div class="view-item full-width">
+                            <span class="view-label">Chronic Conditions Details</span>
+                            <span class="view-value">{{ baseForm.value.chronicConditionsDetails || '-' }}</span>
+                        </div>
+                    }
+
+                    <div class="view-item full-width">
+                        <span class="view-label">Primary Goal</span>
+                        <span class="view-value">{{ baseForm.value.primaryGoal || '-' }}</span>
+                    </div>
+                </div>
+
+
+                @if (errorMessage) {
+                    <div class="alert alert-error">{{ errorMessage }}</div>
+                }
+
+                @if (successMessage) {
+                    <div class="alert alert-success">{{ successMessage }}</div>
+                }
+                <div class="form-actions">
+                    <button
+                        type="button"
+                        class="edit-btn edit-btn-bottom"
+                        (click)="editBase()">
+                        Edit Base Form
+                    </button>
+                </div>
+            </div>
+        } @else {
+            <form class="health-profile-form" [formGroup]="baseForm" (ngSubmit)="onBaseSubmit()">
+
+                <div class="form-grid">
+                    <div class="form-field">
+                        <label for="dateOfBirth">Date of Birth</label>
+                        <input id="dateOfBirth" type="date" formControlName="dateOfBirth" />
+                        @if (f.dateOfBirth.touched && f.dateOfBirth.invalid) {
+                            <small class="error-text">Date of birth is required.</small>
+                        }
+                    </div>
+
+                    <div class="form-field">
+                        <label for="gender">Gender</label>
+                        <select id="gender" formControlName="gender">
+                            <option [ngValue]="null">Select gender</option>
+                            @for (gender of genders; track gender) {
+                                <option [ngValue]="gender">{{ gender }}</option>
+                            }
+                        </select>
+                        @if (f.gender.touched && f.gender.invalid) {
+                            <small class="error-text">Gender is required.</small>
+                        }
+                    </div>
+
+                    <div class="form-field">
+                        <label for="heightCm">Height (cm)</label>
+                        <input
+                            id="heightCm"
+                            type="number"
+                            formControlName="heightCm"
+                            placeholder="e.g. 175" />
+                        @if (f.heightCm.touched && f.heightCm.invalid) {
+                            <small class="error-text">Enter a valid height.</small>
+                        }
+                    </div>
+
+                    <div class="form-field">
+                        <label for="weightKg">Weight (kg)</label>
+                        <input
+                            id="weightKg"
+                            type="number"
+                            step="0.1"
+                            formControlName="weightKg"
+                            placeholder="e.g. 70.5" />
+                        @if (f.weightKg.touched && f.weightKg.invalid) {
+                            <small class="error-text">Enter a valid weight.</small>
+                        }
+                    </div>
+                </div>
+
+                <div class="checkbox-section">
+                    <label class="checkbox-card">
+                        <input type="checkbox" formControlName="hasFoodAllergies" />
+                        <span>I have food allergies</span>
+                    </label>
+
+                    @if (baseForm.value.hasFoodAllergies) {
+                        <div class="form-field full-width details-box">
+                            <label for="foodAllergiesDetails">Food allergies details</label>
+                            <textarea
+                                id="foodAllergiesDetails"
+                                formControlName="foodAllergiesDetails"
+                                rows="4"
+                                placeholder="Describe your food allergies"></textarea>
+                            @if (f.foodAllergiesDetails.touched && f.foodAllergiesDetails.invalid) {
+                                <small class="error-text">Food allergies details are required.</small>
+                            }
+                        </div>
+                    }
+
+                    <label class="checkbox-card">
+                        <input type="checkbox" formControlName="hasChronicConditions" />
+                        <span>I have chronic conditions</span>
+                    </label>
+
+                    @if (baseForm.value.hasChronicConditions) {
+                        <div class="form-field full-width details-box">
+                            <label for="chronicConditionsDetails">Chronic conditions details</label>
+                            <textarea
+                                id="chronicConditionsDetails"
+                                formControlName="chronicConditionsDetails"
+                                rows="4"
+                                placeholder="Describe your chronic conditions"></textarea>
+                            @if (f.chronicConditionsDetails.touched && f.chronicConditionsDetails.invalid) {
+                                <small class="error-text">Chronic conditions details are required.</small>
+                            }
+                        </div>
+                    }
+                </div>
+
+                <div class="form-field full-width">
+                    <label for="primaryGoal">Primary Goal</label>
+                    <select id="primaryGoal" formControlName="primaryGoal">
+                        <option [ngValue]="null">Select goal</option>
+                        @for (goal of primaryGoals; track goal) {
+                            <option [ngValue]="goal">{{ goal }}</option>
+                        }
+                    </select>
+                    @if (f.primaryGoal.touched && f.primaryGoal.invalid) {
+                        <small class="error-text">Primary goal is required.</small>
+                    }
+                </div>
+
+                @if (errorMessage) {
+                    <div class="alert alert-error">{{ errorMessage }}</div>
+                }
+
+                @if (successMessage) {
+                    <div class="alert alert-success">{{ successMessage }}</div>
+                }
+
+                <div class="form-actions">
+                    <button
+                        type="button"
+                        class="secondary-btn"
+                        (click)="cancelBaseEdit()">
+                        Cancel
+                    </button>
+
+                    <button
+                        class="submit-btn"
+                        type="submit"
+                        [disabled]="saving || baseForm.invalid || !baseForm.dirty">
+                        {{ saving ? 'Saving...' : 'Update Base Profile' }}
+                    </button>
+                </div>
+            </form>
+        }
+    </section>
+
+    <!-- Optional profile section -->
+    <section class="form-section">
+        <div class="section-header">
+            <h2>Optional Personalization Details</h2>
+        </div>
+
+        <p class="section-description">
+            These fields help personalize articles, recommendations, and assistant guidance.
+        </p>
+
+        @if (!isEditingOptional) {
+            <div class="profile-view">
+                <div class="view-grid">
+                    <div class="view-item">
+                        <span class="view-label">Sleep Quality</span>
+                        <span class="view-value">{{ optionalForm.value.sleepQuality || '-' }}</span>
+                    </div>
+
+                    <div class="view-item">
+                        <span class="view-label">Stress Level</span>
+                        <span class="view-value">{{ optionalForm.value.stressLevel || '-' }}</span>
+                    </div>
+
+                    <div class="view-item">
+                        <span class="view-label">Study Load</span>
+                        <span class="view-value">{{ optionalForm.value.studyLoad || '-' }}</span>
+                    </div>
+
+                    <div class="view-item">
+                        <span class="view-label">Activity Level</span>
+                        <span class="view-value">{{ optionalForm.value.activityLevel || '-' }}</span>
+                    </div>
+
+                    <div class="view-item">
+                        <span class="view-label">Exercise Frequency Per Week</span>
+                        <span class="view-value">{{ optionalForm.value.exerciseFrequencyPerWeek ?? '-' }}</span>
+                    </div>
+
+                    <div class="view-item">
+                        <span class="view-label">Diet Type</span>
+                        <span class="view-value">{{ optionalForm.value.dietType || '-' }}</span>
+                    </div>
+
+                    <div class="view-item">
+                        <span class="view-label">Meal Regularity</span>
+                        <span class="view-value">{{ optionalForm.value.mealRegularity || '-' }}</span>
+                    </div>
+
+                    <div class="view-item">
+                        <span class="view-label">Hydration Level</span>
+                        <span class="view-value">{{ optionalForm.value.hydrationLevel || '-' }}</span>
+                    </div>
+
+                    <div class="view-item">
+                        <span class="view-label">Fitness Level</span>
+                        <span class="view-value">{{ optionalForm.value.fitnessLevel || '-' }}</span>
+                    </div>
+
+                    <div class="view-item">
+                        <span class="view-label">Physical Limitations</span>
+                        <span class="view-value">
+                            {{
+                                optionalForm.value.hasPhysicalLimitations === true
+                                    ? 'Yes'
+                                    : optionalForm.value.hasPhysicalLimitations === false
+                                        ? 'No'
+                                        : '-'
+                            }}
+                        </span>
+                    </div>
+
+                    @if (optionalForm.value.hasPhysicalLimitations === true) {
+                        <div class="view-item full-width">
+                            <span class="view-label">Physical Limitations Details</span>
+                            <span class="view-value">{{ optionalForm.value.physicalLimitationsDetails || '-' }}</span>
+                        </div>
+                    }
+
+                    <div class="view-item">
+                        <span class="view-label">Preferred Routine Time</span>
+                        <span class="view-value">{{ optionalForm.value.preferredRoutineTime || '-' }}</span>
+                    </div>
+
+                    <div class="view-item">
+                        <span class="view-label">Preferred Content Type</span>
+                        <span class="view-value">{{ optionalForm.value.preferredContentType || '-' }}</span>
+                    </div>
+
+                    <div class="view-item">
+                        <span class="view-label">Wellness Focus</span>
+                        <span class="view-value">{{ optionalForm.value.wellnessFocus || '-' }}</span>
+                    </div>
+                </div>
+
+                @if (optionalErrorMessage) {
+                    <div class="alert alert-error">{{ optionalErrorMessage }}</div>
+                }
+
+                @if (optionalSuccessMessage) {
+                    <div class="alert alert-success">{{ optionalSuccessMessage }}</div>
+                }
+                <div class="actions">
+                    <button
+                        type="button"
+                        class="edit-btn edit-btn-bottom"
+                        (click)="editOptional()">
+                        Edit Optional Form
+                    </button>
+                </div>
+            </div>
+        } @else {
+            <form [formGroup]="optionalForm" (ngSubmit)="onOptionalSubmit()">
+
+                <h3>Daily Wellbeing</h3>
+                <div class="form-grid">
+                    <div class="form-field">
+                        <label for="sleepQuality">Sleep Quality</label>
+                        <select id="sleepQuality" formControlName="sleepQuality">
+                            <option [ngValue]="null">Select</option>
+                            @for (option of sleepQualityOptions; track option) {
+                                <option [value]="option">{{ option }}</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="stressLevel">Stress Level</label>
+                        <select id="stressLevel" formControlName="stressLevel">
+                            <option [ngValue]="null">Select</option>
+                            @for (option of stressLevelOptions; track option) {
+                                <option [value]="option">{{ option }}</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="studyLoad">Study Load</label>
+                        <select id="studyLoad" formControlName="studyLoad">
+                            <option [ngValue]="null">Select</option>
+                            @for (option of studyLoadOptions; track option) {
+                                <option [value]="option">{{ option }}</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <h3>Healthy Habits</h3>
+                <div class="form-grid">
+                    <div class="form-field">
+                        <label for="activityLevel">Activity Level</label>
+                        <select id="activityLevel" formControlName="activityLevel">
+                            <option [ngValue]="null">Select</option>
+                            @for (option of activityLevelOptions; track option) {
+                                <option [value]="option">{{ option }}</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="exerciseFrequencyPerWeek">Exercise Frequency Per Week</label>
+                        <input
+                            id="exerciseFrequencyPerWeek"
+                            type="number"
+                            formControlName="exerciseFrequencyPerWeek"
+                            min="0"
+                            max="7" />
+                        @if (of['exerciseFrequencyPerWeek'].touched && of['exerciseFrequencyPerWeek'].invalid) {
+                            <small class="error-text">Enter a number between 0 and 7.</small>
+                        }
+                    </div>
+
+                    <div class="form-field">
+                        <label for="dietType">Diet Type</label>
+                        <select id="dietType" formControlName="dietType">
+                            <option [ngValue]="null">Select</option>
+                            @for (option of dietTypeOptions; track option) {
+                                <option [value]="option">{{ option }}</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="mealRegularity">Meal Regularity</label>
+                        <select id="mealRegularity" formControlName="mealRegularity">
+                            <option [ngValue]="null">Select</option>
+                            @for (option of mealRegularityOptions; track option) {
+                                <option [value]="option">{{ option }}</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="hydrationLevel">Hydration Level</label>
+                        <select id="hydrationLevel" formControlName="hydrationLevel">
+                            <option [ngValue]="null">Select</option>
+                            @for (option of hydrationLevelOptions; track option) {
+                                <option [value]="option">{{ option }}</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <h3>Physical Condition</h3>
+                <div class="form-grid">
+                    <div class="form-field">
+                        <label for="fitnessLevel">Fitness Level</label>
+                        <select id="fitnessLevel" formControlName="fitnessLevel">
+                            <option [ngValue]="null">Select</option>
+                            @for (option of fitnessLevelOptions; track option) {
+                                <option [value]="option">{{ option }}</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="hasPhysicalLimitations">Physical Limitations</label>
+                        <select id="hasPhysicalLimitations" formControlName="hasPhysicalLimitations">
+                            <option [ngValue]="null">Select</option>
+                            <option [ngValue]="true">Yes</option>
+                            <option [ngValue]="false">No</option>
+                        </select>
+                    </div>
+
+                    @if (optionalForm.get('hasPhysicalLimitations')?.value === true) {
+                        <div class="form-field full-width details-box">
+                            <label for="physicalLimitationsDetails">Physical Limitations Details</label>
+                            <textarea
+                                id="physicalLimitationsDetails"
+                                formControlName="physicalLimitationsDetails"
+                                rows="3"
+                                placeholder="Describe your physical limitations"></textarea>
+                            @if (of['physicalLimitationsDetails'].touched && of['physicalLimitationsDetails'].invalid) {
+                                <small class="error-text">Physical limitations details are required.</small>
+                            }
+                        </div>
+                    }
+                </div>
+
+                <h3>Preferences</h3>
+                <div class="form-grid">
+                    <div class="form-field">
+                        <label for="preferredRoutineTime">Preferred Routine Time</label>
+                        <select id="preferredRoutineTime" formControlName="preferredRoutineTime">
+                            <option [ngValue]="null">Select</option>
+                            @for (option of preferredRoutineTimeOptions; track option) {
+                                <option [value]="option">{{ option }}</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="preferredContentType">Preferred Content Type</label>
+                        <select id="preferredContentType" formControlName="preferredContentType">
+                            <option [ngValue]="null">Select</option>
+                            @for (option of preferredContentTypeOptions; track option) {
+                                <option [value]="option">{{ option }}</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="wellnessFocus">Wellness Focus</label>
+                        <select id="wellnessFocus" formControlName="wellnessFocus">
+                            <option [ngValue]="null">Select</option>
+                            @for (option of wellnessFocusOptions; track option) {
+                                <option [value]="option">{{ option }}</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                @if (optionalErrorMessage) {
+                    <div class="alert alert-error">{{ optionalErrorMessage }}</div>
+                }
+
+                @if (optionalSuccessMessage) {
+                    <div class="alert alert-success">{{ optionalSuccessMessage }}</div>
+                }
+
+                <div class="actions">
+                    <button
+                        type="button"
+                        class="secondary-btn"
+                        (click)="cancelOptionalEdit()">
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="submit-btn"
+                        [disabled]="saving || optionalForm.invalid || !optionalForm.dirty">
+                        {{ saving ? 'Saving...' : 'Save Optional Details' }}
+                    </button>
+                </div>
+            </form>
+        }
+    </section>
+</div>
