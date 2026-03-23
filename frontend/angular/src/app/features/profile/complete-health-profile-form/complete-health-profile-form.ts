@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, inject, OnInit, Output} from '@angular/core';
 import {
     AbstractControl,
     FormBuilder,
@@ -9,8 +9,8 @@ import {
     Validators
 } from '@angular/forms';
 
-import { OptionalHealthProfileDto } from '../../../shared/interfaces/optional-health-profile';
-import { OptionalHealthProfileService } from '../../../shared/services/optional-health-profile.service';
+import {OptionalHealthProfileDto} from '../../../shared/interfaces/optional-health-profile';
+import {OptionalHealthProfileService} from '../../../shared/services/optional-health-profile.service';
 import {
     ACTIVITY_LEVEL_OPTIONS,
     DIET_TYPE_OPTIONS,
@@ -24,14 +24,15 @@ import {
     STUDY_LOAD_OPTIONS,
     WELLNESS_FOCUS_OPTIONS
 } from '../../../shared/types/optional-health-profile.types';
-import { HealthProfileService } from '../../../shared/services/health-profile.service';
-import { Gender, HealthProfileDTO, PrimaryGoal } from '../../../shared/interfaces/health-profile';
+import {HealthProfileService} from '../../../shared/services/health-profile.service';
+import {Gender, HealthProfileDTO, PrimaryGoal} from '../../../shared/interfaces/health-profile';
+import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
     selector: 'app-complete-health-profile-form',
     templateUrl: './complete-health-profile-form.html',
     styleUrls: ['./complete-health-profile-form.scss'],
-    imports: [ReactiveFormsModule]
+    imports: [ReactiveFormsModule, TranslatePipe]
 })
 export class CompleteHealthProfileForm implements OnInit {
     @Output() optionalSubmit = new EventEmitter<OptionalHealthProfileDto>();
@@ -355,11 +356,11 @@ export class CompleteHealthProfileForm implements OnInit {
         });
 
         if (profile.hasFoodAllergies !== true) {
-            this.baseForm.patchValue({ foodAllergiesDetails: null }, { emitEvent: false });
+            this.baseForm.patchValue({foodAllergiesDetails: null}, {emitEvent: false});
         }
 
         if (profile.hasChronicConditions !== true) {
-            this.baseForm.patchValue({ chronicConditionsDetails: null }, { emitEvent: false });
+            this.baseForm.patchValue({chronicConditionsDetails: null}, {emitEvent: false});
         }
     }
 
@@ -369,8 +370,8 @@ export class CompleteHealthProfileForm implements OnInit {
             if (!hasAllergies) {
                 detailsControl?.setValue(null);
             }
-            detailsControl?.updateValueAndValidity({ emitEvent: false });
-            this.baseForm.updateValueAndValidity({ emitEvent: false });
+            detailsControl?.updateValueAndValidity({emitEvent: false});
+            this.baseForm.updateValueAndValidity({emitEvent: false});
         });
 
         this.baseForm.get('hasChronicConditions')?.valueChanges.subscribe((hasConditions) => {
@@ -378,8 +379,8 @@ export class CompleteHealthProfileForm implements OnInit {
             if (!hasConditions) {
                 detailsControl?.setValue(null);
             }
-            detailsControl?.updateValueAndValidity({ emitEvent: false });
-            this.baseForm.updateValueAndValidity({ emitEvent: false });
+            detailsControl?.updateValueAndValidity({emitEvent: false});
+            this.baseForm.updateValueAndValidity({emitEvent: false});
         });
 
         this.optionalForm.get('hasPhysicalLimitations')?.valueChanges.subscribe((hasLimitations) => {
@@ -387,8 +388,8 @@ export class CompleteHealthProfileForm implements OnInit {
             if (hasLimitations !== true) {
                 detailsControl?.setValue(null);
             }
-            detailsControl?.updateValueAndValidity({ emitEvent: false });
-            this.optionalForm.updateValueAndValidity({ emitEvent: false });
+            detailsControl?.updateValueAndValidity({emitEvent: false});
+            this.optionalForm.updateValueAndValidity({emitEvent: false});
         });
     }
 
@@ -398,8 +399,8 @@ export class CompleteHealthProfileForm implements OnInit {
             const detailsValue = group.get(detailsControlName)?.value;
 
             if (toggleValue === true && (!detailsValue || !detailsValue.toString().trim())) {
-                group.get(detailsControlName)?.setErrors({ required: true });
-                return { requiredIfChecked: true };
+                group.get(detailsControlName)?.setErrors({required: true});
+                return {requiredIfChecked: true};
             }
 
             const control = group.get(detailsControlName);
@@ -421,8 +422,8 @@ export class CompleteHealthProfileForm implements OnInit {
             const detailsValue = group.get(detailsControlName)?.value;
 
             if (toggleValue === true && (!detailsValue || !detailsValue.toString().trim())) {
-                group.get(detailsControlName)?.setErrors({ required: true });
-                return { requiredIfTrue: true };
+                group.get(detailsControlName)?.setErrors({required: true});
+                return {requiredIfTrue: true};
             }
 
             const control = group.get(detailsControlName);

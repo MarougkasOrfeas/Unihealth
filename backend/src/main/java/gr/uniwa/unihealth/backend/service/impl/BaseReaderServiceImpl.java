@@ -8,7 +8,9 @@ import gr.uniwa.unihealth.backend.model.BaseEntity;
 import gr.uniwa.unihealth.backend.repository.BaseRepository;
 import gr.uniwa.unihealth.backend.service.BaseReaderService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -30,7 +32,18 @@ public abstract class BaseReaderServiceImpl<D extends BaseDTO, E extends BaseEnt
 
   @Override
   public Page<D> findAll(Predicate predicate, Pageable pageable) {
-    return getRepository().findAll(predicate, pageable).map(getMapper()::mapToDTO);
+    return getRepository().findAll(predicate, withIdAsSortTiebreaker(pageable))
+        .map(getMapper()::mapToDTO);
+  }
+
+  private Pageable withIdAsSortTiebreaker(Pageable pageable) {
+    Sort sort = pageable.getSort();
+    if (sort.getOrderFor("id") != null) {
+      return pageable;
+    }
+    Sort stable =
+        sort.isSorted() ? sort.and(Sort.by(Sort.Order.asc("id"))) : Sort.by(Sort.Order.asc("id"));
+    return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), stable);
   }
 
   @Override

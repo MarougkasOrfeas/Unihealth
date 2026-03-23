@@ -13,7 +13,7 @@
 <mat-toolbar class="app-toolbar mat-elevation-z2" data-testid="app-toolbar">
     <div class="toolbar-left">
         <div class="brand-block">
-            <a mat-button class="page-logo" data-testid="nav-logo">
+            <a mat-button routerLink="/home" class="page-logo" data-testid="nav-logo">
                 UNI<span class="health-text">HEALTH</span>
             </a>
             <div class="brand-subtitle">{{ 'header.subtitle' | translate }}</div>
@@ -24,42 +24,144 @@
 
     <div class="toolbar-right" data-testid="toolbar-icons">
         <button mat-button [matMenuTriggerFor]="sectionsMenu" class="section-switcher">
-            Browse
+            {{ 'header.browse' | translate }}
             <mat-icon>keyboard_arrow_down</mat-icon>
         </button>
 
         <mat-menu #sectionsMenu="matMenu">
-            <button mat-menu-item>
-                <mat-icon>home</mat-icon>
-                <span>Home</span>
+            <button mat-menu-item [matMenuTriggerFor]="adminMenu">
+                <mat-icon>admin_panel_settings</mat-icon>
+                <span>{{ 'side.admin' | translate }}</span>
             </button>
-            <button mat-menu-item routerLink="/rss-feed">
-                <mat-icon>rss_feed</mat-icon>
-                <span>Health News</span>
+
+            <button mat-menu-item [matMenuTriggerFor]="overviewMenu">
+                <mat-icon>dashboard</mat-icon>
+                <span>{{ 'side.overview' | translate }}</span>
             </button>
-            <button mat-menu-item routerLink="/topics">
-                <mat-icon>category</mat-icon>
-                <span>Topics</span>
+
+            <button mat-menu-item [matMenuTriggerFor]="healthMenu">
+                <mat-icon>medical_information</mat-icon>
+                <span>{{ 'side.health' | translate }}</span>
             </button>
-            <button mat-menu-item routerLink="/advice">
+
+            <button mat-menu-item [matMenuTriggerFor]="wellnessMenu">
                 <mat-icon>favorite</mat-icon>
-                <span>Advice & Tips</span>
+                <span>{{ 'side.wellness' | translate }}</span>
             </button>
-            <button mat-menu-item routerLink="/blood-tests">
-                <mat-icon>biotech</mat-icon>
-                <span>Blood Tests</span>
+
+            <button mat-menu-item [matMenuTriggerFor]="assistantMenu">
+                <mat-icon>support_agent</mat-icon>
+                <span>{{ 'side.health.assistant' | translate }}</span>
             </button>
         </mat-menu>
 
-        <button mat-icon-button matTooltip="Help" data-testid="btn-help">
+        <!-- Admin Menu -->
+        <mat-menu #adminMenu="matMenu">
+            <button mat-menu-item routerLink="/users">
+                <mat-icon>people</mat-icon>
+                <span>{{ 'side.admin.users' | translate }}</span>
+            </button>
+
+            <button mat-menu-item routerLink="/departments">
+                <mat-icon>business</mat-icon>
+                <span>{{ 'side.admin.departments' | translate }}</span>
+            </button>
+
+            <button mat-menu-item routerLink="/groups">
+                <mat-icon>groups</mat-icon>
+                <span>{{ 'side.admin.groups' | translate }}</span>
+            </button>
+        </mat-menu>
+
+        <!-- Overview Menu -->
+        <mat-menu #overviewMenu="matMenu">
+            <button mat-menu-item routerLink="/profile">
+                <mat-icon>person</mat-icon>
+                <span>{{ 'side.overview.profile' | translate }}</span>
+            </button>
+
+            <button mat-menu-item routerLink="/my-plans">
+                <mat-icon>assignment</mat-icon>
+                <span>{{ 'side.overview.plans' | translate }}</span>
+            </button>
+
+            <button mat-menu-item routerLink="/my-blood-tests">
+                <mat-icon>biotech</mat-icon>
+                <span>{{ 'side.overview.blood.tests' | translate }}</span>
+            </button>
+        </mat-menu>
+
+        <!-- Health Menu -->
+        <mat-menu #healthMenu="matMenu">
+            <button mat-menu-item routerLink="/health-news">
+                <mat-icon>rss_feed</mat-icon>
+                <span>{{ 'side.health.news' | translate }}</span>
+            </button>
+
+            <button mat-menu-item routerLink="/topics">
+                <mat-icon>local_hospital</mat-icon>
+                <span>{{ 'side.health.topics' | translate }}</span>
+            </button>
+
+            <button mat-menu-item routerLink="/advice">
+                <mat-icon>lightbulb</mat-icon>
+                <span>{{ 'side.health.advice' | translate }}</span>
+            </button>
+        </mat-menu>
+
+        <!-- Wellness Menu -->
+        <mat-menu #wellnessMenu="matMenu">
+            <button mat-menu-item routerLink="/recipes">
+                <mat-icon>restaurant</mat-icon>
+                <span>{{ 'side.wellness.recipes' | translate }}</span>
+            </button>
+
+            <button mat-menu-item routerLink="/fitness">
+                <mat-icon>fitness_center</mat-icon>
+                <span>{{ 'side.wellness.fitness' | translate }}</span>
+            </button>
+
+            <button mat-menu-item routerLink="/mental-wellbeing">
+                <mat-icon>psychology</mat-icon>
+                <span>{{ 'side.wellness.mental' | translate }}</span>
+            </button>
+        </mat-menu>
+
+        <!-- Health Assistant Menu -->
+        <mat-menu #assistantMenu="matMenu">
+            <button mat-menu-item routerLink="/symptoms">
+                <mat-icon>search</mat-icon>
+                <span>{{ 'side.health.assistant.symptoms' | translate }}</span>
+            </button>
+
+            <button mat-menu-item routerLink="/find-doctor">
+                <mat-icon>person_search</mat-icon>
+                <span>{{ 'side.health.assistant.find-doctor' | translate }}</span>
+            </button>
+
+            <button mat-menu-item routerLink="/care-recommendations">
+                <mat-icon>recommend</mat-icon>
+                <span>{{ 'side.health.assistant.care-recommendations' | translate }}</span>
+            </button>
+
+            <button mat-menu-item routerLink="/urgent-guidance">
+                <mat-icon>emergency</mat-icon>
+                <span>{{ 'side.health.assistant.urgent-guidance' | translate }}</span>
+            </button>
+        </mat-menu>
+
+        <button mat-icon-button [matTooltip]="'header.help' | translate" data-testid="btn-help">
             <mat-icon>help_outline</mat-icon>
         </button>
 
-        <button mat-icon-button matTooltip="Language" data-testid="btn-language">
+        <button mat-button [matMenuTriggerFor]="languageMenu"
+                [matTooltip]="'header.language' | translate"
+                data-testid="btn-language">
             <mat-icon>public</mat-icon>
+            <span>{{ getCurrentLanguageLabel() }}</span>
         </button>
 
-        <button mat-icon-button matTooltip="Settings" data-testid="btn-settings">
+        <button mat-icon-button [matTooltip]="'header.settings' | translate" data-testid="btn-settings">
             <mat-icon>settings</mat-icon>
         </button>
 
@@ -68,9 +170,25 @@
             <span class="user-name">{{ username() }}</span>
         </div>
 
-        <button mat-icon-button (click)="logout()" matTooltip="Logout" data-testid="btn-logout">
+        <button mat-icon-button (click)="logout()" [matTooltip]="'header.logout' | translate" data-testid="btn-logout">
             <mat-icon>logout</mat-icon>
         </button>
     </div>
 </mat-toolbar>
+
+<mat-menu #languageMenu="matMenu">
+    <button mat-menu-item (click)="switchLanguage('el')">
+        <span>Ελληνικά</span>
+        @if (currentLang() === 'el') {
+            <mat-icon>check</mat-icon>
+        }
+    </button>
+
+    <button mat-menu-item (click)="switchLanguage('en')">
+        <span>English</span>
+        @if (currentLang() === 'en') {
+            <mat-icon>check</mat-icon>
+        }
+    </button>
+</mat-menu>
 

@@ -2,13 +2,15 @@ import {Component, inject, OnInit} from "@angular/core";
 import {RssFeed} from "../../shared/interfaces/rss-feed";
 import {RssFeedService} from "../../shared/services/rss-feed.service";
 import {DatePipe} from "@angular/common";
+import {TranslatePipe} from "@ngx-translate/core";
 
 
 @Component({
 
     selector: "app-health-news",
     imports: [
-        DatePipe
+        DatePipe,
+        TranslatePipe
     ],
     templateUrl: "./health-news.html",
     styleUrl: './health-news.scss'

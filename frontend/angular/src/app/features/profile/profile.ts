@@ -5,13 +5,15 @@ import {NgIf} from "@angular/common";
 import {UserService} from "../../shared/services/user.service";
 import {User} from "../../shared/interfaces/user";
 import {AuthService} from "../../core/auth/auth.service";
+import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
     selector: "app-profile",
     standalone: true,
     imports: [
         ReactiveFormsModule,
-        NgIf
+        NgIf,
+        TranslatePipe
     ],
     templateUrl: "./profile.html",
     styleUrl: "./profile.scss",

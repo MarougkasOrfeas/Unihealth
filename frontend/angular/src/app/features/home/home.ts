@@ -5,6 +5,7 @@ import {AsyncPipe, DatePipe, NgForOf} from "@angular/common";
 import {map, Observable} from "rxjs";
 import {MatIcon} from "@angular/material/icon";
 import {RssFeed} from "../../shared/interfaces/rss-feed";
+import {TranslatePipe} from "@ngx-translate/core";
 
 interface HomeRssFeed extends RssFeed {
     shortSummary: string;
@@ -18,7 +19,8 @@ interface HomeRssFeed extends RssFeed {
         DatePipe,
         NgForOf,
         AsyncPipe,
-        MatIcon
+        MatIcon,
+        TranslatePipe
     ],
     templateUrl: './home.html',
     styleUrl: './home.scss',

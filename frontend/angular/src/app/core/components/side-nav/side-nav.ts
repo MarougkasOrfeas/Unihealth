@@ -15,6 +15,7 @@ import {MatIconButton} from "@angular/material/button";
 import {MatListItem, MatListItemIcon, MatListItemTitle, MatNavList} from "@angular/material/list";
 import {MatToolbar} from "@angular/material/toolbar";
 import {RouterLink, RouterOutlet} from "@angular/router";
+import {TranslatePipe} from "@ngx-translate/core";
 
 
 @Component({
@@ -37,7 +38,8 @@ import {RouterLink, RouterOutlet} from "@angular/router";
         MatSidenavContent,
         MatToolbar,
         RouterLink,
-        RouterOutlet
+        RouterOutlet,
+        TranslatePipe
     ],
     templateUrl: './side-nav.html',
     styleUrl: './side-nav.scss'

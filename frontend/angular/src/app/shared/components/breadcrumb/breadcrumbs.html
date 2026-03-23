@@ -4,12 +4,13 @@
     </a>
 
     @for (c of crumbs(); track $index; let last = $last) {
-    <mat-icon class="bc-sep" fontSet="material-symbols-outlined">chevron_right</mat-icon>
+        <mat-icon class="bc-sep" fontSet="material-symbols-outlined">chevron_right</mat-icon>
 
-      @if (last) {
-        <span class="bc-current" data-testid="breadcrumb-current">{{ c.label }}</span>
-      } @else {
-        <a mat-button class="bc-link" [routerLink]="c.url" data-testid="breadcrumb-link">{{ c.label }}</a>
-      }
+        @if (last) {
+            <span class="bc-current" data-testid="breadcrumb-current">{{ c.label | translate }}</span>
+        } @else {
+            <a mat-button class="bc-link" [routerLink]="c.url"
+               data-testid="breadcrumb-link">{{ c.label | translate }}</a>
+        }
     }
 </nav>

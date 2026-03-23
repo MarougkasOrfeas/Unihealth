@@ -3,6 +3,7 @@ import {inject} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {map, Observable} from 'rxjs';
 import {Page} from '../interfaces/page';
+import {TranslateService} from "@ngx-translate/core";
 
 export abstract class BaseService<T> {
 
@@ -14,6 +15,8 @@ export abstract class BaseService<T> {
     protected httpClient = inject(HttpClient);
 
     protected basePath: string;
+
+    private translateService = inject(TranslateService);
 
     constructor(endpoint: string) {
         this.basePath = `${BaseService.CONTEXT_PATH}/${endpoint}`;
@@ -40,7 +43,7 @@ export abstract class BaseService<T> {
     }
 
     getPage(body: Record<string, unknown> = {}): Observable<Page<T>> {
-        return this.httpClient.post<Page<T>>(`${this.basePath}/_page`, body).pipe(
+        return this.httpClient.post<Page<T>>(`${this.basePath}/_page`, {locale: this.translateService.getCurrentLang(), ...body}).pipe(
             map(page => {
                 page.content?.forEach(item => this.transform(item));
                 return page;

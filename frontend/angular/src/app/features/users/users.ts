@@ -5,7 +5,6 @@ import {Table} from "../../shared/components/table/table";
 import {TableColumn} from "../../shared/interfaces/table-column";
 import {User} from "../../shared/interfaces/user";
 import {UserService} from "../../shared/services/user.service";
-import {GreekPaginator} from "../../shared/components/i18n/paginator-gr";
 import {MatIcon} from "@angular/material/icon";
 import {MatTooltip} from "@angular/material/tooltip";
 import {TranslatePipe} from "@ngx-translate/core";
@@ -28,7 +27,6 @@ interface UserRow {
     selector: 'app-users',
     standalone: true,
     imports: [Table, MatIcon, MatTooltip, TranslatePipe, MatButton],
-    providers: [{provide: MatPaginatorIntl, useClass: GreekPaginator}],
     templateUrl: './users.html',
     styleUrls: ['./users.scss']
 })

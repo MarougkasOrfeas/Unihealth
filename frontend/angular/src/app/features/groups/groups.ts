@@ -1,7 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {Table} from "../../shared/components/table/table";
-import {MatPaginatorIntl, PageEvent} from "@angular/material/paginator";
-import {GreekPaginator} from "../../shared/components/i18n/paginator-gr";
+import {PageEvent} from "@angular/material/paginator";
 import {TableColumn} from "../../shared/interfaces/table-column";
 import {GroupService} from "../../shared/services/group.service";
 import {Sort} from "@angular/material/sort";
@@ -24,7 +23,6 @@ interface GroupRow {
     selector: 'app-groups',
     standalone: true,
     imports: [Table, MatButton, MatIcon, TranslatePipe, MatTooltip],
-    providers: [{provide: MatPaginatorIntl, useClass: GreekPaginator}],
     templateUrl: './groups.html',
     styleUrls: ['./groups.scss']
 })

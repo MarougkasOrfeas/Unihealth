@@ -18,6 +18,11 @@ translations:
       - header.title: UNIHEALTH
       - header.subtitle: Students personal health and wellbeing hub
       - header.top.banner.text: Αυτός ο ιστότοπος απευθύνεται σε φοιτητές του Πανεπιστημίου Δυτικής Αττικής (UNIWA)
+      - header.browse: Περιήγηση
+      - header.help: Βοήθεια
+      - header.language: Γλώσσα
+      - header.settings: Ρυθμίσεις
+      - header.logout: Αποσύνδεση
 
       - global.back: Πίσω
       - global.back.tooltip: Πηγάινω Πίσω
@@ -25,24 +30,110 @@ translations:
       - global.language.en: Αγγλικά
       - global.save: Αποθήκευση
       - global.save.tooltip: Πάτα για Αποθήκευση
+      - global.yes: "Ναι"
+      - global.no: "Όχι"
 
       # Side Navigation
-      - side.admin: Administration
-      - side.admin.users: Users
-      - side.admin.roles: Roles
-      - side.admin.groups: Groups
-      - side.overview: Overview
-      - side.overview.profile: Profile Overview
-      - side.overview.plans: My Plans
-      - side.overview.blood.tests: My Blood Tests
-      - side.health: Health Information
-      - side.health.news: Health News
-      - side.health.topics: Health Topics
-      - side.health.advice: Advice & Tips
-      - side.wellness: Wellness & Lifestyle
-      - side.wellness.recipes: Healthy Recipes
-      - side.wellness.fitness: Fitness & Workout
-      - side.wellness.mental: Mental Wellbeing
+      - side.admin: Διαχείριση
+      - side.admin.users: Χρήστες
+      - side.admin.departments: Τμήματα
+      - side.admin.groups: Ομάδες
+      - side.overview: Επισκόπηση
+      - side.overview.profile: Επισκόπηση Προφίλ
+      - side.overview.plans: Τα Πλάνα Μου
+      - side.overview.blood.tests: Οι Αιματολογικές Εξετάσεις Μου
+      - side.health: Πληροφορίες Υγείας
+      - side.health.news: Νέα Υγείας
+      - side.health.topics: Θέματα Υγείας
+      - side.health.advice: Συμβουλές & Tips
+      - side.wellness: Ευεξία & Τρόπος Ζωής
+      - side.wellness.recipes: Υγιεινές Συνταγές
+      - side.wellness.fitness: Γυμναστική & Άσκηση
+      - side.wellness.mental: Ψυχική Ευεξία
+      - side.health.assistant: Βοηθός Υγείας
+      - side.health.assistant.symptoms: Έλεγχος Συμπτωμάτων
+      - side.health.assistant.find-doctor: Εύρεση Γιατρού
+      - side.health.assistant.care-recommendations: Συστάσεις Φροντίδας
+      - side.health.assistant.urgent-guidance: Επείγουσα Καθοδήγηση
+
+      # Breadcrumb
+      - breadcrumb.home: Αρχική
+      - breadcrumb.health.news: Νέα Υγείας
+      - breadcrumb.health.news.today: Τα σημερινά νέα υγείας
+      - breadcrumb.users: Χρήστες
+      - breadcrumb.users.create: Δημιουργία Χρήστη
+      - breadcrumb.groups: Ομάδες
+      - breadcrumb.departments: Τμήματα
+      - breadcrumb.profile: Προφίλ
+      - breadcrumb.profile.form: Η Φόρμα Μου
+      - breadcrumb.symptoms: Συμπτώματα
+      - breadcrumb.symptoms.az: Συμπτώματα A έως Z
+      - breadcrumb.overview: Επισκόπηση
+      - breadcrumb.details: Λεπτομέρειες
+
+      # Init Base Health Form
+      - health.profile.badge: UniHealth
+      - health.profile.title.create: Συμπληρώστε το προφίλ υγείας σας
+      - health.profile.title.edit: Επεξεργασία προφίλ υγείας
+      - health.profile.subtitle: Παρακαλώ συμπληρώστε τα στοιχεία υγείας σας για να εξατομικεύσουμε την εμπειρία σας.
+      - health.profile.loading: Φόρτωση...
+      - health.profile.dateOfBirth.label: Ημερομηνία γέννησης
+      - health.profile.dateOfBirth.tooltip: Επιλέξτε την ημερομηνία γέννησής σας
+      - health.profile.dateOfBirth.error: Η ημερομηνία γέννησης είναι υποχρεωτική.
+      - health.profile.gender.label: Φύλο
+      - health.profile.gender.tooltip: Επιλέξτε το φύλο σας
+      - health.profile.gender.placeholder: Επιλέξτε φύλο
+      - health.profile.gender.error: Το φύλο είναι υποχρεωτικό.
+      - health.profile.height.label: Ύψος (εκ.)
+      - health.profile.height.tooltip: Εισάγετε το ύψος σας σε εκατοστά
+      - health.profile.height.placeholder: π.χ. 175
+      - health.profile.height.error: Εισάγετε έγκυρο ύψος.
+      - health.profile.weight.label: Βάρος (κιλά)
+      - health.profile.weight.tooltip: Εισάγετε το βάρος σας σε κιλά
+      - health.profile.weight.placeholder: π.χ. 70.5
+      - health.profile.weight.error: Εισάγετε έγκυρο βάρος.
+      - health.profile.foodAllergies.label: Έχω τροφικές αλλεργίες
+      - health.profile.foodAllergies.tooltip: Επιλέξτε αν έχετε τροφικές αλλεργίες
+      - health.profile.foodAllergiesDetails.label: Λεπτομέρειες τροφικών αλλεργιών
+      - health.profile.foodAllergiesDetails.tooltip: Περιγράψτε τις τροφικές αλλεργίες σας
+      - health.profile.foodAllergiesDetails.placeholder: Περιγράψτε τις τροφικές αλλεργίες σας
+      - health.profile.foodAllergiesDetails.error: Οι λεπτομέρειες τροφικών αλλεργιών είναι υποχρεωτικές.
+      - health.profile.chronicConditions.label: Έχω χρόνιες παθήσεις
+      - health.profile.chronicConditions.tooltip: Επιλέξτε αν έχετε χρόνιες παθήσεις
+      - health.profile.chronicConditionsDetails.label: Λεπτομέρειες χρόνιων παθήσεων
+      - health.profile.chronicConditionsDetails.tooltip: Περιγράψτε τις χρόνιες παθήσεις σας
+      - health.profile.chronicConditionsDetails.placeholder: Περιγράψτε τις χρόνιες παθήσεις σας
+      - health.profile.chronicConditionsDetails.error: Οι λεπτομέρειες χρόνιων παθήσεων είναι υποχρεωτικές.
+      - health.profile.primaryGoal.label: Κύριος στόχος
+      - health.profile.primaryGoal.tooltip: Επιλέξτε τον κύριο στόχο σας
+      - health.profile.primaryGoal.placeholder: Επιλέξτε στόχο
+      - health.profile.primaryGoal.error: Ο κύριος στόχος είναι υποχρεωτικός.
+      - health.profile.submit.create: Ολοκλήρωση προφίλ
+      - health.profile.submit.update: Ενημέρωση προφίλ
+      - health.profile.submit.saving: Αποθήκευση...
+
+      # Home Page
+      - home.feedback.title: Έρευνα UniHealth
+      - home.feedback.subtitle: Βοηθήστε μας να βελτιώσουμε την εμπειρία σας μοιράζοντας τα σχόλιά σας.
+      - home.feedback.card.tooltip: Πατήστε για να ανοίξετε την έρευνα UniHealth
+      - home.latestNews.title: Τελευταία Νέα
+      - home.latestNews.viewAll: Προβολή όλων
+      - home.latestNews.viewAll.tooltip: Πατήστε για να δείτε όλα τα νέα υγείας
+      - home.latestNews.openArticle.tooltip: Πατήστε για να ανοίξετε το άρθρο
+      - home.latestNews.imageAlt: Εικόνα είδησης
+      - home.latestNews.previous: Προηγούμενο
+      - home.latestNews.previous.tooltip: Μετάβαση στα προηγούμενα νέα
+      - home.latestNews.next: Επόμενο
+      - home.latestNews.next.tooltip: Μετάβαση στα επόμενα νέα
+      - home.trending.title: ΔΗΜΟΦΙΛΗ
+
+      # Paginator
+      - paginator.itemsPerPage: "Εγγραφές ανά σελίδα:"
+      - paginator.nextPage: Επόμενη σελίδα
+      - paginator.previousPage: Προηγούμενη σελίδα
+      - paginator.firstPage: Πρώτη σελίδα
+      - paginator.lastPage: Τελευταία σελίδα
+      - paginator.of: από
 
       # Users
       - user.management.title: Χρήστες
@@ -58,6 +149,137 @@ translations:
       - department.management.title: Τμήματα
       - department.management.action.create: Προσθήκη Τμήματος
       - department.management.tooltip.create: Πάτα για να προσθέσεις ένα Τμήμα
+
+      # Profile
+      - profile.title: Το Προφίλ Μου
+      - profile.subtitle: Διαχειριστείτε τα στοιχεία του λογαριασμού σας, τις προσωπικές προτιμήσεις και τις ρυθμίσεις του προφίλ υγείας σας.
+      - profile.overview.title: Επισκόπηση Προφίλ
+      - profile.overview.subtitle: Δείτε και ενημερώστε τα προσωπικά στοιχεία του λογαριασμού σας.
+      - profile.fields.username: Όνομα χρήστη
+      - profile.fields.fullName: Ονοματεπώνυμο
+      - profile.fields.firstname.placeholder: Όνομα
+      - profile.fields.firstname.tooltip: Εισαγάγετε το όνομά σας
+      - profile.fields.lastname.placeholder: Επώνυμο
+      - profile.fields.lastname.tooltip: Εισαγάγετε το επώνυμό σας
+      - profile.fields.email: Email
+      - profile.fields.email.placeholder: Email
+      - profile.fields.email.tooltip: Εισαγάγετε τη διεύθυνση email σας
+      - profile.fields.memberSince: Μέλος από
+      - profile.actions.edit: Επεξεργασία Προφίλ
+      - profile.actions.edit.tooltip: Πατήστε για επεξεργασία του προφίλ σας
+      - profile.actions.save: Αποθήκευση
+      - profile.actions.save.tooltip: Πατήστε για αποθήκευση αλλαγών
+      - profile.actions.cancel: Ακύρωση
+      - profile.actions.cancel.tooltip: Πατήστε για ακύρωση αλλαγών
+      - profile.preferences.title: Προτιμήσεις
+      - profile.preferences.subtitle: Επιλέξτε πώς θέλετε να λαμβάνετε ενημερώσεις και ειδοποιήσεις.
+      - profile.preferences.unsubscribeNewsFeeds: Απεγγραφή από Ροές Ειδήσεων
+      - profile.preferences.unsubscribeNewsFeeds.tooltip: Ενεργοποιήστε για να μη λαμβάνετε ροές ειδήσεων
+      - profile.preferences.enableNotifications: Ενεργοποίηση Ειδοποιήσεων
+      - profile.preferences.enableNotifications.tooltip: Ενεργοποιήστε για να λαμβάνετε ειδοποιήσεις
+      - profile.healthForm.title: Φόρμα Υγείας
+      - profile.healthForm.subtitle: Διαχειριστείτε τα στοιχεία του ιατρικού και ευεξιακού προφίλ σας.
+      - profile.healthForm.description: Το προφίλ υγείας σας είναι ενεργό και μπορεί να ενημερωθεί οποιαδήποτε στιγμή.
+      - profile.healthForm.edit: Επεξεργασία Φόρμας
+      - profile.healthForm.edit.tooltip: Πατήστε για επεξεργασία της φόρμας υγείας
+      - profile.security.title: Ασφάλεια & Λογαριασμός
+      - profile.security.subtitle: Διατηρήστε τον λογαριασμό σας ασφαλή και διαχειριστείτε τις ενέργειες λογαριασμού.
+      - profile.security.logout: Αποσύνδεση
+      - profile.security.logout.tooltip: Πατήστε για αποσύνδεση
+      - profile.security.deactivate: Απενεργοποίηση Λογαριασμού
+      - profile.security.deactivate.tooltip: Πατήστε για απενεργοποίηση του λογαριασμού
+      - profile.security.delete: Διαγραφή Λογαριασμού
+      - profile.security.delete.tooltip: Πατήστε για οριστική διαγραφή του λογαριασμού
+      - profile.loading.subtitle: Φόρτωση των στοιχείων προφίλ σας...
+      - profile.loading.message: Φόρτωση προφίλ…
+
+      # Complete Full Health Form
+      - complete.health.loading: Φόρτωση...
+      - complete.health.cancel: Ακύρωση
+      - complete.health.cancel.tooltip: Πατήστε για ακύρωση αλλαγών
+      - complete.health.saving: Αποθήκευση...
+      - complete.health.select.default: Επιλογή
+      - complete.health.select.gender: Επιλέξτε φύλο
+      - complete.health.select.goal: Επιλέξτε στόχο
+      - complete.health.base.title: Γενικό Προφίλ Υγείας
+      - complete.health.base.edit: Επεξεργασία Βασικής Φόρμας
+      - complete.health.base.edit.tooltip: Πατήστε για επεξεργασία της βασικής φόρμας
+      - complete.health.base.submit: Ενημέρωση Βασικού Προφίλ
+      - complete.health.base.dateOfBirth.label: Ημερομηνία Γέννησης
+      - complete.health.base.dateOfBirth.tooltip: Επιλέξτε την ημερομηνία γέννησής σας
+      - complete.health.base.dateOfBirth.error: Η ημερομηνία γέννησης είναι υποχρεωτική.
+      - complete.health.base.gender.label: Φύλο
+      - complete.health.base.gender.tooltip: Επιλέξτε το φύλο σας
+      - complete.health.base.gender.error: Το φύλο είναι υποχρεωτικό.
+      - complete.health.base.height.label: Ύψος (εκ.)
+      - complete.health.base.height.tooltip: Εισαγάγετε το ύψος σας σε εκατοστά
+      - complete.health.base.height.placeholder: π.χ. 175
+      - complete.health.base.height.error: Εισαγάγετε έγκυρο ύψος.
+      - complete.health.base.weight.label: Βάρος (κιλά)
+      - complete.health.base.weight.tooltip: Εισαγάγετε το βάρος σας σε κιλά
+      - complete.health.base.weight.placeholder: π.χ. 70.5
+      - complete.health.base.weight.error: Εισαγάγετε έγκυρο βάρος.
+      - complete.health.base.foodAllergies.label: Τροφικές Αλλεργίες
+      - complete.health.base.foodAllergies.checkbox: Έχω τροφικές αλλεργίες
+      - complete.health.base.foodAllergies.tooltip: Επιλέξτε αν έχετε τροφικές αλλεργίες
+      - complete.health.base.chronicConditions.label: Χρόνιες Παθήσεις
+      - complete.health.base.chronicConditions.checkbox: Έχω χρόνιες παθήσεις
+      - complete.health.base.chronicConditions.tooltip: Επιλέξτε αν έχετε χρόνιες παθήσεις
+      - complete.health.base.foodAllergiesDetails.label: Λεπτομέρειες Τροφικών Αλλεργιών
+      - complete.health.base.foodAllergiesDetails.tooltip: Περιγράψτε τις τροφικές αλλεργίες σας
+      - complete.health.base.foodAllergiesDetails.placeholder: Περιγράψτε τις τροφικές αλλεργίες σας
+      - complete.health.base.foodAllergiesDetails.error: Οι λεπτομέρειες τροφικών αλλεργιών είναι υποχρεωτικές.
+      - complete.health.base.chronicConditionsDetails.label: Λεπτομέρειες Χρόνιων Παθήσεων
+      - complete.health.base.chronicConditionsDetails.tooltip: Περιγράψτε τις χρόνιες παθήσεις σας
+      - complete.health.base.chronicConditionsDetails.placeholder: Περιγράψτε τις χρόνιες παθήσεις σας
+      - complete.health.base.chronicConditionsDetails.error: Οι λεπτομέρειες χρόνιων παθήσεων είναι υποχρεωτικές.
+      - complete.health.base.primaryGoal.label: Κύριος Στόχος
+      - complete.health.base.primaryGoal.tooltip: Επιλέξτε τον κύριο στόχο σας
+      - complete.health.base.primaryGoal.error: Ο κύριος στόχος είναι υποχρεωτικός.
+      - complete.health.optional.title: Προαιρετικά Στοιχεία Προσωποποίησης
+      - complete.health.optional.description: Αυτά τα πεδία βοηθούν στην εξατομίκευση άρθρων, συστάσεων και καθοδήγησης από τον βοηθό.
+      - complete.health.optional.edit: Επεξεργασία Προαιρετικής Φόρμας
+      - complete.health.optional.edit.tooltip: Πατήστε για επεξεργασία της προαιρετικής φόρμας
+      - complete.health.optional.submit: Αποθήκευση Προαιρετικών Στοιχείων
+      - complete.health.optional.dailyWellbeing.title: Καθημερινή Ευεξία
+      - complete.health.optional.healthyHabits.title: Υγιεινές Συνήθειες
+      - complete.health.optional.physicalCondition.title: Φυσική Κατάσταση
+      - complete.health.optional.preferences.title: Προτιμήσεις
+      - complete.health.optional.sleepQuality.label: Ποιότητα Ύπνου
+      - complete.health.optional.stressLevel.label: Επίπεδο Άγχους
+      - complete.health.optional.studyLoad.label: Φόρτος Σπουδών
+      - complete.health.optional.activityLevel.label: Επίπεδο Δραστηριότητας
+      - complete.health.optional.exerciseFrequency.label: Συχνότητα Άσκησης Ανά Εβδομάδα
+      - complete.health.optional.exerciseFrequency.tooltip: Εισαγάγετε έναν αριθμό από 0 έως 7
+      - complete.health.optional.exerciseFrequency.error: Εισαγάγετε έναν αριθμό από 0 έως 7.
+      - complete.health.optional.dietType.label: Τύπος Διατροφής
+      - complete.health.optional.mealRegularity.label: Τακτικότητα Γευμάτων
+      - complete.health.optional.hydrationLevel.label: Επίπεδο Ενυδάτωσης
+      - complete.health.optional.fitnessLevel.label: Επίπεδο Φυσικής Κατάστασης
+      - complete.health.optional.physicalLimitations.label: Φυσικοί Περιορισμοί
+      - complete.health.optional.physicalLimitationsDetails.label: Λεπτομέρειες Φυσικών Περιορισμών
+      - complete.health.optional.physicalLimitationsDetails.tooltip: Περιγράψτε τους φυσικούς περιορισμούς σας
+      - complete.health.optional.physicalLimitationsDetails.placeholder: Περιγράψτε τους φυσικούς περιορισμούς σας
+      - complete.health.optional.physicalLimitationsDetails.error: Οι λεπτομέρειες φυσικών περιορισμών είναι υποχρεωτικές.
+      - complete.health.optional.preferredRoutineTime.label: Προτιμώμενη Ώρα Ρουτίνας
+      - complete.health.optional.preferredContentType.label: Προτιμώμενος Τύπος Περιεχομένου
+      - complete.health.optional.wellnessFocus.label: Εστίαση Ευεξίας
+
+      # RSS Health News
+      - health.news.title: Τα σημερινά νέα υγείας
+      - health.news.subtitle: Περιηγηθείτε σε όλα τα διαθέσιμα άρθρα ειδήσεων υγείας.
+      - health.news.loading: Φόρτωση ειδήσεων υγείας...
+      - health.news.empty: Δεν βρέθηκαν νέα υγείας.
+      - health.news.openArticle.tooltip: Πατήστε για άνοιγμα του άρθρου
+      - health.news.imagePlaceholder.tooltip: Δεν υπάρχει διαθέσιμη εικόνα
+      - health.news.source.tooltip: Πηγή άρθρου
+      - health.news.date.tooltip: Ημερομηνία δημοσίευσης
+      - health.news.pagination.previous: Προηγούμενη
+      - health.news.pagination.previous.tooltip: Μετάβαση στην προηγούμενη σελίδα
+      - health.news.pagination.next: Επόμενη
+      - health.news.pagination.next.tooltip: Μετάβαση στην επόμενη σελίδα
+      - health.news.pagination.page: Σελίδα
+      - health.news.pagination.of: από
 
       # Footer
       - unihealth.footer.cookies-policy: Πολιτική Cookies
@@ -99,6 +321,11 @@ translations:
       - header.title: UNIHEALTH
       - header.subtitle: Κέντρο προσωπικής υγείας και ευεξίας φοιτητών
       - header.top.banner.text: This site is intended for university students of UNIWA
+      - header.browse: Browse
+      - header.help: Help
+      - header.language: Language
+      - header.settings: Settings
+      - header.logout: Logout
 
       - global.back: Back
       - global.back.tooltip: Go Back
@@ -106,11 +333,13 @@ translations:
       - global.language.en: English
       - global.save: Save
       - global.save.tooltip: Press to Save
+      - global.yes: "Yes"
+      - global.no: "No"
 
       # Side Navigation
       - side.admin: Administration
       - side.admin.users: Users
-      - side.admin.roles: Roles
+      - side.admin.departments: Departments
       - side.admin.groups: Groups
       - side.overview: Overview
       - side.overview.profile: Profile Overview
@@ -124,6 +353,90 @@ translations:
       - side.wellness.recipes: Healthy Recipes
       - side.wellness.fitness: Fitness & Workout
       - side.wellness.mental: Mental Wellbeing
+      - side.health.assistant: Health Assistant
+      - side.health.assistant.symptoms: Symptom Checker
+      - side.health.assistant.find-doctor: Find a Doctor
+      - side.health.assistant.care-recommendations: Care Recommendations
+      - side.health.assistant.urgent-guidance: Urgent Guidance
+
+      # Breadcrumb
+      - breadcrumb.home: Home
+      - breadcrumb.health.news: Health News
+      - breadcrumb.health.news.today: Today's Health News
+      - breadcrumb.users: Users
+      - breadcrumb.users.create: Create User
+      - breadcrumb.groups: Groups
+      - breadcrumb.departments: Departments
+      - breadcrumb.profile: Profile
+      - breadcrumb.profile.form: My Form
+      - breadcrumb.symptoms: Symptoms
+      - breadcrumb.symptoms.az: Symptoms A to Z
+      - breadcrumb.overview: Overview
+      - breadcrumb.details: Details
+
+      # Init Base Health Form
+      - health.profile.badge: UniHealth
+      - health.profile.title.create: Complete Your Health Profile
+      - health.profile.title.edit: Edit Health Profile
+      - health.profile.subtitle: Please provide your health information to personalize your experience.
+      - health.profile.loading: Loading...
+      - health.profile.dateOfBirth.label: Date of Birth
+      - health.profile.dateOfBirth.tooltip: Select your date of birth
+      - health.profile.dateOfBirth.error: Date of birth is required.
+      - health.profile.gender.label: Gender
+      - health.profile.gender.tooltip: Select your gender
+      - health.profile.gender.placeholder: Select gender
+      - health.profile.gender.error: Gender is required.
+      - health.profile.height.label: Height (cm)
+      - health.profile.height.tooltip: Enter your height in centimeters
+      - health.profile.height.placeholder: e.g. 175
+      - health.profile.height.error: Enter a valid height.
+      - health.profile.weight.label: Weight (kg)
+      - health.profile.weight.tooltip: Enter your weight in kilograms
+      - health.profile.weight.placeholder: e.g. 70.5
+      - health.profile.weight.error: Enter a valid weight.
+      - health.profile.foodAllergies.label: I have food allergies
+      - health.profile.foodAllergies.tooltip: Check if you have food allergies
+      - health.profile.foodAllergiesDetails.label: Food allergies details
+      - health.profile.foodAllergiesDetails.tooltip: Describe your food allergies
+      - health.profile.foodAllergiesDetails.placeholder: Describe your food allergies
+      - health.profile.foodAllergiesDetails.error: Food allergies details are required.
+      - health.profile.chronicConditions.label: I have chronic conditions
+      - health.profile.chronicConditions.tooltip: Check if you have chronic conditions
+      - health.profile.chronicConditionsDetails.label: Chronic conditions details
+      - health.profile.chronicConditionsDetails.tooltip: Describe your chronic conditions
+      - health.profile.chronicConditionsDetails.placeholder: Describe your chronic conditions
+      - health.profile.chronicConditionsDetails.error: Chronic conditions details are required.
+      - health.profile.primaryGoal.label: Primary Goal
+      - health.profile.primaryGoal.tooltip: Select your primary goal
+      - health.profile.primaryGoal.placeholder: Select goal
+      - health.profile.primaryGoal.error: Primary goal is required.
+      - health.profile.submit.create: Complete Profile
+      - health.profile.submit.update: Update Profile
+      - health.profile.submit.saving: Saving...
+
+      # Home Page
+      - home.feedback.title: UniHealth Survey
+      - home.feedback.subtitle: Help us improve your experience by sharing your feedback.
+      - home.feedback.card.tooltip: Click to open the UniHealth survey
+      - home.latestNews.title: Latest News
+      - home.latestNews.viewAll: View all
+      - home.latestNews.viewAll.tooltip: Click to view all health news
+      - home.latestNews.openArticle.tooltip: Click to open the article
+      - home.latestNews.imageAlt: Feed Image
+      - home.latestNews.previous: Previous
+      - home.latestNews.previous.tooltip: Go to previous news items
+      - home.latestNews.next: Next
+      - home.latestNews.next.tooltip: Go to next news items
+      - home.trending.title: TRENDING
+
+      # Paginator
+      - paginator.itemsPerPage: "Records per page:"
+      - paginator.nextPage: Next page
+      - paginator.previousPage: Previous page
+      - paginator.firstPage: First page
+      - paginator.lastPage: Last page
+      - paginator.of: from
 
       # Users
       - user.management.title: Users
@@ -140,11 +453,163 @@ translations:
       - department.management.action.create: Add Department
       - department.management.tooltip.create: Press to Add Department
 
-      # Footer
+        # Profile
+      - profile.badge: UniHealth
+      - profile.title: My Profile
+      - profile.subtitle: Manage your account details, personal preferences, and health profile settings.
+      - profile.overview.title: Profile Overview
+      - profile.overview.subtitle: Review and update your personal account information.
+      - profile.fields.username: Username
+      - profile.fields.fullName: Full Name
+      - profile.fields.firstname.placeholder: First name
+      - profile.fields.firstname.tooltip: Enter your first name
+      - profile.fields.lastname.placeholder: Last name
+      - profile.fields.lastname.tooltip: Enter your last name
+      - profile.fields.email: Email
+      - profile.fields.email.placeholder: Email
+      - profile.fields.email.tooltip: Enter your email address
+      - profile.fields.memberSince: Member Since
+      - profile.actions.edit: Edit Profile
+      - profile.actions.edit.tooltip: Click to edit your profile
+      - profile.actions.save: Save
+      - profile.actions.save.tooltip: Click to save changes
+      - profile.actions.cancel: Cancel
+      - profile.actions.cancel.tooltip: Click to cancel changes
+      - profile.preferences.title: Preferences
+      - profile.preferences.subtitle: Choose how you want to receive updates and notifications.
+      - profile.preferences.unsubscribeNewsFeeds: Unsubscribe from News Feeds
+      - profile.preferences.unsubscribeNewsFeeds.tooltip: Enable to stop receiving news feeds
+      - profile.preferences.enableNotifications: Enable Notifications
+      - profile.preferences.enableNotifications.tooltip: Enable to receive notifications
+      - profile.healthForm.title: Health Form
+      - profile.healthForm.subtitle: Manage your medical and wellness profile details.
+      - profile.healthForm.description: Your health profile is active and can be updated at any time.
+      - profile.healthForm.edit: Edit Form
+      - profile.healthForm.edit.tooltip: Click to edit the health form
+      - profile.security.title: Security & Account
+      - profile.security.subtitle: Keep your account secure and manage account actions.
+      - profile.security.logout: Logout
+      - profile.security.logout.tooltip: Click to log out
+      - profile.security.deactivate: Deactivate Account
+      - profile.security.deactivate.tooltip: Click to deactivate your account
+      - profile.security.delete: Delete Account
+      - profile.security.delete.tooltip: Click to permanently delete your account
+      - profile.loading.subtitle: Loading your profile information...
+      - profile.loading.message: Loading profile…
+
+      # Complete Health Form
+      - complete.health.loading: Loading...
+      - complete.health.cancel: Cancel
+      - complete.health.cancel.tooltip: Click to cancel changes
+      - complete.health.saving: Saving...
+      - complete.health.select.default: Select
+      - complete.health.select.gender: Select gender
+      - complete.health.select.goal: Select goal
+      - complete.health.base.title: General Health Profile
+      - complete.health.base.edit: Edit Base Form
+      - complete.health.base.edit.tooltip: Click to edit the base form
+      - complete.health.base.submit: Update Base Profile
+      - complete.health.base.dateOfBirth.label: Date of Birth
+      - complete.health.base.dateOfBirth.tooltip: Select your date of birth
+      - complete.health.base.dateOfBirth.error: Date of birth is required.
+      - complete.health.base.gender.label: Gender
+      - complete.health.base.gender.tooltip: Select your gender
+      - complete.health.base.gender.error: Gender is required.
+      - complete.health.base.height.label: Height (cm)
+      - complete.health.base.height.tooltip: Enter your height in centimeters
+      - complete.health.base.height.placeholder: e.g. 175
+      - complete.health.base.height.error: Enter a valid height.
+      - complete.health.base.weight.label: Weight (kg)
+      - complete.health.base.weight.tooltip: Enter your weight in kilograms
+      - complete.health.base.weight.placeholder: e.g. 70.5
+      - complete.health.base.weight.error: Enter a valid weight.
+      - complete.health.base.foodAllergies.label: Food Allergies
+      - complete.health.base.foodAllergies.checkbox: I have food allergies
+      - complete.health.base.foodAllergies.tooltip: Check if you have food allergies
+      - complete.health.base.chronicConditions.label: Chronic Conditions
+      - complete.health.base.chronicConditions.checkbox: I have chronic conditions
+      - complete.health.base.chronicConditions.tooltip: Check if you have chronic conditions
+      - complete.health.base.foodAllergiesDetails.label: Food Allergies Details
+      - complete.health.base.foodAllergiesDetails.tooltip: Describe your food allergies
+      - complete.health.base.foodAllergiesDetails.placeholder: Describe your food allergies
+      - complete.health.base.foodAllergiesDetails.error: Food allergies details are required.
+      - complete.health.base.chronicConditionsDetails.label: Chronic Conditions Details
+      - complete.health.base.chronicConditionsDetails.tooltip: Describe your chronic conditions
+      - complete.health.base.chronicConditionsDetails.placeholder: Describe your chronic conditions
+      - complete.health.base.chronicConditionsDetails.error: Chronic conditions details are required.
+      - complete.health.base.primaryGoal.label: Primary Goal
+      - complete.health.base.primaryGoal.tooltip: Select your primary goal
+      - complete.health.base.primaryGoal.error: Primary goal is required.
+      - complete.health.optional.title: Optional Personalization Details
+      - complete.health.optional.description: These fields help personalize articles, recommendations, and assistant guidance.
+      - complete.health.optional.edit: Edit Optional Form
+      - complete.health.optional.edit.tooltip: Click to edit the optional form
+      - complete.health.optional.submit: Save Optional Details
+      - complete.health.optional.dailyWellbeing.title: Daily Wellbeing
+      - complete.health.optional.healthyHabits.title: Healthy Habits
+      - complete.health.optional.physicalCondition.title: Physical Condition
+      - complete.health.optional.preferences.title: Preferences
+      - complete.health.optional.sleepQuality.label: Sleep Quality
+      - complete.health.optional.stressLevel.label: Stress Level
+      - complete.health.optional.studyLoad.label: Study Load
+      - complete.health.optional.activityLevel.label: Activity Level
+      - complete.health.optional.exerciseFrequency.label: Exercise Frequency Per Week
+      - complete.health.optional.exerciseFrequency.tooltip: Enter a number from 0 to 7
+      - complete.health.optional.exerciseFrequency.error: Enter a number between 0 and 7.
+      - complete.health.optional.dietType.label: Diet Type
+      - complete.health.optional.mealRegularity.label: Meal Regularity
+      - complete.health.optional.hydrationLevel.label: Hydration Level
+      - complete.health.optional.fitnessLevel.label: Fitness Level
+      - complete.health.optional.physicalLimitations.label: Physical Limitations
+      - complete.health.optional.physicalLimitationsDetails.label: Physical Limitations Details
+      - complete.health.optional.physicalLimitationsDetails.tooltip: Describe your physical limitations
+      - complete.health.optional.physicalLimitationsDetails.placeholder: Describe your physical limitations
+      - complete.health.optional.physicalLimitationsDetails.error: Physical limitations details are required.
+      - complete.health.optional.preferredRoutineTime.label: Preferred Routine Time
+      - complete.health.optional.preferredContentType.label: Preferred Content Type
+      - complete.health.optional.wellnessFocus.label: Wellness Focus
+
+        # RSS Health News
+      - health.news.title: Today's Health News
+      - health.news.subtitle: Browse all available health news articles.
+      - health.news.loading: Loading health news...
+      - health.news.empty: No health news found.
+      - health.news.openArticle.tooltip: Click to open the article
+      - health.news.imagePlaceholder.tooltip: No image available
+      - health.news.source.tooltip: Article source
+      - health.news.date.tooltip: Publication date
+      - health.news.pagination.previous: Previous
+      - health.news.pagination.previous.tooltip: Go to the previous page
+      - health.news.pagination.next: Next
+      - health.news.pagination.next.tooltip: Go to the next page
+      - health.news.pagination.page: Page
+      - health.news.pagination.of: of
+
+        # Footer
       - unihealth.footer.cookies-policy: Cookies Policy
       - unihealth.footer.privacy-policy: Privacy Policy
       - unihealth.footer.terms-of-use: Terms of Use
       - unihealth.footer.advertising-policy: Advertising Policy
+      - unihealth.footer.copyright-text: © 2026 UniHealth. Created by Uniwa.
+      - unihealth.footer.version: Version
+      - unihealth.footer.legal-title: Legal
+      - unihealth.footer.support-title: Support
+      - unihealth.footer.university-title: University
+      - unihealth.footer.cookies-policy: Cookies Policy
+      - unihealth.footer.privacy-policy: Privacy Policy
+      - unihealth.footer.terms-of-use: Terms of Use
+      - unihealth.footer.advertising-policy: Advertising Policy
+      - unihealth.footer.accessibility: Accessibility
+      - unihealth.footer.faq: Frequently Asked Questions
+      - unihealth.footer.contact-support: Contact Support
+      - unihealth.footer.report-issue: Report an Issue
+      - unihealth.footer.student-support: Student Support
+      - unihealth.footer.uniwa: University of West Attica
+      - unihealth.footer.student-services: Student Services
+      - unihealth.footer.health-office: Health Office
+      - unihealth.footer.campus-info: Campus Information
+      - unihealth.footer.disclaimer: The information provided by UniHealth is for informational and educational purposes only and does not replace professional medical advice. In case of emergency, call 112 or 166.
+      - unihealth.footer.emergency: "Emergency: 112 | 166"
       - unihealth.footer.copyright-text: © 2026 UniHealth. Created by Uniwa.
       - unihealth.footer.version: Version
 

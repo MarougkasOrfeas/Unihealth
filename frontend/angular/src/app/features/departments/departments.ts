@@ -1,7 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {Table} from "../../shared/components/table/table";
 import {MatPaginatorIntl, PageEvent} from "@angular/material/paginator";
-import {GreekPaginator} from "../../shared/components/i18n/paginator-gr";
 import {TableColumn} from "../../shared/interfaces/table-column";
 import {Sort} from "@angular/material/sort";
 import {DepartmentService} from "../../shared/services/department.service";
@@ -24,7 +23,6 @@ interface DepartmentRow {
     selector: 'app-departments',
     standalone: true,
     imports: [Table, MatButton, MatIcon, TranslatePipe, MatTooltip],
-    providers: [{provide: MatPaginatorIntl, useClass: GreekPaginator}],
     templateUrl: './departments.html',
     styleUrls: ['./departments.scss']
 })

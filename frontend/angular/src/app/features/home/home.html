@@ -1,11 +1,15 @@
-<a routerLink="/feedback" class="feedback-card">
+<a
+    routerLink="/feedback"
+    class="feedback-card"
+    [title]="'home.feedback.card.tooltip' | translate"
+>
     <div class="feedback-icon-wrap">
         <mat-icon class="feedback-icon">rate_review</mat-icon>
     </div>
 
     <div class="feedback-text">
-        <h3>UniHealth Survey</h3>
-        <p>Help us improve your experience by sharing your feedback.</p>
+        <h3>{{ 'home.feedback.title' | translate }}</h3>
+        <p>{{ 'home.feedback.subtitle' | translate }}</p>
     </div>
 
     <mat-icon class="feedback-arrow">arrow_forward</mat-icon>
@@ -13,21 +17,30 @@
 
 <div class="container mt-4">
     <div class="title-container">
-        <h2 class="section-title">Latest News</h2>
+        <h2 class="section-title">{{ 'home.latestNews.title' | translate }}</h2>
 
-        <a routerLink="/health-news" class="view-all-link">
-            View all <span class="arrow">→</span>
+        <a
+            routerLink="/health-news"
+            class="view-all-link"
+            [title]="'home.latestNews.viewAll.tooltip' | translate"
+        >
+            {{ 'home.latestNews.viewAll' | translate }} <span class="arrow">→</span>
         </a>
     </div>
 
     <div class="news-carousel-wrapper">
         <div class="news-carousel-container" #carousel (scroll)="checkScrollPosition()">
             <div class="news-grid">
-                <div *ngFor="let feed of rssFeeds$ | async" class="news-card" (click)="openLink(feed.link)">
+                <div
+                    *ngFor="let feed of rssFeeds$ | async"
+                    class="news-card"
+                    (click)="openLink(feed.link)"
+                    [title]="'home.latestNews.openArticle.tooltip' | translate"
+                >
                     <img
                         [src]="feed.imageUrl || 'assets/placeholder-image.png'"
                         class="news-img"
-                        alt="Feed Image"
+                        [alt]="('home.latestNews.imageAlt' | translate)"
                         loading="lazy"
                         width="320"
                         height="180"
@@ -46,13 +59,23 @@
 
     <div class="news-controls">
         @if (!(isAtStart && isAtEnd)) {
-            <button class="news-nav-btn" (click)="prevSlide()" [disabled]="isAtStart">
+            <button
+                class="news-nav-btn"
+                (click)="prevSlide()"
+                [disabled]="isAtStart"
+                [title]="'home.latestNews.previous.tooltip' | translate"
+            >
                 <span class="nav-arrow">←</span>
-                Previous
+                {{ 'home.latestNews.previous' | translate }}
             </button>
 
-            <button class="news-nav-btn" (click)="nextSlide()" [disabled]="isAtEnd">
-                Next
+            <button
+                class="news-nav-btn"
+                (click)="nextSlide()"
+                [disabled]="isAtEnd"
+                [title]="'home.latestNews.next.tooltip' | translate"
+            >
+                {{ 'home.latestNews.next' | translate }}
                 <span class="nav-arrow">→</span>
             </button>
         }
@@ -62,7 +85,7 @@
 <section class="trending-section">
     <h3>
         <mat-icon>trending_up</mat-icon>
-        TRENDING
+        {{ 'home.trending.title' | translate }}
     </h3>
 
     <div class="trending-container"></div>

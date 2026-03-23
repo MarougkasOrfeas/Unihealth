@@ -2,111 +2,173 @@
     <div class="health-profile-card">
         <div class="card-header">
             <div class="title-block">
-                <span class="section-badge">UniHealth</span>
-                <h2>{{ editMode ? 'Edit Health Profile' : 'Complete Your Health Profile' }}</h2>
+                <span class="section-badge">{{ 'health.profile.badge' | translate }}</span>
+                <h2>{{ (editMode ? 'health.profile.title.edit' : 'health.profile.title.create') | translate }}</h2>
                 <p class="subtitle">
-                    Please provide your health information to personalize your experience.
+                    {{ 'health.profile.subtitle' | translate }}
                 </p>
             </div>
         </div>
 
         @if (loading) {
-            <div class="state-message">Loading...</div>
+            <div class="state-message">{{ 'health.profile.loading' | translate }}</div>
         } @else {
             <form class="health-profile-form" [formGroup]="form" (ngSubmit)="submit()">
 
                 <div class="form-grid">
                     <div class="form-field">
-                        <label for="dateOfBirth">Date of Birth</label>
-                        <input id="dateOfBirth" type="date" formControlName="dateOfBirth">
+                        <label
+                            for="dateOfBirth"
+                            [title]="'health.profile.dateOfBirth.tooltip' | translate">
+                            {{ 'health.profile.dateOfBirth.label' | translate }}
+                        </label>
+                        <input
+                            id="dateOfBirth"
+                            type="date"
+                            formControlName="dateOfBirth"
+                            [title]="'health.profile.dateOfBirth.tooltip' | translate">
                         @if (f.dateOfBirth.touched && f.dateOfBirth.invalid) {
-                            <small class="error-text">Date of birth is required.</small>
+                            <small class="error-text">{{ 'health.profile.dateOfBirth.error' | translate }}</small>
                         }
                     </div>
 
                     <div class="form-field">
-                        <label for="gender">Gender</label>
-                        <select id="gender" formControlName="gender">
-                            <option [ngValue]="null">Select gender</option>
+                        <label
+                            for="gender"
+                            [title]="'health.profile.gender.tooltip' | translate">
+                            {{ 'health.profile.gender.label' | translate }}
+                        </label>
+                        <select
+                            id="gender"
+                            formControlName="gender"
+                            [title]="'health.profile.gender.tooltip' | translate">
+                            <option [ngValue]="null">{{ 'health.profile.gender.placeholder' | translate }}</option>
                             @for (gender of genders; track gender) {
                                 <option [ngValue]="gender">{{ gender }}</option>
                             }
                         </select>
                         @if (f.gender.touched && f.gender.invalid) {
-                            <small class="error-text">Gender is required.</small>
+                            <small class="error-text">{{ 'health.profile.gender.error' | translate }}</small>
                         }
                     </div>
 
                     <div class="form-field">
-                        <label for="heightCm">Height (cm)</label>
-                        <input id="heightCm" type="number" formControlName="heightCm" placeholder="e.g. 175">
+                        <label
+                            for="heightCm"
+                            [title]="'health.profile.height.tooltip' | translate">
+                            {{ 'health.profile.height.label' | translate }}
+                        </label>
+                        <input
+                            id="heightCm"
+                            type="number"
+                            formControlName="heightCm"
+                            [placeholder]="'health.profile.height.placeholder' | translate"
+                            [title]="'health.profile.height.tooltip' | translate">
                         @if (f.heightCm.touched && f.heightCm.invalid) {
-                            <small class="error-text">Enter a valid height.</small>
+                            <small class="error-text">{{ 'health.profile.height.error' | translate }}</small>
                         }
                     </div>
 
                     <div class="form-field">
-                        <label for="weightKg">Weight (kg)</label>
-                        <input id="weightKg" type="number" step="0.1" formControlName="weightKg"
-                               placeholder="e.g. 70.5">
+                        <label
+                            for="weightKg"
+                            [title]="'health.profile.weight.tooltip' | translate">
+                            {{ 'health.profile.weight.label' | translate }}
+                        </label>
+                        <input
+                            id="weightKg"
+                            type="number"
+                            step="0.1"
+                            formControlName="weightKg"
+                            [placeholder]="'health.profile.weight.placeholder' | translate"
+                            [title]="'health.profile.weight.tooltip' | translate">
                         @if (f.weightKg.touched && f.weightKg.invalid) {
-                            <small class="error-text">Enter a valid weight.</small>
+                            <small class="error-text">{{ 'health.profile.weight.error' | translate }}</small>
                         }
                     </div>
                 </div>
 
                 <div class="checkbox-section">
-                    <label class="checkbox-card">
-                        <input type="checkbox" formControlName="hasFoodAllergies">
-                        <span>I have food allergies</span>
+                    <label
+                        class="checkbox-card"
+                        [title]="'health.profile.foodAllergies.tooltip' | translate">
+                        <input
+                            type="checkbox"
+                            formControlName="hasFoodAllergies"
+                            [title]="'health.profile.foodAllergies.tooltip' | translate">
+                        <span>{{ 'health.profile.foodAllergies.label' | translate }}</span>
                     </label>
 
                     @if (form.value.hasFoodAllergies) {
                         <div class="form-field full-width details-box">
-                            <label for="foodAllergiesDetails">Food allergies details</label>
+                            <label
+                                for="foodAllergiesDetails"
+                                [title]="'health.profile.foodAllergiesDetails.tooltip' | translate">
+                                {{ 'health.profile.foodAllergiesDetails.label' | translate }}
+                            </label>
                             <textarea
                                 id="foodAllergiesDetails"
                                 formControlName="foodAllergiesDetails"
                                 rows="4"
-                                placeholder="Describe your food allergies"
+                                [placeholder]="'health.profile.foodAllergiesDetails.placeholder' | translate"
+                                [title]="'health.profile.foodAllergiesDetails.tooltip' | translate"
                             ></textarea>
                             @if (f.foodAllergiesDetails.touched && f.foodAllergiesDetails.invalid) {
-                                <small class="error-text">Food allergies details are required.</small>
+                                <small
+                                    class="error-text">{{ 'health.profile.foodAllergiesDetails.error' | translate }}</small>
                             }
                         </div>
                     }
 
-                    <label class="checkbox-card">
-                        <input type="checkbox" formControlName="hasChronicConditions">
-                        <span>I have chronic conditions</span>
+                    <label
+                        class="checkbox-card"
+                        [title]="'health.profile.chronicConditions.tooltip' | translate">
+                        <input
+                            type="checkbox"
+                            formControlName="hasChronicConditions"
+                            [title]="'health.profile.chronicConditions.tooltip' | translate">
+                        <span>{{ 'health.profile.chronicConditions.label' | translate }}</span>
                     </label>
 
                     @if (form.value.hasChronicConditions) {
                         <div class="form-field full-width details-box">
-                            <label for="chronicConditionsDetails">Chronic conditions details</label>
+                            <label
+                                for="chronicConditionsDetails"
+                                [title]="'health.profile.chronicConditionsDetails.tooltip' | translate">
+                                {{ 'health.profile.chronicConditionsDetails.label' | translate }}
+                            </label>
                             <textarea
                                 id="chronicConditionsDetails"
                                 formControlName="chronicConditionsDetails"
                                 rows="4"
-                                placeholder="Describe your chronic conditions"
+                                [placeholder]="'health.profile.chronicConditionsDetails.placeholder' | translate"
+                                [title]="'health.profile.chronicConditionsDetails.tooltip' | translate"
                             ></textarea>
                             @if (f.chronicConditionsDetails.touched && f.chronicConditionsDetails.invalid) {
-                                <small class="error-text">Chronic conditions details are required.</small>
+                                <small
+                                    class="error-text">{{ 'health.profile.chronicConditionsDetails.error' | translate }}</small>
                             }
                         </div>
                     }
                 </div>
 
                 <div class="form-field full-width">
-                    <label for="primaryGoal">Primary Goal</label>
-                    <select id="primaryGoal" formControlName="primaryGoal">
-                        <option [ngValue]="null">Select goal</option>
+                    <label
+                        for="primaryGoal"
+                        [title]="'health.profile.primaryGoal.tooltip' | translate">
+                        {{ 'health.profile.primaryGoal.label' | translate }}
+                    </label>
+                    <select
+                        id="primaryGoal"
+                        formControlName="primaryGoal"
+                        [title]="'health.profile.primaryGoal.tooltip' | translate">
+                        <option [ngValue]="null">{{ 'health.profile.primaryGoal.placeholder' | translate }}</option>
                         @for (goal of primaryGoals; track goal) {
                             <option [ngValue]="goal">{{ goal }}</option>
                         }
                     </select>
                     @if (f.primaryGoal.touched && f.primaryGoal.invalid) {
-                        <small class="error-text">Primary goal is required.</small>
+                        <small class="error-text">{{ 'health.profile.primaryGoal.error' | translate }}</small>
                     }
                 </div>
 
@@ -119,8 +181,18 @@
                 }
 
                 <div class="form-actions">
-                    <button class="submit-btn" type="submit" [disabled]="saving">
-                        {{ saving ? 'Saving...' : (editMode ? 'Update Profile' : 'Complete Profile') }}
+                    <button
+                        class="submit-btn"
+                        type="submit"
+                        [disabled]="saving"
+                        [title]="(saving
+                            ? 'health.profile.submit.saving'
+                            : (editMode ? 'health.profile.submit.update' : 'health.profile.submit.create')) | translate">
+                        {{
+                            (saving
+                                ? 'health.profile.submit.saving'
+                                : (editMode ? 'health.profile.submit.update' : 'health.profile.submit.create')) | translate
+                        }}
                     </button>
                 </div>
             </form>

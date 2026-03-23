@@ -10,7 +10,7 @@ import {BeforeUnloadService} from "../../../shared/services/beforeunload.service
 import {AuthService} from "../../auth/auth.service";
 import {Observable, of} from "rxjs";
 import {CanLeaveWithUnsavedChanges} from "../../../shared/interfaces/unsaved-changes";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 
 
 @Component({
@@ -42,16 +42,33 @@ export class Header {
      */
     private oauthService = inject(AuthService);
 
+    private translate = inject(TranslateService);
     /**
      * Stores the username of the currently logged-in user.
      */
     protected username = signal<string | null>(this.oauthService.username ?? null);
+
+    protected currentLang = signal(this.translate.getCurrentLang() || 'el');
 
     /**
      * Used for logout: if the current page has unsaved changes, it can show its own
      * confirmation dialog before logout is executed.
      */
     @ViewChild(RouterOutlet) outlet!: RouterOutlet;
+
+    constructor() {
+        this.translate.onLangChange.subscribe(event => {
+            this.currentLang.set(event.lang);
+        });
+    }
+
+    switchLanguage(lang: 'el' | 'en'): void {
+        this.translate.use(lang).subscribe();
+    }
+
+    getCurrentLanguageLabel(): string {
+        return this.currentLang() === 'el' ? 'GR' : 'EN';
+    }
 
 
     protected calculateIconLetter = computed(

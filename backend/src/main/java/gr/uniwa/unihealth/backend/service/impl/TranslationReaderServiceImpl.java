@@ -108,4 +108,9 @@ public class TranslationReaderServiceImpl extends LexiconConfigService
     });
     return result;
   }
+
+  @Override
+  public String translate(String key, String locale) {
+    return keyService.getTranslation(key, locale);
+  }
 }

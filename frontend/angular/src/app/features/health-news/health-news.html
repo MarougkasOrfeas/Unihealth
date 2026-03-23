@@ -1,18 +1,18 @@
 <div class="health-news-page">
     <div class="page-header">
         <div>
-            <h1>Today's Health News</h1>
-            <p>Browse all available health news articles.</p>
+            <h1>{{ 'health.news.title' | translate }}</h1>
+            <p>{{ 'health.news.subtitle' | translate }}</p>
         </div>
     </div>
 
     @if (isLoading) {
         <div class="state-message">
-            Loading health news...
+            {{ 'health.news.loading' | translate }}
         </div>
     } @else if (feeds.length === 0) {
         <div class="state-message">
-            No health news found.
+            {{ 'health.news.empty' | translate }}
         </div>
     } @else {
         <div class="news-grid">
@@ -22,6 +22,7 @@
                     [href]="feed.link"
                     target="_blank"
                     rel="noopener noreferrer"
+                    [title]="'health.news.openArticle.tooltip' | translate"
                 >
                     @if (feed.imageUrl) {
                         <img
@@ -30,7 +31,10 @@
                             [alt]="feed.title"
                         />
                     } @else {
-                        <div class="news-card__image news-card__image--placeholder"></div>
+                        <div
+                            class="news-card__image news-card__image--placeholder"
+                            [title]="'health.news.imagePlaceholder.tooltip' | translate"
+                        ></div>
                     }
 
                     <div class="news-card__content">
@@ -46,11 +50,13 @@
 
                         <div class="news-card__meta">
                             @if (feed.sourceName) {
-                                <span>{{ feed.sourceName }}</span>
+                                <span [title]="'health.news.source.tooltip' | translate">{{ feed.sourceName }}</span>
                             }
 
                             @if (feed.publishedDate) {
-                                <span>{{ feed.publishedDate | date:'dd/MM/yyyy' }}</span>
+                                <span [title]="'health.news.date.tooltip' | translate">
+                                    {{ feed.publishedDate | date:'dd/MM/yyyy' }}
+                                </span>
                             }
                         </div>
                     </div>
@@ -63,20 +69,22 @@
                 type="button"
                 (click)="prevPage()"
                 [disabled]="pageNumber === 0 || isLoading"
+                [title]="'health.news.pagination.previous.tooltip' | translate"
             >
-                Previous
+                {{ 'health.news.pagination.previous' | translate }}
             </button>
 
             <span class="pagination-info">
-                Page {{ pageNumber + 1 }} of {{ totalPages }}
-             </span>
+                {{ 'health.news.pagination.page' | translate }} {{ pageNumber + 1 }} {{ 'health.news.pagination.of' | translate }} {{ totalPages }}
+            </span>
 
             <button
                 type="button"
                 (click)="nextPage()"
                 [disabled]="pageNumber + 1 >= totalPages || isLoading"
+                [title]="'health.news.pagination.next.tooltip' | translate"
             >
-                Next
+                {{ 'health.news.pagination.next' | translate }}
             </button>
         </div>
     }

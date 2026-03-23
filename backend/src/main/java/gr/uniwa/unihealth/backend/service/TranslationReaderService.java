@@ -27,4 +27,6 @@ public interface TranslationReaderService {
    * @return a list of LanguageDTO objects representing all languages available in the system.
    */
   List<LanguageDTO> getLanguages();
+
+  String translate(String key, String locale);
 }

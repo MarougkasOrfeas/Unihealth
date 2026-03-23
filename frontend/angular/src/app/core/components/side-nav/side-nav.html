@@ -19,7 +19,7 @@
                 <mat-expansion-panel-header data-testid="nav-panel-admin-header">
                     <mat-panel-title>
                         <mat-icon>admin_panel_settings</mat-icon>
-                        <span class="sidenav-label">Administration</span>
+                        <span class="sidenav-label">{{ 'side.admin' | translate }}</span>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
 
@@ -27,19 +27,19 @@
                     <a mat-list-item routerLink="/users" (click)="closeIfHandset(sidenav)"
                        data-testid="nav-link-admin-users">
                         <mat-icon matListItemIcon>people</mat-icon>
-                        <span matListItemTitle class="sidenav-label">Users</span>
+                        <span matListItemTitle class="sidenav-label">{{ 'side.admin.users' | translate }}</span>
                     </a>
 
                     <a mat-list-item routerLink="/departments" (click)="closeIfHandset(sidenav)"
                        data-testid="nav-link-admin-roles">
                         <mat-icon matListItemIcon>business</mat-icon>
-                        <span matListItemTitle class="sidenav-label">Departments</span>
+                        <span matListItemTitle class="sidenav-label">{{ 'side.admin.departments' | translate }}</span>
                     </a>
 
                     <a mat-list-item routerLink="/groups" (click)="closeIfHandset(sidenav)"
                        data-testid="nav-link-admin-groups">
                         <mat-icon matListItemIcon>groups</mat-icon>
-                        <span matListItemTitle class="sidenav-label">Groups</span>
+                        <span matListItemTitle class="sidenav-label">{{ 'side.admin.groups' | translate }}</span>
                     </a>
                 </mat-nav-list>
             </mat-expansion-panel>
@@ -48,7 +48,7 @@
                 <mat-expansion-panel-header data-testid="nav-panel-overview-header">
                     <mat-panel-title>
                         <mat-icon>dashboard</mat-icon>
-                        <span class="sidenav-label">Overview</span>
+                        <span class="sidenav-label">{{ 'side.overview' | translate }}</span>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
 
@@ -56,19 +56,20 @@
                     <a mat-list-item routerLink="/profile" (click)="closeIfHandset(sidenav)"
                        data-testid="nav-link-profile-overview">
                         <mat-icon matListItemIcon>person</mat-icon>
-                        <span matListItemTitle class="sidenav-label">Profile Overview</span>
+                        <span matListItemTitle class="sidenav-label">{{ 'side.overview.profile' | translate }}</span>
                     </a>
 
                     <a mat-list-item routerLink="/my-plans" (click)="closeIfHandset(sidenav)"
                        data-testid="nav-link-my-plans">
                         <mat-icon matListItemIcon>assignment</mat-icon>
-                        <span matListItemTitle class="sidenav-label">My Plans</span>
+                        <span matListItemTitle class="sidenav-label">{{ 'side.overview.plans' | translate }}</span>
                     </a>
 
                     <a mat-list-item routerLink="/my-blood-tests" (click)="closeIfHandset(sidenav)"
                        data-testid="nav-link-my-blood-tests">
                         <mat-icon matListItemIcon>biotech</mat-icon>
-                        <span matListItemTitle class="sidenav-label">My Blood Tests</span>
+                        <span matListItemTitle
+                              class="sidenav-label">{{ 'side.overview.blood.tests' | translate }}</span>
                     </a>
                 </mat-nav-list>
             </mat-expansion-panel>
@@ -78,7 +79,7 @@
                 <mat-expansion-panel-header data-testid="nav-panel-health-information-header">
                     <mat-panel-title>
                         <mat-icon>medical_information</mat-icon>
-                        <span class="sidenav-label">Health Information</span>
+                        <span class="sidenav-label">{{ 'side.health' | translate }}</span>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
 
@@ -86,19 +87,19 @@
                     <a mat-list-item routerLink="/health-news" (click)="closeIfHandset(sidenav)"
                        data-testid="nav-link-health-news">
                         <mat-icon matListItemIcon>rss_feed</mat-icon>
-                        <span matListItemTitle class="sidenav-label">Health News</span>
+                        <span matListItemTitle class="sidenav-label">{{ 'side.health.news' | translate }}</span>
                     </a>
 
                     <a mat-list-item routerLink="/topics" (click)="closeIfHandset(sidenav)"
                        data-testid="nav-link-health-topics">
                         <mat-icon matListItemIcon>local_hospital</mat-icon>
-                        <span matListItemTitle class="sidenav-label">Health Topics</span>
+                        <span matListItemTitle class="sidenav-label">{{ 'side.health.topics' | translate }}</span>
                     </a>
 
                     <a mat-list-item routerLink="/advice" (click)="closeIfHandset(sidenav)"
                        data-testid="nav-link-blood-tests">
                         <mat-icon matListItemIcon>lightbulb</mat-icon>
-                        <span matListItemTitle class="sidenav-label">Advice & Tips</span>
+                        <span matListItemTitle class="sidenav-label">{{ 'side.health.advice' | translate }}</span>
                     </a>
                 </mat-nav-list>
             </mat-expansion-panel>
@@ -107,7 +108,7 @@
                 <mat-expansion-panel-header data-testid="nav-panel-wellness-header">
                     <mat-panel-title>
                         <mat-icon>favorite</mat-icon>
-                        <span class="sidenav-label">Wellness &amp; Lifestyle</span>
+                        <span class="sidenav-label">{{ 'side.wellness' | translate }}</span>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
 
@@ -115,19 +116,19 @@
                     <a mat-list-item routerLink="/recipes" (click)="closeIfHandset(sidenav)"
                        data-testid="nav-link-healthy-recipes">
                         <mat-icon matListItemIcon>restaurant</mat-icon>
-                        <span matListItemTitle class="sidenav-label">Healthy Recipes</span>
+                        <span matListItemTitle class="sidenav-label">{{ 'side.wellness.recipes' | translate }}</span>
                     </a>
 
                     <a mat-list-item routerLink="/fitness" (click)="closeIfHandset(sidenav)"
                        data-testid="nav-link-fitness">
                         <mat-icon matListItemIcon>fitness_center</mat-icon>
-                        <span matListItemTitle class="sidenav-label">Fitness &amp; Workouts</span>
+                        <span matListItemTitle class="sidenav-label">{{ 'side.wellness.fitness' | translate }}</span>
                     </a>
 
                     <a mat-list-item routerLink="/mental-wellbeing" (click)="closeIfHandset(sidenav)"
                        data-testid="nav-link-mental-wellbeing">
                         <mat-icon matListItemIcon>psychology</mat-icon>
-                        <span matListItemTitle class="sidenav-label">Mental Wellbeing</span>
+                        <span matListItemTitle class="sidenav-label">{{ 'side.wellness.mental' | translate }}</span>
                     </a>
                 </mat-nav-list>
             </mat-expansion-panel>
@@ -138,7 +139,7 @@
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                         <mat-icon>support_agent</mat-icon>
-                        <span class="sidenav-label">Health Assistant</span>
+                        <span class="sidenav-label">{{ 'side.health.assistant' | translate }}</span>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
 
@@ -147,25 +148,25 @@
                     <a mat-list-item routerLink="/symptoms"
                        (click)="closeIfHandset(sidenav)">
                         <mat-icon matListItemIcon>search</mat-icon>
-                        <span matListItemTitle>Symptom Checker</span>
+                        <span matListItemTitle>{{ 'side.health.assistant.symptoms' | translate }}</span>
                     </a>
 
                     <a mat-list-item routerLink="/find-doctor"
                        (click)="closeIfHandset(sidenav)">
                         <mat-icon matListItemIcon>person_search</mat-icon>
-                        <span matListItemTitle>Find a Doctor</span>
+                        <span matListItemTitle>{{ 'side.health.assistant.find-doctor' | translate }}</span>
                     </a>
 
                     <a mat-list-item routerLink="/care-recommendations"
                        (click)="closeIfHandset(sidenav)">
                         <mat-icon matListItemIcon>recommend</mat-icon>
-                        <span matListItemTitle>Care Recommendations</span>
+                        <span matListItemTitle>{{ 'side.health.assistant.care-recommendations' | translate }}</span>
                     </a>
 
                     <a mat-list-item routerLink="/urgent-guidance"
                        (click)="closeIfHandset(sidenav)">
                         <mat-icon matListItemIcon>emergency</mat-icon>
-                        <span matListItemTitle>Urgent Guidance</span>
+                        <span matListItemTitle>{{ 'side.health.assistant.urgent-guidance' | translate }}</span>
                     </a>
 
                 </mat-nav-list>

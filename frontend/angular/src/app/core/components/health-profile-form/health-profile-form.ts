@@ -5,11 +5,12 @@ import {HealthProfileService} from "../../../shared/services/health-profile.serv
 import {Gender, HealthProfileDTO, PrimaryGoal} from "../../../shared/interfaces/health-profile";
 import {Router} from "@angular/router";
 import {AuthService} from "../../auth/auth.service";
+import {TranslatePipe} from "@ngx-translate/core";
 
 @Component({
     selector: 'app-health-profile-form',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule],
+    imports: [CommonModule, ReactiveFormsModule, TranslatePipe],
     templateUrl: './health-profile-form.html',
     styleUrl: './health-profile-form.scss'
 })

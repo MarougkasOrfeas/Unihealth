@@ -6,96 +6,96 @@ export const routes: Routes = [
     {
         path: UNIHEALTH_CONSTANTS.ROUTE_HOME,
         loadComponent: () => import('./features/home/home').then((m) => m.Home),
-        data: {breadcrumb: 'Home'},
+        data: {breadcrumb: 'breadcrumb.home'},
     },
     {
         path: 'health-news',
-        data: {breadcrumb: 'Health News'},
+        data: {breadcrumb: 'breadcrumb.health.news'},
         children: [
             {
                 path: '',
                 pathMatch: 'full',
                 loadComponent: () =>
                     import('./features/health-news/health-news').then((m) => m.HealthNews),
-                data: {breadcrumb: "Today's Health News"},
+                data: {breadcrumb: "breadcrumb.health.news.today"},
             }
         ],
     },
     {
         path: 'users',
-        data: {breadcrumb: 'Users'},
+        data: {breadcrumb: 'breadcrumb.users'},
         children: [
             {
                 path: '',
                 pathMatch: 'full',
                 loadComponent: () => import('./features/users/users').then((m) => m.Users),
-                data: {breadcrumb: 'Overview'},
+                data: {breadcrumb: 'breadcrumb.overview'},
             },
             {
                 path: 'create',
                 pathMatch: 'full',
                 loadComponent: () => import('./features/users/create-user/create-user').then((m) => m.CreateUser),
-                data: {breadcrumb: 'Create User'},
+                data: {breadcrumb: 'breadcrumb.users.create'},
             }
         ]
     },
     {
         path: 'groups',
-        data: {breadcrumb: 'Groups'},
+        data: {breadcrumb: 'breadcrumb.groups'},
         children: [
             {
                 path: '',
                 pathMatch: 'full',
                 loadComponent: () => import('./features/groups/groups').then((m) => m.Groups),
-                data: {breadcrumb: 'Overview'},
+                data: {breadcrumb: 'breadcrumb.overview'},
             }
         ]
     },
     {
         path: 'departments',
-        data: {breadcrumb: 'Departments'},
+        data: {breadcrumb: 'breadcrumb.departments'},
         children: [
             {
                 path: '',
                 pathMatch: 'full',
                 loadComponent: () => import('./features/departments/departments').then((m) => m.Departments),
-                data: {breadcrumb: 'Overview'},
+                data: {breadcrumb: 'breadcrumb.overview'},
             }
         ]
     },
     {
         path: 'profile',
-        data: {breadcrumb: 'Profile'},
+        data: {breadcrumb: 'breadcrumb.profile'},
         children: [
             {
                 path: '',
                 pathMatch: 'full',
                 loadComponent: () => import('./features/profile/profile').then((m) => m.Profile),
-                data: {breadcrumb: 'Overview'},
+                data: {breadcrumb: 'breadcrumb.overview'},
             },
             {
                 path: 'form',
                 pathMatch: 'full',
                 loadComponent: () => import('./features/profile/complete-health-profile-form/complete-health-profile-form').then((m) => m.CompleteHealthProfileForm),
-                data: {breadcrumb: 'My Form'},
+                data: {breadcrumb: 'breadcrumb.profile.form'},
             }
         ]
     },
     {
         path: 'symptoms',
-        data: {breadcrumb: 'Symptoms'},
+        data: {breadcrumb: 'breadcrumb.symptoms'},
         children: [
             {
                 path: '',
                 pathMatch: 'full',
                 loadComponent: () => import('./features/symptoms/symptoms').then((m) => m.Symptoms),
-                data: {breadcrumb: 'Symptoms A to Z'},
+                data: {breadcrumb: 'breadcrumb.symptoms.az'},
             },
             {
                 path: ':slug',
                 pathMatch: 'full',
                 loadComponent: () => import('./features/symptoms/symptom-details/symptom-details').then((m) => m.SymptomDetails),
-                data: {breadcrumb: 'Details'},
+                data: {breadcrumb: 'breadcrumb.details'},
             },
         ]
     }

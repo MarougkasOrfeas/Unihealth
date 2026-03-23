@@ -1,11 +1,11 @@
 <div class="profile-page" *ngIf="user as u; else loading">
     <div class="profile-card">
         <div class="card-header">
-            <span class="section-badge">Unihealth</span>
+            <span class="section-badge">{{ 'profile.badge' | translate }}</span>
             <div class="title-block">
-                <h2>My Profile</h2>
+                <h2>{{ 'profile.title' | translate }}</h2>
                 <p class="subtitle">
-                    Manage your account details, personal preferences, and health profile settings.
+                    {{ 'profile.subtitle' | translate }}
                 </p>
             </div>
         </div>
@@ -15,19 +15,19 @@
 
                 <section id="overview" class="content-section">
                     <div class="section-header">
-                        <h3>Profile Overview</h3>
-                        <p>Review and update your personal account information.</p>
+                        <h3>{{ 'profile.overview.title' | translate }}</h3>
+                        <p>{{ 'profile.overview.subtitle' | translate }}</p>
                     </div>
 
                     <div class="details-card">
                         <div class="details-grid">
                             <div class="detail-row">
-                                <div class="detail-label">Username</div>
+                                <div class="detail-label">{{ 'profile.fields.username' | translate }}</div>
                                 <div class="detail-value">{{ u.username }}</div>
                             </div>
 
                             <div class="detail-row">
-                                <div class="detail-label">Full Name</div>
+                                <div class="detail-label">{{ 'profile.fields.fullName' | translate }}</div>
                                 <div class="detail-value">
                                     <ng-container *ngIf="!editMode; else nameEdit">
                                         {{ u.firstname }} {{ u.lastname }}
@@ -35,43 +35,66 @@
 
                                     <ng-template #nameEdit>
                                         <div class="name-grid">
-                                            <input type="text" formControlName="firstname" placeholder="First name"/>
-                                            <input type="text" formControlName="lastname" placeholder="Last name"/>
+                                            <input
+                                                type="text"
+                                                formControlName="firstname"
+                                                [placeholder]="'profile.fields.firstname.placeholder' | translate"
+                                                [title]="'profile.fields.firstname.tooltip' | translate"/>
+                                            <input
+                                                type="text"
+                                                formControlName="lastname"
+                                                [placeholder]="'profile.fields.lastname.placeholder' | translate"
+                                                [title]="'profile.fields.lastname.tooltip' | translate"/>
                                         </div>
                                     </ng-template>
                                 </div>
                             </div>
 
                             <div class="detail-row">
-                                <div class="detail-label">Email</div>
+                                <div class="detail-label">{{ 'profile.fields.email' | translate }}</div>
                                 <div class="detail-value">
                                     <ng-container *ngIf="!editMode; else emailEdit">
                                         {{ u.email }}
                                     </ng-container>
 
                                     <ng-template #emailEdit>
-                                        <input type="email" formControlName="email" placeholder="Email"/>
+                                        <input
+                                            type="email"
+                                            formControlName="email"
+                                            [placeholder]="'profile.fields.email.placeholder' | translate"
+                                            [title]="'profile.fields.email.tooltip' | translate"/>
                                     </ng-template>
                                 </div>
                             </div>
 
                             <div class="detail-row">
-                                <div class="detail-label">Member Since</div>
+                                <div class="detail-label">{{ 'profile.fields.memberSince' | translate }}</div>
                                 <div class="detail-value">{{ u.createdOn }}</div>
                             </div>
                         </div>
 
                         <div class="section-actions">
-                            <button *ngIf="!editMode" class="primary-btn" (click)="onEdit()">
-                                Edit Profile
+                            <button
+                                *ngIf="!editMode"
+                                class="primary-btn"
+                                (click)="onEdit()"
+                                [title]="'profile.actions.edit.tooltip' | translate">
+                                {{ 'profile.actions.edit' | translate }}
                             </button>
 
                             <ng-container *ngIf="editMode">
-                                <button class="primary-btn" (click)="onSave()" [disabled]="form.invalid">
-                                    Save
+                                <button
+                                    class="primary-btn"
+                                    (click)="onSave()"
+                                    [disabled]="form.invalid"
+                                    [title]="'profile.actions.save.tooltip' | translate">
+                                    {{ 'profile.actions.save' | translate }}
                                 </button>
-                                <button class="secondary-btn" (click)="onCancel()">
-                                    Cancel
+                                <button
+                                    class="secondary-btn"
+                                    (click)="onCancel()"
+                                    [title]="'profile.actions.cancel.tooltip' | translate">
+                                    {{ 'profile.actions.cancel' | translate }}
                                 </button>
                             </ng-container>
                         </div>
@@ -80,22 +103,26 @@
 
                 <section id="preferences" class="content-section">
                     <div class="section-header">
-                        <h3>Preferences</h3>
-                        <p>Choose how you want to receive updates and notifications.</p>
+                        <h3>{{ 'profile.preferences.title' | translate }}</h3>
+                        <p>{{ 'profile.preferences.subtitle' | translate }}</p>
                     </div>
 
                     <div class="settings-card">
                         <div class="settings-item">
-                            <span>Unsubscribe from News Feeds</span>
-                            <label class="toggle-switch">
+                            <span>{{ 'profile.preferences.unsubscribeNewsFeeds' | translate }}</span>
+                            <label
+                                class="toggle-switch"
+                                [title]="'profile.preferences.unsubscribeNewsFeeds.tooltip' | translate">
                                 <input type="checkbox"/>
                                 <span class="slider round"></span>
                             </label>
                         </div>
 
                         <div class="settings-item">
-                            <span>Enable Notifications</span>
-                            <label class="toggle-switch">
+                            <span>{{ 'profile.preferences.enableNotifications' | translate }}</span>
+                            <label
+                                class="toggle-switch"
+                                [title]="'profile.preferences.enableNotifications.tooltip' | translate">
                                 <input type="checkbox"/>
                                 <span class="slider round"></span>
                             </label>
@@ -105,26 +132,44 @@
 
                 <section id="health-form" class="content-section">
                     <div class="section-header">
-                        <h3>Health Form</h3>
-                        <p>Manage your medical and wellness profile details.</p>
+                        <h3>{{ 'profile.healthForm.title' | translate }}</h3>
+                        <p>{{ 'profile.healthForm.subtitle' | translate }}</p>
                     </div>
 
                     <div class="action-card">
-                        <p>Your health profile is active and can be updated at any time.</p>
-                        <button class="primary-btn" (click)="onEditHealthForm()">Edit Form</button>
+                        <p>{{ 'profile.healthForm.description' | translate }}</p>
+                        <button
+                            class="primary-btn"
+                            (click)="onEditHealthForm()"
+                            [title]="'profile.healthForm.edit.tooltip' | translate">
+                            {{ 'profile.healthForm.edit' | translate }}
+                        </button>
                     </div>
                 </section>
 
                 <section id="security" class="content-section">
                     <div class="section-header">
-                        <h3>Security &amp; Account</h3>
-                        <p>Keep your account secure and manage account actions.</p>
+                        <h3>{{ 'profile.security.title' | translate }}</h3>
+                        <p>{{ 'profile.security.subtitle' | translate }}</p>
                     </div>
 
                     <div class="security-card">
-                        <button class="primary-btn" (click)="onLogout()">Logout</button>
-                        <button class="secondary-btn">Deactivate Account</button>
-                        <button class="danger-btn">Delete Account</button>
+                        <button
+                            class="primary-btn"
+                            (click)="onLogout()"
+                            [title]="'profile.security.logout.tooltip' | translate">
+                            {{ 'profile.security.logout' | translate }}
+                        </button>
+                        <button
+                            class="secondary-btn"
+                            [title]="'profile.security.deactivate.tooltip' | translate">
+                            {{ 'profile.security.deactivate' | translate }}
+                        </button>
+                        <button
+                            class="danger-btn"
+                            [title]="'profile.security.delete.tooltip' | translate">
+                            {{ 'profile.security.delete' | translate }}
+                        </button>
                     </div>
                 </section>
             </main>
@@ -136,15 +181,15 @@
     <div class="profile-page">
         <div class="profile-card">
             <div class="card-header">
-                <span class="section-badge">Unihealth</span>
+                <span class="section-badge">{{ 'profile.badge' | translate }}</span>
                 <div class="title-block">
-                    <h2>My Profile</h2>
-                    <p class="subtitle">Loading your profile information...</p>
+                    <h2>{{ 'profile.title' | translate }}</h2>
+                    <p class="subtitle">{{ 'profile.loading.subtitle' | translate }}</p>
                 </div>
             </div>
 
             <div class="state-message">
-                Loading profile…
+                {{ 'profile.loading.message' | translate }}
             </div>
         </div>
     </div>

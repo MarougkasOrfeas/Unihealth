@@ -3,64 +3,69 @@
     <!-- Base profile section -->
     <section class="form-section">
         <div class="section-header">
-            <h2>General Health Profile</h2>
+            <h2>{{ 'complete.health.base.title' | translate }}</h2>
         </div>
 
         @if (loading) {
-            <div class="state-message">Loading...</div>
+            <div class="state-message">{{ 'complete.health.loading' | translate }}</div>
         } @else if (!isEditingBase) {
             <div class="profile-view">
                 <div class="view-grid">
                     <div class="view-item">
-                        <span class="view-label">Date of Birth</span>
+                        <span class="view-label">{{ 'complete.health.base.dateOfBirth.label' | translate }}</span>
                         <span class="view-value">{{ baseForm.value.dateOfBirth || '-' }}</span>
                     </div>
 
                     <div class="view-item">
-                        <span class="view-label">Gender</span>
+                        <span class="view-label">{{ 'complete.health.base.gender.label' | translate }}</span>
                         <span class="view-value">{{ baseForm.value.gender || '-' }}</span>
                     </div>
 
                     <div class="view-item">
-                        <span class="view-label">Height (cm)</span>
+                        <span class="view-label">{{ 'complete.health.base.height.label' | translate }}</span>
                         <span class="view-value">{{ baseForm.value.heightCm ?? '-' }}</span>
                     </div>
 
                     <div class="view-item">
-                        <span class="view-label">Weight (kg)</span>
+                        <span class="view-label">{{ 'complete.health.base.weight.label' | translate }}</span>
                         <span class="view-value">{{ baseForm.value.weightKg ?? '-' }}</span>
                     </div>
 
                     <div class="view-item">
-                        <span class="view-label">Food Allergies</span>
-                        <span class="view-value">{{ baseForm.value.hasFoodAllergies ? 'Yes' : 'No' }}</span>
+                        <span class="view-label">{{ 'complete.health.base.foodAllergies.label' | translate }}</span>
+                        <span class="view-value">
+                            {{ (baseForm.value.hasFoodAllergies ? 'global.yes' : 'global.no') | translate }}
+                        </span>
                     </div>
 
                     <div class="view-item">
-                        <span class="view-label">Chronic Conditions</span>
-                        <span class="view-value">{{ baseForm.value.hasChronicConditions ? 'Yes' : 'No' }}</span>
+                        <span class="view-label">{{ 'complete.health.base.chronicConditions.label' | translate }}</span>
+                        <span class="view-value">
+                            {{ (baseForm.value.hasChronicConditions ? 'global.yes' : 'global.no') | translate }}
+                        </span>
                     </div>
 
                     @if (baseForm.value.hasFoodAllergies) {
                         <div class="view-item full-width">
-                            <span class="view-label">Food Allergies Details</span>
+                            <span
+                                class="view-label">{{ 'complete.health.base.foodAllergiesDetails.label' | translate }}</span>
                             <span class="view-value">{{ baseForm.value.foodAllergiesDetails || '-' }}</span>
                         </div>
                     }
 
                     @if (baseForm.value.hasChronicConditions) {
                         <div class="view-item full-width">
-                            <span class="view-label">Chronic Conditions Details</span>
+                            <span
+                                class="view-label">{{ 'complete.health.base.chronicConditionsDetails.label' | translate }}</span>
                             <span class="view-value">{{ baseForm.value.chronicConditionsDetails || '-' }}</span>
                         </div>
                     }
 
                     <div class="view-item full-width">
-                        <span class="view-label">Primary Goal</span>
+                        <span class="view-label">{{ 'complete.health.base.primaryGoal.label' | translate }}</span>
                         <span class="view-value">{{ baseForm.value.primaryGoal || '-' }}</span>
                     </div>
                 </div>
-
 
                 @if (errorMessage) {
                     <div class="alert alert-error">{{ errorMessage }}</div>
@@ -69,12 +74,14 @@
                 @if (successMessage) {
                     <div class="alert alert-success">{{ successMessage }}</div>
                 }
+
                 <div class="form-actions">
                     <button
                         type="button"
                         class="edit-btn edit-btn-bottom"
-                        (click)="editBase()">
-                        Edit Base Form
+                        (click)="editBase()"
+                        [title]="'complete.health.base.edit.tooltip' | translate">
+                        {{ 'complete.health.base.edit' | translate }}
                     </button>
                 </div>
             </div>
@@ -83,102 +90,156 @@
 
                 <div class="form-grid">
                     <div class="form-field">
-                        <label for="dateOfBirth">Date of Birth</label>
-                        <input id="dateOfBirth" type="date" formControlName="dateOfBirth" />
+                        <label
+                            for="dateOfBirth"
+                            [title]="'complete.health.base.dateOfBirth.tooltip' | translate">
+                            {{ 'complete.health.base.dateOfBirth.label' | translate }}
+                        </label>
+                        <input
+                            id="dateOfBirth"
+                            type="date"
+                            formControlName="dateOfBirth"
+                            [title]="'complete.health.base.dateOfBirth.tooltip' | translate"/>
                         @if (f.dateOfBirth.touched && f.dateOfBirth.invalid) {
-                            <small class="error-text">Date of birth is required.</small>
+                            <small class="error-text">{{ 'complete.health.base.dateOfBirth.error' | translate }}</small>
                         }
                     </div>
 
                     <div class="form-field">
-                        <label for="gender">Gender</label>
-                        <select id="gender" formControlName="gender">
-                            <option [ngValue]="null">Select gender</option>
+                        <label
+                            for="gender"
+                            [title]="'complete.health.base.gender.tooltip' | translate">
+                            {{ 'complete.health.base.gender.label' | translate }}
+                        </label>
+                        <select
+                            id="gender"
+                            formControlName="gender"
+                            [title]="'complete.health.base.gender.tooltip' | translate">
+                            <option [ngValue]="null">{{ 'complete.health.select.gender' | translate }}</option>
                             @for (gender of genders; track gender) {
                                 <option [ngValue]="gender">{{ gender }}</option>
                             }
                         </select>
                         @if (f.gender.touched && f.gender.invalid) {
-                            <small class="error-text">Gender is required.</small>
+                            <small class="error-text">{{ 'complete.health.base.gender.error' | translate }}</small>
                         }
                     </div>
 
                     <div class="form-field">
-                        <label for="heightCm">Height (cm)</label>
+                        <label
+                            for="heightCm"
+                            [title]="'complete.health.base.height.tooltip' | translate">
+                            {{ 'complete.health.base.height.label' | translate }}
+                        </label>
                         <input
                             id="heightCm"
                             type="number"
                             formControlName="heightCm"
-                            placeholder="e.g. 175" />
+                            [placeholder]="'complete.health.base.height.placeholder' | translate"
+                            [title]="'complete.health.base.height.tooltip' | translate"/>
                         @if (f.heightCm.touched && f.heightCm.invalid) {
-                            <small class="error-text">Enter a valid height.</small>
+                            <small class="error-text">{{ 'complete.health.base.height.error' | translate }}</small>
                         }
                     </div>
 
                     <div class="form-field">
-                        <label for="weightKg">Weight (kg)</label>
+                        <label
+                            for="weightKg"
+                            [title]="'complete.health.base.weight.tooltip' | translate">
+                            {{ 'complete.health.base.weight.label' | translate }}
+                        </label>
                         <input
                             id="weightKg"
                             type="number"
                             step="0.1"
                             formControlName="weightKg"
-                            placeholder="e.g. 70.5" />
+                            [placeholder]="'complete.health.base.weight.placeholder' | translate"
+                            [title]="'complete.health.base.weight.tooltip' | translate"/>
                         @if (f.weightKg.touched && f.weightKg.invalid) {
-                            <small class="error-text">Enter a valid weight.</small>
+                            <small class="error-text">{{ 'complete.health.base.weight.error' | translate }}</small>
                         }
                     </div>
                 </div>
 
                 <div class="checkbox-section">
-                    <label class="checkbox-card">
-                        <input type="checkbox" formControlName="hasFoodAllergies" />
-                        <span>I have food allergies</span>
+                    <label
+                        class="checkbox-card"
+                        [title]="'complete.health.base.foodAllergies.tooltip' | translate">
+                        <input
+                            type="checkbox"
+                            formControlName="hasFoodAllergies"
+                            [title]="'complete.health.base.foodAllergies.tooltip' | translate"/>
+                        <span>{{ 'complete.health.base.foodAllergies.checkbox' | translate }}</span>
                     </label>
 
                     @if (baseForm.value.hasFoodAllergies) {
                         <div class="form-field full-width details-box">
-                            <label for="foodAllergiesDetails">Food allergies details</label>
+                            <label
+                                for="foodAllergiesDetails"
+                                [title]="'complete.health.base.foodAllergiesDetails.tooltip' | translate">
+                                {{ 'complete.health.base.foodAllergiesDetails.label' | translate }}
+                            </label>
                             <textarea
                                 id="foodAllergiesDetails"
                                 formControlName="foodAllergiesDetails"
                                 rows="4"
-                                placeholder="Describe your food allergies"></textarea>
+                                [placeholder]="'complete.health.base.foodAllergiesDetails.placeholder' | translate"
+                                [title]="'complete.health.base.foodAllergiesDetails.tooltip' | translate"></textarea>
                             @if (f.foodAllergiesDetails.touched && f.foodAllergiesDetails.invalid) {
-                                <small class="error-text">Food allergies details are required.</small>
+                                <small
+                                    class="error-text">{{ 'complete.health.base.foodAllergiesDetails.error' | translate }}</small>
                             }
                         </div>
                     }
 
-                    <label class="checkbox-card">
-                        <input type="checkbox" formControlName="hasChronicConditions" />
-                        <span>I have chronic conditions</span>
+                    <label
+                        class="checkbox-card"
+                        [title]="'complete.health.base.chronicConditions.tooltip' | translate">
+                        <input
+                            type="checkbox"
+                            formControlName="hasChronicConditions"
+                            [title]="'complete.health.base.chronicConditions.tooltip' | translate"/>
+                        <span>{{ 'complete.health.base.chronicConditions.checkbox' | translate }}</span>
                     </label>
 
                     @if (baseForm.value.hasChronicConditions) {
                         <div class="form-field full-width details-box">
-                            <label for="chronicConditionsDetails">Chronic conditions details</label>
+                            <label
+                                for="chronicConditionsDetails"
+                                [title]="'complete.health.base.chronicConditionsDetails.tooltip' | translate">
+                                {{ 'complete.health.base.chronicConditionsDetails.label' | translate }}
+                            </label>
                             <textarea
                                 id="chronicConditionsDetails"
                                 formControlName="chronicConditionsDetails"
                                 rows="4"
-                                placeholder="Describe your chronic conditions"></textarea>
+                                [placeholder]="'complete.health.base.chronicConditionsDetails.placeholder' | translate"
+                                [title]="'complete.health.base.chronicConditionsDetails.tooltip' | translate"></textarea>
                             @if (f.chronicConditionsDetails.touched && f.chronicConditionsDetails.invalid) {
-                                <small class="error-text">Chronic conditions details are required.</small>
+                                <small
+                                    class="error-text">{{ 'complete.health.base.chronicConditionsDetails.error' | translate }}</small>
                             }
                         </div>
                     }
                 </div>
 
                 <div class="form-field full-width">
-                    <label for="primaryGoal">Primary Goal</label>
-                    <select id="primaryGoal" formControlName="primaryGoal">
-                        <option [ngValue]="null">Select goal</option>
+                    <label
+                        for="primaryGoal"
+                        [title]="'complete.health.base.primaryGoal.tooltip' | translate">
+                        {{ 'complete.health.base.primaryGoal.label' | translate }}
+                    </label>
+                    <select
+                        id="primaryGoal"
+                        formControlName="primaryGoal"
+                        [title]="'complete.health.base.primaryGoal.tooltip' | translate">
+                        <option [ngValue]="null">{{ 'complete.health.select.goal' | translate }}</option>
                         @for (goal of primaryGoals; track goal) {
                             <option [ngValue]="goal">{{ goal }}</option>
                         }
                     </select>
                     @if (f.primaryGoal.touched && f.primaryGoal.invalid) {
-                        <small class="error-text">Primary goal is required.</small>
+                        <small class="error-text">{{ 'complete.health.base.primaryGoal.error' | translate }}</small>
                     }
                 </div>
 
@@ -194,15 +255,17 @@
                     <button
                         type="button"
                         class="secondary-btn"
-                        (click)="cancelBaseEdit()">
-                        Cancel
+                        (click)="cancelBaseEdit()"
+                        [title]="'complete.health.cancel.tooltip' | translate">
+                        {{ 'complete.health.cancel' | translate }}
                     </button>
 
                     <button
                         class="submit-btn"
                         type="submit"
-                        [disabled]="saving || baseForm.invalid || !baseForm.dirty">
-                        {{ saving ? 'Saving...' : 'Update Base Profile' }}
+                        [disabled]="saving || baseForm.invalid || !baseForm.dirty"
+                        [title]="(saving ? 'complete.health.saving' : 'complete.health.base.submit') | translate">
+                        {{ (saving ? 'complete.health.saving' : 'complete.health.base.submit') | translate }}
                     </button>
                 </div>
             </form>
@@ -212,69 +275,73 @@
     <!-- Optional profile section -->
     <section class="form-section">
         <div class="section-header">
-            <h2>Optional Personalization Details</h2>
+            <h2>{{ 'complete.health.optional.title' | translate }}</h2>
         </div>
 
         <p class="section-description">
-            These fields help personalize articles, recommendations, and assistant guidance.
+            {{ 'complete.health.optional.description' | translate }}
         </p>
 
         @if (!isEditingOptional) {
             <div class="profile-view">
                 <div class="view-grid">
                     <div class="view-item">
-                        <span class="view-label">Sleep Quality</span>
+                        <span class="view-label">{{ 'complete.health.optional.sleepQuality.label' | translate }}</span>
                         <span class="view-value">{{ optionalForm.value.sleepQuality || '-' }}</span>
                     </div>
 
                     <div class="view-item">
-                        <span class="view-label">Stress Level</span>
+                        <span class="view-label">{{ 'complete.health.optional.stressLevel.label' | translate }}</span>
                         <span class="view-value">{{ optionalForm.value.stressLevel || '-' }}</span>
                     </div>
 
                     <div class="view-item">
-                        <span class="view-label">Study Load</span>
+                        <span class="view-label">{{ 'complete.health.optional.studyLoad.label' | translate }}</span>
                         <span class="view-value">{{ optionalForm.value.studyLoad || '-' }}</span>
                     </div>
 
                     <div class="view-item">
-                        <span class="view-label">Activity Level</span>
+                        <span class="view-label">{{ 'complete.health.optional.activityLevel.label' | translate }}</span>
                         <span class="view-value">{{ optionalForm.value.activityLevel || '-' }}</span>
                     </div>
 
                     <div class="view-item">
-                        <span class="view-label">Exercise Frequency Per Week</span>
+                        <span
+                            class="view-label">{{ 'complete.health.optional.exerciseFrequency.label' | translate }}</span>
                         <span class="view-value">{{ optionalForm.value.exerciseFrequencyPerWeek ?? '-' }}</span>
                     </div>
 
                     <div class="view-item">
-                        <span class="view-label">Diet Type</span>
+                        <span class="view-label">{{ 'complete.health.optional.dietType.label' | translate }}</span>
                         <span class="view-value">{{ optionalForm.value.dietType || '-' }}</span>
                     </div>
 
                     <div class="view-item">
-                        <span class="view-label">Meal Regularity</span>
+                        <span
+                            class="view-label">{{ 'complete.health.optional.mealRegularity.label' | translate }}</span>
                         <span class="view-value">{{ optionalForm.value.mealRegularity || '-' }}</span>
                     </div>
 
                     <div class="view-item">
-                        <span class="view-label">Hydration Level</span>
+                        <span
+                            class="view-label">{{ 'complete.health.optional.hydrationLevel.label' | translate }}</span>
                         <span class="view-value">{{ optionalForm.value.hydrationLevel || '-' }}</span>
                     </div>
 
                     <div class="view-item">
-                        <span class="view-label">Fitness Level</span>
+                        <span class="view-label">{{ 'complete.health.optional.fitnessLevel.label' | translate }}</span>
                         <span class="view-value">{{ optionalForm.value.fitnessLevel || '-' }}</span>
                     </div>
 
                     <div class="view-item">
-                        <span class="view-label">Physical Limitations</span>
+                        <span
+                            class="view-label">{{ 'complete.health.optional.physicalLimitations.label' | translate }}</span>
                         <span class="view-value">
                             {{
                                 optionalForm.value.hasPhysicalLimitations === true
-                                    ? 'Yes'
+                                    ? ('global.yes' | translate)
                                     : optionalForm.value.hasPhysicalLimitations === false
-                                        ? 'No'
+                                        ? ('global.no' | translate)
                                         : '-'
                             }}
                         </span>
@@ -282,23 +349,26 @@
 
                     @if (optionalForm.value.hasPhysicalLimitations === true) {
                         <div class="view-item full-width">
-                            <span class="view-label">Physical Limitations Details</span>
+                            <span
+                                class="view-label">{{ 'complete.health.optional.physicalLimitationsDetails.label' | translate }}</span>
                             <span class="view-value">{{ optionalForm.value.physicalLimitationsDetails || '-' }}</span>
                         </div>
                     }
 
                     <div class="view-item">
-                        <span class="view-label">Preferred Routine Time</span>
+                        <span
+                            class="view-label">{{ 'complete.health.optional.preferredRoutineTime.label' | translate }}</span>
                         <span class="view-value">{{ optionalForm.value.preferredRoutineTime || '-' }}</span>
                     </div>
 
                     <div class="view-item">
-                        <span class="view-label">Preferred Content Type</span>
+                        <span
+                            class="view-label">{{ 'complete.health.optional.preferredContentType.label' | translate }}</span>
                         <span class="view-value">{{ optionalForm.value.preferredContentType || '-' }}</span>
                     </div>
 
                     <div class="view-item">
-                        <span class="view-label">Wellness Focus</span>
+                        <span class="view-label">{{ 'complete.health.optional.wellnessFocus.label' | translate }}</span>
                         <span class="view-value">{{ optionalForm.value.wellnessFocus || '-' }}</span>
                     </div>
                 </div>
@@ -310,24 +380,27 @@
                 @if (optionalSuccessMessage) {
                     <div class="alert alert-success">{{ optionalSuccessMessage }}</div>
                 }
+
                 <div class="actions">
                     <button
                         type="button"
                         class="edit-btn edit-btn-bottom"
-                        (click)="editOptional()">
-                        Edit Optional Form
+                        (click)="editOptional()"
+                        [title]="'complete.health.optional.edit.tooltip' | translate">
+                        {{ 'complete.health.optional.edit' | translate }}
                     </button>
                 </div>
             </div>
         } @else {
             <form [formGroup]="optionalForm" (ngSubmit)="onOptionalSubmit()">
 
-                <h3>Daily Wellbeing</h3>
+                <h3>{{ 'complete.health.optional.dailyWellbeing.title' | translate }}</h3>
                 <div class="form-grid">
                     <div class="form-field">
-                        <label for="sleepQuality">Sleep Quality</label>
+                        <label
+                            for="sleepQuality">{{ 'complete.health.optional.sleepQuality.label' | translate }}</label>
                         <select id="sleepQuality" formControlName="sleepQuality">
-                            <option [ngValue]="null">Select</option>
+                            <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
                             @for (option of sleepQualityOptions; track option) {
                                 <option [value]="option">{{ option }}</option>
                             }
@@ -335,9 +408,9 @@
                     </div>
 
                     <div class="form-field">
-                        <label for="stressLevel">Stress Level</label>
+                        <label for="stressLevel">{{ 'complete.health.optional.stressLevel.label' | translate }}</label>
                         <select id="stressLevel" formControlName="stressLevel">
-                            <option [ngValue]="null">Select</option>
+                            <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
                             @for (option of stressLevelOptions; track option) {
                                 <option [value]="option">{{ option }}</option>
                             }
@@ -345,9 +418,9 @@
                     </div>
 
                     <div class="form-field">
-                        <label for="studyLoad">Study Load</label>
+                        <label for="studyLoad">{{ 'complete.health.optional.studyLoad.label' | translate }}</label>
                         <select id="studyLoad" formControlName="studyLoad">
-                            <option [ngValue]="null">Select</option>
+                            <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
                             @for (option of studyLoadOptions; track option) {
                                 <option [value]="option">{{ option }}</option>
                             }
@@ -355,12 +428,13 @@
                     </div>
                 </div>
 
-                <h3>Healthy Habits</h3>
+                <h3>{{ 'complete.health.optional.healthyHabits.title' | translate }}</h3>
                 <div class="form-grid">
                     <div class="form-field">
-                        <label for="activityLevel">Activity Level</label>
+                        <label
+                            for="activityLevel">{{ 'complete.health.optional.activityLevel.label' | translate }}</label>
                         <select id="activityLevel" formControlName="activityLevel">
-                            <option [ngValue]="null">Select</option>
+                            <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
                             @for (option of activityLevelOptions; track option) {
                                 <option [value]="option">{{ option }}</option>
                             }
@@ -368,22 +442,25 @@
                     </div>
 
                     <div class="form-field">
-                        <label for="exerciseFrequencyPerWeek">Exercise Frequency Per Week</label>
+                        <label
+                            for="exerciseFrequencyPerWeek">{{ 'complete.health.optional.exerciseFrequency.label' | translate }}</label>
                         <input
                             id="exerciseFrequencyPerWeek"
                             type="number"
                             formControlName="exerciseFrequencyPerWeek"
                             min="0"
-                            max="7" />
+                            max="7"
+                            [title]="'complete.health.optional.exerciseFrequency.tooltip' | translate"/>
                         @if (of['exerciseFrequencyPerWeek'].touched && of['exerciseFrequencyPerWeek'].invalid) {
-                            <small class="error-text">Enter a number between 0 and 7.</small>
+                            <small
+                                class="error-text">{{ 'complete.health.optional.exerciseFrequency.error' | translate }}</small>
                         }
                     </div>
 
                     <div class="form-field">
-                        <label for="dietType">Diet Type</label>
+                        <label for="dietType">{{ 'complete.health.optional.dietType.label' | translate }}</label>
                         <select id="dietType" formControlName="dietType">
-                            <option [ngValue]="null">Select</option>
+                            <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
                             @for (option of dietTypeOptions; track option) {
                                 <option [value]="option">{{ option }}</option>
                             }
@@ -391,9 +468,10 @@
                     </div>
 
                     <div class="form-field">
-                        <label for="mealRegularity">Meal Regularity</label>
+                        <label
+                            for="mealRegularity">{{ 'complete.health.optional.mealRegularity.label' | translate }}</label>
                         <select id="mealRegularity" formControlName="mealRegularity">
-                            <option [ngValue]="null">Select</option>
+                            <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
                             @for (option of mealRegularityOptions; track option) {
                                 <option [value]="option">{{ option }}</option>
                             }
@@ -401,9 +479,10 @@
                     </div>
 
                     <div class="form-field">
-                        <label for="hydrationLevel">Hydration Level</label>
+                        <label
+                            for="hydrationLevel">{{ 'complete.health.optional.hydrationLevel.label' | translate }}</label>
                         <select id="hydrationLevel" formControlName="hydrationLevel">
-                            <option [ngValue]="null">Select</option>
+                            <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
                             @for (option of hydrationLevelOptions; track option) {
                                 <option [value]="option">{{ option }}</option>
                             }
@@ -411,12 +490,13 @@
                     </div>
                 </div>
 
-                <h3>Physical Condition</h3>
+                <h3>{{ 'complete.health.optional.physicalCondition.title' | translate }}</h3>
                 <div class="form-grid">
                     <div class="form-field">
-                        <label for="fitnessLevel">Fitness Level</label>
+                        <label
+                            for="fitnessLevel">{{ 'complete.health.optional.fitnessLevel.label' | translate }}</label>
                         <select id="fitnessLevel" formControlName="fitnessLevel">
-                            <option [ngValue]="null">Select</option>
+                            <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
                             @for (option of fitnessLevelOptions; track option) {
                                 <option [value]="option">{{ option }}</option>
                             }
@@ -424,35 +504,43 @@
                     </div>
 
                     <div class="form-field">
-                        <label for="hasPhysicalLimitations">Physical Limitations</label>
+                        <label
+                            for="hasPhysicalLimitations">{{ 'complete.health.optional.physicalLimitations.label' | translate }}</label>
                         <select id="hasPhysicalLimitations" formControlName="hasPhysicalLimitations">
-                            <option [ngValue]="null">Select</option>
-                            <option [ngValue]="true">Yes</option>
-                            <option [ngValue]="false">No</option>
+                            <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
+                            <option [ngValue]="true">{{ 'global.yes' | translate }}</option>
+                            <option [ngValue]="false">{{ 'global.no' | translate }}</option>
                         </select>
                     </div>
 
                     @if (optionalForm.get('hasPhysicalLimitations')?.value === true) {
                         <div class="form-field full-width details-box">
-                            <label for="physicalLimitationsDetails">Physical Limitations Details</label>
+                            <label
+                                for="physicalLimitationsDetails"
+                                [title]="'complete.health.optional.physicalLimitationsDetails.tooltip' | translate">
+                                {{ 'complete.health.optional.physicalLimitationsDetails.label' | translate }}
+                            </label>
                             <textarea
                                 id="physicalLimitationsDetails"
                                 formControlName="physicalLimitationsDetails"
                                 rows="3"
-                                placeholder="Describe your physical limitations"></textarea>
+                                [placeholder]="'complete.health.optional.physicalLimitationsDetails.placeholder' | translate"
+                                [title]="'complete.health.optional.physicalLimitationsDetails.tooltip' | translate"></textarea>
                             @if (of['physicalLimitationsDetails'].touched && of['physicalLimitationsDetails'].invalid) {
-                                <small class="error-text">Physical limitations details are required.</small>
+                                <small
+                                    class="error-text">{{ 'complete.health.optional.physicalLimitationsDetails.error' | translate }}</small>
                             }
                         </div>
                     }
                 </div>
 
-                <h3>Preferences</h3>
+                <h3>{{ 'complete.health.optional.preferences.title' | translate }}</h3>
                 <div class="form-grid">
                     <div class="form-field">
-                        <label for="preferredRoutineTime">Preferred Routine Time</label>
+                        <label
+                            for="preferredRoutineTime">{{ 'complete.health.optional.preferredRoutineTime.label' | translate }}</label>
                         <select id="preferredRoutineTime" formControlName="preferredRoutineTime">
-                            <option [ngValue]="null">Select</option>
+                            <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
                             @for (option of preferredRoutineTimeOptions; track option) {
                                 <option [value]="option">{{ option }}</option>
                             }
@@ -460,9 +548,10 @@
                     </div>
 
                     <div class="form-field">
-                        <label for="preferredContentType">Preferred Content Type</label>
+                        <label
+                            for="preferredContentType">{{ 'complete.health.optional.preferredContentType.label' | translate }}</label>
                         <select id="preferredContentType" formControlName="preferredContentType">
-                            <option [ngValue]="null">Select</option>
+                            <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
                             @for (option of preferredContentTypeOptions; track option) {
                                 <option [value]="option">{{ option }}</option>
                             }
@@ -470,9 +559,10 @@
                     </div>
 
                     <div class="form-field">
-                        <label for="wellnessFocus">Wellness Focus</label>
+                        <label
+                            for="wellnessFocus">{{ 'complete.health.optional.wellnessFocus.label' | translate }}</label>
                         <select id="wellnessFocus" formControlName="wellnessFocus">
-                            <option [ngValue]="null">Select</option>
+                            <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
                             @for (option of wellnessFocusOptions; track option) {
                                 <option [value]="option">{{ option }}</option>
                             }
@@ -492,15 +582,17 @@
                     <button
                         type="button"
                         class="secondary-btn"
-                        (click)="cancelOptionalEdit()">
-                        Cancel
+                        (click)="cancelOptionalEdit()"
+                        [title]="'complete.health.cancel.tooltip' | translate">
+                        {{ 'complete.health.cancel' | translate }}
                     </button>
 
                     <button
                         type="submit"
                         class="submit-btn"
-                        [disabled]="saving || optionalForm.invalid || !optionalForm.dirty">
-                        {{ saving ? 'Saving...' : 'Save Optional Details' }}
+                        [disabled]="saving || optionalForm.invalid || !optionalForm.dirty"
+                        [title]="(saving ? 'complete.health.saving' : 'complete.health.optional.submit') | translate">
+                        {{ (saving ? 'complete.health.saving' : 'complete.health.optional.submit') | translate }}
                     </button>
                 </div>
             </form>
