@@ -6,12 +6,14 @@ import gr.uniwa.unihealth.backend.model.UniGroup;
 import gr.uniwa.unihealth.backend.repository.DepartmentRepository;
 import gr.uniwa.unihealth.backend.repository.UniGroupRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class UniversityDataBootstrap implements ApplicationRunner {
 
   private final UniGroupRepository groupRepository;
@@ -20,12 +22,16 @@ public class UniversityDataBootstrap implements ApplicationRunner {
 
   @Override
   public void run(ApplicationArguments args) {
-    tenantContext.runForEachTenant(tenantId -> initialize(), "UniversityDataBootstrap.run");
+    tenantContext.runForEachTenant(this::initialize, "UniversityDataBootstrap.run");
   }
 
-  public void initialize() {
+  public void initialize(String tenantId) {
     if (groupRepository.count() == 0 && departmentRepository.count() == 0) {
+      log.info("Initializing University Init Data content for tenant [{}].", tenantId);
       seedGreekData();
+    } else{
+      log.info("University Init Data already exists for tenant [{}]. Skipping initialization.",
+          tenantId);
     }
   }
 

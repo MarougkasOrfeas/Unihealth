@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd">
+
+    <changeSet id="unihealth_00008" author="uniwa">
+
+        <createTable tableName="t_label_field_mapping">
+
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="created_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="label_code" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="field_name" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="operator" type="varchar(20)"/>
+            <column name="match_value" type="varchar(100)"/>
+            <column name="match_value2" type="varchar(100)"/>
+            <column name="calculated_field" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mixed_rule" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="label_group" type="varchar(50)"/>
+            <column name="description" type="varchar(255)"/>
+            <column name="active" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="priority" type="int"/>
+        </createTable>
+
+        <addUniqueConstraint
+                tableName="t_label_field_mapping"
+                columnNames="label_code"
+                constraintName="uq_label_field_mapping_label_code"/>
+
+        <createIndex indexName="idx_label_field_mapping_active"
+                     tableName="t_label_field_mapping">
+            <column name="active"/>
+        </createIndex>
+
+        <createIndex indexName="idx_label_field_mapping_group"
+                     tableName="t_label_field_mapping">
+            <column name="label_group"/>
+        </createIndex>
+
+        <createTable tableName="t_user_profile_labels">
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="created_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="varchar(36)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="labels" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="t_user_profile_labels"
+                baseColumnNames="user_id"
+                constraintName="fk_user_profile_labels_user"
+                referencedTableName="t_user"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+
+        <createIndex indexName="idx_user_profile_labels_user_id"
+                     tableName="t_user_profile_labels">
+            <column name="user_id"/>
+        </createIndex>
+
+        <createTable tableName="t_label_keyword_mapping">
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="created_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="keyword" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="label_code" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="keyword_type" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex tableName="t_label_keyword_mapping" indexName="idx_keyword_mapping_type">
+            <column name="keyword_type"/>
+        </createIndex>
+
+    </changeSet>
+
+</databaseChangeLog>

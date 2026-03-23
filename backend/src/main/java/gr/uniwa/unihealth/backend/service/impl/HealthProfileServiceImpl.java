@@ -9,11 +9,14 @@ import gr.uniwa.unihealth.backend.repository.BaseRepository;
 import gr.uniwa.unihealth.backend.repository.HealthProfileRepository;
 import gr.uniwa.unihealth.backend.repository.UserRepository;
 import gr.uniwa.unihealth.backend.service.HealthProfileService;
+import gr.uniwa.unihealth.backend.service.personalization.LabelEvaluatorService;
+import gr.uniwa.unihealth.backend.service.personalization.UserProfileLabelsService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +27,8 @@ public class HealthProfileServiceImpl extends BaseServiceImpl<HealthProfileDTO, 
   private final UserRepository userRepository;
   private final HealthProfileMapper mapper;
   private final HealthProfileReaderServiceImpl service;
+  private final LabelEvaluatorService labelEvaluatorService;
+  private final UserProfileLabelsService userProfileLabelsService;
 
 
   @Override
@@ -45,6 +50,9 @@ public class HealthProfileServiceImpl extends BaseServiceImpl<HealthProfileDTO, 
     user.setHealthProfileCompleted(true);
     user.setHealthProfileCompletedOn(LocalDateTime.now());
     userRepository.save(user);
+
+    List<String> sortedLabels = labelEvaluatorService.evaluateAndSort(dto);
+    userProfileLabelsService.saveForUser(user, sortedLabels);
 
     return saved.getId();
   }
