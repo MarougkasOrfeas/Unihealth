@@ -3,6 +3,7 @@ package gr.uniwa.unihealth.backend.repository;
 import gr.uniwa.unihealth.backend.model.User;
 import gr.uniwa.unihealth.backend.model.enums.DeactivationMode;
 import gr.uniwa.unihealth.backend.model.enums.UserStatus;
+import gr.uniwa.unihealth.backend.model.projection.RightsMatrixProjection;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 

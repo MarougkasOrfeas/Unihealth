@@ -6,10 +6,11 @@ import gr.uniwa.unihealth.backend.controller.request.SetUserStatusCommand;
 import gr.uniwa.unihealth.backend.controller.request.SuggestUsernameCommand;
 import gr.uniwa.unihealth.backend.controller.response.SetUserStatusAnswer;
 import gr.uniwa.unihealth.backend.controller.util.ControllerUtils;
+import gr.uniwa.unihealth.backend.dto.RightsMatrix;
 import gr.uniwa.unihealth.backend.dto.UserDTO;
-import gr.uniwa.unihealth.backend.model.QUser;
 import gr.uniwa.unihealth.backend.model.User;
 import gr.uniwa.unihealth.backend.model.enums.UserStatus;
+import gr.uniwa.unihealth.backend.service.permission.UserPermissionService;
 import gr.uniwa.unihealth.backend.service.UserReaderService;
 import gr.uniwa.unihealth.backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,6 +33,7 @@ public class UserController {
   private final UserReaderService readerService;
   private final ControllerUtils controllerUtils;
   private final AuthenticationContext authenticationContext;
+  private final UserPermissionService userPermissionService;
 
   @PostMapping
   @Operation(summary = "Creates a new user",
@@ -76,9 +78,9 @@ public class UserController {
         controllerUtils.getPredicateAndPageable(requestBody, User.class);
 
     Predicate predicateToUse = predicateAndPageable.getKey();
-//
-//    UserDTO loggedInUser = readerService.findLoggedInUser();
-//    predicateToUse = QUser.user.id.eq(loggedInUser.getId()).and(predicateAndPageable.getKey());
+    //
+    //    UserDTO loggedInUser = readerService.findLoggedInUser();
+    //    predicateToUse = QUser.user.id.eq(loggedInUser.getId()).and(predicateAndPageable.getKey());
 
 
     return readerService.findAll(predicateToUse, predicateAndPageable.getValue());
@@ -99,6 +101,13 @@ public class UserController {
   @PutMapping("_just_logged_in")
   public void justLoggedIn() {
     service.justLoggedIn(authenticationContext.getCurrentUsername());
+  }
+
+  @GetMapping("_self/_rights-matrix")
+  @Operation(summary = "Returns the rights matrix of the logged in user.",
+      description = "Returns the rights matrix of the logged in user.")
+  public RightsMatrix getLoggedinUserRightsMatrix() {
+    return userPermissionService.getLoggedinUserRightsMatrix();
   }
 
   @PostMapping("_suggest_username")

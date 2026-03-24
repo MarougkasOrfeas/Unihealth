@@ -15,6 +15,7 @@ import gr.uniwa.unihealth.backend.model.enums.UserStatus;
 import gr.uniwa.unihealth.backend.repository.UserRepository;
 import gr.uniwa.unihealth.backend.service.UserService;
 import gr.uniwa.unihealth.backend.service.client.KeycloakAdminClient;
+import gr.uniwa.unihealth.backend.service.permission.resolver.RightsMatrixResolver;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.keycloak.representations.idm.EventRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -59,6 +61,8 @@ public class UserServiceImpl extends BaseUpdatableServiceImpl<UserDTO, User>
   private final TenantContext tenantContext;
 
   private final AuthenticationContext authenticationContext;
+
+  private final RightsMatrixResolver cacheService;
 
   @Value("${unihealth.app.users.deactivate.reactivated.after.days}")
   private int deactivateAfterDays;
@@ -121,6 +125,7 @@ public class UserServiceImpl extends BaseUpdatableServiceImpl<UserDTO, User>
   public void update(String id, UserDTO dto) {
     // Get existing user to check for email change
     User existingUser = readerService.findEntityById(id, true);
+    String username = existingUser.getUsername();
     UserDTO existingUserDTO = mapper.mapToDTO(existingUser);
 
     String oldEmail = existingUserDTO.getEmail();
@@ -134,12 +139,16 @@ public class UserServiceImpl extends BaseUpdatableServiceImpl<UserDTO, User>
     userRepository.flush();
 
     keycloakAdminClient.updateKeycloakUser(dto, oldEmail, emailChanged);
+
+
+    cacheService.evictByUsername(username);
   }
 
   @Override
   public void delete(String id) {
     User user = readerService.findEntityById(id, true);
     UserDTO userDTO = mapper.mapToDTO(user);
+    String username = userDTO.getUsername();
     // Delete user from database
     super.delete(id);
 
@@ -148,6 +157,7 @@ public class UserServiceImpl extends BaseUpdatableServiceImpl<UserDTO, User>
     // Delete user from Keycloak first
     keycloakAdminClient.deleteKeycloakUser(userDTO.getUsername());
 
+    cacheService.evictByUsername(username);
     log.info("Successfully deleted user with id {} and username {}", id, userDTO.getUsername());
   }
 
@@ -163,7 +173,7 @@ public class UserServiceImpl extends BaseUpdatableServiceImpl<UserDTO, User>
     //Update the status of user account status.
     userEntity.setStatus(
         getUserStatus(userRepresentation.isEnabled(), userRepresentation.isEmailVerified()));
-
+    cacheService.evictByUsername(userEntity.getUsername());
     //In case user was previously deactivated due to prolonged inactivity and then reactivated, they would be deactivated again after 21 days if no login performed.
     userEntity.setDeactivateAfter(null);
 
@@ -188,6 +198,7 @@ public class UserServiceImpl extends BaseUpdatableServiceImpl<UserDTO, User>
   public UserStatus setUserStatus(String id, UserStatus userStatus,
       boolean deactivatedDueToInactivity, String reason) {
     User userToChange = readerService.findEntityById(id, true);
+    String username = userToChange.getUsername();
 
     String currentUser = authenticationContext.getCurrentUsername();
     if (currentUser.equals(userToChange.getUsername())) {
@@ -195,15 +206,19 @@ public class UserServiceImpl extends BaseUpdatableServiceImpl<UserDTO, User>
           "status_change_own_account", "You cannot change the status of your account by yourself.");
     }
 
+    UserStatus result;
     if (UserStatus.DEACTIVATED == userStatus) {
       deactivateUser(userToChange, deactivatedDueToInactivity, reason);
-      return UserStatus.DEACTIVATED;
+      result = UserStatus.DEACTIVATED;
     } else if (UserStatus.ACTIVE == userStatus) {
-      return activateUser(userToChange, reason);
+      result = activateUser(userToChange, reason);
     } else {
       throw ExceptionUtils.createException(IllegalArgumentException.class, "unknown_status",
           "User status {0} is currently unknown", userStatus.toString());
     }
+
+    cacheService.evictByUsername(username);
+    return result;
   }
 
   @Override

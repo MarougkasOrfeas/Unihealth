@@ -11,6 +11,7 @@ import {AuthService} from "../../auth/auth.service";
 import {Observable, of} from "rxjs";
 import {CanLeaveWithUnsavedChanges} from "../../../shared/interfaces/unsaved-changes";
 import {TranslatePipe, TranslateService} from "@ngx-translate/core";
+import {HasAdminPermissionDirective} from "../../directives/has-admin-permission.directive";
 
 
 @Component({
@@ -26,7 +27,8 @@ import {TranslatePipe, TranslateService} from "@ngx-translate/core";
         MatTooltip,
         RouterLink,
         NgOptimizedImage,
-        TranslatePipe
+        TranslatePipe,
+        HasAdminPermissionDirective
     ],
     templateUrl: './header.html',
     styleUrls: ['./header.scss']

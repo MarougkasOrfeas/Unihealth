@@ -29,7 +29,7 @@
         </button>
 
         <mat-menu #sectionsMenu="matMenu">
-            <button mat-menu-item [matMenuTriggerFor]="adminMenu">
+            <button mat-menu-item *appHasAdminPermission [matMenuTriggerFor]="adminMenu">
                 <mat-icon>admin_panel_settings</mat-icon>
                 <span>{{ 'side.admin' | translate }}</span>
             </button>

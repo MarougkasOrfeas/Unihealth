@@ -25,3 +25,8 @@ export enum UserStatus {
     ACTIVE,
     UNVERIFIED
 }
+
+export interface RightsMatrix {
+    userId: string;
+    globalPermissions: string[];
+}

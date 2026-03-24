@@ -16,6 +16,7 @@ import {MatListItem, MatListItemIcon, MatListItemTitle, MatNavList} from "@angul
 import {MatToolbar} from "@angular/material/toolbar";
 import {RouterLink, RouterOutlet} from "@angular/router";
 import {TranslatePipe} from "@ngx-translate/core";
+import {HasAdminPermissionDirective} from "../../directives/has-admin-permission.directive";
 
 
 @Component({
@@ -39,7 +40,8 @@ import {TranslatePipe} from "@ngx-translate/core";
         MatToolbar,
         RouterLink,
         RouterOutlet,
-        TranslatePipe
+        TranslatePipe,
+        HasAdminPermissionDirective
     ],
     templateUrl: './side-nav.html',
     styleUrl: './side-nav.scss'

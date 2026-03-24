@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BaseService} from './base.service';
-import {User, UserStatus} from '../interfaces/user';
-import {Observable} from "rxjs";
+import {RightsMatrix, User, UserStatus} from '../interfaces/user';
+import {Observable, shareReplay} from "rxjs";
 import {UNIHEALTH_CONSTANTS} from "../constants/unihealth.constants";
 
 class UserEndpoints {
@@ -17,6 +17,8 @@ class UserEndpoints {
     static readonly SUGGEST_USERNAME_URI = BaseService.CONTEXT_PATH + `${UNIHEALTH_CONSTANTS.USER_API.SUGGEST_USERNAME}`;
 
     static readonly CHECK_USERNAME_EXISTS_URI = BaseService.CONTEXT_PATH + `${UNIHEALTH_CONSTANTS.USER_API.CHECK_USERNAME_EXISTS}`;
+
+    static readonly GET_USER_RIGHTS_MATRIX_URI = BaseService.CONTEXT_PATH + '/user/_self/_rights-matrix';
 }
 
 type SetUserStatusAnswer = {
@@ -41,6 +43,12 @@ export class UserService extends BaseService<User> {
 
     getUser(): Observable<User> {
         return this.httpClient.get<User>(`${this.basePath}/_me`);
+    }
+
+    getLoggedinUserRightsMatrix(): Observable<RightsMatrix> {
+        return this.httpClient.get<RightsMatrix>(UserEndpoints.GET_USER_RIGHTS_MATRIX_URI).pipe(
+            shareReplay(1)
+        );
     }
 
     setUserStatus(id: string, newUserStatus: UserStatus, deactivationReason: string | null): Observable<SetUserStatusAnswer> {
