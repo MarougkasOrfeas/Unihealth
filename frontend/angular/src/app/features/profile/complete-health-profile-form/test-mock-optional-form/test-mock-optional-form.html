@@ -1,0 +1,193 @@
+<form class="health-profile-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <h3>Καθημερινή κατάσταση</h3>
+    <div class="form-grid">
+        <div class="form-field">
+            <label for="sleepQuality">Διάρκεια ύπνου</label>
+            <select id="sleepQuality" formControlName="sleepQuality">
+                <option [ngValue]="null">Επιλέξτε</option>
+                @for (option of sleepQualityOptions; track option) {
+                    <option [ngValue]="option">{{ option }}</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-field">
+            <label for="studyLoad">Χρόνος μελέτης</label>
+            <select id="studyLoad" formControlName="studyLoad">
+                <option [ngValue]="null">Επιλέξτε</option>
+                @for (option of studyLoadOptions; track option) {
+                    <option [ngValue]="option">{{ option }}</option>
+                }
+            </select>
+        </div>
+        <div class="form-field">
+            <label for="smoking">Καπνιστική συνήθεια</label>
+            <select id="smoking" formControlName="smoking">
+                <option [ngValue]="null">Επιλέξτε</option>
+                @for (option of smokingOptions; track option) {
+                    <option [ngValue]="option">{{ option }}</option>
+                }
+            </select>
+        </div>
+        <div class="form-field">
+            <label for="coffee">Κατανάλωση καφέ</label>
+            <select id="coffee" formControlName="coffee">
+                <option [ngValue]="null">Επιλέξτε</option>
+                @for (option of coffeeOptions; track option) {
+                    <option [ngValue]="option">{{ option }}</option>
+                }
+            </select>
+        </div>
+        <div class="form-field">
+            <label for="screenTime">Χρόνος σε οθόνες</label>
+            <select id="screenTime" formControlName="screenTime">
+                <option [ngValue]="null">Επιλέξτε</option>
+                @for (option of screenTimeOptions; track option) {
+                    <option [ngValue]="option">{{ option }}</option>
+                }
+            </select>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+    <h3>Διατροφή & άσκηση</h3>
+    <div class="form-grid">
+        <div class="form-field">
+            <label for="exercise">Άσκηση ανά εβδομάδα</label>
+            <select id="exercise" formControlName="exercise">
+                <option [ngValue]="null">Επιλέξτε</option>
+                @for (option of exerciseOptions; track option) {
+                    <option [ngValue]="option">{{ option }}</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-field">
+            <label for="mealsPerDay">Γεύματα ανά ημέρα</label>
+            <select id="mealsPerDay" formControlName="mealsPerDay">
+                <option [ngValue]="null">Επιλέξτε</option>
+                @for (option of mealsPerDayOptions; track option) {
+                    <option [ngValue]="option">{{ option }}</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-field">
+            <label for="eatSnack">Σνακ / δεκατιανό / απογευματινό</label>
+            <select id="eatSnack" formControlName="eatSnack">
+                <option [ngValue]="null">Επιλέξτε</option>
+                @for (option of snackOptions; track option) {
+                    <option [ngValue]="option">{{ option }}</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-field">
+            <label for="water">Κατανάλωση νερού ανά ημέρα (σε ποτήρια)</label>
+            <select id="water" formControlName="water">
+                <option [ngValue]="null">Επιλέξτε</option>
+                @for (option of waterOptions; track option) {
+                    <option [ngValue]="option">{{ option }}</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-field">
+            <label for="dietType">Τύπος διατροφής</label>
+            <select id="dietType" formControlName="dietType">
+                <option [ngValue]="null">Επιλέξτε</option>
+                @for (option of dietTypeOptions; track option) {
+                    <option [ngValue]="option">{{ option }}</option>
+                }
+            </select>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+    <h3>Στοιχεία υγείας</h3>
+
+    <div class="form-grid">
+
+
+        <div class="form-field">
+            <label for="medication">Λαμβάνετε κάποια φαρμακευτική αγωγή;</label>
+            <select id="medication" formControlName="medication">
+                <option [ngValue]="null">Επιλέξτε</option>
+                @for (option of yesNoOptions; track option) {
+                    <option [ngValue]="option">{{ option }}</option>
+                }
+            </select>
+        </div>
+
+        @if (f.medication.value === 'Ναι') {
+            <div class="form-field full-width">
+                <label for="medicationDetails">Ποια φαρμακευτική αγωγή λαμβάνετε;</label>
+                <textarea
+                    id="medicationDetails"
+                    formControlName="medicationDetails"
+                    rows="3"
+                    placeholder="Προαιρετικά, περιγράψτε συνοπτικά"></textarea>
+            </div>
+        }
+
+        <div class="form-field">
+            <label for="surgeryHistory">Υπάρχει ιστορικό χειρουργικών επεμβάσεων;</label>
+            <select id="surgeryHistory" formControlName="surgeryHistory">
+                <option [ngValue]="null">Επιλέξτε</option>
+                @for (option of yesNoOptions; track option) {
+                    <option [ngValue]="option">{{ option }}</option>
+                }
+            </select>
+        </div>
+
+        @if (f.surgeryHistory.value === 'Ναι') {
+            <div class="form-field full-width">
+                <label for="surgeryDetails">Παρακαλώ αναφέρετε συνοπτικά</label>
+                <textarea
+                    id="surgeryDetails"
+                    formControlName="surgeryDetails"
+                    rows="3"
+                    placeholder="Προαιρετικά, γράψτε σχετικές πληροφορίες"></textarea>
+            </div>
+        }
+    </div>
+    <mat-divider></mat-divider>
+    <h3>Προτιμήσεις</h3>
+    <div class="form-grid">
+        <div class="form-field">
+            <label for="preferredContent">Τι είδους περιεχόμενο σας βοηθά περισσότερο;</label>
+            <select id="preferredContent" formControlName="preferredContent">
+                <option [ngValue]="null">Επιλέξτε</option>
+                @for (option of preferredContentOptions; track option) {
+                    <option [ngValue]="option">{{ option }}</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-field">
+            <label for="preferredContent">Πόσο συχνά θα θέλατε να λαμβάνετε περιεχόμενο;</label>
+            <select id="preferredContent" formControlName="frequency">
+                <option [ngValue]="null">Επιλέξτε</option>
+                @for (option of frequencyOptions; track option) {
+                    <option [ngValue]="option">{{ option }}</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-field full-width">
+            <label for="comments">Κάτι επιπλέον που θα θέλατε να ληφθεί υπόψη;</label>
+            <textarea
+                id="comments"
+                formControlName="comments"
+                rows="4"
+                placeholder="Προαιρετικά, γράψτε κάτι εδώ"></textarea>
+        </div>
+    </div>
+
+    <div class="actions">
+        <button type="submit" class="submit-btn">
+            Αποθήκευση
+        </button>
+    </div>
+
+    <pre>{{ form.getRawValue() | json }}</pre>
+</form>

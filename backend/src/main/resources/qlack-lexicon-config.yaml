@@ -194,76 +194,134 @@ translations:
       - profile.loading.message: Φόρτωση προφίλ…
 
       # Complete Full Health Form
-      - complete.health.loading: Φόρτωση...
+      - complete.health.loading: Φόρτωση στοιχείων υγείας...
       - complete.health.cancel: Ακύρωση
-      - complete.health.cancel.tooltip: Πατήστε για ακύρωση αλλαγών
+      - complete.health.cancel.tooltip: Ακύρωση επεξεργασίας
       - complete.health.saving: Αποθήκευση...
-      - complete.health.select.default: Επιλογή
-      - complete.health.select.gender: Επιλέξτε φύλο
-      - complete.health.select.goal: Επιλέξτε στόχο
-      - complete.health.base.title: Γενικό Προφίλ Υγείας
-      - complete.health.base.edit: Επεξεργασία Βασικής Φόρμας
-      - complete.health.base.edit.tooltip: Πατήστε για επεξεργασία της βασικής φόρμας
-      - complete.health.base.submit: Ενημέρωση Βασικού Προφίλ
-      - complete.health.base.dateOfBirth.label: Ημερομηνία Γέννησης
-      - complete.health.base.dateOfBirth.tooltip: Επιλέξτε την ημερομηνία γέννησής σας
-      - complete.health.base.dateOfBirth.error: Η ημερομηνία γέννησης είναι υποχρεωτική.
+      - complete.health.base.title: Βασικά στοιχεία υγείας
+      - complete.health.base.edit: Επεξεργασία βασικών στοιχείων
+      - complete.health.base.edit.tooltip: Επεξεργασία βασικών στοιχείων υγείας
+      - complete.health.base.submit: Αποθήκευση βασικών στοιχείων
+      - complete.health.base.dateOfBirth.label: Ημερομηνία γέννησης
+      - complete.health.base.dateOfBirth.tooltip: Επίλεξε την ημερομηνία γέννησής σου
+      - complete.health.base.dateOfBirth.error: Η ημερομηνία γέννησης είναι υποχρεωτική
       - complete.health.base.gender.label: Φύλο
-      - complete.health.base.gender.tooltip: Επιλέξτε το φύλο σας
-      - complete.health.base.gender.error: Το φύλο είναι υποχρεωτικό.
-      - complete.health.base.height.label: Ύψος (εκ.)
-      - complete.health.base.height.tooltip: Εισαγάγετε το ύψος σας σε εκατοστά
+      - complete.health.base.gender.tooltip: Επίλεξε το φύλο σου
+      - complete.health.base.gender.error: Το φύλο είναι υποχρεωτικό
+      - complete.health.base.height.label: Ύψος (cm)
+      - complete.health.base.height.tooltip: Καταχώρησε το ύψος σου σε εκατοστά
       - complete.health.base.height.placeholder: π.χ. 175
-      - complete.health.base.height.error: Εισαγάγετε έγκυρο ύψος.
-      - complete.health.base.weight.label: Βάρος (κιλά)
-      - complete.health.base.weight.tooltip: Εισαγάγετε το βάρος σας σε κιλά
+      - complete.health.base.height.error: Το ύψος είναι υποχρεωτικό και πρέπει να είναι έγκυρο
+      - complete.health.base.weight.label: Βάρος (kg)
+      - complete.health.base.weight.tooltip: Καταχώρησε το βάρος σου σε κιλά
       - complete.health.base.weight.placeholder: π.χ. 70.5
-      - complete.health.base.weight.error: Εισαγάγετε έγκυρο βάρος.
-      - complete.health.base.foodAllergies.label: Τροφικές Αλλεργίες
+      - complete.health.base.weight.error: Το βάρος είναι υποχρεωτικό και πρέπει να είναι έγκυρο
+      - complete.health.base.age.label: Ηλικία
+      - complete.health.base.bmi.label: ΔΜΣ
+      - complete.health.base.foodAllergies.label: Τροφικές αλλεργίες
+      - complete.health.base.foodAllergies.tooltip: Δήλωσε αν έχεις τροφικές αλλεργίες
       - complete.health.base.foodAllergies.checkbox: Έχω τροφικές αλλεργίες
-      - complete.health.base.foodAllergies.tooltip: Επιλέξτε αν έχετε τροφικές αλλεργίες
-      - complete.health.base.chronicConditions.label: Χρόνιες Παθήσεις
-      - complete.health.base.chronicConditions.checkbox: Έχω χρόνιες παθήσεις
-      - complete.health.base.chronicConditions.tooltip: Επιλέξτε αν έχετε χρόνιες παθήσεις
-      - complete.health.base.foodAllergiesDetails.label: Λεπτομέρειες Τροφικών Αλλεργιών
-      - complete.health.base.foodAllergiesDetails.tooltip: Περιγράψτε τις τροφικές αλλεργίες σας
-      - complete.health.base.foodAllergiesDetails.placeholder: Περιγράψτε τις τροφικές αλλεργίες σας
-      - complete.health.base.foodAllergiesDetails.error: Οι λεπτομέρειες τροφικών αλλεργιών είναι υποχρεωτικές.
-      - complete.health.base.chronicConditionsDetails.label: Λεπτομέρειες Χρόνιων Παθήσεων
-      - complete.health.base.chronicConditionsDetails.tooltip: Περιγράψτε τις χρόνιες παθήσεις σας
-      - complete.health.base.chronicConditionsDetails.placeholder: Περιγράψτε τις χρόνιες παθήσεις σας
-      - complete.health.base.chronicConditionsDetails.error: Οι λεπτομέρειες χρόνιων παθήσεων είναι υποχρεωτικές.
-      - complete.health.base.primaryGoal.label: Κύριος Στόχος
-      - complete.health.base.primaryGoal.tooltip: Επιλέξτε τον κύριο στόχο σας
-      - complete.health.base.primaryGoal.error: Ο κύριος στόχος είναι υποχρεωτικός.
-      - complete.health.optional.title: Προαιρετικά Στοιχεία Προσωποποίησης
-      - complete.health.optional.description: Αυτά τα πεδία βοηθούν στην εξατομίκευση άρθρων, συστάσεων και καθοδήγησης από τον βοηθό.
-      - complete.health.optional.edit: Επεξεργασία Προαιρετικής Φόρμας
-      - complete.health.optional.edit.tooltip: Πατήστε για επεξεργασία της προαιρετικής φόρμας
-      - complete.health.optional.submit: Αποθήκευση Προαιρετικών Στοιχείων
-      - complete.health.optional.dailyWellbeing.title: Καθημερινή Ευεξία
-      - complete.health.optional.healthyHabits.title: Υγιεινές Συνήθειες
-      - complete.health.optional.physicalCondition.title: Φυσική Κατάσταση
+      - complete.health.base.foodAllergiesDetails.label: Λεπτομέρειες τροφικών αλλεργιών
+      - complete.health.base.foodAllergiesDetails.tooltip: Περιέγραψε τις τροφικές αλλεργίες σου
+      - complete.health.base.foodAllergiesDetails.placeholder: π.χ. Αλλεργία σε ξηρούς καρπούς, οστρακοειδή
+      - complete.health.base.foodAllergiesDetails.error: Συμπλήρωσε λεπτομέρειες για τις τροφικές αλλεργίες
+      - complete.health.base.chronicConditions.label: Χρόνιες παθήσεις
+      - complete.health.base.chronicConditions.tooltip: Δήλωσε αν έχεις κάποια χρόνια πάθηση
+      - complete.health.base.chronicConditions.checkbox: Έχω χρόνια πάθηση
+      - complete.health.base.chronicConditionsDetails.label: Λεπτομέρειες χρόνιων παθήσεων
+      - complete.health.base.chronicConditionsDetails.tooltip: Περιέγραψε τη χρόνια πάθησή σου
+      - complete.health.base.chronicConditionsDetails.placeholder: π.χ. Άσθμα, διαβήτης
+      - complete.health.base.chronicConditionsDetails.error: Συμπλήρωσε λεπτομέρειες για τις χρόνιες παθήσεις
+      - complete.health.base.primaryGoal.label: Κύριος στόχος
+      - complete.health.base.primaryGoal.tooltip: Επίλεξε τον βασικό σου στόχο υγείας
+      - complete.health.base.primaryGoal.error: Ο κύριος στόχος είναι υποχρεωτικός
+      - complete.health.optional.title: Προαιρετικά στοιχεία
+      - complete.health.optional.description: Συμπλήρωσε προαιρετικά στοιχεία για πιο εξατομικευμένες προτάσεις και περιεχόμενο.
+      - complete.health.optional.edit: Επεξεργασία προαιρετικών στοιχείων
+      - complete.health.optional.edit.tooltip: Επεξεργασία προαιρετικών στοιχείων
+      - complete.health.optional.submit: Αποθήκευση προαιρετικών στοιχείων
+      - complete.health.optional.sleepQuality.label: Ποιότητα ύπνου
+      - complete.health.optional.studyLoad.label: Φορτίο σπουδών
+      - complete.health.optional.smoking.label: Κάπνισμα
+      - complete.health.optional.coffee.label: Κατανάλωση καφέ
+      - complete.health.optional.screenTime.label: Χρόνος οθόνης
+      - complete.health.optional.exercise.label: Άσκηση
+      - complete.health.optional.mealsPerDay.label: Γεύματα ανά ημέρα
+      - complete.health.optional.eatSnack.label: Σνακ
+      - complete.health.optional.water.label: Κατανάλωση νερού
+      - complete.health.optional.dietType.label: Τύπος διατροφής
+      - complete.health.optional.medication.label: Φαρμακευτική αγωγή
+      - complete.health.optional.medicationDetails.label: Λεπτομέρειες φαρμακευτικής αγωγής
+      - complete.health.optional.medicationDetails.placeholder: π.χ. Όνομα φαρμάκου, δοσολογία, συχνότητα
+      - complete.health.optional.surgeryHistory.label: Ιστορικό χειρουργείων
+      - complete.health.optional.surgeryDetails.label: Λεπτομέρειες χειρουργείων
+      - complete.health.optional.surgeryDetails.placeholder: π.χ. Επέμβαση, έτος, τυχόν επιπλοκές
+      - complete.health.optional.preferredContent.label: Προτιμώμενο περιεχόμενο
+      - complete.health.optional.frequency.label: Συχνότητα
+      - complete.health.optional.comments.label: Σχόλια
+      - complete.health.optional.comments.placeholder: Πρόσθεσε σχόλια ή πληροφορίες που θεωρείς σημαντικές
+      - complete.health.optional.dailyStatus.title: Καθημερινή κατάσταση
+      - complete.health.optional.nutritionAndExercise.title: Διατροφή και άσκηση
+      - complete.health.optional.healthInfo.title: Πληροφορίες υγείας
       - complete.health.optional.preferences.title: Προτιμήσεις
-      - complete.health.optional.sleepQuality.label: Ποιότητα Ύπνου
-      - complete.health.optional.stressLevel.label: Επίπεδο Άγχους
-      - complete.health.optional.studyLoad.label: Φόρτος Σπουδών
-      - complete.health.optional.activityLevel.label: Επίπεδο Δραστηριότητας
-      - complete.health.optional.exerciseFrequency.label: Συχνότητα Άσκησης Ανά Εβδομάδα
-      - complete.health.optional.exerciseFrequency.tooltip: Εισαγάγετε έναν αριθμό από 0 έως 7
-      - complete.health.optional.exerciseFrequency.error: Εισαγάγετε έναν αριθμό από 0 έως 7.
-      - complete.health.optional.dietType.label: Τύπος Διατροφής
-      - complete.health.optional.mealRegularity.label: Τακτικότητα Γευμάτων
-      - complete.health.optional.hydrationLevel.label: Επίπεδο Ενυδάτωσης
-      - complete.health.optional.fitnessLevel.label: Επίπεδο Φυσικής Κατάστασης
-      - complete.health.optional.physicalLimitations.label: Φυσικοί Περιορισμοί
-      - complete.health.optional.physicalLimitationsDetails.label: Λεπτομέρειες Φυσικών Περιορισμών
-      - complete.health.optional.physicalLimitationsDetails.tooltip: Περιγράψτε τους φυσικούς περιορισμούς σας
-      - complete.health.optional.physicalLimitationsDetails.placeholder: Περιγράψτε τους φυσικούς περιορισμούς σας
-      - complete.health.optional.physicalLimitationsDetails.error: Οι λεπτομέρειες φυσικών περιορισμών είναι υποχρεωτικές.
-      - complete.health.optional.preferredRoutineTime.label: Προτιμώμενη Ώρα Ρουτίνας
-      - complete.health.optional.preferredContentType.label: Προτιμώμενος Τύπος Περιεχομένου
-      - complete.health.optional.wellnessFocus.label: Εστίαση Ευεξίας
+      - complete.health.select.gender: Επίλεξε φύλο
+      - complete.health.select.goal: Επίλεξε στόχο
+      - complete.health.select.default: Επιλογή
+
+      # Form Enums
+      - complete.health.optional.gender.options.FEMALE: Γυναίκα
+      - complete.health.optional.gender.options.MALE: Άνδρας
+      - complete.health.optional.gender.options.OTHER: Άλλο
+      - complete.health.optional.primaryGoal.options.EAT_HEALTHIER: Πιο υγιεινή διατροφή
+      - complete.health.optional.primaryGoal.options.IMPROVE_FITNESS: Βελτίωση φυσικής κατάστασης
+      - complete.health.optional.primaryGoal.options.MANAGE_WEIGHT: Διαχείριση βάρους
+      - complete.health.optional.primaryGoal.options.SLEEP_BETTER: Καλύτερος ύπνος
+      - complete.health.optional.sleepQuality.options.LESS_THAN_6_HOURS: Λιγότερο από 6 ώρες
+      - complete.health.optional.sleepQuality.options.ABOUT_6_HOURS: Περίπου 6 ώρες
+      - complete.health.optional.sleepQuality.options.ABOUT_8_HOURS: Περίπου 8 ώρες
+      - complete.health.optional.sleepQuality.options.MORE_THAN_8_HOURS: Περισσότερες από 8 ώρες
+      - complete.health.optional.studyLoad.options.LESS_THAN_1_HOUR: Λιγότερο από 1 ώρα
+      - complete.health.optional.studyLoad.options.ONE_TO_TWO_HOURS: "1–2 ώρες"
+      - complete.health.optional.studyLoad.options.TWO_TO_FOUR_HOURS: "2–4 ώρες"
+      - complete.health.optional.studyLoad.options.MORE_THAN_4_HOURS: Περισσότερες από 4 ώρες
+      - complete.health.optional.smoking.options.NO: "Όχι"
+      - complete.health.optional.smoking.options.OCCASIONALLY: Περιστασιακά
+      - complete.health.optional.smoking.options.DAILY: Καθημερινά
+      - complete.health.optional.coffee.options.NONE: Καθόλου
+      - complete.health.optional.coffee.options.ONE_CUP: 1 καφές
+      - complete.health.optional.coffee.options.TWO_TO_THREE_CUPS: "2–3 καφέδες"
+      - complete.health.optional.coffee.options.FOUR_OR_MORE_CUPS: "4+ καφέδες"
+      - complete.health.optional.screenTime.options.LESS_THAN_2_HOURS: "<2 ώρες"
+      - complete.health.optional.screenTime.options.TWO_TO_FOUR_HOURS: "2–4 ώρες"
+      - complete.health.optional.screenTime.options.FOUR_TO_SIX_HOURS: "4–6 ώρες"
+      - complete.health.optional.screenTime.options.MORE_THAN_6_HOURS: ">6 ώρες"
+      - complete.health.optional.exercise.options.NONE: Καθόλου
+      - complete.health.optional.exercise.options.ONE_TO_TWO_TIMES: "1–2 φορές/εβδομάδα"
+      - complete.health.optional.exercise.options.THREE_TO_FIVE_TIMES: "3–5 φορές/εβδομάδα"
+      - complete.health.optional.exercise.options.FIVE_TO_SEVEN_TIMES: "5–7 φορές/εβδομάδα"
+      - complete.health.optional.mealsPerDay.options.ONE_TO_TWO: "1–2 γεύματα"
+      - complete.health.optional.mealsPerDay.options.THREE: 3 γεύματα
+      - complete.health.optional.mealsPerDay.options.FOUR_TO_FIVE: "4–5 γεύματα"
+      - complete.health.optional.mealsPerDay.options.MORE_THAN_FIVE: ">5 γεύματα"
+      - complete.health.optional.eatSnack.options.NO: "Όχι"
+      - complete.health.optional.eatSnack.options.SOMETIMES: Μερικές φορές
+      - complete.health.optional.eatSnack.options.DAILY: Καθημερινά
+      - complete.health.optional.water.options.ONE_TO_THREE_GLASSES: "1–3 ποτήρια"
+      - complete.health.optional.water.options.FOUR_TO_SIX_GLASSES: "4–6 ποτήρια"
+      - complete.health.optional.water.options.SEVEN_TO_NINE_GLASSES: "7–9 ποτήρια"
+      - complete.health.optional.water.options.MORE_THAN_NINE_GLASSES: ">9 ποτήρια"
+      - complete.health.optional.dietType.options.OMNIVORE: Παμφάγος
+      - complete.health.optional.dietType.options.VEGETARIAN: Χορτοφάγος
+      - complete.health.optional.dietType.options.VEGAN: Vegan
+      - complete.health.optional.dietType.options.PESCATARIAN: Ψαροφάγος
+      - complete.health.optional.dietType.options.GLUTEN_FREE: Χωρίς γλουτένη
+      - complete.health.optional.dietType.options.OTHER: Άλλο
+      - complete.health.optional.preferredContent.options.ARTICLES: Άρθρα
+      - complete.health.optional.preferredContent.options.SHORT_TIPS: Σύντομες συμβουλές
+      - complete.health.optional.preferredContent.options.MIXED: Μικτό
+      - complete.health.optional.frequency.options.DAILY: Καθημερινά
+      - complete.health.optional.frequency.options.FEW_TIMES_PER_WEEK: Λίγες φορές την εβδομάδα
+      - complete.health.optional.frequency.options.RARELY: Σπάνια
 
       # RSS Health News
       - health.news.title: Τα σημερινά νέα υγείας
@@ -498,76 +556,134 @@ translations:
       - profile.loading.message: Loading profile…
 
       # Complete Health Form
-      - complete.health.loading: Loading...
+      - complete.health.loading: Loading health profile...
       - complete.health.cancel: Cancel
-      - complete.health.cancel.tooltip: Click to cancel changes
+      - complete.health.cancel.tooltip: Cancel editing
       - complete.health.saving: Saving...
-      - complete.health.select.default: Select
-      - complete.health.select.gender: Select gender
-      - complete.health.select.goal: Select goal
-      - complete.health.base.title: General Health Profile
-      - complete.health.base.edit: Edit Base Form
-      - complete.health.base.edit.tooltip: Click to edit the base form
-      - complete.health.base.submit: Update Base Profile
-      - complete.health.base.dateOfBirth.label: Date of Birth
+      - complete.health.base.title: Basic health information
+      - complete.health.base.edit: Edit basic information
+      - complete.health.base.edit.tooltip: Edit your basic health information
+      - complete.health.base.submit: Save basic information
+      - complete.health.base.dateOfBirth.label: Date of birth
       - complete.health.base.dateOfBirth.tooltip: Select your date of birth
-      - complete.health.base.dateOfBirth.error: Date of birth is required.
+      - complete.health.base.dateOfBirth.error: Date of birth is required
       - complete.health.base.gender.label: Gender
       - complete.health.base.gender.tooltip: Select your gender
-      - complete.health.base.gender.error: Gender is required.
+      - complete.health.base.gender.error: Gender is required
       - complete.health.base.height.label: Height (cm)
       - complete.health.base.height.tooltip: Enter your height in centimeters
       - complete.health.base.height.placeholder: e.g. 175
-      - complete.health.base.height.error: Enter a valid height.
+      - complete.health.base.height.error: Height is required and must be valid
       - complete.health.base.weight.label: Weight (kg)
       - complete.health.base.weight.tooltip: Enter your weight in kilograms
       - complete.health.base.weight.placeholder: e.g. 70.5
-      - complete.health.base.weight.error: Enter a valid weight.
-      - complete.health.base.foodAllergies.label: Food Allergies
+      - complete.health.base.weight.error: Weight is required and must be valid
+      - complete.health.base.age.label: Age
+      - complete.health.base.bmi.label: BMI
+      - complete.health.base.foodAllergies.label: Food allergies
+      - complete.health.base.foodAllergies.tooltip: Indicate whether you have food allergies
       - complete.health.base.foodAllergies.checkbox: I have food allergies
-      - complete.health.base.foodAllergies.tooltip: Check if you have food allergies
-      - complete.health.base.chronicConditions.label: Chronic Conditions
-      - complete.health.base.chronicConditions.checkbox: I have chronic conditions
-      - complete.health.base.chronicConditions.tooltip: Check if you have chronic conditions
-      - complete.health.base.foodAllergiesDetails.label: Food Allergies Details
+      - complete.health.base.foodAllergiesDetails.label: Food allergy details
       - complete.health.base.foodAllergiesDetails.tooltip: Describe your food allergies
-      - complete.health.base.foodAllergiesDetails.placeholder: Describe your food allergies
-      - complete.health.base.foodAllergiesDetails.error: Food allergies details are required.
-      - complete.health.base.chronicConditionsDetails.label: Chronic Conditions Details
-      - complete.health.base.chronicConditionsDetails.tooltip: Describe your chronic conditions
-      - complete.health.base.chronicConditionsDetails.placeholder: Describe your chronic conditions
-      - complete.health.base.chronicConditionsDetails.error: Chronic conditions details are required.
-      - complete.health.base.primaryGoal.label: Primary Goal
-      - complete.health.base.primaryGoal.tooltip: Select your primary goal
-      - complete.health.base.primaryGoal.error: Primary goal is required.
-      - complete.health.optional.title: Optional Personalization Details
-      - complete.health.optional.description: These fields help personalize articles, recommendations, and assistant guidance.
-      - complete.health.optional.edit: Edit Optional Form
-      - complete.health.optional.edit.tooltip: Click to edit the optional form
-      - complete.health.optional.submit: Save Optional Details
-      - complete.health.optional.dailyWellbeing.title: Daily Wellbeing
-      - complete.health.optional.healthyHabits.title: Healthy Habits
-      - complete.health.optional.physicalCondition.title: Physical Condition
+      - complete.health.base.foodAllergiesDetails.placeholder: e.g. Allergy to nuts, shellfish
+      - complete.health.base.foodAllergiesDetails.error: Please provide details about your food allergies
+      - complete.health.base.chronicConditions.label: Chronic conditions
+      - complete.health.base.chronicConditions.tooltip: Indicate whether you have any chronic conditions
+      - complete.health.base.chronicConditions.checkbox: I have a chronic condition
+      - complete.health.base.chronicConditionsDetails.label: Chronic condition details
+      - complete.health.base.chronicConditionsDetails.tooltip: Describe your chronic condition
+      - complete.health.base.chronicConditionsDetails.placeholder: e.g. Asthma, diabetes
+      - complete.health.base.chronicConditionsDetails.error: Please provide details about your chronic conditions
+      - complete.health.base.primaryGoal.label: Primary goal
+      - complete.health.base.primaryGoal.tooltip: Select your main health goal
+      - complete.health.base.primaryGoal.error: Primary goal is required
+      - complete.health.optional.title: Optional information
+      - complete.health.optional.description: Fill in optional information for more personalized recommendations and content.
+      - complete.health.optional.edit: Edit optional information
+      - complete.health.optional.edit.tooltip: Edit optional information
+      - complete.health.optional.submit: Save optional information
+      - complete.health.optional.sleepQuality.label: Sleep quality
+      - complete.health.optional.studyLoad.label: Study load
+      - complete.health.optional.smoking.label: Smoking
+      - complete.health.optional.coffee.label: Coffee consumption
+      - complete.health.optional.screenTime.label: Screen time
+      - complete.health.optional.exercise.label: Exercise
+      - complete.health.optional.mealsPerDay.label: Meals per day
+      - complete.health.optional.eatSnack.label: Snacks
+      - complete.health.optional.water.label: Water intake
+      - complete.health.optional.dietType.label: Diet type
+      - complete.health.optional.medication.label: Medication
+      - complete.health.optional.medicationDetails.label: Medication details
+      - complete.health.optional.medicationDetails.placeholder: e.g. Medication name, dosage, frequency
+      - complete.health.optional.surgeryHistory.label: Surgery history
+      - complete.health.optional.surgeryDetails.label: Surgery details
+      - complete.health.optional.surgeryDetails.placeholder: e.g. Procedure, year, any complications
+      - complete.health.optional.preferredContent.label: Preferred content
+      - complete.health.optional.frequency.label: Frequency
+      - complete.health.optional.comments.label: Comments
+      - complete.health.optional.comments.placeholder: Add comments or information you think is important
+      - complete.health.optional.dailyStatus.title: Daily status
+      - complete.health.optional.nutritionAndExercise.title: Nutrition and exercise
+      - complete.health.optional.healthInfo.title: Health information
       - complete.health.optional.preferences.title: Preferences
-      - complete.health.optional.sleepQuality.label: Sleep Quality
-      - complete.health.optional.stressLevel.label: Stress Level
-      - complete.health.optional.studyLoad.label: Study Load
-      - complete.health.optional.activityLevel.label: Activity Level
-      - complete.health.optional.exerciseFrequency.label: Exercise Frequency Per Week
-      - complete.health.optional.exerciseFrequency.tooltip: Enter a number from 0 to 7
-      - complete.health.optional.exerciseFrequency.error: Enter a number between 0 and 7.
-      - complete.health.optional.dietType.label: Diet Type
-      - complete.health.optional.mealRegularity.label: Meal Regularity
-      - complete.health.optional.hydrationLevel.label: Hydration Level
-      - complete.health.optional.fitnessLevel.label: Fitness Level
-      - complete.health.optional.physicalLimitations.label: Physical Limitations
-      - complete.health.optional.physicalLimitationsDetails.label: Physical Limitations Details
-      - complete.health.optional.physicalLimitationsDetails.tooltip: Describe your physical limitations
-      - complete.health.optional.physicalLimitationsDetails.placeholder: Describe your physical limitations
-      - complete.health.optional.physicalLimitationsDetails.error: Physical limitations details are required.
-      - complete.health.optional.preferredRoutineTime.label: Preferred Routine Time
-      - complete.health.optional.preferredContentType.label: Preferred Content Type
-      - complete.health.optional.wellnessFocus.label: Wellness Focus
+      - complete.health.select.gender: Select gender
+      - complete.health.select.goal: Select goal
+      - complete.health.select.default: Select
+
+      # Form Enums
+      - complete.health.optional.gender.options.FEMALE: Female
+      - complete.health.optional.gender.options.MALE: Male
+      - complete.health.optional.gender.options.OTHER: Other
+      - complete.health.optional.primaryGoal.options.EAT_HEALTHIER: Eat Healthier
+      - complete.health.optional.primaryGoal.options.IMPROVE_FITNESS: Improve Fitness
+      - complete.health.optional.primaryGoal.options.MANAGE_WEIGHT: Manage Weight
+      - complete.health.optional.primaryGoal.options.SLEEP_BETTER: Sleep Better
+      - complete.health.optional.sleepQuality.options.LESS_THAN_6_HOURS: Less than 6 hours
+      - complete.health.optional.sleepQuality.options.ABOUT_6_HOURS: About 6 hours
+      - complete.health.optional.sleepQuality.options.ABOUT_8_HOURS: About 8 hours
+      - complete.health.optional.sleepQuality.options.MORE_THAN_8_HOURS: More than 8 hours
+      - complete.health.optional.studyLoad.options.LESS_THAN_1_HOUR: Less than 1 hour
+      - complete.health.optional.studyLoad.options.ONE_TO_TWO_HOURS: "1–2 hours"
+      - complete.health.optional.studyLoad.options.TWO_TO_FOUR_HOURS: "2–4 hours"
+      - complete.health.optional.studyLoad.options.MORE_THAN_4_HOURS: More than 4 hours
+      - complete.health.optional.smoking.options.NO: "No"
+      - complete.health.optional.smoking.options.OCCASIONALLY: Occasionally
+      - complete.health.optional.smoking.options.DAILY: Daily
+      - complete.health.optional.coffee.options.NONE: None
+      - complete.health.optional.coffee.options.ONE_CUP: 1 cup
+      - complete.health.optional.coffee.options.TWO_TO_THREE_CUPS: "2–3 cups"
+      - complete.health.optional.coffee.options.FOUR_OR_MORE_CUPS: "4+ cups"
+      - complete.health.optional.screenTime.options.LESS_THAN_2_HOURS: Less than 2 hours
+      - complete.health.optional.screenTime.options.TWO_TO_FOUR_HOURS: "2–4 hours"
+      - complete.health.optional.screenTime.options.FOUR_TO_SIX_HOURS: "4–6 hours"
+      - complete.health.optional.screenTime.options.MORE_THAN_6_HOURS: More than 6 hours
+      - complete.health.optional.exercise.options.NONE: None
+      - complete.health.optional.exercise.options.ONE_TO_TWO_TIMES: "1–2 times/week"
+      - complete.health.optional.exercise.options.THREE_TO_FIVE_TIMES: "3–5 times/week"
+      - complete.health.optional.exercise.options.FIVE_TO_SEVEN_TIMES: "5–7 times/week"
+      - complete.health.optional.mealsPerDay.options.ONE_TO_TWO: "1–2 meals"
+      - complete.health.optional.mealsPerDay.options.THREE: 3 meals
+      - complete.health.optional.mealsPerDay.options.FOUR_TO_FIVE: "4–5 meals"
+      - complete.health.optional.mealsPerDay.options.MORE_THAN_FIVE: More than 5 meals
+      - complete.health.optional.eatSnack.options.NO: "No"
+      - complete.health.optional.eatSnack.options.SOMETIMES: Sometimes
+      - complete.health.optional.eatSnack.options.DAILY: Daily
+      - complete.health.optional.water.options.ONE_TO_THREE_GLASSES: "1–3 glasses"
+      - complete.health.optional.water.options.FOUR_TO_SIX_GLASSES: "4–6 glasses"
+      - complete.health.optional.water.options.SEVEN_TO_NINE_GLASSES: "7–9 glasses"
+      - complete.health.optional.water.options.MORE_THAN_NINE_GLASSES: More than 9 glasses
+      - complete.health.optional.dietType.options.OMNIVORE: Omnivore
+      - complete.health.optional.dietType.options.VEGETARIAN: Vegetarian
+      - complete.health.optional.dietType.options.VEGAN: Vegan
+      - complete.health.optional.dietType.options.PESCATARIAN: Pescatarian
+      - complete.health.optional.dietType.options.GLUTEN_FREE: Gluten-free
+      - complete.health.optional.dietType.options.OTHER: Other
+      - complete.health.optional.preferredContent.options.ARTICLES: Articles
+      - complete.health.optional.preferredContent.options.SHORT_TIPS: Short tips
+      - complete.health.optional.preferredContent.options.MIXED: Mixed
+      - complete.health.optional.frequency.options.DAILY: Daily
+      - complete.health.optional.frequency.options.FEW_TIMES_PER_WEEK: Few times per week
+      - complete.health.optional.frequency.options.RARELY: Rarely
 
         # RSS Health News
       - health.news.title: Today's Health News

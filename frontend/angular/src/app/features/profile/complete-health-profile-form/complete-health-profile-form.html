@@ -18,7 +18,9 @@
 
                     <div class="view-item">
                         <span class="view-label">{{ 'complete.health.base.gender.label' | translate }}</span>
-                        <span class="view-value">{{ baseForm.value.gender || '-' }}</span>
+                        <span class="view-value">
+                            {{ baseForm.value.gender ? (getEnumKey(baseForm.value.gender, 'gender') | translate) : '-' }}
+                        </span>
                     </div>
 
                     <div class="view-item">
@@ -29,6 +31,16 @@
                     <div class="view-item">
                         <span class="view-label">{{ 'complete.health.base.weight.label' | translate }}</span>
                         <span class="view-value">{{ baseForm.value.weightKg ?? '-' }}</span>
+                    </div>
+
+                    <div class="view-item">
+                        <span class="view-label">{{ 'complete.health.base.age.label' | translate }}</span>
+                        <span class="view-value">{{ age ?? '-' }}</span>
+                    </div>
+
+                    <div class="view-item">
+                        <span class="view-label">{{ 'complete.health.base.bmi.label' | translate }}</span>
+                        <span class="view-value">{{ bmi ?? '-' }}</span>
                     </div>
 
                     <div class="view-item">
@@ -63,7 +75,9 @@
 
                     <div class="view-item full-width">
                         <span class="view-label">{{ 'complete.health.base.primaryGoal.label' | translate }}</span>
-                        <span class="view-value">{{ baseForm.value.primaryGoal || '-' }}</span>
+                        <span class="view-value">
+                            {{ baseForm.value.primaryGoal ? (getEnumKey(baseForm.value.primaryGoal, 'primaryGoal') | translate) : '-' }}
+                        </span>
                     </div>
                 </div>
 
@@ -117,7 +131,9 @@
                             [title]="'complete.health.base.gender.tooltip' | translate">
                             <option [ngValue]="null">{{ 'complete.health.select.gender' | translate }}</option>
                             @for (gender of genders; track gender) {
-                                <option [ngValue]="gender">{{ gender }}</option>
+                                <option [ngValue]="gender">
+                                    {{ getEnumKey(gender, 'gender') | translate }}
+                                </option>
                             }
                         </select>
                         @if (f.gender.touched && f.gender.invalid) {
@@ -235,7 +251,9 @@
                         [title]="'complete.health.base.primaryGoal.tooltip' | translate">
                         <option [ngValue]="null">{{ 'complete.health.select.goal' | translate }}</option>
                         @for (goal of primaryGoals; track goal) {
-                            <option [ngValue]="goal">{{ goal }}</option>
+                            <option [ngValue]="goal">
+                                {{ getEnumKey(goal, 'primaryGoal') | translate }}
+                            </option>
                         }
                     </select>
                     @if (f.primaryGoal.touched && f.primaryGoal.invalid) {
@@ -272,7 +290,6 @@
         }
     </section>
 
-    <!-- Optional profile section -->
     <section class="form-section">
         <div class="section-header">
             <h2>{{ 'complete.health.optional.title' | translate }}</h2>
@@ -287,99 +304,125 @@
                 <div class="view-grid">
                     <div class="view-item">
                         <span class="view-label">{{ 'complete.health.optional.sleepQuality.label' | translate }}</span>
-                        <span class="view-value">{{ optionalForm.value.sleepQuality || '-' }}</span>
-                    </div>
-
-                    <div class="view-item">
-                        <span class="view-label">{{ 'complete.health.optional.stressLevel.label' | translate }}</span>
-                        <span class="view-value">{{ optionalForm.value.stressLevel || '-' }}</span>
+                        <span class="view-value">
+                        {{ optionalForm.value.sleepQuality ? (getEnumKey(optionalForm.value.sleepQuality, 'sleepQuality') | translate) : '-' }}
+                    </span>
                     </div>
 
                     <div class="view-item">
                         <span class="view-label">{{ 'complete.health.optional.studyLoad.label' | translate }}</span>
-                        <span class="view-value">{{ optionalForm.value.studyLoad || '-' }}</span>
+                        <span class="view-value">
+                        {{ optionalForm.value.studyLoad ? (getEnumKey(optionalForm.value.studyLoad, 'studyLoad') | translate) : '-' }}
+                    </span>
                     </div>
 
                     <div class="view-item">
-                        <span class="view-label">{{ 'complete.health.optional.activityLevel.label' | translate }}</span>
-                        <span class="view-value">{{ optionalForm.value.activityLevel || '-' }}</span>
+                        <span class="view-label">{{ 'complete.health.optional.smoking.label' | translate }}</span>
+                        <span class="view-value">
+                        {{ optionalForm.value.smoking ? (getEnumKey(optionalForm.value.smoking, 'smoking') | translate) : '-' }}
+                    </span>
                     </div>
 
                     <div class="view-item">
-                        <span
-                            class="view-label">{{ 'complete.health.optional.exerciseFrequency.label' | translate }}</span>
-                        <span class="view-value">{{ optionalForm.value.exerciseFrequencyPerWeek ?? '-' }}</span>
+                        <span class="view-label">{{ 'complete.health.optional.coffee.label' | translate }}</span>
+                        <span class="view-value">
+                        {{ optionalForm.value.coffee ? (getEnumKey(optionalForm.value.coffee, 'coffee') | translate) : '-' }}
+                    </span>
+                    </div>
+
+                    <div class="view-item">
+                        <span class="view-label">{{ 'complete.health.optional.screenTime.label' | translate }}</span>
+                        <span class="view-value">
+                        {{ optionalForm.value.screenTime ? (getEnumKey(optionalForm.value.screenTime, 'screenTime') | translate) : '-' }}
+                    </span>
+                    </div>
+
+                    <div class="view-item">
+                        <span class="view-label">{{ 'complete.health.optional.exercise.label' | translate }}</span>
+                        <span class="view-value">
+                        {{ optionalForm.value.exercise ? (getEnumKey(optionalForm.value.exercise, 'exercise') | translate) : '-' }}
+                    </span>
+                    </div>
+
+                    <div class="view-item">
+                        <span class="view-label">{{ 'complete.health.optional.mealsPerDay.label' | translate }}</span>
+                        <span class="view-value">
+                        {{ optionalForm.value.mealsPerDay ? (getEnumKey(optionalForm.value.mealsPerDay, 'mealsPerDay') | translate) : '-' }}
+                    </span>
+                    </div>
+
+                    <div class="view-item">
+                        <span class="view-label">{{ 'complete.health.optional.eatSnack.label' | translate }}</span>
+                        <span class="view-value">
+                        {{ optionalForm.value.eatSnack ? (getEnumKey(optionalForm.value.eatSnack, 'eatSnack') | translate) : '-' }}
+                    </span>
+                    </div>
+
+                    <div class="view-item">
+                        <span class="view-label">{{ 'complete.health.optional.water.label' | translate }}</span>
+                        <span class="view-value">
+                        {{ optionalForm.value.water ? (getEnumKey(optionalForm.value.water, 'water') | translate) : '-' }}
+                    </span>
                     </div>
 
                     <div class="view-item">
                         <span class="view-label">{{ 'complete.health.optional.dietType.label' | translate }}</span>
-                        <span class="view-value">{{ optionalForm.value.dietType || '-' }}</span>
-                    </div>
-
-                    <div class="view-item">
-                        <span
-                            class="view-label">{{ 'complete.health.optional.mealRegularity.label' | translate }}</span>
-                        <span class="view-value">{{ optionalForm.value.mealRegularity || '-' }}</span>
-                    </div>
-
-                    <div class="view-item">
-                        <span
-                            class="view-label">{{ 'complete.health.optional.hydrationLevel.label' | translate }}</span>
-                        <span class="view-value">{{ optionalForm.value.hydrationLevel || '-' }}</span>
-                    </div>
-
-                    <div class="view-item">
-                        <span class="view-label">{{ 'complete.health.optional.fitnessLevel.label' | translate }}</span>
-                        <span class="view-value">{{ optionalForm.value.fitnessLevel || '-' }}</span>
-                    </div>
-
-                    <div class="view-item">
-                        <span
-                            class="view-label">{{ 'complete.health.optional.physicalLimitations.label' | translate }}</span>
                         <span class="view-value">
-                            {{
-                                optionalForm.value.hasPhysicalLimitations === true
-                                    ? ('global.yes' | translate)
-                                    : optionalForm.value.hasPhysicalLimitations === false
-                                        ? ('global.no' | translate)
-                                        : '-'
-                            }}
-                        </span>
+                        {{ optionalForm.value.dietType ? (getEnumKey(optionalForm.value.dietType, 'dietType') | translate) : '-' }}
+                    </span>
                     </div>
 
-                    @if (optionalForm.value.hasPhysicalLimitations === true) {
+                    <div class="view-item">
+                        <span class="view-label">{{ 'complete.health.optional.medication.label' | translate }}</span>
+                        <span class="view-value">
+                        {{ optionalForm.value.medication ? (getEnumKey(optionalForm.value.medication, 'medication') | translate) : '-' }}
+                    </span>
+                    </div>
+
+                    @if (optionalForm.value.medication === true) {
                         <div class="view-item full-width">
                             <span
-                                class="view-label">{{ 'complete.health.optional.physicalLimitationsDetails.label' | translate }}</span>
-                            <span class="view-value">{{ optionalForm.value.physicalLimitationsDetails || '-' }}</span>
+                                class="view-label">{{ 'complete.health.optional.medicationDetails.label' | translate }}</span>
+                            <span class="view-value">{{ optionalForm.value.medicationDetails || '-' }}</span>
                         </div>
                     }
 
                     <div class="view-item">
                         <span
-                            class="view-label">{{ 'complete.health.optional.preferredRoutineTime.label' | translate }}</span>
-                        <span class="view-value">{{ optionalForm.value.preferredRoutineTime || '-' }}</span>
+                            class="view-label">{{ 'complete.health.optional.surgeryHistory.label' | translate }}</span>
+                        <span class="view-value">
+                        {{ optionalForm.value.surgeryHistory ? (getEnumKey(optionalForm.value.surgeryHistory, 'surgeryHistory') | translate) : '-' }}
+                    </span>
                     </div>
+
+                    @if (optionalForm.value.surgeryHistory === true) {
+                        <div class="view-item full-width">
+                            <span
+                                class="view-label">{{ 'complete.health.optional.surgeryDetails.label' | translate }}</span>
+                            <span class="view-value">{{ optionalForm.value.surgeryDetails || '-' }}</span>
+                        </div>
+                    }
 
                     <div class="view-item">
                         <span
-                            class="view-label">{{ 'complete.health.optional.preferredContentType.label' | translate }}</span>
-                        <span class="view-value">{{ optionalForm.value.preferredContentType || '-' }}</span>
+                            class="view-label">{{ 'complete.health.optional.preferredContent.label' | translate }}</span>
+                        <span class="view-value">
+                        {{ optionalForm.value.preferredContent ? (getEnumKey(optionalForm.value.preferredContent, 'preferredContent') | translate) : '-' }}
+                    </span>
                     </div>
 
                     <div class="view-item">
-                        <span class="view-label">{{ 'complete.health.optional.wellnessFocus.label' | translate }}</span>
-                        <span class="view-value">{{ optionalForm.value.wellnessFocus || '-' }}</span>
+                        <span class="view-label">{{ 'complete.health.optional.frequency.label' | translate }}</span>
+                        <span class="view-value">
+                        {{ optionalForm.value.frequency ? (getEnumKey(optionalForm.value.frequency, 'frequency') | translate) : '-' }}
+                    </span>
+                    </div>
+
+                    <div class="view-item full-width">
+                        <span class="view-label">{{ 'complete.health.optional.comments.label' | translate }}</span>
+                        <span class="view-value">{{ optionalForm.value.comments || '-' }}</span>
                     </div>
                 </div>
-
-                @if (optionalErrorMessage) {
-                    <div class="alert alert-error">{{ optionalErrorMessage }}</div>
-                }
-
-                @if (optionalSuccessMessage) {
-                    <div class="alert alert-success">{{ optionalSuccessMessage }}</div>
-                }
 
                 <div class="actions">
                     <button
@@ -394,7 +437,7 @@
         } @else {
             <form [formGroup]="optionalForm" (ngSubmit)="onOptionalSubmit()">
 
-                <h3>{{ 'complete.health.optional.dailyWellbeing.title' | translate }}</h3>
+                <h3>{{ 'complete.health.optional.dailyStatus.title' | translate }}</h3>
                 <div class="form-grid">
                     <div class="form-field">
                         <label
@@ -402,17 +445,7 @@
                         <select id="sleepQuality" formControlName="sleepQuality">
                             <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
                             @for (option of sleepQualityOptions; track option) {
-                                <option [value]="option">{{ option }}</option>
-                            }
-                        </select>
-                    </div>
-
-                    <div class="form-field">
-                        <label for="stressLevel">{{ 'complete.health.optional.stressLevel.label' | translate }}</label>
-                        <select id="stressLevel" formControlName="stressLevel">
-                            <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
-                            @for (option of stressLevelOptions; track option) {
-                                <option [value]="option">{{ option }}</option>
+                                <option [ngValue]="option">{{ getEnumKey(option, 'sleepQuality') | translate }}</option>
                             }
                         </select>
                     </div>
@@ -422,39 +455,84 @@
                         <select id="studyLoad" formControlName="studyLoad">
                             <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
                             @for (option of studyLoadOptions; track option) {
-                                <option [value]="option">{{ option }}</option>
+                                <option [ngValue]="option">{{ getEnumKey(option, 'studyLoad') | translate }}</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="smoking">{{ 'complete.health.optional.smoking.label' | translate }}</label>
+                        <select id="smoking" formControlName="smoking">
+                            <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
+                            @for (option of smokingOptions; track option) {
+                                <option [ngValue]="option">{{ getEnumKey(option, 'smoking') | translate }}</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="coffee">{{ 'complete.health.optional.coffee.label' | translate }}</label>
+                        <select id="coffee" formControlName="coffee">
+                            <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
+                            @for (option of coffeeOptions; track option) {
+                                <option [ngValue]="option">{{ getEnumKey(option, 'coffee') | translate }}</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="screenTime">{{ 'complete.health.optional.screenTime.label' | translate }}</label>
+                        <select id="screenTime" formControlName="screenTime">
+                            <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
+                            @for (option of screenTimeOptions; track option) {
+                                <option [ngValue]="option">{{ getEnumKey(option, 'screenTime') | translate }}</option>
                             }
                         </select>
                     </div>
                 </div>
 
-                <h3>{{ 'complete.health.optional.healthyHabits.title' | translate }}</h3>
+                <mat-divider></mat-divider>
+
+                <h3>{{ 'complete.health.optional.nutritionAndExercise.title' | translate }}</h3>
                 <div class="form-grid">
                     <div class="form-field">
-                        <label
-                            for="activityLevel">{{ 'complete.health.optional.activityLevel.label' | translate }}</label>
-                        <select id="activityLevel" formControlName="activityLevel">
+                        <label for="exercise">{{ 'complete.health.optional.exercise.label' | translate }}</label>
+                        <select id="exercise" formControlName="exercise">
                             <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
-                            @for (option of activityLevelOptions; track option) {
-                                <option [value]="option">{{ option }}</option>
+                            @for (option of exerciseOptions; track option) {
+                                <option [ngValue]="option">{{ getEnumKey(option, 'exercise') | translate }}</option>
                             }
                         </select>
                     </div>
 
                     <div class="form-field">
-                        <label
-                            for="exerciseFrequencyPerWeek">{{ 'complete.health.optional.exerciseFrequency.label' | translate }}</label>
-                        <input
-                            id="exerciseFrequencyPerWeek"
-                            type="number"
-                            formControlName="exerciseFrequencyPerWeek"
-                            min="0"
-                            max="7"
-                            [title]="'complete.health.optional.exerciseFrequency.tooltip' | translate"/>
-                        @if (of['exerciseFrequencyPerWeek'].touched && of['exerciseFrequencyPerWeek'].invalid) {
-                            <small
-                                class="error-text">{{ 'complete.health.optional.exerciseFrequency.error' | translate }}</small>
-                        }
+                        <label for="mealsPerDay">{{ 'complete.health.optional.mealsPerDay.label' | translate }}</label>
+                        <select id="mealsPerDay" formControlName="mealsPerDay">
+                            <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
+                            @for (option of mealsPerDayOptions; track option) {
+                                <option [ngValue]="option">{{ getEnumKey(option, 'mealsPerDay') | translate }}</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="eatSnack">{{ 'complete.health.optional.eatSnack.label' | translate }}</label>
+                        <select id="eatSnack" formControlName="eatSnack">
+                            <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
+                            @for (option of snackOptions; track option) {
+                                <option [ngValue]="option">{{ getEnumKey(option, 'eatSnack') | translate }}</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="water">{{ 'complete.health.optional.water.label' | translate }}</label>
+                        <select id="water" formControlName="water">
+                            <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
+                            @for (option of waterOptions; track option) {
+                                <option [ngValue]="option">{{ getEnumKey(option, 'water') | translate }}</option>
+                            }
+                        </select>
                     </div>
 
                     <div class="form-field">
@@ -462,121 +540,101 @@
                         <select id="dietType" formControlName="dietType">
                             <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
                             @for (option of dietTypeOptions; track option) {
-                                <option [value]="option">{{ option }}</option>
-                            }
-                        </select>
-                    </div>
-
-                    <div class="form-field">
-                        <label
-                            for="mealRegularity">{{ 'complete.health.optional.mealRegularity.label' | translate }}</label>
-                        <select id="mealRegularity" formControlName="mealRegularity">
-                            <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
-                            @for (option of mealRegularityOptions; track option) {
-                                <option [value]="option">{{ option }}</option>
-                            }
-                        </select>
-                    </div>
-
-                    <div class="form-field">
-                        <label
-                            for="hydrationLevel">{{ 'complete.health.optional.hydrationLevel.label' | translate }}</label>
-                        <select id="hydrationLevel" formControlName="hydrationLevel">
-                            <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
-                            @for (option of hydrationLevelOptions; track option) {
-                                <option [value]="option">{{ option }}</option>
+                                <option [ngValue]="option">{{ getEnumKey(option, 'dietType') | translate }}</option>
                             }
                         </select>
                     </div>
                 </div>
 
-                <h3>{{ 'complete.health.optional.physicalCondition.title' | translate }}</h3>
+                <mat-divider></mat-divider>
+
+                <h3>{{ 'complete.health.optional.healthInfo.title' | translate }}</h3>
                 <div class="form-grid">
                     <div class="form-field">
-                        <label
-                            for="fitnessLevel">{{ 'complete.health.optional.fitnessLevel.label' | translate }}</label>
-                        <select id="fitnessLevel" formControlName="fitnessLevel">
+                        <label for="medication">{{ 'complete.health.optional.medication.label' | translate }}</label>
+                        <select id="medication" formControlName="medication">
                             <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
-                            @for (option of fitnessLevelOptions; track option) {
-                                <option [value]="option">{{ option }}</option>
+                            @for (option of yesNoOptions; track option) {
+                                <option [ngValue]="option.value">
+                                    {{ ('global.' + option.label) | translate }}
+                                </option>
                             }
                         </select>
                     </div>
 
                     <div class="form-field">
                         <label
-                            for="hasPhysicalLimitations">{{ 'complete.health.optional.physicalLimitations.label' | translate }}</label>
-                        <select id="hasPhysicalLimitations" formControlName="hasPhysicalLimitations">
+                            for="surgeryHistory">{{ 'complete.health.optional.surgeryHistory.label' | translate }}</label>
+                        <select id="surgeryHistory" formControlName="surgeryHistory">
                             <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
-                            <option [ngValue]="true">{{ 'global.yes' | translate }}</option>
-                            <option [ngValue]="false">{{ 'global.no' | translate }}</option>
+                            @for (option of yesNoOptions; track option) {
+                                <option [ngValue]="option.value">
+                                    {{ ('global.' + option.label) | translate }}
+                                </option>
+                            }
                         </select>
                     </div>
 
-                    @if (optionalForm.get('hasPhysicalLimitations')?.value === true) {
-                        <div class="form-field full-width details-box">
+                    @if (isMedicationYes) {
+                        <div class="form-field full-width">
                             <label
-                                for="physicalLimitationsDetails"
-                                [title]="'complete.health.optional.physicalLimitationsDetails.tooltip' | translate">
-                                {{ 'complete.health.optional.physicalLimitationsDetails.label' | translate }}
-                            </label>
+                                for="medicationDetails">{{ 'complete.health.optional.medicationDetails.label' | translate }}</label>
                             <textarea
-                                id="physicalLimitationsDetails"
-                                formControlName="physicalLimitationsDetails"
+                                id="medicationDetails"
+                                formControlName="medicationDetails"
                                 rows="3"
-                                [placeholder]="'complete.health.optional.physicalLimitationsDetails.placeholder' | translate"
-                                [title]="'complete.health.optional.physicalLimitationsDetails.tooltip' | translate"></textarea>
-                            @if (of['physicalLimitationsDetails'].touched && of['physicalLimitationsDetails'].invalid) {
-                                <small
-                                    class="error-text">{{ 'complete.health.optional.physicalLimitationsDetails.error' | translate }}</small>
-                            }
+                                [placeholder]="'complete.health.optional.medicationDetails.placeholder' | translate"></textarea>
+                        </div>
+                    }
+
+                    @if (isSurgeryHistoryYes) {
+                        <div class="form-field full-width">
+                            <label
+                                for="surgeryDetails">{{ 'complete.health.optional.surgeryDetails.label' | translate }}</label>
+                            <textarea
+                                id="surgeryDetails"
+                                formControlName="surgeryDetails"
+                                rows="3"
+                                [placeholder]="'complete.health.optional.surgeryDetails.placeholder' | translate"></textarea>
                         </div>
                     }
                 </div>
+
+                <mat-divider></mat-divider>
 
                 <h3>{{ 'complete.health.optional.preferences.title' | translate }}</h3>
                 <div class="form-grid">
                     <div class="form-field">
                         <label
-                            for="preferredRoutineTime">{{ 'complete.health.optional.preferredRoutineTime.label' | translate }}</label>
-                        <select id="preferredRoutineTime" formControlName="preferredRoutineTime">
+                            for="preferredContent">{{ 'complete.health.optional.preferredContent.label' | translate }}</label>
+                        <select id="preferredContent" formControlName="preferredContent">
                             <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
-                            @for (option of preferredRoutineTimeOptions; track option) {
-                                <option [value]="option">{{ option }}</option>
+                            @for (option of preferredContentOptions; track option) {
+                                <option [ngValue]="option">{{ getEnumKey(option, 'preferredContent') | translate }}
+                                </option>
                             }
                         </select>
                     </div>
 
                     <div class="form-field">
-                        <label
-                            for="preferredContentType">{{ 'complete.health.optional.preferredContentType.label' | translate }}</label>
-                        <select id="preferredContentType" formControlName="preferredContentType">
+                        <label for="frequency">{{ 'complete.health.optional.frequency.label' | translate }}</label>
+                        <select id="frequency" formControlName="frequency">
                             <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
-                            @for (option of preferredContentTypeOptions; track option) {
-                                <option [value]="option">{{ option }}</option>
+                            @for (option of frequencyOptions; track option) {
+                                <option [ngValue]="option">{{ getEnumKey(option, 'frequency') | translate }}</option>
                             }
                         </select>
                     </div>
 
-                    <div class="form-field">
-                        <label
-                            for="wellnessFocus">{{ 'complete.health.optional.wellnessFocus.label' | translate }}</label>
-                        <select id="wellnessFocus" formControlName="wellnessFocus">
-                            <option [ngValue]="null">{{ 'complete.health.select.default' | translate }}</option>
-                            @for (option of wellnessFocusOptions; track option) {
-                                <option [value]="option">{{ option }}</option>
-                            }
-                        </select>
+                    <div class="form-field full-width">
+                        <label for="comments">{{ 'complete.health.optional.comments.label' | translate }}</label>
+                        <textarea
+                            id="comments"
+                            formControlName="comments"
+                            rows="4"
+                            [placeholder]="'complete.health.optional.comments.placeholder' | translate"></textarea>
                     </div>
                 </div>
-
-                @if (optionalErrorMessage) {
-                    <div class="alert alert-error">{{ optionalErrorMessage }}</div>
-                }
-
-                @if (optionalSuccessMessage) {
-                    <div class="alert alert-success">{{ optionalSuccessMessage }}</div>
-                }
 
                 <div class="actions">
                     <button
@@ -598,4 +656,5 @@
             </form>
         }
     </section>
+    <!--    <app-test-mock-optional-form></app-test-mock-optional-form>-->
 </div>

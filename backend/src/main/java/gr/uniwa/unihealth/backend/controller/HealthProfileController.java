@@ -2,6 +2,7 @@ package gr.uniwa.unihealth.backend.controller;
 
 import gr.uniwa.unihealth.backend.config.context.AuthenticationContext;
 import gr.uniwa.unihealth.backend.dto.HealthProfileDTO;
+import gr.uniwa.unihealth.backend.dto.HealthProfileViewDTO;
 import gr.uniwa.unihealth.backend.service.HealthProfileReaderService;
 import gr.uniwa.unihealth.backend.service.HealthProfileService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,14 +29,14 @@ public class HealthProfileController {
   @GetMapping("_me")
   @Operation(summary = "Returns the health profile of the logged in user",
       description = "Fetches the health profile of the currently authenticated user.")
-  public HealthProfileDTO findMyProfile() {
+  public HealthProfileViewDTO findMyProfile() {
     return readerService.findByCurrentUser(authenticationContext.getCurrentUsername());
   }
 
   @PutMapping("_me")
   @Operation(summary = "Updates the health profile of the logged in user",
       description = "Updates the health profile of the currently authenticated user.")
-  public void updateMyProfile(@RequestBody @Valid HealthProfileDTO dto) {
-    service.updateCurrentUserProfile(authenticationContext.getCurrentUsername(), dto);
+  public HealthProfileViewDTO updateMyProfile(@RequestBody @Valid HealthProfileDTO dto) {
+    return service.updateCurrentUserProfile(authenticationContext.getCurrentUsername(), dto);
   }
 }

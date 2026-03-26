@@ -7,25 +7,21 @@ import lombok.Setter;
 @Setter
 public class OptionalHealthProfileDTO extends BaseUpdatableDTO {
 
-  // Daily Wellbeing
   private String sleepQuality;
-  private String stressLevel;
   private String studyLoad;
-
-  // Healthy Habits
-  private String activityLevel;
-  private Integer exerciseFrequencyPerWeek;
+  private String smoking;
+  private String coffee;
+  private String screenTime;
+  private String exercise;
+  private String mealsPerDay;
+  private String eatSnack;
+  private String water;
   private String dietType;
-  private String mealRegularity;
-  private String hydrationLevel;
-
-  // Physical Condition
-  private String fitnessLevel;
-  private Boolean hasPhysicalLimitations;
-  private String physicalLimitationsDetails;
-
-  // Preferences
-  private String preferredRoutineTime;
-  private String preferredContentType;
-  private String wellnessFocus;
+  private Boolean medication;
+  private String medicationDetails;
+  private Boolean surgeryHistory;
+  private String surgeryDetails;
+  private String preferredContent;
+  private String frequency;
+  private String comments;
 }

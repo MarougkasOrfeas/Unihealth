@@ -29,20 +29,24 @@
             <column name="health_profile_id" type="varchar(36)">
                 <constraints nullable="false" unique="true"/>
             </column>
+
             <column name="sleep_quality" type="varchar(50)"/>
-            <column name="stress_level" type="varchar(50)"/>
             <column name="study_load" type="varchar(50)"/>
-            <column name="activity_level" type="varchar(50)"/>
-            <column name="exercise_frequency_per_week" type="int"/>
+            <column name="smoking" type="varchar(50)"/>
+            <column name="coffee" type="varchar(50)"/>
+            <column name="screen_time" type="varchar(50)"/>
+            <column name="exercise" type="varchar(50)"/>
+            <column name="meals_per_day" type="varchar(50)"/>
+            <column name="eat_snack" type="varchar(50)"/>
+            <column name="water" type="varchar(50)"/>
             <column name="diet_type" type="varchar(50)"/>
-            <column name="meal_regularity" type="varchar(50)"/>
-            <column name="hydration_level" type="varchar(50)"/>
-            <column name="fitness_level" type="varchar(50)"/>
-            <column name="has_physical_limitations" type="boolean"/>
-            <column name="physical_limitations_details" type="varchar(50)"/>
-            <column name="preferred_routine_time" type="varchar(50)"/>
-            <column name="preferred_content_type" type="varchar(50)"/>
-            <column name="wellness_focus" type="varchar(50)"/>
+            <column name="medication" type="boolean"/>
+            <column name="medication_details" type="varchar(255)"/>
+            <column name="surgery_history" type="boolean"/>
+            <column name="surgery_details" type="varchar(255)"/>
+            <column name="preferred_content" type="varchar(50)"/>
+            <column name="frequency" type="varchar(50)"/>
+            <column name="comments" type="varchar(1000)"/>
 
         </createTable>
 

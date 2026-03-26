@@ -12,6 +12,11 @@ export interface HealthProfileDTO extends BaseEntity {
     primaryGoal?: PrimaryGoal | null;
 }
 
+export interface HealthProfileViewDTO extends HealthProfileDTO {
+    age: number;
+    bmi: string;
+}
+
 export enum Gender {
     MALE = 'MALE',
     FEMALE = 'FEMALE',
@@ -23,7 +28,4 @@ export enum PrimaryGoal {
     IMPROVE_FITNESS = "IMPROVE_FITNESS",
     MANAGE_WEIGHT = "MANAGE_WEIGHT",
     SLEEP_BETTER = "SLEEP_BETTER",
-    REDUCE_STRESS = "REDUCE_STRESS",
-    GENERAL_WELLBEING = "GENERAL_WELLBEING",
-
 }

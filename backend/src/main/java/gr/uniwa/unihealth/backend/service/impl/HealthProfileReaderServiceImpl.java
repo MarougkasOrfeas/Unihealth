@@ -1,12 +1,14 @@
 package gr.uniwa.unihealth.backend.service.impl;
 
 import gr.uniwa.unihealth.backend.dto.HealthProfileDTO;
+import gr.uniwa.unihealth.backend.dto.HealthProfileViewDTO;
 import gr.uniwa.unihealth.backend.mapper.BaseEntityMapper;
 import gr.uniwa.unihealth.backend.mapper.HealthProfileMapper;
 import gr.uniwa.unihealth.backend.model.HealthProfile;
 import gr.uniwa.unihealth.backend.repository.BaseRepository;
 import gr.uniwa.unihealth.backend.repository.HealthProfileRepository;
 import gr.uniwa.unihealth.backend.service.HealthProfileReaderService;
+import gr.uniwa.unihealth.backend.utils.profile.HealthProfileCalculationUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,13 +23,19 @@ public class HealthProfileReaderServiceImpl
   private final HealthProfileRepository repository;
 
   @Override
-  public HealthProfileDTO findByCurrentUser(String username) {
+  public HealthProfileViewDTO findByCurrentUser(String username) {
     HealthProfile entity = repository.findByUserUsername(username).orElseThrow(
         () -> new EntityNotFoundException("Health profile not found for current user."));
 
-    return mapper.mapToDTO(entity);
+    return toViewDto(entity);
   }
 
+  public HealthProfileViewDTO toViewDto(HealthProfile entity) {
+    HealthProfileViewDTO dto = mapper.mapToViewDTO(entity);
+    dto.setAge(HealthProfileCalculationUtils.calculateAge(dto.getDateOfBirth()));
+    dto.setBmi(HealthProfileCalculationUtils.calculateBmi(dto.getHeightCm(), dto.getWeightKg()));
+    return dto;
+  }
 
   @Override
   protected BaseEntityMapper<HealthProfileDTO, HealthProfile> getMapper() {

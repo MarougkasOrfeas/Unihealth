@@ -1,6 +1,7 @@
 package gr.uniwa.unihealth.backend.mapper;
 
 import gr.uniwa.unihealth.backend.dto.HealthProfileDTO;
+import gr.uniwa.unihealth.backend.dto.HealthProfileViewDTO;
 import gr.uniwa.unihealth.backend.model.HealthProfile;
 import org.mapstruct.InheritConfiguration;
 import org.mapstruct.Mapper;
@@ -20,4 +21,5 @@ public abstract class HealthProfileMapper
   @InheritConfiguration(name = "mapDtoToUpdatableEntityConfig")
   public abstract void mapForUpdate(HealthProfileDTO dto, @MappingTarget HealthProfile entity);
 
+  public abstract HealthProfileViewDTO mapToViewDTO(HealthProfile entity);
 }

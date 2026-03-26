@@ -1,6 +1,7 @@
 package gr.uniwa.unihealth.backend.service.impl;
 
 import gr.uniwa.unihealth.backend.dto.HealthProfileDTO;
+import gr.uniwa.unihealth.backend.dto.HealthProfileViewDTO;
 import gr.uniwa.unihealth.backend.mapper.BaseEntityMapper;
 import gr.uniwa.unihealth.backend.mapper.HealthProfileMapper;
 import gr.uniwa.unihealth.backend.model.HealthProfile;
@@ -11,6 +12,7 @@ import gr.uniwa.unihealth.backend.repository.UserRepository;
 import gr.uniwa.unihealth.backend.service.HealthProfileService;
 import gr.uniwa.unihealth.backend.service.personalization.LabelEvaluatorService;
 import gr.uniwa.unihealth.backend.service.personalization.UserProfileLabelsService;
+import gr.uniwa.unihealth.backend.utils.profile.HealthProfileCalculationUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -58,24 +60,35 @@ public class HealthProfileServiceImpl extends BaseServiceImpl<HealthProfileDTO, 
   }
 
   @Override
-  public HealthProfileDTO findByCurrentUser(String username) {
+  public HealthProfileViewDTO findByCurrentUser(String username) {
     HealthProfile entity = repository.findByUserUsername(username).orElseThrow(
         () -> new EntityNotFoundException("Health profile not found for current user."));
 
-    return mapper.mapToDTO(entity);
+    return toViewDto(entity);
   }
 
   @Override
-  public void updateCurrentUserProfile(String username, HealthProfileDTO dto) {
+  public HealthProfileViewDTO updateCurrentUserProfile(String username, HealthProfileDTO dto) {
     HealthProfile entity = repository.findByUserUsername(username).orElseThrow(
         () -> new EntityNotFoundException("Health profile not found for current user."));
 
     validate(entity.getId(), dto);
 
     mapper.mapForUpdate(dto, entity);
-    repository.save(entity);
+    HealthProfile saved = repository.save(entity);
+
+    List<String> sortedLabels = labelEvaluatorService.evaluateAndSort(dto);
+    userProfileLabelsService.saveForUser(saved.getUser(), sortedLabels);
+
+    return toViewDto(saved);
   }
 
+  private HealthProfileViewDTO toViewDto(HealthProfile entity) {
+    HealthProfileViewDTO dto = mapper.mapToViewDTO(entity);
+    dto.setAge(HealthProfileCalculationUtils.calculateAge(dto.getDateOfBirth()));
+    dto.setBmi(HealthProfileCalculationUtils.calculateBmi(dto.getHeightCm(), dto.getWeightKg()));
+    return dto;
+  }
 
   @Override
   protected BaseReaderServiceImpl<HealthProfileDTO, HealthProfile> getReaderService() {

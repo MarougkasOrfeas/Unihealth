@@ -16,7 +16,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class OptionalHealthProfileServiceImpl extends BaseServiceImpl<OptionalHealthProfileDTO, OptionalHealthProfile>
+public class OptionalHealthProfileServiceImpl
+    extends BaseServiceImpl<OptionalHealthProfileDTO, OptionalHealthProfile>
     implements OptionalHealthProfileService {
 
   private final OptionalHealthProfileRepository repository;
@@ -26,12 +27,11 @@ public class OptionalHealthProfileServiceImpl extends BaseServiceImpl<OptionalHe
 
   @Override
   public void updateCurrentUserOptionalProfile(String username, OptionalHealthProfileDTO dto) {
-    HealthProfile healthProfile = healthProfileRepository.findByUserUsername(username)
-        .orElseThrow(() -> new EntityNotFoundException(
-            "Health profile not found for current user."));
+    HealthProfile healthProfile = healthProfileRepository.findByUserUsername(username).orElseThrow(
+        () -> new EntityNotFoundException("Health profile not found for current user."));
 
-    OptionalHealthProfile entity = repository.findByHealthProfileId(healthProfile.getId())
-        .orElseGet(() -> {
+    OptionalHealthProfile entity =
+        repository.findByHealthProfileId(healthProfile.getId()).orElseGet(() -> {
           OptionalHealthProfile newEntity = new OptionalHealthProfile();
           newEntity.setHealthProfile(healthProfile);
           return newEntity;
@@ -45,13 +45,24 @@ public class OptionalHealthProfileServiceImpl extends BaseServiceImpl<OptionalHe
   }
 
   private void normalizeOptionalFields(OptionalHealthProfile entity) {
-    if (Boolean.FALSE.equals(entity.getHasPhysicalLimitations())) {
-      entity.setPhysicalLimitationsDetails(null);
+    if (Boolean.FALSE.equals(entity.getMedication())) {
+      entity.setMedicationDetails(null);
     }
 
-    if (entity.getPhysicalLimitationsDetails() != null
-        && entity.getPhysicalLimitationsDetails().isBlank()) {
-      entity.setPhysicalLimitationsDetails(null);
+    if (entity.getMedicationDetails() != null && entity.getMedicationDetails().isBlank()) {
+      entity.setMedicationDetails(null);
+    }
+
+    if (Boolean.FALSE.equals(entity.getSurgeryHistory())) {
+      entity.setSurgeryDetails(null);
+    }
+
+    if (entity.getSurgeryDetails() != null && entity.getSurgeryDetails().isBlank()) {
+      entity.setSurgeryDetails(null);
+    }
+
+    if (entity.getComments() != null && entity.getComments().isBlank()) {
+      entity.setComments(null);
     }
   }
 

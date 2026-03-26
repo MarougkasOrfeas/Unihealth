@@ -6,6 +6,7 @@ import {Gender, HealthProfileDTO, PrimaryGoal} from "../../../shared/interfaces/
 import {Router} from "@angular/router";
 import {AuthService} from "../../auth/auth.service";
 import {TranslatePipe} from "@ngx-translate/core";
+import {map} from "rxjs";
 
 @Component({
     selector: 'app-health-profile-form',
@@ -120,7 +121,7 @@ export class HealthProfileFormComponent implements OnInit {
         this.saving = true;
 
         const request$ = this.editMode
-            ? this.healthProfileService.updateMyProfile(dto)
+            ? this.healthProfileService.updateMyProfile(dto).pipe(map(() => void 0))
             : this.healthProfileService.completeProfile(dto);
 
         request$.subscribe({

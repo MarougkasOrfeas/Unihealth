@@ -9,37 +9,32 @@ import {
     Validators
 } from '@angular/forms';
 
-import {OptionalHealthProfileDto} from '../../../shared/interfaces/optional-health-profile';
 import {OptionalHealthProfileService} from '../../../shared/services/optional-health-profile.service';
-import {
-    ACTIVITY_LEVEL_OPTIONS,
-    DIET_TYPE_OPTIONS,
-    FITNESS_LEVEL_OPTIONS,
-    HYDRATION_LEVEL_OPTIONS,
-    MEAL_REGULARITY_OPTIONS,
-    PREFERRED_CONTENT_TYPE_OPTIONS,
-    PREFERRED_ROUTINE_TIME_OPTIONS,
-    SLEEP_QUALITY_OPTIONS,
-    STRESS_LEVEL_OPTIONS,
-    STUDY_LOAD_OPTIONS,
-    WELLNESS_FOCUS_OPTIONS
-} from '../../../shared/types/optional-health-profile.types';
 import {HealthProfileService} from '../../../shared/services/health-profile.service';
 import {Gender, HealthProfileDTO, PrimaryGoal} from '../../../shared/interfaces/health-profile';
 import {TranslatePipe} from "@ngx-translate/core";
+import {MatDivider} from "@angular/material/list";
+import {
+    CoffeeConsumption,
+    ContentFrequency, DietType, ExerciseFrequency, MealsPerDay,
+    OptionalHealthProfile, OptionalHealthProfileDto,
+    PreferredContentType, ScreenTime, SleepQuality, SmokingHabit, SnackFrequency, StudyLoad, WaterIntake, YesNoOption
+} from "../../../shared/interfaces/optional-health-profile";
 
 @Component({
     selector: 'app-complete-health-profile-form',
     templateUrl: './complete-health-profile-form.html',
     styleUrls: ['./complete-health-profile-form.scss'],
-    imports: [ReactiveFormsModule, TranslatePipe]
+    imports: [ReactiveFormsModule, TranslatePipe, MatDivider]
 })
 export class CompleteHealthProfileForm implements OnInit {
-    @Output() optionalSubmit = new EventEmitter<OptionalHealthProfileDto>();
+    @Output() optionalSubmit = new EventEmitter<OptionalHealthProfile>();
 
     private readonly fb = inject(FormBuilder);
     private readonly optionalHealthProfileService = inject(OptionalHealthProfileService);
     private readonly healthProfileService = inject(HealthProfileService);
+    age: number | null = null;
+    bmi: string | null = null;
 
     saving = false;
     loading = false;
@@ -59,17 +54,25 @@ export class CompleteHealthProfileForm implements OnInit {
     readonly genders = Object.values(Gender);
     readonly primaryGoals = Object.values(PrimaryGoal);
 
-    readonly sleepQualityOptions = SLEEP_QUALITY_OPTIONS;
-    readonly stressLevelOptions = STRESS_LEVEL_OPTIONS;
-    readonly studyLoadOptions = STUDY_LOAD_OPTIONS;
-    readonly activityLevelOptions = ACTIVITY_LEVEL_OPTIONS;
-    readonly dietTypeOptions = DIET_TYPE_OPTIONS;
-    readonly mealRegularityOptions = MEAL_REGULARITY_OPTIONS;
-    readonly hydrationLevelOptions = HYDRATION_LEVEL_OPTIONS;
-    readonly fitnessLevelOptions = FITNESS_LEVEL_OPTIONS;
-    readonly preferredRoutineTimeOptions = PREFERRED_ROUTINE_TIME_OPTIONS;
-    readonly preferredContentTypeOptions = PREFERRED_CONTENT_TYPE_OPTIONS;
-    readonly wellnessFocusOptions = WELLNESS_FOCUS_OPTIONS;
+    readonly sleepQualityOptions = Object.values(SleepQuality);
+    readonly studyLoadOptions = Object.values(StudyLoad);
+    readonly smokingOptions = Object.values(SmokingHabit);
+    readonly coffeeOptions = Object.values(CoffeeConsumption);
+    readonly screenTimeOptions = Object.values(ScreenTime);
+
+    readonly exerciseOptions = Object.values(ExerciseFrequency);
+    readonly mealsPerDayOptions = Object.values(MealsPerDay);
+    readonly snackOptions = Object.values(SnackFrequency);
+    readonly waterOptions = Object.values(WaterIntake);
+    readonly dietTypeOptions = Object.values(DietType);
+
+    readonly preferredContentOptions = Object.values(PreferredContentType);
+    readonly frequencyOptions = Object.values(ContentFrequency);
+
+    readonly yesNoOptions = [
+        {value: true, label: 'yes'},
+        {value: false, label: 'no'}
+    ];
 
     readonly baseForm = this.fb.group(
         {
@@ -94,30 +97,28 @@ export class CompleteHealthProfileForm implements OnInit {
     optionalForm!: FormGroup;
 
     ngOnInit(): void {
-        this.optionalForm = this.fb.group(
-            {
-                sleepQuality: [null],
-                stressLevel: [null],
-                studyLoad: [null],
+        this.optionalForm = this.fb.group({
+            sleepQuality: [null as SleepQuality | null],
+            studyLoad: [null as StudyLoad | null],
+            smoking: [null as SmokingHabit | null],
+            coffee: [null as CoffeeConsumption | null],
+            screenTime: [null as ScreenTime | null],
 
-                activityLevel: [null],
-                exerciseFrequencyPerWeek: [null, [Validators.min(0), Validators.max(7)]],
-                dietType: [null],
-                mealRegularity: [null],
-                hydrationLevel: [null],
+            exercise: [null as ExerciseFrequency | null],
+            mealsPerDay: [null as MealsPerDay | null],
+            eatSnack: [null as SnackFrequency | null],
+            water: [null as WaterIntake | null],
+            dietType: [null as DietType | null],
 
-                fitnessLevel: [null],
-                hasPhysicalLimitations: [null],
-                physicalLimitationsDetails: [null],
+            medication: [null as YesNoOption | null],
+            medicationDetails: [null as string | null],
+            surgeryHistory: [null as YesNoOption | null],
+            surgeryDetails: [null as string | null],
 
-                preferredRoutineTime: [null],
-                preferredContentType: [null],
-                wellnessFocus: [null]
-            },
-            {
-                validators: [this.requiredIfTrueValidator('hasPhysicalLimitations', 'physicalLimitationsDetails')]
-            }
-        );
+            preferredContent: [null as PreferredContentType | null],
+            frequency: [null as ContentFrequency | null],
+            comments: [null as string | null]
+        });
 
         this.setupConditionalLogic();
         this.loadBaseHealthProfile();
@@ -130,6 +131,18 @@ export class CompleteHealthProfileForm implements OnInit {
 
     get of() {
         return this.optionalForm.controls;
+    }
+
+    get isMedicationYes(): boolean {
+        return this.optionalForm.get('medication')?.value === true;
+    }
+
+    get isSurgeryHistoryYes(): boolean {
+        return this.optionalForm.get('surgeryHistory')?.value === true;
+    }
+
+    getEnumKey(value: string | null | undefined, group: string): string {
+        return value ? `complete.health.optional.${group}.options.${value}` : '-';
     }
 
     editBase(): void {
@@ -194,6 +207,8 @@ export class CompleteHealthProfileForm implements OnInit {
                 const profileToUse = updatedProfile ?? dto;
 
                 this.patchForm(profileToUse);
+                this.age = updatedProfile.age ?? null;
+                this.bmi = updatedProfile.bmi ?? null;
                 this.storeInitialBaseValue();
 
                 this.successMessage = 'Base health profile updated successfully.';
@@ -221,31 +236,40 @@ export class CompleteHealthProfileForm implements OnInit {
 
         const value = this.optionalForm.getRawValue() as OptionalHealthProfileDto;
 
-        if (value.hasPhysicalLimitations !== true) {
-            value.physicalLimitationsDetails = null;
+        if (value.medication !== true) {
+            value.medicationDetails = null;
+        }
+
+        if (value.surgeryHistory !== true) {
+            value.surgeryDetails = null;
         }
 
         this.saving = true;
-
         this.optionalHealthProfileService.updateMyOptionalProfile(value).subscribe({
             next: (updatedValue) => {
                 const dtoToUse = updatedValue ?? value;
 
                 this.optionalForm.patchValue({
                     sleepQuality: dtoToUse.sleepQuality ?? null,
-                    stressLevel: dtoToUse.stressLevel ?? null,
                     studyLoad: dtoToUse.studyLoad ?? null,
-                    activityLevel: dtoToUse.activityLevel ?? null,
-                    exerciseFrequencyPerWeek: dtoToUse.exerciseFrequencyPerWeek ?? null,
+                    smoking: dtoToUse.smoking ?? null,
+                    coffee: dtoToUse.coffee ?? null,
+                    screenTime: dtoToUse.screenTime ?? null,
+
+                    exercise: dtoToUse.exercise ?? null,
+                    mealsPerDay: dtoToUse.mealsPerDay ?? null,
+                    eatSnack: dtoToUse.eatSnack ?? null,
+                    water: dtoToUse.water ?? null,
                     dietType: dtoToUse.dietType ?? null,
-                    mealRegularity: dtoToUse.mealRegularity ?? null,
-                    hydrationLevel: dtoToUse.hydrationLevel ?? null,
-                    fitnessLevel: dtoToUse.fitnessLevel ?? null,
-                    hasPhysicalLimitations: dtoToUse.hasPhysicalLimitations ?? null,
-                    physicalLimitationsDetails: dtoToUse.physicalLimitationsDetails ?? null,
-                    preferredRoutineTime: dtoToUse.preferredRoutineTime ?? null,
-                    preferredContentType: dtoToUse.preferredContentType ?? null,
-                    wellnessFocus: dtoToUse.wellnessFocus ?? null
+
+                    medication: dtoToUse.medication ?? null,
+                    medicationDetails: dtoToUse.medicationDetails ?? null,
+                    surgeryHistory: dtoToUse.surgeryHistory ?? null,
+                    surgeryDetails: dtoToUse.surgeryDetails ?? null,
+
+                    preferredContent: dtoToUse.preferredContent ?? null,
+                    frequency: dtoToUse.frequency ?? null,
+                    comments: dtoToUse.comments ?? null
                 });
 
                 this.storeInitialOptionalValue();
@@ -269,19 +293,25 @@ export class CompleteHealthProfileForm implements OnInit {
             next: (dto) => {
                 this.optionalForm.patchValue({
                     sleepQuality: dto?.sleepQuality ?? null,
-                    stressLevel: dto?.stressLevel ?? null,
                     studyLoad: dto?.studyLoad ?? null,
-                    activityLevel: dto?.activityLevel ?? null,
-                    exerciseFrequencyPerWeek: dto?.exerciseFrequencyPerWeek ?? null,
+                    smoking: dto?.smoking ?? null,
+                    coffee: dto?.coffee ?? null,
+                    screenTime: dto?.screenTime ?? null,
+
+                    exercise: dto?.exercise ?? null,
+                    mealsPerDay: dto?.mealsPerDay ?? null,
+                    eatSnack: dto?.eatSnack ?? null,
+                    water: dto?.water ?? null,
                     dietType: dto?.dietType ?? null,
-                    mealRegularity: dto?.mealRegularity ?? null,
-                    hydrationLevel: dto?.hydrationLevel ?? null,
-                    fitnessLevel: dto?.fitnessLevel ?? null,
-                    hasPhysicalLimitations: dto?.hasPhysicalLimitations ?? null,
-                    physicalLimitationsDetails: dto?.physicalLimitationsDetails ?? null,
-                    preferredRoutineTime: dto?.preferredRoutineTime ?? null,
-                    preferredContentType: dto?.preferredContentType ?? null,
-                    wellnessFocus: dto?.wellnessFocus ?? null
+
+                    medication: dto?.medication ?? null,
+                    medicationDetails: dto?.medicationDetails ?? null,
+                    surgeryHistory: dto?.surgeryHistory ?? null,
+                    surgeryDetails: dto?.surgeryDetails ?? null,
+
+                    preferredContent: dto?.preferredContent ?? null,
+                    frequency: dto?.frequency ?? null,
+                    comments: dto?.comments ?? null
                 });
 
                 this.storeInitialOptionalValue();
@@ -300,6 +330,8 @@ export class CompleteHealthProfileForm implements OnInit {
         this.healthProfileService.getMyProfile().subscribe({
             next: (profile) => {
                 this.patchForm(profile);
+                this.age = profile.age ?? null;
+                this.bmi = profile.bmi ?? null;
                 this.storeInitialBaseValue();
                 this.loading = false;
             },
@@ -355,11 +387,11 @@ export class CompleteHealthProfileForm implements OnInit {
             primaryGoal: profile.primaryGoal ?? null
         });
 
-        if (profile.hasFoodAllergies !== true) {
+        if (!profile.hasFoodAllergies) {
             this.baseForm.patchValue({foodAllergiesDetails: null}, {emitEvent: false});
         }
 
-        if (profile.hasChronicConditions !== true) {
+        if (!profile.hasChronicConditions) {
             this.baseForm.patchValue({chronicConditionsDetails: null}, {emitEvent: false});
         }
     }
@@ -383,9 +415,18 @@ export class CompleteHealthProfileForm implements OnInit {
             this.baseForm.updateValueAndValidity({emitEvent: false});
         });
 
-        this.optionalForm.get('hasPhysicalLimitations')?.valueChanges.subscribe((hasLimitations) => {
-            const detailsControl = this.optionalForm.get('physicalLimitationsDetails');
-            if (hasLimitations !== true) {
+        this.optionalForm.get('medication')?.valueChanges.subscribe((value) => {
+            const detailsControl = this.optionalForm.get('medicationDetails');
+            if (value !== YesNoOption.YES) {
+                detailsControl?.setValue(null);
+            }
+            detailsControl?.updateValueAndValidity({emitEvent: false});
+            this.optionalForm.updateValueAndValidity({emitEvent: false});
+        });
+
+        this.optionalForm.get('surgeryHistory')?.valueChanges.subscribe((value) => {
+            const detailsControl = this.optionalForm.get('surgeryDetails');
+            if (value !== YesNoOption.YES) {
                 detailsControl?.setValue(null);
             }
             detailsControl?.updateValueAndValidity({emitEvent: false});
@@ -401,29 +442,6 @@ export class CompleteHealthProfileForm implements OnInit {
             if (toggleValue === true && (!detailsValue || !detailsValue.toString().trim())) {
                 group.get(detailsControlName)?.setErrors({required: true});
                 return {requiredIfChecked: true};
-            }
-
-            const control = group.get(detailsControlName);
-            if (control?.hasError('required')) {
-                const currentErrors = control.errors;
-                if (currentErrors) {
-                    delete currentErrors['required'];
-                    control.setErrors(Object.keys(currentErrors).length ? currentErrors : null);
-                }
-            }
-
-            return null;
-        };
-    }
-
-    private requiredIfTrueValidator(toggleControlName: string, detailsControlName: string): ValidatorFn {
-        return (group: AbstractControl): ValidationErrors | null => {
-            const toggleValue = group.get(toggleControlName)?.value;
-            const detailsValue = group.get(detailsControlName)?.value;
-
-            if (toggleValue === true && (!detailsValue || !detailsValue.toString().trim())) {
-                group.get(detailsControlName)?.setErrors({required: true});
-                return {requiredIfTrue: true};
             }
 
             const control = group.get(detailsControlName);

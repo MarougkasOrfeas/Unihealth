@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {map, Observable} from 'rxjs';
 import {BaseService} from './base.service';
-import {HealthProfileDTO} from "../interfaces/health-profile";
+import {HealthProfileDTO, HealthProfileViewDTO} from "../interfaces/health-profile";
 
 class HealthProfileEndpoints {
     static readonly COMPLETE_PROFILE_API = BaseService.CONTEXT_PATH + '/profile/_complete';
@@ -26,8 +26,8 @@ export class HealthProfileService extends BaseService<HealthProfileDTO> {
         );
     }
 
-    getMyProfile(): Observable<HealthProfileDTO> {
-        return this.httpClient.get<HealthProfileDTO>(HealthProfileEndpoints.USER_PROFILE_API).pipe(
+    getMyProfile(): Observable<HealthProfileViewDTO> {
+        return this.httpClient.get<HealthProfileViewDTO>(HealthProfileEndpoints.USER_PROFILE_API).pipe(
             map(item => {
                 this.transform(item);
                 return item;
@@ -35,7 +35,7 @@ export class HealthProfileService extends BaseService<HealthProfileDTO> {
         );
     }
 
-    updateMyProfile(dto: HealthProfileDTO): Observable<void> {
-        return this.httpClient.put<void>(HealthProfileEndpoints.USER_PROFILE_API, dto);
+    updateMyProfile(dto: HealthProfileDTO): Observable<HealthProfileViewDTO> {
+        return this.httpClient.put<HealthProfileViewDTO>(HealthProfileEndpoints.USER_PROFILE_API, dto);
     }
 }
