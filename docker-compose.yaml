@@ -81,17 +81,57 @@ services:
       - unihealth-redis:/data
     networks:
       - unihealth
-    restart: unless-stopped
+
+  unihealth-ollama:
+    image: ollama/ollama:latest
+    container_name: unihealth-ollama
+    hostname: unihealth-ollama
+    ports:
+      - '11434:11434'
+    volumes:
+      - unihealth-ollama:/root/.ollama
+    networks:
+      - unihealth
+    configs:
+      - source: ollama_entrypoint
+        target: /ollama-entrypoint.sh
+        mode: 0755
+    entrypoint: /ollama-entrypoint.sh
 
 volumes:
   unihealth-db:
+    name: unihealth-db
   unihealth-redis:
+    name: unihealth-redis
+  unihealth-ollama:
+    name: unihealth-ollama
 
 networks:
   unihealth:
     name: unihealth
 
 configs:
+  ollama_entrypoint:
+    content: |
+      #!/bin/bash
+      set -e
+
+      ollama serve &
+      OLLAMA_PID=$$!
+
+      echo "Waiting for Ollama to be ready..."
+      until ollama list >/dev/null 2>&1; do
+        sleep 2
+      done
+
+      echo "Pulling model llama3.1:8b..."
+      ollama pull llama3.1:8b
+
+      echo "Installed models:"
+      ollama list
+
+      wait "$$OLLAMA_PID"
+
   start_db:
     content: |
       #!/bin/bash

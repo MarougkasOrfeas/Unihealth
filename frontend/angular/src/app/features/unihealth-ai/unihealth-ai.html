@@ -1,0 +1,48 @@
+<div class="chat-page">
+    <div class="chat-card">
+        <div class="chat-header">
+            <h1>UniHealth AI</h1>
+            <p>
+                Ask questions about student health, wellbeing, sleep, stress,
+                nutrition, and healthy habits.
+            </p>
+        </div>
+
+        <div class="chat-messages">
+            <div
+                class="chat-message"
+                *ngFor="let msg of messages(); trackBy: trackByIndex"
+                [ngClass]="msg.role"
+            >
+                <div class="chat-bubble">
+                    <div class="chat-role">
+                        {{ msg.role === 'user' ? 'You' : 'UniHealth' }}
+                    </div>
+
+                    <div class="chat-content">
+                        {{ msg.content }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="errorMessage()" class="chat-error">
+            {{ errorMessage() }}
+        </div>
+
+        <form class="chat-input-area" (ngSubmit)="sendMessage()">
+      <textarea
+          name="message"
+          [ngModel]="message()"
+          (ngModelChange)="message.set($event)"
+          rows="4"
+          placeholder="Type your question here..."
+          [disabled]="loading()"
+      ></textarea>
+
+            <button type="submit" [disabled]="!canSend()">
+                {{ loading() ? 'Sending...' : 'Send' }}
+            </button>
+        </form>
+    </div>
+</div>

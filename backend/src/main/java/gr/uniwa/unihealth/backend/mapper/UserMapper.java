@@ -82,7 +82,8 @@ public abstract class UserMapper extends BaseUpdatableEntityMapper<UserDTO, User
         .orElseThrow(() -> new QDoesNotExistException("Department does not exist"));
 
     if (dto.getGroup() != null && !dto.getGroup().isBlank()) {
-      if (department.getGroup() == null || !dto.getGroup().equals(department.getGroup().getName())) {
+      if (department.getGroup() == null || !dto.getGroup()
+          .equals(department.getGroup().getName())) {
         throw new IllegalArgumentException("Department does not belong to the selected group");
       }
     }

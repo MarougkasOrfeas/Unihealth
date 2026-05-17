@@ -98,6 +98,18 @@ export const routes: Routes = [
                 data: {breadcrumb: 'breadcrumb.details'},
             },
         ]
+    },
+    {
+        path: 'unihealth-ai',
+        data: {breadcrumb: 'breadcrumb.ai.assist'},
+        children: [
+            {
+                path: '',
+                pathMatch: 'full',
+                loadComponent: () => import('./features/unihealth-ai/unihealth-ai').then((m) => m.UnihealthAi),
+                data: {breadcrumb: 'breadcrumb.ai.unihealth'},
+            }
+        ]
     }
 
 ];

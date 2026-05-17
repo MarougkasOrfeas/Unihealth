@@ -70,6 +70,8 @@ translations:
       - breadcrumb.symptoms.az: Συμπτώματα A έως Z
       - breadcrumb.overview: Επισκόπηση
       - breadcrumb.details: Λεπτομέρειες
+      - breadcrumb.ai.assist: Ζωντανή Υποστήριξη
+      - breadcrumb.ai.unihealth: UniHealth AI
 
       # Init Base Health Form
       - health.profile.badge: UniHealth
@@ -431,6 +433,8 @@ translations:
       - breadcrumb.symptoms.az: Symptoms A to Z
       - breadcrumb.overview: Overview
       - breadcrumb.details: Details
+      - breadcrumb.ai.assist: Live Assist
+      - breadcrumb.ai.unihealth: UniHealth AI
 
       # Init Base Health Form
       - health.profile.badge: UniHealth
