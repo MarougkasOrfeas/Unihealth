@@ -82,6 +82,18 @@ export const routes: Routes = [
         ]
     },
     {
+        path: 'advice-tips',
+        data: {breadcrumb: 'Advice & Tips'},
+        children: [
+            {
+                path: '',
+                pathMatch: 'full',
+                loadComponent: () => import('./features/advice-tips/advice-tips').then((m) => m.AdviceTips),
+                data: {breadcrumb: 'Advice & Tips'},
+            }
+        ]
+    },
+    {
         path: 'symptoms',
         data: {breadcrumb: 'breadcrumb.symptoms'},
         children: [

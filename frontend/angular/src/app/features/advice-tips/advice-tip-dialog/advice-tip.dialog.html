@@ -1,0 +1,20 @@
+<div class="dialog-header">
+    <div class="dialog-icon">
+        <mat-icon>{{ data.icon }}</mat-icon>
+    </div>
+
+    <div class="dialog-title-group">
+        <p class="dialog-eyebrow">Personalized tip</p>
+        <h2 mat-dialog-title>{{ data.title }}</h2>
+    </div>
+</div>
+
+<mat-dialog-content>
+    <p>{{ data.content }}</p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-stroked-button mat-dialog-close>
+        Close
+    </button>
+</mat-dialog-actions>

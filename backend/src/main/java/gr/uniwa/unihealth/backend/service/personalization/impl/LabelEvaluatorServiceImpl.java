@@ -1,6 +1,7 @@
 package gr.uniwa.unihealth.backend.service.personalization.impl;
 
 import gr.uniwa.unihealth.backend.dto.HealthProfileDTO;
+import gr.uniwa.unihealth.backend.dto.OptionalHealthProfileDTO;
 import gr.uniwa.unihealth.backend.model.LabelFieldMapping;
 import gr.uniwa.unihealth.backend.repository.LabelFieldMappingRepository;
 import gr.uniwa.unihealth.backend.service.personalization.LabelEvaluatorService;
@@ -22,6 +23,12 @@ public class LabelEvaluatorServiceImpl implements LabelEvaluatorService {
   @Override
   public List<String> evaluateAndSort(HealthProfileDTO dto) {
     List<String> labels = evaluate(dto);
+    return sortBySignificance(labels);
+  }
+
+  @Override
+  public List<String> evaluateAndSortOptional(OptionalHealthProfileDTO dto) {
+    List<String> labels = evaluateOptional(dto);
     return sortBySignificance(labels);
   }
 
@@ -66,5 +73,67 @@ public class LabelEvaluatorServiceImpl implements LabelEvaluatorService {
     return labelCodes.stream()
         .sorted(Comparator.comparingInt(code -> -scoreMap.getOrDefault(code, 0)))
         .collect(Collectors.toList());
+  }
+
+  private List<String> evaluateOptional(OptionalHealthProfileDTO dto) {
+    List<String> labels = new ArrayList<>();
+
+    if (dto.getSleepQuality() != null) {
+      labels.add("OPTIONAL_SLEEP_" + dto.getSleepQuality());
+    }
+
+    if (dto.getStudyLoad() != null) {
+      labels.add("OPTIONAL_STUDY_LOAD_" + dto.getStudyLoad());
+    }
+
+    if (dto.getSmoking() != null) {
+      labels.add("OPTIONAL_SMOKING_" + dto.getSmoking());
+    }
+
+    if (dto.getCoffee() != null) {
+      labels.add("OPTIONAL_COFFEE_" + dto.getCoffee());
+    }
+
+    if (dto.getScreenTime() != null) {
+      labels.add("OPTIONAL_SCREEN_TIME_" + dto.getScreenTime());
+    }
+
+    if (dto.getExercise() != null) {
+      labels.add("OPTIONAL_EXERCISE_" + dto.getExercise());
+    }
+
+    if (dto.getMealsPerDay() != null) {
+      labels.add("OPTIONAL_MEALS_" + dto.getMealsPerDay());
+    }
+
+    if (dto.getEatSnack() != null) {
+      labels.add("OPTIONAL_SNACK_" + dto.getEatSnack());
+    }
+
+    if (dto.getWater() != null) {
+      labels.add("OPTIONAL_WATER_" + dto.getWater());
+    }
+
+    if (dto.getDietType() != null) {
+      labels.add("OPTIONAL_DIET_" + dto.getDietType());
+    }
+
+    if (Boolean.TRUE.equals(dto.getMedication())) {
+      labels.add("OPTIONAL_HIGH_MEDICATION");
+    }
+
+    if (Boolean.TRUE.equals(dto.getSurgeryHistory())) {
+      labels.add("OPTIONAL_HIGH_SURGERY_HISTORY");
+    }
+
+    if (dto.getPreferredContent() != null) {
+      labels.add("OPTIONAL_CONTENT_" + dto.getPreferredContent());
+    }
+
+    if (dto.getFrequency() != null) {
+      labels.add("OPTIONAL_FREQUENCY_" + dto.getFrequency());
+    }
+
+    return labels;
   }
 }

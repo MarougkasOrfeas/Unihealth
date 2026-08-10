@@ -9,10 +9,13 @@ import gr.uniwa.unihealth.backend.repository.BaseRepository;
 import gr.uniwa.unihealth.backend.repository.HealthProfileRepository;
 import gr.uniwa.unihealth.backend.repository.OptionalHealthProfileRepository;
 import gr.uniwa.unihealth.backend.service.OptionalHealthProfileService;
+import gr.uniwa.unihealth.backend.service.personalization.LabelEvaluatorService;
+import gr.uniwa.unihealth.backend.service.personalization.UserProfileLabelsService;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +27,8 @@ public class OptionalHealthProfileServiceImpl
   private final HealthProfileRepository healthProfileRepository;
   private final OptionalHealthProfileMapper mapper;
   private final OptionalHealthProfileReaderServiceImpl service;
+  private final LabelEvaluatorService labelEvaluatorService;
+  private final UserProfileLabelsService userProfileLabelsService;
 
   @Override
   public void updateCurrentUserOptionalProfile(String username, OptionalHealthProfileDTO dto) {
@@ -41,7 +46,11 @@ public class OptionalHealthProfileServiceImpl
 
     normalizeOptionalFields(entity);
 
-    repository.save(entity);
+    OptionalHealthProfile saved = repository.save(entity);
+
+    List<String> sortedOptionalLabels = labelEvaluatorService.evaluateAndSortOptional(dto);
+    userProfileLabelsService.saveOptionalForUser(saved.getHealthProfile().getUser(),
+        sortedOptionalLabels);
   }
 
   private void normalizeOptionalFields(OptionalHealthProfile entity) {

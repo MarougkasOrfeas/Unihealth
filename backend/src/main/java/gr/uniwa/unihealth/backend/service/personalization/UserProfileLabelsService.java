@@ -11,4 +11,6 @@ public interface UserProfileLabelsService {
    * profile completion, updates the existing one on subsequent profile edits.
    */
   void saveForUser(User user, List<String> sortedLabels);
+
+  void saveOptionalForUser(User user, List<String> sortedOptionalLabels);
 }

@@ -1,0 +1,67 @@
+.dialog-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 4px 0 12px;
+}
+
+.dialog-icon {
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 20px;
+
+  background: radial-gradient(circle at top right,
+          rgba(47, 102, 115, 0.25),
+          transparent 60%),
+  #eef9f8;
+
+  border: 1px solid #d6ecee;
+}
+
+.dialog-icon mat-icon {
+  font-size: 34px;
+  width: 34px;
+  height: 34px;
+  color: #2f6673;
+}
+
+.dialog-title-group {
+  min-width: 0;
+}
+
+.dialog-eyebrow {
+  margin: 0 0 4px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #2f6673;
+}
+
+h2[mat-dialog-title] {
+  margin: 0;
+  padding: 0;
+  font-size: 28px;
+  line-height: 1.15;
+  font-weight: 800;
+}
+
+mat-dialog-content {
+  padding-top: 8px !important;
+
+  p {
+    margin: 0;
+    color: #667085;
+    line-height: 1.7;
+    font-size: 15px;
+  }
+}
+
+mat-dialog-actions {
+  padding-top: 18px;
+}

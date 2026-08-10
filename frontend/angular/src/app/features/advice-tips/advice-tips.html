@@ -1,0 +1,123 @@
+<section class="advice-page">
+    <header class="advice-hero">
+        <p class="eyebrow">Personalized advice</p>
+        <h1>Recommended for you</h1>
+        <p>Simple tips selected from your profile to help you build healthier habits.</p>
+    </header>
+
+    @if (topTips().length > 0) {
+        <section class="today-card">
+            <div class="today-icon">✨</div>
+
+            <div>
+                <p class="eyebrow">Today’s focus</p>
+                <h2>Start with one small action today</h2>
+                <p>
+                    These tips are selected to be practical, realistic, and easy to repeat.
+                </p>
+            </div>
+        </section>
+
+        <aside class="did-you-know-card">
+            <div>
+                <p class="eyebrow">Did you know?</p>
+                <h2>Small daily actions work better than occasional big changes.</h2>
+                <p>
+                    Try choosing one habit and repeating it consistently before adding more.
+                </p>
+            </div>
+        </aside>
+
+        <section class="tips-section">
+            <div class="section-heading">
+                <p class="eyebrow">Tips for you</p>
+                <h2>Good actions to try today</h2>
+            </div>
+
+            <div class="rich-tips-grid">
+                @for (tip of topTips(); track tip.id) {
+                    <article class="rich-tip-card" (click)="openTopTip(tip)">
+                        <div class="tip-image" [class]="tip.imageClass">
+                            <mat-icon>{{ tip.icon }}</mat-icon>
+                        </div>
+
+                        <div class="tip-content">
+                            <p class="eyebrow">{{ tip.sectionTitle }}</p>
+                            <h3>{{ tip.title }}</h3>
+                            <p>{{ tip.summary }}</p>
+
+                            <button type="button">
+                                Read more
+                                <mat-icon>arrow_forward</mat-icon>
+                            </button>
+                        </div>
+                    </article>
+                }
+            </div>
+        </section>
+    } @else {
+        <section class="empty-state">
+            <h2>No advice available yet</h2>
+            <p>Complete your profile to receive personalized recommendations.</p>
+        </section>
+    }
+</section>
+
+<section class="insights-section">
+    <div class="section-heading">
+        <p class="eyebrow">Profile insights</p>
+        <h2>Your health snapshot</h2>
+    </div>
+
+    <div class="insights-grid">
+        @for (insight of insights(); track insight.id) {
+            <article class="insight-card">
+                <div class="insight-icon">
+                    <mat-icon>{{ insight.icon }}</mat-icon>
+                </div>
+
+                <div>
+                    <p class="eyebrow">{{ insight.title }}</p>
+                    <h3>{{ insight.value }}</h3>
+                    <p>{{ insight.description }}</p>
+
+                    @if (insight.trend) {
+                        <span class="insight-badge">{{ insight.trend }}</span>
+                    }
+                </div>
+            </article>
+        }
+    </div>
+</section>
+
+<section class="stats-section">
+    <div class="section-heading">
+        <p class="eyebrow">Statistics</p>
+        <h2>Your profile insights</h2>
+        <p>These scores are estimated from your selected profile labels.</p>
+    </div>
+
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3>Health focus score</h3>
+
+            <canvas
+                baseChart
+                [data]="insightChartData"
+                [options]="insightChartOptions"
+                [type]="'bar'">
+            </canvas>
+        </div>
+
+        <div class="chart-card">
+            <h3>Recommendation mix</h3>
+
+            <canvas
+                baseChart
+                [data]="recommendationMixChartData"
+                [options]="recommendationMixChartOptions"
+                [type]="'doughnut'">
+            </canvas>
+        </div>
+    </div>
+</section>
