@@ -1,0 +1,111 @@
+<section class="wellness-page">
+    <header class="wellness-hero">
+        <div>
+            <p class="eyebrow">{{ collection().eyebrow }}</p>
+            <h1>{{ collection().title }}</h1>
+            <p>{{ collection().description }}</p>
+        </div>
+
+        <div class="hero-stat">
+            <span>{{ collection().items.length }}</span>
+            <small>mock resources</small>
+        </div>
+    </header>
+
+    <section class="filter-row">
+        <mat-form-field class="search-field">
+            <mat-label>Search this section</mat-label>
+            <mat-icon matPrefix>search</mat-icon>
+            <input matInput [value]="searchTerm()" (input)="searchItems($event)" />
+        </mat-form-field>
+
+        <div class="category-list">
+            @for (category of collection().categories; track category) {
+                <button
+                    type="button"
+                    [class.active]="selectedCategory() === category"
+                    (click)="selectCategory(category)">
+                    {{ category }}
+                </button>
+            }
+        </div>
+    </section>
+
+    <article class="featured-card" [style.--accent]="featuredItem().accentColor">
+        <div class="item-icon">
+            <mat-icon>{{ featuredItem().icon }}</mat-icon>
+        </div>
+
+        <div>
+            <p class="eyebrow">{{ collection().featuredLabel }}</p>
+            <h2>{{ featuredItem().title }}</h2>
+            <p>{{ featuredItem().summary }}</p>
+        </div>
+
+        <button mat-flat-button type="button" (click)="openItem(featuredItem())">
+            <mat-icon>open_in_new</mat-icon>
+            View details
+        </button>
+    </article>
+
+    <section class="section-heading">
+        <div>
+            <p class="eyebrow">Browse</p>
+            <h2>{{ filteredItems().length }} items available</h2>
+        </div>
+
+        @if (selectedCategory() !== 'All' || searchTerm()) {
+            <button mat-stroked-button type="button" (click)="clearFilters()">
+                <mat-icon>filter_alt_off</mat-icon>
+                Clear filters
+            </button>
+        }
+    </section>
+
+    @if (filteredItems().length > 0) {
+        <section class="wellness-grid">
+            @for (item of filteredItems(); track item.id) {
+                <article class="wellness-card" [style.--accent]="item.accentColor">
+                    <div class="card-top">
+                        <div class="item-icon">
+                            <mat-icon>{{ item.icon }}</mat-icon>
+                        </div>
+                        <span>{{ item.category }}</span>
+                    </div>
+
+                    <h3>{{ item.title }}</h3>
+                    <p>{{ item.summary }}</p>
+
+                    <div class="metric-row">
+                        <div>
+                            <strong>{{ item.duration }}</strong>
+                            <span>Time</span>
+                        </div>
+                        <div>
+                            <strong>{{ item.metricValue }}</strong>
+                            <span>{{ item.metricLabel }}</span>
+                        </div>
+                    </div>
+
+                    <div class="tag-row">
+                        @for (tag of item.tags; track tag) {
+                            <span>{{ tag }}</span>
+                        }
+                    </div>
+
+                    <button mat-button type="button" (click)="openItem(item)">
+                        Read more
+                        <mat-icon>arrow_forward</mat-icon>
+                    </button>
+                </article>
+            }
+        </section>
+    } @else {
+        <section class="empty-state">
+            <mat-icon>search_off</mat-icon>
+            <h2>No items match your filters</h2>
+            <p>Try a broader search or another category.</p>
+            <button mat-flat-button type="button" (click)="clearFilters()">Reset</button>
+        </section>
+    }
+</section>

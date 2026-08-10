@@ -1,0 +1,145 @@
+<section class="topics-page">
+    <header class="topics-hero">
+        <div>
+            <p class="eyebrow">Health library</p>
+            <h1>Health topics</h1>
+            <p>
+                Explore practical, student-focused health guidance across prevention, nutrition,
+                mental wellbeing, fitness, and everyday campus life.
+            </p>
+        </div>
+
+        <div class="hero-stat" aria-label="Available mock health topics">
+            <span>{{ topics().length }}</span>
+            <small>curated topics</small>
+        </div>
+    </header>
+
+    <section class="toolbar-section" aria-label="Health topic filters">
+        <mat-form-field class="search-field">
+            <mat-label>Search health topics</mat-label>
+            <mat-icon matPrefix>search</mat-icon>
+            <input
+                matInput
+                type="search"
+                [value]="searchTerm()"
+                (input)="searchTopics($event)"
+                placeholder="Try sleep, stress, screening..."
+            />
+        </mat-form-field>
+
+        <div class="category-list" aria-label="Topic categories">
+            @for (category of categories; track category) {
+                <button
+                    type="button"
+                    class="category-button"
+                    [class.active]="selectedCategory() === category"
+                    (click)="selectCategory(category)">
+                    {{ category }}
+                </button>
+            }
+        </div>
+    </section>
+
+    <section class="featured-section">
+        <article class="featured-topic" [style.--topic-accent]="featuredTopic().accentColor">
+            <div class="featured-icon">
+                <mat-icon>{{ featuredTopic().icon }}</mat-icon>
+            </div>
+
+            <div class="featured-copy">
+                <p class="eyebrow">Featured topic</p>
+                <h2>{{ featuredTopic().title }}</h2>
+                <p>{{ featuredTopic().summary }}</p>
+
+                <div class="featured-meta">
+                    <span>{{ featuredTopic().category }}</span>
+                    <span>{{ featuredTopic().readTime }}</span>
+                    <span>{{ featuredTopic().updated }}</span>
+                </div>
+            </div>
+
+            <button mat-flat-button type="button" (click)="openTopic(featuredTopic())">
+                <mat-icon>article</mat-icon>
+                View details
+            </button>
+        </article>
+    </section>
+
+    <section class="quick-tags" aria-label="Popular tags">
+        <span>Popular searches</span>
+        @for (tag of popularTags(); track tag) {
+            <button type="button" (click)="applyTag(tag)">
+                {{ tag }}
+            </button>
+        }
+    </section>
+
+    <section class="library-heading">
+        <div>
+            <p class="eyebrow">Browse library</p>
+            <h2>{{ topicCount() }} topics available</h2>
+        </div>
+
+        @if (selectedCategory() !== 'All' || searchTerm()) {
+            <button mat-stroked-button type="button" (click)="clearFilters()">
+                <mat-icon>filter_alt_off</mat-icon>
+                Clear filters
+            </button>
+        }
+    </section>
+
+    @if (filteredTopics().length > 0) {
+        <section class="topics-grid">
+            @for (topic of filteredTopics(); track topic.id) {
+                <article class="topic-card" [style.--topic-accent]="topic.accentColor">
+                    <div class="topic-card-header">
+                        <div class="topic-icon">
+                            <mat-icon>{{ topic.icon }}</mat-icon>
+                        </div>
+
+                        <span>{{ topic.category }}</span>
+                    </div>
+
+                    <h3>{{ topic.title }}</h3>
+                    <p>{{ topic.summary }}</p>
+
+                    <div class="facts-row">
+                        @for (fact of topic.quickFacts; track fact.label) {
+                            <div>
+                                <strong>{{ fact.value }}</strong>
+                                <span>{{ fact.label }}</span>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="tag-row">
+                        @for (tag of topic.tags; track tag) {
+                            <span>{{ tag }}</span>
+                        }
+                    </div>
+
+                    <button mat-button type="button" (click)="openTopic(topic)">
+                        Read topic
+                        <mat-icon>arrow_forward</mat-icon>
+                    </button>
+                </article>
+            }
+        </section>
+    } @else {
+        <section class="empty-state">
+            <mat-icon>manage_search</mat-icon>
+            <h2>No topics match your filters</h2>
+            <p>Try a broader keyword or choose another category.</p>
+            <button mat-flat-button type="button" (click)="clearFilters()">Reset search</button>
+        </section>
+    }
+
+    <section class="education-note">
+        <mat-icon>info</mat-icon>
+        <p>
+            This mock library is for educational UI demonstration only and does not replace
+            professional medical advice, diagnosis, or treatment.
+        </p>
+    </section>
+</section>

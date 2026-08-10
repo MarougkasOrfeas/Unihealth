@@ -1,0 +1,47 @@
+<div class="dialog-header" [style.--accent]="data.accentColor">
+    <div class="dialog-icon">
+        <mat-icon>{{ data.icon }}</mat-icon>
+    </div>
+
+    <div>
+        <p class="dialog-eyebrow">{{ data.kind }} · {{ data.category }}</p>
+        <h2 mat-dialog-title>{{ data.title }}</h2>
+        <div class="dialog-meta">
+            <span>{{ data.duration }}</span>
+            <span>{{ data.level }}</span>
+            <span>{{ data.metricLabel }}: {{ data.metricValue }}</span>
+        </div>
+    </div>
+</div>
+
+<mat-dialog-content>
+    <section>
+        <h3>Overview</h3>
+        <p>{{ data.detail }}</p>
+    </section>
+
+    <section>
+        <h3>Highlights</h3>
+        <ul>
+            @for (highlight of data.highlights; track highlight) {
+                <li>
+                    <mat-icon>check_circle</mat-icon>
+                    <span>{{ highlight }}</span>
+                </li>
+            }
+        </ul>
+    </section>
+
+    <section>
+        <h3>How to start</h3>
+        <ol>
+            @for (step of data.steps; track step) {
+                <li>{{ step }}</li>
+            }
+        </ol>
+    </section>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-stroked-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

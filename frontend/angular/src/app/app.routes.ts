@@ -82,6 +82,19 @@ export const routes: Routes = [
         ]
     },
     {
+        path: 'topics',
+        data: {breadcrumb: 'Health Topics'},
+        children: [
+            {
+                path: '',
+                pathMatch: 'full',
+                loadComponent: () =>
+                    import('./features/health-topics/health-topics').then((m) => m.HealthTopics),
+                data: {breadcrumb: 'Health Topics'},
+            }
+        ],
+    },
+    {
         path: 'advice-tips',
         data: {breadcrumb: 'Advice & Tips'},
         children: [
@@ -92,6 +105,24 @@ export const routes: Routes = [
                 data: {breadcrumb: 'Advice & Tips'},
             }
         ]
+    },
+    {
+        path: 'recipes',
+        data: {breadcrumb: 'Healthy Recipes', wellnessPage: 'recipes'},
+        loadComponent: () =>
+            import('./features/wellness-lifestyle/wellness-lifestyle').then((m) => m.WellnessLifestyle),
+    },
+    {
+        path: 'fitness',
+        data: {breadcrumb: 'Fitness', wellnessPage: 'fitness'},
+        loadComponent: () =>
+            import('./features/wellness-lifestyle/wellness-lifestyle').then((m) => m.WellnessLifestyle),
+    },
+    {
+        path: 'mental-wellbeing',
+        data: {breadcrumb: 'Mental Wellbeing', wellnessPage: 'mental'},
+        loadComponent: () =>
+            import('./features/wellness-lifestyle/wellness-lifestyle').then((m) => m.WellnessLifestyle),
     },
     {
         path: 'symptoms',

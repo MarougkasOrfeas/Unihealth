@@ -1,0 +1,59 @@
+<div class="dialog-header" [style.--topic-accent]="data.accentColor">
+    <div class="dialog-icon">
+        <mat-icon>{{ data.icon }}</mat-icon>
+    </div>
+
+    <div>
+        <p class="dialog-eyebrow">{{ data.category }}</p>
+        <h2 mat-dialog-title>{{ data.title }}</h2>
+        <div class="dialog-meta">
+            <span>{{ data.readTime }}</span>
+            <span>{{ data.updated }}</span>
+        </div>
+    </div>
+</div>
+
+<mat-dialog-content>
+    <section class="overview-section">
+        <h3>Overview</h3>
+        <p>{{ data.overview }}</p>
+    </section>
+
+    <section>
+        <h3>Recommended actions</h3>
+        <ul class="action-list">
+            @for (action of data.keyActions; track action) {
+                <li>
+                    <mat-icon>check_circle</mat-icon>
+                    <span>{{ action }}</span>
+                </li>
+            }
+        </ul>
+    </section>
+
+    <section>
+        <h3>When to seek care</h3>
+        <ul class="warning-list">
+            @for (warning of data.warningSigns; track warning) {
+                <li>
+                    <mat-icon>priority_high</mat-icon>
+                    <span>{{ warning }}</span>
+                </li>
+            }
+        </ul>
+    </section>
+
+    <section class="review-note">
+        <mat-icon>verified</mat-icon>
+        <p>{{ data.reviewedBy }}</p>
+    </section>
+
+    <p class="disclaimer">
+        Educational mock content only. Contact a qualified healthcare professional for personal
+        medical questions or urgent symptoms.
+    </p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-stroked-button mat-dialog-close>Close</button>
+</mat-dialog-actions>
