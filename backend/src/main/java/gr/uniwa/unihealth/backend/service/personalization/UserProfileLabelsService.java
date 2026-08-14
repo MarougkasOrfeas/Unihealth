@@ -1,6 +1,7 @@
 package gr.uniwa.unihealth.backend.service.personalization;
 
 import gr.uniwa.unihealth.backend.model.User;
+import gr.uniwa.unihealth.backend.dto.UserProfileLabelDTO;
 
 import java.util.List;
 
@@ -13,4 +14,6 @@ public interface UserProfileLabelsService {
   void saveForUser(User user, List<String> sortedLabels);
 
   void saveOptionalForUser(User user, List<String> sortedOptionalLabels);
+
+  List<UserProfileLabelDTO> findForUser(String userId);
 }

@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {map, Observable} from 'rxjs';
 import {BaseService} from './base.service';
 import {HealthProfileDTO, HealthProfileViewDTO} from "../interfaces/health-profile";
+import {UserProfileLabel} from "../interfaces/user-profile-label";
 
 class HealthProfileEndpoints {
     static readonly COMPLETE_PROFILE_API = BaseService.CONTEXT_PATH + '/profile/_complete';
@@ -37,5 +38,9 @@ export class HealthProfileService extends BaseService<HealthProfileDTO> {
 
     updateMyProfile(dto: HealthProfileDTO): Observable<HealthProfileViewDTO> {
         return this.httpClient.put<HealthProfileViewDTO>(HealthProfileEndpoints.USER_PROFILE_API, dto);
+    }
+
+    getMyLabels(): Observable<UserProfileLabel[]> {
+        return this.httpClient.get<UserProfileLabel[]>(`${HealthProfileEndpoints.USER_PROFILE_API}/labels`);
     }
 }

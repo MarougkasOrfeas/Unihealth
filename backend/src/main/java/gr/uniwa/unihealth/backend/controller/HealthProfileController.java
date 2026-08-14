@@ -3,12 +3,17 @@ package gr.uniwa.unihealth.backend.controller;
 import gr.uniwa.unihealth.backend.config.context.AuthenticationContext;
 import gr.uniwa.unihealth.backend.dto.HealthProfileDTO;
 import gr.uniwa.unihealth.backend.dto.HealthProfileViewDTO;
+import gr.uniwa.unihealth.backend.dto.UserProfileLabelDTO;
 import gr.uniwa.unihealth.backend.service.HealthProfileReaderService;
 import gr.uniwa.unihealth.backend.service.HealthProfileService;
+import gr.uniwa.unihealth.backend.service.UserReaderService;
+import gr.uniwa.unihealth.backend.service.personalization.UserProfileLabelsService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("profile")
@@ -17,6 +22,8 @@ public class HealthProfileController {
 
   private final HealthProfileService service;
   private final HealthProfileReaderService readerService;
+  private final UserReaderService userReaderService;
+  private final UserProfileLabelsService userProfileLabelsService;
   private final AuthenticationContext authenticationContext;
 
   @PostMapping("_complete")
@@ -31,6 +38,14 @@ public class HealthProfileController {
       description = "Fetches the health profile of the currently authenticated user.")
   public HealthProfileViewDTO findMyProfile() {
     return readerService.findByCurrentUser(authenticationContext.getCurrentUsername());
+  }
+
+  @GetMapping("_me/labels")
+  @Operation(summary = "Returns personalization labels for the logged in user",
+      description = "Fetches the calculated health-profile labels and their recommendation priorities.")
+  public List<UserProfileLabelDTO> findMyLabels() {
+    String userId = userReaderService.findLoggedInUser().getId();
+    return userProfileLabelsService.findForUser(userId);
   }
 
   @PutMapping("_me")

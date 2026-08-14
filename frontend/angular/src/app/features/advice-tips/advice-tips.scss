@@ -62,10 +62,14 @@
   width: 58px;
   height: 58px;
   display: flex;
-  place-items: center;
+  align-items: center;
+  justify-content: center;
   border-radius: 20px;
   background: #eef9f8;
-  font-size: 28px;
+
+  mat-icon {
+    color: #24545f;
+  }
 }
 
 .did-you-know-card {
@@ -159,6 +163,22 @@
     color: #667085;
     font-size: 16px;
     line-height: 1.65;
+  }
+
+  .score-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 18px;
+
+    span {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #f4f7f9;
+      color: #53616e;
+      font-size: 12px;
+      font-weight: 800;
+    }
   }
 
   button {

@@ -42,11 +42,11 @@ public class FormLabelInitData implements ApplicationRunner {
     // TYPE 1 — Pure field rules
     // ================================================================
     // gender
-    mappings.add(build("GENDER_MALE", "gender", "EQ", "Male", null, false, false, "gender",
+    mappings.add(build("GENDER_MALE", "gender", "EQ", "MALE", null, false, false, "gender",
         "User identified as Male"));
-    mappings.add(build("GENDER_FEMALE", "gender", "EQ", "Female", null, false, false, "gender",
+    mappings.add(build("GENDER_FEMALE", "gender", "EQ", "FEMALE", null, false, false, "gender",
         "User identified as Female"));
-    mappings.add(build("GENDER_OTHER", "gender", "EQ", "Other", null, false, false, "gender",
+    mappings.add(build("GENDER_OTHER", "gender", "EQ", "OTHER", null, false, false, "gender",
         "User identified as Other"));
 
     // height
@@ -240,7 +240,50 @@ public class FormLabelInitData implements ApplicationRunner {
     mappings.add(build("MALE_SLEEP_BETTER", "gender+goal", null, null, null, false, true, "mixed",
         "Male user targeting better sleep"));
 
+    addOptionalPriorityMappings(mappings);
+
     repository.saveAll(mappings);
+  }
+
+  private void addOptionalPriorityMappings(List<LabelFieldMapping> mappings) {
+    addOptional(mappings, "OPTIONAL_SLEEP_", "optional_sleep", "Sleep quality preference",
+        "LESS_THAN_6_HOURS", "ABOUT_6_HOURS", "ABOUT_8_HOURS", "MORE_THAN_8_HOURS");
+    addOptional(mappings, "OPTIONAL_STUDY_LOAD_", "optional_context", "Daily study load",
+        "LESS_THAN_1_HOUR", "ONE_TO_TWO_HOURS", "TWO_TO_FOUR_HOURS", "MORE_THAN_4_HOURS");
+    addOptional(mappings, "OPTIONAL_SMOKING_", "optional_substance", "Smoking habit", "NO",
+        "OCCASIONALLY", "DAILY");
+    addOptional(mappings, "OPTIONAL_COFFEE_", "optional_substance", "Coffee consumption", "NONE",
+        "ONE_CUP", "TWO_TO_THREE_CUPS", "FOUR_OR_MORE_CUPS");
+    addOptional(mappings, "OPTIONAL_SCREEN_TIME_", "optional_context", "Daily screen time",
+        "LESS_THAN_2_HOURS", "TWO_TO_FOUR_HOURS", "FOUR_TO_SIX_HOURS", "MORE_THAN_6_HOURS");
+    addOptional(mappings, "OPTIONAL_EXERCISE_", "optional_activity", "Exercise frequency", "NONE",
+        "ONE_TO_TWO_TIMES", "THREE_TO_FIVE_TIMES", "FIVE_TO_SEVEN_TIMES");
+    addOptional(mappings, "OPTIONAL_MEALS_", "optional_nutrition", "Meals per day", "ONE_TO_TWO",
+        "THREE", "FOUR_TO_FIVE", "MORE_THAN_FIVE");
+    addOptional(mappings, "OPTIONAL_SNACK_", "optional_nutrition", "Snack frequency", "NO",
+        "SOMETIMES", "DAILY");
+    addOptional(mappings, "OPTIONAL_WATER_", "optional_nutrition", "Water intake",
+        "ONE_TO_THREE_GLASSES", "FOUR_TO_SIX_GLASSES", "SEVEN_TO_NINE_GLASSES",
+        "MORE_THAN_NINE_GLASSES");
+    addOptional(mappings, "OPTIONAL_DIET_", "optional_nutrition", "Diet type", "OMNIVORE",
+        "VEGETARIAN", "VEGAN", "PESCATARIAN", "GLUTEN_FREE", "OTHER");
+    addOptional(mappings, "OPTIONAL_CONTENT_", "optional_preference", "Preferred content type",
+        "ARTICLES", "SHORT_TIPS", "MIXED");
+    addOptional(mappings, "OPTIONAL_FREQUENCY_", "optional_preference", "Content frequency",
+        "DAILY", "FEW_TIMES_PER_WEEK", "RARELY");
+
+    mappings.add(build("OPTIONAL_HIGH_MEDICATION", "optional.medication", null, null, null, false,
+        true, "optional_risk", "User reports medication use"));
+    mappings.add(build("OPTIONAL_HIGH_SURGERY_HISTORY", "optional.surgeryHistory", null, null, null,
+        false, true, "optional_risk", "User reports surgery history"));
+  }
+
+  private void addOptional(List<LabelFieldMapping> mappings, String prefix, String group,
+      String description, String... values) {
+    for (String value : values) {
+      mappings.add(build(prefix + value, "optional", null, null, null, false, true, group,
+          description + ": " + value));
+    }
   }
 
   private LabelFieldMapping build(String labelCode, String fieldName, String operator,
@@ -290,12 +333,19 @@ public class FormLabelInitData implements ApplicationRunner {
     int tierWeight = switch (labelGroup) {
       case "bmi" -> 500; // tier 5 — most clinically actionable
       case "mixed" -> 450; // tier 5 — multi-signal, highest specificity
+      case "optional_risk" -> 425; // optional medical context
       case "chronic" -> 400; // tier 4 — direct health condition
+      case "optional_sleep" -> 360; // strong lifestyle signal
       case "allergy" -> 350; // tier 4 — direct dietary constraint
+      case "optional_activity" -> 330; // behaviour-change signal
+      case "optional_nutrition" -> 320; // diet and hydration signal
+      case "optional_substance" -> 310; // smoking/caffeine signal
       case "weight" -> 300; // tier 3 — physical metric, actionable
+      case "optional_context" -> 220; // study/screen-time context
       case "age" -> 200; // tier 2 — contextual, shapes tone
       case "height" -> 150; // tier 2 — low actionability
       case "goal" -> 100; // tier 2 — stated intent, content shaping
+      case "optional_preference" -> 90; // content delivery preference
       case "gender" -> 50; // tier 1 — demographic, framing only
       default -> 10;
     };
@@ -339,7 +389,9 @@ public class FormLabelInitData implements ApplicationRunner {
     // Extreme conditions — strongest content signal
     if (labelCode.contains("SEVERELY") || labelCode.contains("VERY_LOW") || labelCode.contains(
         "VERY_HIGH") || labelCode.contains("VERY_SHORT") || labelCode.contains(
-        "VERY_TALL") || labelCode.contains("HIGH_RISK") || labelCode.contains("MISALIGNED"))
+        "VERY_TALL") || labelCode.contains("HIGH_RISK") || labelCode.contains(
+        "MISALIGNED") || labelCode.contains("LESS_THAN_6_HOURS") || labelCode.contains(
+        "MORE_THAN_6_HOURS") || labelCode.contains("FOUR_OR_MORE_CUPS"))
       return 2.0;
 
     // Strong conditions
@@ -378,6 +430,11 @@ public class FormLabelInitData implements ApplicationRunner {
     if (labelCode.startsWith("HAS_") || labelCode.contains("RISK") || labelCode.contains(
         "MISALIGNED") || labelCode.contains("SEVERELY") || labelCode.contains("COMPLEX_PROFILE"))
       return 1.5;
+
+    if (labelCode.startsWith("OPTIONAL_HIGH_") || labelCode.contains("SMOKING_DAILY")
+        || labelCode.contains("EXERCISE_NONE") || labelCode.contains("WATER_ONE_TO_THREE")
+        || labelCode.contains("MEALS_ONE_TO_TWO"))
+      return 1.4;
 
     // Active intent — user stated they want to act
     if (labelCode.startsWith("GOAL_") || labelCode.contains("ALIGNED") || labelCode.contains(

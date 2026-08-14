@@ -2,18 +2,25 @@
     <header class="advice-hero">
         <p class="eyebrow">Personalized advice</p>
         <h1>Recommended for you</h1>
-        <p>Simple tips selected from your profile to help you build healthier habits.</p>
+        <p>Simple tips ranked from your saved health-profile labels and preferences.</p>
     </header>
 
-    @if (topTips().length > 0) {
+    @if (loadingLabels()) {
+        <section class="empty-state">
+            <h2>Loading personalized advice</h2>
+            <p>Your profile labels are being evaluated.</p>
+        </section>
+    } @else if (topTips().length > 0) {
         <section class="today-card">
-            <div class="today-icon">✨</div>
+            <div class="today-icon">
+                <mat-icon>auto_awesome</mat-icon>
+            </div>
 
             <div>
-                <p class="eyebrow">Today’s focus</p>
+                <p class="eyebrow">Today focus</p>
                 <h2>Start with one small action today</h2>
                 <p>
-                    These tips are selected to be practical, realistic, and easy to repeat.
+                    These tips are selected using a label-based recommendation score.
                 </p>
             </div>
         </section>
@@ -46,6 +53,11 @@
                             <h3>{{ tip.title }}</h3>
                             <p>{{ tip.summary }}</p>
 
+                            <div class="score-row">
+                                <span>{{ tip.recommendationScore }} score</span>
+                                <span>{{ tip.matchedLabelCount }} matched labels</span>
+                            </div>
+
                             <button type="button">
                                 Read more
                                 <mat-icon>arrow_forward</mat-icon>
@@ -58,7 +70,7 @@
     } @else {
         <section class="empty-state">
             <h2>No advice available yet</h2>
-            <p>Complete your profile to receive personalized recommendations.</p>
+            <p>{{ labelsError() ?? 'Complete your profile to receive personalized recommendations.' }}</p>
         </section>
     }
 </section>
