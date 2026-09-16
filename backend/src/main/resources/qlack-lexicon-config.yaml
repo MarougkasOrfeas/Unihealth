@@ -41,7 +41,7 @@ translations:
       - side.overview: Επισκόπηση
       - side.overview.profile: Επισκόπηση Προφίλ
       - side.overview.plans: Τα Πλάνα Μου
-      - side.overview.blood.tests: Οι Αιματολογικές Εξετάσεις Μου
+      - side.overview.blood.tests: Οι Εξετάσεις Μου
       - side.health: Πληροφορίες Υγείας
       - side.health.news: Νέα Υγείας
       - side.health.topics: Θέματα Υγείας
@@ -52,7 +52,7 @@ translations:
       - side.wellness.mental: Ψυχική Ευεξία
       - side.health.assistant: Βοηθός Υγείας
       - side.health.assistant.symptoms: Έλεγχος Συμπτωμάτων
-      - side.health.assistant.find-doctor: Εύρεση Γιατρού
+      - side.health.assistant.find-doctor: Εύρεση Υπηρεσιών Υγείας
       - side.health.assistant.care-recommendations: Συστάσεις Φροντίδας
       - side.health.assistant.urgent-guidance: Επείγουσα Καθοδήγηση
 
@@ -68,6 +68,9 @@ translations:
       - breadcrumb.profile.form: Η Φόρμα Μου
       - breadcrumb.symptoms: Συμπτώματα
       - breadcrumb.symptoms.az: Συμπτώματα A έως Z
+      - breadcrumb.find-care: Εύρεση Υπηρεσιών Υγείας
+      - breadcrumb.find-care.options: Επιλογές
+      - breadcrumb.find-care.mock: Mock Σελίδα
       - breadcrumb.overview: Επισκόπηση
       - breadcrumb.details: Λεπτομέρειες
       - breadcrumb.ai.assist: Ζωντανή Υποστήριξη
@@ -415,7 +418,7 @@ translations:
       - side.wellness.mental: Mental Wellbeing
       - side.health.assistant: Health Assistant
       - side.health.assistant.symptoms: Symptom Checker
-      - side.health.assistant.find-doctor: Find a Doctor
+      - side.health.assistant.find-doctor: Find Health Services
       - side.health.assistant.care-recommendations: Care Recommendations
       - side.health.assistant.urgent-guidance: Urgent Guidance
 
@@ -431,6 +434,9 @@ translations:
       - breadcrumb.profile.form: My Form
       - breadcrumb.symptoms: Symptoms
       - breadcrumb.symptoms.az: Symptoms A to Z
+      - breadcrumb.find-care: Find Health Services
+      - breadcrumb.find-care.options: Options
+      - breadcrumb.find-care.mock: Mock Page
       - breadcrumb.overview: Overview
       - breadcrumb.details: Details
       - breadcrumb.ai.assist: Live Assist

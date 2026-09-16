@@ -143,6 +143,30 @@ export const routes: Routes = [
         ]
     },
     {
+        path: 'find-doctor',
+        data: {breadcrumb: 'breadcrumb.find-care'},
+        children: [
+            {
+                path: '',
+                pathMatch: 'full',
+                loadComponent: () => import('./features/find-care/find-care').then((m) => m.FindCare),
+                data: {breadcrumb: 'breadcrumb.find-care.options'},
+            },
+            {
+                path: ':category',
+                pathMatch: 'full',
+                loadComponent: () => import('./features/find-care/find-care').then((m) => m.FindCare),
+                data: {breadcrumb: 'breadcrumb.find-care.mock'},
+            },
+            {
+                path: 'doctors/:specialty',
+                pathMatch: 'full',
+                loadComponent: () => import('./features/find-care/find-care').then((m) => m.FindCare),
+                data: {breadcrumb: 'breadcrumb.find-care.mock'},
+            },
+        ]
+    },
+    {
         path: 'unihealth-ai',
         data: {breadcrumb: 'breadcrumb.ai.assist'},
         children: [

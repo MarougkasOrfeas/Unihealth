@@ -1,0 +1,261 @@
+.find-care-page {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  color: #172026;
+}
+
+.page-header {
+  max-width: 860px;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #2f6673;
+  font-size: 12px;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 4px 0 10px;
+  font-size: 42px;
+  line-height: 1.05;
+  font-weight: 850;
+}
+
+.page-header p:not(.eyebrow),
+.card-copy p,
+.mock-destination p:not(.eyebrow) {
+  color: #586673;
+  line-height: 1.6;
+}
+
+.care-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  max-width: 1120px;
+}
+
+.care-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+  min-height: 184px;
+  padding: 30px;
+  border: 1px solid #d8dee7;
+  border-radius: 4px;
+  background: #fff;
+  color: inherit;
+  text-decoration: none;
+  box-shadow: 0 2px 0 rgba(15, 23, 42, 0.08);
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.care-card:hover,
+.care-card:focus-within {
+  border-color: #9ecbd2;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.1);
+  transform: translateY(-2px);
+}
+
+.card-icon,
+.card-arrow {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+}
+
+.card-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  background: #eef9f8;
+  color: #24545f;
+}
+
+.card-icon mat-icon {
+  width: 32px;
+  height: 32px;
+  font-size: 32px;
+}
+
+.card-copy {
+  min-width: 0;
+}
+
+.card-copy h2 {
+  margin: 0 0 10px;
+  color: #005eb8;
+  font-size: 25px;
+  line-height: 1.2;
+  font-weight: 850;
+  text-decoration: underline;
+}
+
+.card-copy p {
+  margin: 0;
+}
+
+.card-arrow {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #0069c0;
+  color: #fff;
+}
+
+.card-arrow mat-icon {
+  width: 22px;
+  height: 22px;
+  font-size: 22px;
+}
+
+.doctors-card {
+  cursor: default;
+}
+
+.specialty-trigger {
+  margin-top: 16px;
+  border-radius: 4px;
+}
+
+.specialty-trigger mat-icon {
+  margin-left: 4px;
+}
+
+.results-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  max-width: 1120px;
+  padding: 28px;
+  border: 1px solid #d8dee7;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 2px 0 rgba(15, 23, 42, 0.08);
+}
+
+.results-header {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: start;
+}
+
+.results-header > div {
+  grid-column: 1 / 3;
+}
+
+.results-header h2 {
+  margin: 4px 0 8px;
+  font-size: 30px;
+  line-height: 1.15;
+}
+
+.results-header p:not(.eyebrow) {
+  margin: 0;
+  color: #586673;
+  line-height: 1.6;
+}
+
+.table-shell {
+  overflow-x: auto;
+  border: 1px solid #d8dee7;
+  border-radius: 4px;
+  background: #f8fbfb;
+}
+
+.results-table {
+  width: 100%;
+  min-width: 980px;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.results-table th,
+.results-table td {
+  padding: 18px 20px;
+  border-bottom: 1px solid #d8dee7;
+  text-align: left;
+  vertical-align: top;
+}
+
+.results-table th {
+  width: 16.66%;
+  background: #eef9f8;
+  color: #172026;
+  font-weight: 850;
+}
+
+.results-table th span {
+  display: block;
+  margin-bottom: 6px;
+  color: #005eb8;
+  font-size: 15px;
+}
+
+.results-table th small {
+  display: block;
+  color: #586673;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.empty-row td {
+  height: 120px;
+  color: #586673;
+  text-align: center;
+}
+
+.empty-row mat-icon {
+  display: block;
+  margin: 0 auto 8px;
+  color: #24545f;
+}
+
+.mock-destination {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .care-grid,
+  .results-header {
+    grid-template-columns: 1fr;
+  }
+
+  .results-header > div {
+    grid-column: auto;
+  }
+
+  .care-card {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .card-arrow {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  h1 {
+    font-size: 34px;
+  }
+
+  .care-card {
+    padding: 20px;
+  }
+
+  .results-panel {
+    padding: 20px;
+  }
+
+  .results-header h2 {
+    font-size: 25px;
+  }
+}

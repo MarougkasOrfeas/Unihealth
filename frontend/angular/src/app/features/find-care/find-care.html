@@ -1,0 +1,119 @@
+<section class="find-care-page">
+    <header class="page-header">
+        <p class="eyebrow">Υπηρεσίες υγείας</p>
+        <h1>Τι θέλεις να βρεις;</h1>
+        <p>
+            Επίλεξε την κατηγορία υπηρεσίας που σε ενδιαφέρει. Προς το παρόν η οθόνη
+            λειτουργεί ως frontend mock για τη μελλοντική αναζήτηση.
+        </p>
+    </header>
+
+    <section class="care-grid" aria-label="Επιλογές υπηρεσιών υγείας">
+        @for (card of cards; track card.id) {
+            <a class="care-card" [routerLink]="card.route">
+                <div class="card-icon">
+                    <mat-icon>{{ card.icon }}</mat-icon>
+                </div>
+
+                <div class="card-copy">
+                    <h2>{{ card.title }}</h2>
+                    <p>{{ card.description }}</p>
+                </div>
+
+                <span class="card-arrow" aria-hidden="true">
+                    <mat-icon>chevron_right</mat-icon>
+                </span>
+            </a>
+        }
+
+        <article class="care-card doctors-card">
+            <div class="card-icon">
+                <mat-icon>stethoscope</mat-icon>
+            </div>
+
+            <div class="card-copy">
+                <h2>Γιατροί</h2>
+                <p>Επίλεξε την ειδικότητα για την οποία θέλεις να δεις διαθέσιμες επιλογές.</p>
+
+                <button
+                    mat-stroked-button
+                    type="button"
+                    class="specialty-trigger"
+                    [matMenuTriggerFor]="specialtyMenu">
+                    Ειδικότητα
+                    <mat-icon>keyboard_arrow_down</mat-icon>
+                </button>
+            </div>
+
+            <span class="card-arrow" aria-hidden="true">
+                <mat-icon>expand_more</mat-icon>
+            </span>
+        </article>
+    </section>
+
+    <mat-menu #specialtyMenu="matMenu">
+        @for (specialty of specialties; track specialty.id) {
+            <a
+                mat-menu-item
+                [routerLink]="['/find-doctor', 'doctors', specialty.id]">
+                <mat-icon>medical_services</mat-icon>
+                <span>{{ specialty.title }}</span>
+            </a>
+        }
+    </mat-menu>
+
+    @if (selectedTitle()) {
+        <section class="results-panel" aria-live="polite">
+            <div class="results-header">
+                <div>
+                    <p class="eyebrow">Results table</p>
+                    <h2>{{ selectedTitle() }}</h2>
+                    <p>
+                        These are the generic columns that can support all care categories before category-specific fields are added.
+                    </p>
+                </div>
+
+                <a mat-stroked-button routerLink="/find-doctor">
+                    <mat-icon>arrow_back</mat-icon>
+                    Back
+                </a>
+            </div>
+
+            <div class="table-shell">
+                <table class="results-table" aria-label="Care results columns preview">
+                    <thead>
+                        <tr>
+                            @for (column of resultColumns; track column.key) {
+                                <th scope="col">
+                                    <span>{{ column.label }}</span>
+                                    <small>{{ column.helper }}</small>
+                                </th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="empty-row">
+                            <td [attr.colspan]="resultColumns.length">
+                                <mat-icon>table_view</mat-icon>
+                                <span>No data connected yet. Backend results will be displayed here.</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <section class="mock-destination" aria-live="polite">
+            <mat-icon>construction</mat-icon>
+            <div>
+                <p class="eyebrow">Mock σελίδα</p>
+                <h2>{{ selectedTitle() }}</h2>
+                <p>
+                    Εδώ θα εμφανιστεί αργότερα η πραγματική αναζήτηση με δεδομένα από backend.
+                </p>
+            </div>
+            <a mat-button routerLink="/find-doctor">
+                Πίσω στις επιλογές
+            </a>
+        </section>
+    }
+</section>
