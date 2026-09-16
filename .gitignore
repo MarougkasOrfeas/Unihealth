@@ -6,5 +6,7 @@ node_modules
 *.iml
 
 /backend/.m2
-/data
+/logs
+/data/**/target/
+/data/**/generated-output/
 /backend/tools

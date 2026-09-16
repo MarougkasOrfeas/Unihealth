@@ -1,0 +1,49 @@
+<div class="conditions-page">
+    <div class="search-box">
+        <mat-icon>search</mat-icon>
+        <input
+            type="text"
+            [ngModel]="searchTerm()"
+            (ngModelChange)="searchTerm.set($event)"
+            placeholder="Search conditions"
+        />
+    </div>
+
+    <div class="alphabet-nav">
+        @for (letter of alphabet; track letter) {
+            <button
+                type="button"
+                [disabled]="!availableLetters().includes(letter)"
+                [class.disabled]="!availableLetters().includes(letter)"
+                (click)="scrollToLetter(letter)">
+                {{ letter }}
+            </button>
+        }
+    </div>
+
+    @if (loading()) {
+        <div class="loading-state">Loading conditions...</div>
+    } @else if (conditions().length === 0) {
+        <div class="loading-state">No conditions found.</div>
+    } @else {
+        <div class="condition-sections">
+            @for (letter of alphabet; track letter) {
+                @if (getConditionsByLetter(letter).length > 0) {
+                    <section class="letter-section" [id]="'letter-' + letter">
+                        <div class="letter-badge">{{ letter }}</div>
+
+                        <div class="condition-list">
+                            @for (item of groupedConditions()[letter]; track item.id) {
+                                <a class="condition-row" [routerLink]="['/conditions', item.slug]">
+                                    <div class="condition-title">{{ item.name }}</div>
+                                </a>
+                            }
+                        </div>
+                    </section>
+                }
+            }
+        </div>
+    }
+
+    <app-data-sources/>
+</div>

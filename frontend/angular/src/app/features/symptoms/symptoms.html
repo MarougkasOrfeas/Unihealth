@@ -1,45 +1,79 @@
 <div class="symptoms-page">
-    <div class="search-box">
-        <mat-icon>search</mat-icon>
-        <input
-            type="text"
-            [ngModel]="searchTerm()"
-            (ngModelChange)="searchTerm.set($event)"
-            placeholder="Search symptoms"
-        />
-    </div>
+    <header class="symptoms-header">
+        <div>
+            <p class="eyebrow">Symptom checker</p>
+            <h1>Symptoms A&ndash;Z</h1>
+        </div>
 
-    <div class="alphabet-nav">
-        @for (letter of alphabet; track letter) {
+        <div class="symptom-mode-toggle" role="tablist" aria-label="Symptom search mode">
             <button
                 type="button"
-                [disabled]="!availableLetters().includes(letter)"
-                [class.disabled]="!availableLetters().includes(letter)"
-                (click)="scrollToLetter(letter)">
-                {{ letter }}
+                role="tab"
+                [attr.aria-selected]="mode() === 'browse'"
+                [class.active]="mode() === 'browse'"
+                (click)="mode.set('browse')">
+                <mat-icon>list</mat-icon>
+                Browse A&ndash;Z
             </button>
-        }
-    </div>
+            <button
+                type="button"
+                role="tab"
+                [attr.aria-selected]="mode() === 'narrow'"
+                [class.active]="mode() === 'narrow'"
+                (click)="mode.set('narrow')">
+                <mat-icon>filter_alt</mat-icon>
+                Advanced search
+            </button>
+        </div>
+    </header>
 
-    @if (loading()) {
-        <div class="loading-state">Loading symptoms...</div>
+    @if (mode() === 'narrow') {
+        <app-advanced-search/>
     } @else {
-        <div class="symptom-sections">
-            @for (letter of alphabet; track letter) {
-                @if (getSymptomsByLetter(letter).length > 0) {
-                    <section class="letter-section" [id]="'letter-' + letter">
-                        <div class="letter-badge">{{ letter }}</div>
+        <div class="search-box">
+            <mat-icon>search</mat-icon>
+            <input
+                type="text"
+                [ngModel]="searchTerm()"
+                (ngModelChange)="searchTerm.set($event)"
+                placeholder="Search symptoms"
+            />
+        </div>
 
-                        <div class="symptom-list">
-                            @for (item of groupedSymptoms()[letter]; track item.id) {
-                                <a class="symptom-row" [routerLink]="['/symptoms', item.slug]">
-                                    <div class="symptom-title">{{ item.title }}</div>
-                                </a>
-                            }
-                        </div>
-                    </section>
-                }
+        <div class="alphabet-nav">
+            @for (letter of alphabet; track letter) {
+                <button
+                    type="button"
+                    [disabled]="!availableLetters().includes(letter)"
+                    [class.disabled]="!availableLetters().includes(letter)"
+                    (click)="scrollToLetter(letter)">
+                    {{ letter }}
+                </button>
             }
         </div>
+
+        @if (loading()) {
+            <div class="loading-state">Loading symptoms...</div>
+        } @else {
+            <div class="symptom-sections">
+                @for (letter of alphabet; track letter) {
+                    @if (getSymptomsByLetter(letter).length > 0) {
+                        <section class="letter-section" [id]="'letter-' + letter">
+                            <div class="letter-badge">{{ letter }}</div>
+
+                            <div class="symptom-list">
+                                @for (item of groupedSymptoms()[letter]; track item.id) {
+                                    <a class="symptom-row" [routerLink]="['/symptoms', item.slug]">
+                                        <div class="symptom-title">{{ item.title }}</div>
+                                    </a>
+                                }
+                            </div>
+                        </section>
+                    }
+                }
+            </div>
+        }
     }
+
+    <app-data-sources/>
 </div>

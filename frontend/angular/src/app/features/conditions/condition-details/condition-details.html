@@ -1,0 +1,48 @@
+<div class="condition-detail-page">
+    @if (loading()) {
+        <div class="loading-state">Loading...</div>
+    } @else if (condition()) {
+        <div class="detail-content">
+            <a class="back-link" routerLink="/conditions">
+                <mat-icon>arrow_back</mat-icon>
+                Conditions A&ndash;Z
+            </a>
+
+            <h1>{{ condition()!.name }}</h1>
+
+            @if (condition()!.sourceUrl) {
+                <a class="read-more"
+                   [href]="condition()!.sourceUrl"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    Read about {{ condition()!.name }} on the NHS website
+                    <mat-icon>open_in_new</mat-icon>
+                </a>
+            }
+
+            @if (condition()!.relatedSymptoms.length > 0) {
+                <section class="content-section">
+                    <h2>Symptoms that can point to this</h2>
+                    <div class="symptom-links">
+                        @for (symptom of condition()!.relatedSymptoms; track symptom.id) {
+                            <a class="symptom-chip" [routerLink]="['/symptoms', symptom.slug]">
+                                {{ symptom.title }}
+                                <mat-icon>chevron_right</mat-icon>
+                            </a>
+                        }
+                    </div>
+                </section>
+            }
+
+            <p class="disclaimer">
+                <mat-icon>info</mat-icon>
+                This page lists where the condition appears in our symptom guide. For the full
+                description, follow the link to the NHS website.
+            </p>
+        </div>
+
+        <app-data-sources/>
+    } @else {
+        <div class="loading-state">Condition not found.</div>
+    }
+</div>

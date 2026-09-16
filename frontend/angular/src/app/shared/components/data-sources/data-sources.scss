@@ -1,0 +1,78 @@
+.data-sources {
+  margin-top: 40px;
+  padding: 20px 22px;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.data-sources h4 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 14px;
+  font-size: 1rem;
+  color: #374151;
+}
+
+.data-sources h4 mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  color: #6b7280;
+}
+
+.source {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.source + .source {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.source-logo {
+  width: 68px;
+  height: auto;
+  flex-shrink: 0;
+}
+
+.source-body a {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: #1565c0;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.source-body a:hover {
+  text-decoration: underline;
+}
+
+.source-body a mat-icon {
+  font-size: 15px;
+  width: 15px;
+  height: 15px;
+}
+
+.attribution {
+  margin: 4px 0 0;
+  color: #4b5563;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.licence {
+  margin: 4px 0 0;
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+.licence a {
+  font-weight: 400;
+  font-size: 0.85rem;
+}

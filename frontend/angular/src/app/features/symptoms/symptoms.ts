@@ -5,6 +5,8 @@ import {MatIconModule} from "@angular/material/icon";
 import {SymptomService} from "../../shared/services/symptom.service";
 import {SymptomItem} from "../../shared/interfaces/symptom-item";
 import {RouterLink} from "@angular/router";
+import {AdvancedSearch} from "./advanced-search/advanced-search";
+import {DataSources} from "../../shared/components/data-sources/data-sources";
 
 @Component({
     selector: 'app-symptoms',
@@ -13,7 +15,9 @@ import {RouterLink} from "@angular/router";
         CommonModule,
         FormsModule,
         MatIconModule,
-        RouterLink
+        RouterLink,
+        AdvancedSearch,
+        DataSources
     ],
     templateUrl: './symptoms.html',
     styleUrl: './symptoms.scss'
@@ -21,6 +25,9 @@ import {RouterLink} from "@angular/router";
 export class Symptoms {
 
     private symptomService = inject(SymptomService);
+
+    /** 'browse' is the A-Z encyclopedia; 'narrow' is the advanced search. */
+    mode = signal<'browse' | 'narrow'>('browse');
 
     searchTerm = signal('');
     symptoms = signal<SymptomItem[]>([]);

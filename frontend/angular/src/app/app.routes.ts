@@ -167,6 +167,24 @@ export const routes: Routes = [
         ]
     },
     {
+        path: 'conditions',
+        data: {breadcrumb: 'breadcrumb.conditions'},
+        children: [
+            {
+                path: '',
+                pathMatch: 'full',
+                loadComponent: () => import('./features/conditions/conditions').then((m) => m.Conditions),
+                data: {breadcrumb: 'breadcrumb.conditions.az'},
+            },
+            {
+                path: ':slug',
+                pathMatch: 'full',
+                loadComponent: () => import('./features/conditions/condition-details/condition-details').then((m) => m.ConditionDetails),
+                data: {breadcrumb: 'breadcrumb.details'},
+            },
+        ]
+    },
+    {
         path: 'unihealth-ai',
         data: {breadcrumb: 'breadcrumb.ai.assist'},
         children: [

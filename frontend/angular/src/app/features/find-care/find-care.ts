@@ -1,9 +1,14 @@
-import {Component, OnDestroy, signal} from '@angular/core';
+import {Component, computed, OnDestroy, signal} from '@angular/core';
 import {ActivatedRoute, ParamMap, RouterLink} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
+import {PageEvent} from '@angular/material/paginator';
+import {Sort} from '@angular/material/sort';
+import {Table} from '../../shared/components/table/table';
+import {TableColumn} from '../../shared/interfaces/table-column';
+import {CareResultRow, FIND_CARE_MOCK_RESULTS} from './find-care.mock';
 
 type CareCard = {
     id: string;
@@ -18,12 +23,6 @@ type DoctorSpecialty = {
     title: string;
 };
 
-type ResultColumn = {
-    key: string;
-    label: string;
-    helper: string;
-};
-
 @Component({
     selector: 'app-find-care',
     standalone: true,
@@ -32,6 +31,7 @@ type ResultColumn = {
         MatButtonModule,
         MatIconModule,
         MatMenuModule,
+        Table,
     ],
     templateUrl: './find-care.html',
     styleUrl: './find-care.scss',
@@ -71,48 +71,59 @@ export class FindCare implements OnDestroy {
     ];
 
     readonly selectedTitle = signal<string | null>(null);
-    readonly resultColumns: ResultColumn[] = [
-        {
-            key: 'name',
-            label: 'Name',
-            helper: 'Provider, service, clinic, or facility name',
-        },
-        {
-            key: 'type',
-            label: 'Type',
-            helper: 'Hospital, pharmacy, dentist, doctor, or other care type',
-        },
-        {
-            key: 'place',
-            label: 'Place',
-            helper: 'City, area, or full address',
-        },
-        {
-            key: 'services',
-            label: 'Services',
-            helper: 'Main service, specialty, or category match',
-        },
-        {
-            key: 'contact',
-            label: 'Contact',
-            helper: 'Phone, email, or booking link',
-        },
-        {
-            key: 'availability',
-            label: 'Availability',
-            helper: 'Open hours, appointment status, or emergency availability',
-        },
+    readonly resultRows = signal<CareResultRow[]>([]);
+    readonly resultColumns: TableColumn<CareResultRow>[] = [
+        {key: 'name', header: 'Όνομα', sortable: true, filterable: true, filterSearchable: true},
+        {key: 'type', header: 'Είδος', sortable: true, filterable: true, filterSearchable: true},
+        {key: 'place', header: 'Περιοχή', sortable: true, filterable: true, filterSearchable: true},
+        {key: 'services', header: 'Υπηρεσίες', sortable: true, filterable: true, filterSearchable: true},
+        {key: 'contact', header: 'Επικοινωνία', sortable: true},
+        {key: 'availability', header: 'Διαθεσιμότητα', sortable: true, filterable: true, filterSearchable: true},
     ];
+    readonly totalElements = computed(() => this.resultRows().length);
+    readonly currentPageSize = 10;
+    readonly isLoading = false;
+    readonly facetOptions = computed<Record<string, string[]>>(() => ({
+        name: this.uniqueValues('name'),
+        type: this.uniqueValues('type'),
+        place: this.uniqueValues('place'),
+        services: this.uniqueValues('services'),
+        availability: this.uniqueValues('availability'),
+    }));
+    readonly facetSelection: Record<string, Set<string>> = {
+        name: new Set<string>(),
+        type: new Set<string>(),
+        place: new Set<string>(),
+        services: new Set<string>(),
+        availability: new Set<string>(),
+    };
     private readonly routeSubscription: Subscription;
 
     constructor(private readonly route: ActivatedRoute) {
         this.routeSubscription = this.route.paramMap.subscribe((params) => {
             this.selectedTitle.set(this.resolveSelectionTitle(params));
+            this.resultRows.set(this.resolveRows(params));
         });
     }
 
     ngOnDestroy(): void {
         this.routeSubscription.unsubscribe();
+    }
+
+    onPageChange(event: PageEvent): void {
+        console.log('find care page changed', event);
+    }
+
+    onSortChange(sort: Sort): void {
+        console.log('find care sort changed', sort);
+    }
+
+    onFacetOpened(key: string): void {
+        console.log('find care facet opened', key);
+    }
+
+    onFacetChange(event: { key: string; selection: Set<string> }): void {
+        console.log('find care facet changed', event.key, event.selection);
     }
 
     private resolveSelectionTitle(params: ParamMap): string | null {
@@ -132,5 +143,23 @@ export class FindCare implements OnDestroy {
         }
 
         return this.cards.find(card => card.id === category)?.title ?? null;
+    }
+
+    private resolveRows(params: ParamMap): CareResultRow[] {
+        const specialty = params.get('specialty');
+        if (specialty) {
+            return FIND_CARE_MOCK_RESULTS[`doctors:${specialty}`] ?? FIND_CARE_MOCK_RESULTS['doctors'];
+        }
+
+        const category = params.get('category');
+        if (!category) {
+            return [];
+        }
+
+        return FIND_CARE_MOCK_RESULTS[category] ?? [];
+    }
+
+    private uniqueValues(key: keyof CareResultRow): string[] {
+        return [...new Set(this.resultRows().map(row => row[key]).filter(Boolean))];
     }
 }

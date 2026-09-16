@@ -1,14 +1,19 @@
 import {Component, inject, signal} from "@angular/core";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, RouterLink} from "@angular/router";
 import {SymptomItemDetail} from "../../../shared/interfaces/symptom-item-detail";
 import {SymptomService} from "../../../shared/services/symptom.service";
 import {CommonModule} from "@angular/common";
+import {MatIconModule} from "@angular/material/icon";
+import {DataSources} from "../../../shared/components/data-sources/data-sources";
 
 @Component({
     selector: 'app-symptom-details',
     standalone: true,
     imports: [
         CommonModule,
+        MatIconModule,
+        RouterLink,
+        DataSources
     ],
     templateUrl: './symptom-details.html',
     styleUrl: './symptom-details.scss'

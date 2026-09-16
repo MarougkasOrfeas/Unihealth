@@ -4,6 +4,30 @@
   padding: 24px;
 }
 
+.symptoms-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.symptoms-header h1 {
+  margin: 4px 0 0;
+  color: #1f2937;
+  font-size: 2.4rem;
+  font-weight: 700;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #2f6673;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
 .page-header {
   margin-bottom: 28px;
 }
@@ -129,7 +153,67 @@
     padding: 16px;
   }
 
+  .symptoms-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
   .page-header h1 {
     font-size: 2.2rem;
   }
 }
+
+/* ---------- browse / narrow mode switch ---------- */
+
+.symptom-mode-toggle {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(150px, 1fr));
+  gap: 6px;
+  min-width: 360px;
+  padding: 6px;
+  background: #eef3f7;
+  border: 1px solid #d8dee7;
+  border-radius: 12px;
+}
+
+.symptom-mode-toggle button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 10px 16px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: #374151;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.symptom-mode-toggle button mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.symptom-mode-toggle button.active {
+  background: #ffffff;
+  color: #1565c0;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12);
+}
+
+@media (max-width: 768px) {
+  .symptom-mode-toggle {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .symptom-mode-toggle {
+    grid-template-columns: 1fr;
+  }
+}
+

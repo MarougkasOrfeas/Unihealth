@@ -5,8 +5,50 @@
         <div class="detail-content">
             <h1>{{ symptom()!.title }}</h1>
 
+            @if (symptom()!.synonyms) {
+                <p class="synonyms">Also called: {{ symptom()!.synonyms }}</p>
+            }
+
             @if (symptom()!.brief) {
                 <p class="lead">{{ symptom()!.brief }}</p>
+            }
+
+            <!-- Urgency comes before the article, never after it. -->
+            @if (symptom()!.emergencyText) {
+                <section class="alert alert-emergency">
+                    <mat-icon>emergency</mat-icon>
+                    <div>
+                        @for (line of asLines(symptom()!.emergencyText); track line) {
+                            @if (line.startsWith('- ')) {
+                                <p class="bullet">{{ line.substring(2) }}</p>
+                            } @else {
+                                <p class="alert-headline">{{ line }}</p>
+                            }
+                        }
+                    </div>
+                </section>
+            }
+
+            @if (symptom()!.urgentText) {
+                <section class="alert alert-urgent">
+                    <mat-icon>priority_high</mat-icon>
+                    <div>
+                        @for (line of asLines(symptom()!.urgentText); track line) {
+                            @if (line.startsWith('- ')) {
+                                <p class="bullet">{{ line.substring(2) }}</p>
+                            } @else {
+                                <p class="alert-headline">{{ line }}</p>
+                            }
+                        }
+                    </div>
+                </section>
+            }
+
+            @if (symptom()!.hasFactors) {
+                <a class="narrow-cta" routerLink="/symptoms">
+                    <mat-icon>filter_alt</mat-icon>
+                    Narrow this down to possible causes
+                </a>
             }
 
             @if (symptom()!.overviewText) {
@@ -73,7 +115,19 @@
                     <p>{{ symptom()!.causesText }}</p>
                 </section>
             }
+
+            @if (symptom()!.sourceUrl) {
+                <a class="source-link"
+                   [href]="symptom()!.sourceUrl"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    Read the original on the NHS website
+                    <mat-icon>open_in_new</mat-icon>
+                </a>
+            }
         </div>
+
+        <app-data-sources/>
     } @else {
         <div class="loading-state">Symptom not found.</div>
     }

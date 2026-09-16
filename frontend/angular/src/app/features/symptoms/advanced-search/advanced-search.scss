@@ -1,0 +1,390 @@
+.advanced-search {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.step-hint {
+  margin: 0;
+  color: #4b5563;
+  font-size: 1rem;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  background: #ffffff;
+  border: 1px solid #dbe2ea;
+  border-radius: 12px;
+}
+
+.search-box mat-icon {
+  color: #6b7280;
+}
+
+.search-box input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  background: transparent;
+}
+
+.loading-state {
+  padding: 18px 0;
+  color: #6b7280;
+}
+
+/* ---------- picking a symptom ---------- */
+
+.suggestion-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 12px;
+}
+
+.suggestion {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  text-align: left;
+  background: #ffffff;
+  border: 1px solid #dbe2ea;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.suggestion:hover {
+  border-color: #1565c0;
+  box-shadow: 0 2px 8px rgba(21, 101, 192, 0.12);
+}
+
+.suggestion-title {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.suggestion-synonyms {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+/* ---------- the chosen symptom ---------- */
+
+.selected-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.selected-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #6b7280;
+}
+
+.selected-bar h2 {
+  margin: 2px 0 0;
+  font-size: 1.8rem;
+  color: #1f2937;
+}
+
+.link-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: #1565c0;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.link-button:hover {
+  background: #eff6ff;
+}
+
+.link-button mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+/* ---------- urgency ---------- */
+
+.alert {
+  display: flex;
+  gap: 12px;
+  padding: 16px 18px;
+  border-radius: 12px;
+  border-left: 6px solid;
+}
+
+.alert p {
+  margin: 0 0 4px;
+  line-height: 1.5;
+}
+
+.alert .alert-headline {
+  font-weight: 700;
+}
+
+.alert .bullet {
+  padding-left: 14px;
+  position: relative;
+}
+
+.alert .bullet::before {
+  content: '\2022';
+  position: absolute;
+  left: 0;
+}
+
+.alert-emergency {
+  background: #fef2f2;
+  border-color: #dc2626;
+  color: #7f1d1d;
+}
+
+.alert-emergency mat-icon {
+  color: #dc2626;
+}
+
+.alert-urgent {
+  background: #fffbeb;
+  border-color: #d97706;
+  color: #78350f;
+}
+
+.alert-urgent mat-icon {
+  color: #d97706;
+}
+
+/* ---------- factors ---------- */
+
+.factors-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.factors-header h3,
+.results h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #1f2937;
+}
+
+.factor-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 14px;
+  background: #ffffff;
+  border: 1px solid #dbe2ea;
+  border-radius: 999px;
+  color: #374151;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.chip:hover {
+  border-color: #1565c0;
+}
+
+.chip mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: #9ca3af;
+}
+
+.chip-selected {
+  background: #1565c0;
+  border-color: #1565c0;
+  color: #ffffff;
+}
+
+.chip-selected mat-icon {
+  color: #ffffff;
+}
+
+/* ---------- results ---------- */
+
+.results-count {
+  margin-left: 10px;
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: #6b7280;
+}
+
+.cause-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.cause-card {
+  padding: 16px 18px;
+  background: #ffffff;
+  border: 1px solid #dbe2ea;
+  border-radius: 12px;
+}
+
+.cause-card header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cause-card h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #1f2937;
+}
+
+.match-badge {
+  flex-shrink: 0;
+  padding: 3px 10px;
+  background: #eff6ff;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: #1565c0;
+  white-space: nowrap;
+}
+
+.match-bar {
+  height: 6px;
+  margin: 10px 0 12px;
+  background: #f1f5f9;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.match-bar-fill {
+  height: 100%;
+  background: #1565c0;
+  border-radius: 999px;
+  transition: width 0.25s ease;
+}
+
+.cause-factors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.mini-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 4px 10px;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  font-size: 0.83rem;
+  color: #6b7280;
+}
+
+.mini-chip mat-icon {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+}
+
+.mini-chip-matched {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #065f46;
+  font-weight: 600;
+}
+
+.cause-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.condition-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: #1565c0;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.condition-link:hover {
+  text-decoration: underline;
+}
+
+.condition-link mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.cause-card-muted {
+  background: #fafafa;
+}
+
+.cause-description {
+  margin: 6px 0 0;
+  color: #6b7280;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.other-causes {
+  margin-top: 18px;
+}
+
+.other-causes summary {
+  cursor: pointer;
+  color: #1565c0;
+  font-size: 0.95rem;
+}
+
+.disclaimer {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  padding: 14px 16px;
+  background: #f8fafc;
+  border-radius: 12px;
+  color: #4b5563;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.disclaimer mat-icon {
+  flex-shrink: 0;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  color: #6b7280;
+}

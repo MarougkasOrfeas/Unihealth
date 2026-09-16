@@ -52,6 +52,7 @@ translations:
       - side.wellness.mental: Ψυχική Ευεξία
       - side.health.assistant: Βοηθός Υγείας
       - side.health.assistant.symptoms: Έλεγχος Συμπτωμάτων
+      - side.health.assistant.conditions: Παθήσεις Α έως Ω
       - side.health.assistant.find-doctor: Εύρεση Υπηρεσιών Υγείας
       - side.health.assistant.care-recommendations: Συστάσεις Φροντίδας
       - side.health.assistant.urgent-guidance: Επείγουσα Καθοδήγηση
@@ -68,6 +69,8 @@ translations:
       - breadcrumb.profile.form: Η Φόρμα Μου
       - breadcrumb.symptoms: Συμπτώματα
       - breadcrumb.symptoms.az: Συμπτώματα A έως Z
+      - breadcrumb.conditions: Παθήσεις
+      - breadcrumb.conditions.az: Παθήσεις Α έως Ω
       - breadcrumb.find-care: Εύρεση Υπηρεσιών Υγείας
       - breadcrumb.find-care.options: Επιλογές
       - breadcrumb.find-care.mock: Mock Σελίδα
@@ -418,6 +421,7 @@ translations:
       - side.wellness.mental: Mental Wellbeing
       - side.health.assistant: Health Assistant
       - side.health.assistant.symptoms: Symptom Checker
+      - side.health.assistant.conditions: Conditions A to Z
       - side.health.assistant.find-doctor: Find Health Services
       - side.health.assistant.care-recommendations: Care Recommendations
       - side.health.assistant.urgent-guidance: Urgent Guidance
@@ -434,6 +438,8 @@ translations:
       - breadcrumb.profile.form: My Form
       - breadcrumb.symptoms: Symptoms
       - breadcrumb.symptoms.az: Symptoms A to Z
+      - breadcrumb.conditions: Conditions
+      - breadcrumb.conditions.az: Conditions A to Z
       - breadcrumb.find-care: Find Health Services
       - breadcrumb.find-care.options: Options
       - breadcrumb.find-care.mock: Mock Page

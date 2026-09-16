@@ -43,6 +43,17 @@
                     Ειδικότητα
                     <mat-icon>keyboard_arrow_down</mat-icon>
                 </button>
+
+                <div class="specialty-panel" aria-label="Doctor specialties">
+                    @for (specialty of specialties; track specialty.id) {
+                        <a
+                            class="specialty-chip"
+                            [routerLink]="['/find-doctor', 'doctors', specialty.id]">
+                            <mat-icon>medical_services</mat-icon>
+                            <span>{{ specialty.title }}</span>
+                        </a>
+                    }
+                </div>
             </div>
 
             <span class="card-arrow" aria-hidden="true">
@@ -66,41 +77,32 @@
         <section class="results-panel" aria-live="polite">
             <div class="results-header">
                 <div>
-                    <p class="eyebrow">Results table</p>
+                    <p class="eyebrow">Αποτελέσματα</p>
                     <h2>{{ selectedTitle() }}</h2>
                     <p>
-                        These are the generic columns that can support all care categories before category-specific fields are added.
+                        Ενδεικτικά mock δεδομένα για την επιλεγμένη κατηγορία υπηρεσιών υγείας.
                     </p>
                 </div>
 
                 <a mat-stroked-button routerLink="/find-doctor">
                     <mat-icon>arrow_back</mat-icon>
-                    Back
+                    Πίσω
                 </a>
             </div>
 
-            <div class="table-shell">
-                <table class="results-table" aria-label="Care results columns preview">
-                    <thead>
-                        <tr>
-                            @for (column of resultColumns; track column.key) {
-                                <th scope="col">
-                                    <span>{{ column.label }}</span>
-                                    <small>{{ column.helper }}</small>
-                                </th>
-                            }
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="empty-row">
-                            <td [attr.colspan]="resultColumns.length">
-                                <mat-icon>table_view</mat-icon>
-                                <span>No data connected yet. Backend results will be displayed here.</span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <app-table
+                [columns]="resultColumns"
+                [data]="resultRows()"
+                [totalElements]="totalElements()"
+                [pageSize]="currentPageSize"
+                [loading]="isLoading"
+                [facetOptions]="facetOptions()"
+                [facetSelection]="facetSelection"
+                (pageChange)="onPageChange($event)"
+                (sortChange)="onSortChange($event)"
+                (facetOpened)="onFacetOpened($event)"
+                (facetChange)="onFacetChange($event)">
+            </app-table>
         </section>
         <section class="mock-destination" aria-live="polite">
             <mat-icon>construction</mat-icon>

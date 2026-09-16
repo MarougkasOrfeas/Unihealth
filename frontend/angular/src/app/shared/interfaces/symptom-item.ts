@@ -5,6 +5,9 @@ export interface SymptomItem extends BaseEntity {
     slug: string;
     startingLetter: string;
     brief?: string;
+    synonyms?: string;
+    /** Whether this symptom has an advanced search to offer. */
+    hasFactors: boolean;
     displayOrder: number;
     active: boolean;
 }

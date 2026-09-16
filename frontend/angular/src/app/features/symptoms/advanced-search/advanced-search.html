@@ -1,0 +1,193 @@
+<div class="advanced-search">
+
+    @if (!selected()) {
+        <p class="step-hint">Pick a symptom, then tick what applies to you.</p>
+
+        <div class="search-box">
+            <mat-icon>search</mat-icon>
+            <input
+                type="text"
+                [ngModel]="symptomQuery()"
+                (ngModelChange)="symptomQuery.set($event)"
+                placeholder="Search symptoms you can narrow down"
+            />
+        </div>
+
+        @if (loadingSymptoms()) {
+            <div class="loading-state">Loading symptoms...</div>
+        } @else if (suggestions().length === 0) {
+            <div class="loading-state">No symptoms match that.</div>
+        } @else {
+            <div class="suggestion-grid">
+                @for (item of suggestions(); track item.id) {
+                    <button type="button" class="suggestion" (click)="selectSymptom(item)">
+                        <span class="suggestion-title">{{ item.title }}</span>
+                        @if (item.synonyms) {
+                            <span class="suggestion-synonyms">also called {{ item.synonyms }}</span>
+                        }
+                    </button>
+                }
+            </div>
+        }
+    } @else {
+        <div class="selected-bar">
+            <div>
+                <span class="selected-label">Symptom</span>
+                <h2>{{ selected()!.title }}</h2>
+            </div>
+            <button type="button" class="link-button" (click)="clearSymptom()">
+                <mat-icon>close</mat-icon>
+                Change symptom
+            </button>
+        </div>
+
+        <!-- Urgency always comes first, whatever the reader has ticked. -->
+        @if (detail()?.emergencyText) {
+            <section class="alert alert-emergency">
+                <mat-icon>emergency</mat-icon>
+                <div>
+                    @for (line of asLines(detail()!.emergencyText); track line) {
+                        @if (line.startsWith('- ')) {
+                            <p class="bullet">{{ line.substring(2) }}</p>
+                        } @else {
+                            <p class="alert-headline">{{ line }}</p>
+                        }
+                    }
+                </div>
+            </section>
+        }
+
+        @if (detail()?.urgentText) {
+            <section class="alert alert-urgent">
+                <mat-icon>priority_high</mat-icon>
+                <div>
+                    @for (line of asLines(detail()!.urgentText); track line) {
+                        @if (line.startsWith('- ')) {
+                            <p class="bullet">{{ line.substring(2) }}</p>
+                        } @else {
+                            <p class="alert-headline">{{ line }}</p>
+                        }
+                    }
+                </div>
+            </section>
+        }
+
+        <section class="factors">
+            <div class="factors-header">
+                <h3>What else applies?</h3>
+                @if (hasSelection()) {
+                    <button type="button" class="link-button" (click)="clearFactors()">
+                        Clear {{ selectedCodes().length }} selected
+                    </button>
+                }
+            </div>
+
+            @if (factors().length === 0) {
+                <p class="step-hint">This symptom has no further details to narrow down.</p>
+            } @else {
+                <div class="factor-chips">
+                    @for (factor of factors(); track factor.code) {
+                        <button
+                            type="button"
+                            class="chip"
+                            [class.chip-selected]="isSelected(factor.code)"
+                            (click)="toggleFactor(factor.code)">
+                            <mat-icon>{{ isSelected(factor.code) ? 'check_circle' : 'add' }}</mat-icon>
+                            {{ factor.label }}
+                        </button>
+                    }
+                </div>
+            }
+        </section>
+
+        <section class="results">
+            <h3>
+                Possible causes
+                @if (hasSelection()) {
+                    <span class="results-count">best match first</span>
+                }
+            </h3>
+
+            @if (loadingCauses()) {
+                <div class="loading-state">Ranking causes...</div>
+            } @else if (causes().length === 0) {
+                <div class="loading-state">No causes listed for this symptom.</div>
+            } @else {
+                @if (hasSelection() && matched().length === 0) {
+                    <p class="step-hint">Nothing you ticked matches a listed cause. All of them are
+                        shown below.</p>
+                }
+
+                <div class="cause-list">
+                    @for (cause of (hasSelection() ? matched() : causes()); track cause.causeText) {
+                        <article class="cause-card">
+                            <header>
+                                <h4>{{ cause.causeText }}</h4>
+                                @if (hasSelection()) {
+                                    <span class="match-badge">
+                                        {{ cause.matchedCount }} of {{ cause.factors.length }} match
+                                    </span>
+                                }
+                            </header>
+
+                            @if (hasSelection()) {
+                                <div class="match-bar">
+                                    <div class="match-bar-fill" [style.width.%]="matchPercent(cause)"></div>
+                                </div>
+                            }
+
+                            <div class="cause-factors">
+                                @for (factor of cause.factors; track factor.code) {
+                                    <span class="mini-chip"
+                                          [class.mini-chip-matched]="isMatched(cause, factor.code)">
+                                        @if (isMatched(cause, factor.code)) {
+                                            <mat-icon>check</mat-icon>
+                                        }
+                                        {{ factor.label }}
+                                    </span>
+                                }
+                            </div>
+
+                            @if (cause.conditions.length > 0) {
+                                <div class="cause-links">
+                                    @for (condition of cause.conditions; track condition.id) {
+                                        <a class="condition-link"
+                                           [routerLink]="['/conditions', condition.slug]">
+                                            {{ condition.name }}
+                                            <mat-icon>chevron_right</mat-icon>
+                                        </a>
+                                    }
+                                </div>
+                            }
+                        </article>
+                    }
+                </div>
+
+                <!-- Never hide a listed cause just because it did not match. -->
+                @if (hasSelection() && unmatched().length > 0) {
+                    <details class="other-causes">
+                        <summary>Other causes listed for {{ selected()!.title }}
+                            ({{ unmatched().length }})
+                        </summary>
+                        <div class="cause-list">
+                            @for (cause of unmatched(); track cause.causeText) {
+                                <article class="cause-card cause-card-muted">
+                                    <header>
+                                        <h4>{{ cause.causeText }}</h4>
+                                    </header>
+                                    <p class="cause-description">{{ cause.factorsText }}</p>
+                                </article>
+                            }
+                        </div>
+                    </details>
+                }
+            }
+        </section>
+
+        <p class="disclaimer">
+            <mat-icon>info</mat-icon>
+            Your symptoms might give you an idea of the cause. Do not self-diagnose &ndash; see a GP
+            if you're worried. This is not a diagnosis.
+        </p>
+    }
+</div>

@@ -33,10 +33,9 @@ h1 {
 }
 
 .care-grid {
-  display: grid;
+  display: flex;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 24px;
-  max-width: 1120px;
 }
 
 .care-card {
@@ -120,19 +119,50 @@ h1 {
 }
 
 .specialty-trigger {
-  margin-top: 16px;
-  border-radius: 4px;
+  display: none;
 }
 
-.specialty-trigger mat-icon {
-  margin-left: 4px;
+.specialty-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.specialty-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 8px 12px;
+  border: 1px solid #c9d8e5;
+  border-radius: 999px;
+  background: #f8fbfb;
+  color: #005eb8;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.specialty-chip:hover,
+.specialty-chip:focus-visible {
+  border-color: #0069c0;
+  background: #eef6ff;
+  color: #003f7d;
+}
+
+.specialty-chip mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
 }
 
 .results-panel {
   display: flex;
   flex-direction: column;
   gap: 22px;
-  max-width: 1120px;
   padding: 28px;
   border: 1px solid #d8dee7;
   border-radius: 4px;
@@ -161,62 +191,6 @@ h1 {
   margin: 0;
   color: #586673;
   line-height: 1.6;
-}
-
-.table-shell {
-  overflow-x: auto;
-  border: 1px solid #d8dee7;
-  border-radius: 4px;
-  background: #f8fbfb;
-}
-
-.results-table {
-  width: 100%;
-  min-width: 980px;
-  border-collapse: collapse;
-  background: #fff;
-}
-
-.results-table th,
-.results-table td {
-  padding: 18px 20px;
-  border-bottom: 1px solid #d8dee7;
-  text-align: left;
-  vertical-align: top;
-}
-
-.results-table th {
-  width: 16.66%;
-  background: #eef9f8;
-  color: #172026;
-  font-weight: 850;
-}
-
-.results-table th span {
-  display: block;
-  margin-bottom: 6px;
-  color: #005eb8;
-  font-size: 15px;
-}
-
-.results-table th small {
-  display: block;
-  color: #586673;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1.4;
-}
-
-.empty-row td {
-  height: 120px;
-  color: #586673;
-  text-align: center;
-}
-
-.empty-row mat-icon {
-  display: block;
-  margin: 0 auto 8px;
-  color: #24545f;
 }
 
 .mock-destination {

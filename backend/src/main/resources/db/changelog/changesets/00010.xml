@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd">
+
+    <changeSet id="unihealth_00010" author="uniwa">
+        <createTable tableName="t_data_source">
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="created_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="code" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="url" type="varchar(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="licence" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="licence_url" type="varchar(500)"/>
+            <column name="attribution_text" type="varchar(1000)"/>
+            <column name="logo_url" type="varchar(500)"/>
+            <column name="retrieved_on" type="date"/>
+            <column name="display_order" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active" type="boolean" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addUniqueConstraint tableName="t_data_source" columnNames="code"
+                             constraintName="uq_data_source_code"/>
+
+        <createTable tableName="t_condition">
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="created_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="name" type="varchar(300)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="slug" type="varchar(300)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="starting_letter" type="varchar(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="source_url" type="varchar(500)"/>
+            <column name="source_id" type="varchar(36)"/>
+            <column name="display_order" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active" type="boolean" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="idx_condition_letter_order" tableName="t_condition">
+            <column name="starting_letter"/>
+            <column name="display_order"/>
+        </createIndex>
+
+        <createIndex indexName="idx_condition_active" tableName="t_condition">
+            <column name="active"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseTableName="t_condition" baseColumnNames="source_id"
+                                 constraintName="fk_condition_source"
+                                 referencedTableName="t_data_source"
+                                 referencedColumnNames="id"/>
+
+        <addColumn tableName="t_symptom_item">
+            <column name="source_id" type="varchar(36)"/>
+            <column name="source_url" type="varchar(500)"/>
+            <column name="source_last_reviewed" type="timestamp"/>
+            <column name="synonyms" type="varchar(1000)"/>
+            <column name="urgent_text" type="text"/>
+            <column name="emergency_text" type="text"/>
+            <column name="has_factors" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <addForeignKeyConstraint baseTableName="t_symptom_item" baseColumnNames="source_id"
+                                 constraintName="fk_symptom_item_source"
+                                 referencedTableName="t_data_source"
+                                 referencedColumnNames="id"/>
+
+        <delete tableName="t_symptom_item"/>
+
+        <createTable tableName="t_symptom_factor">
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="created_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="symptom_item_id" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="code" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="label" type="varchar(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="weight" type="double precision" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="display_order" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addUniqueConstraint tableName="t_symptom_factor" columnNames="symptom_item_id, code"
+                             constraintName="uq_symptom_factor_symptom_code"/>
+
+        <addForeignKeyConstraint baseTableName="t_symptom_factor" baseColumnNames="symptom_item_id"
+                                 constraintName="fk_symptom_factor_symptom"
+                                 referencedTableName="t_symptom_item"
+                                 referencedColumnNames="id" onDelete="CASCADE"/>
+
+        <createTable tableName="t_symptom_cause">
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="created_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="symptom_item_id" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="factors_text" type="varchar(2000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cause_text" type="varchar(2000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="display_order" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="t_symptom_cause" baseColumnNames="symptom_item_id"
+                                 constraintName="fk_symptom_cause_symptom"
+                                 referencedTableName="t_symptom_item"
+                                 referencedColumnNames="id" onDelete="CASCADE"/>
+
+        <createIndex indexName="idx_symptom_cause_symptom" tableName="t_symptom_cause">
+            <column name="symptom_item_id"/>
+            <column name="display_order"/>
+        </createIndex>
+
+        <createTable tableName="t_symptom_cause_condition">
+            <column name="symptom_cause_id" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="condition_id" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey tableName="t_symptom_cause_condition"
+                       columnNames="symptom_cause_id, condition_id"
+                       constraintName="pk_symptom_cause_condition"/>
+
+        <addForeignKeyConstraint baseTableName="t_symptom_cause_condition"
+                                 baseColumnNames="symptom_cause_id"
+                                 constraintName="fk_scc_cause"
+                                 referencedTableName="t_symptom_cause"
+                                 referencedColumnNames="id" onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint baseTableName="t_symptom_cause_condition"
+                                 baseColumnNames="condition_id"
+                                 constraintName="fk_scc_condition"
+                                 referencedTableName="t_condition"
+                                 referencedColumnNames="id" onDelete="CASCADE"/>
+
+        <createTable tableName="t_symptom_cause_factor">
+            <column name="symptom_cause_id" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="symptom_factor_id" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey tableName="t_symptom_cause_factor"
+                       columnNames="symptom_cause_id, symptom_factor_id"
+                       constraintName="pk_symptom_cause_factor"/>
+
+        <addForeignKeyConstraint baseTableName="t_symptom_cause_factor"
+                                 baseColumnNames="symptom_cause_id"
+                                 constraintName="fk_scf_cause"
+                                 referencedTableName="t_symptom_cause"
+                                 referencedColumnNames="id" onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint baseTableName="t_symptom_cause_factor"
+                                 baseColumnNames="symptom_factor_id"
+                                 constraintName="fk_scf_factor"
+                                 referencedTableName="t_symptom_factor"
+                                 referencedColumnNames="id" onDelete="CASCADE"/>
+    </changeSet>
+</databaseChangeLog>

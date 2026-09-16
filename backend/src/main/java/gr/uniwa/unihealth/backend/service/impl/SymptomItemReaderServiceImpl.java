@@ -1,7 +1,6 @@
 package gr.uniwa.unihealth.backend.service.impl;
 
 import com.eurodyn.qlack.common.exception.QDoesNotExistException;
-import gr.uniwa.unihealth.backend.config.context.TenantContext;
 import gr.uniwa.unihealth.backend.dto.SymptomItemDTO;
 import gr.uniwa.unihealth.backend.dto.SymptomItemDetailDTO;
 import gr.uniwa.unihealth.backend.mapper.BaseEntityMapper;
@@ -10,14 +9,11 @@ import gr.uniwa.unihealth.backend.model.SymptomItem;
 import gr.uniwa.unihealth.backend.repository.BaseRepository;
 import gr.uniwa.unihealth.backend.repository.SymptomItemRepository;
 import gr.uniwa.unihealth.backend.service.SymptomItemReaderService;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-import static gr.uniwa.unihealth.backend.service.bootstrap.SymptomItemInitData.addSymptomsData;
 
 @Service
 @RequiredArgsConstructor
@@ -27,19 +23,6 @@ public class SymptomItemReaderServiceImpl extends BaseReaderServiceImpl<SymptomI
 
   private final SymptomItemRepository repository;
   private final SymptomItemMapper mapper;
-  private final TenantContext tenantContext;
-
-  @PostConstruct
-  public void init() {
-    tenantContext.runForEachTenant(tenantId -> {
-      if (repository.count() == 0) {
-        log.info("Initializing Symptoms for tenant [{}].", tenantId);
-        addSymptomsData(repository);
-      } else {
-        log.info("Symptoms already exist for tenant [{}]. Skipping initialization.", tenantId);
-      }
-    }, "SymptomItemReaderServiceImpl.init");
-  }
 
   @Override
   public List<SymptomItemDTO> findContent(String search) {
