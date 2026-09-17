@@ -5,6 +5,7 @@ import {
     ViewChild,
     TemplateRef,
     inject,
+    computed,
     signal,
     OnInit,
 } from '@angular/core';
@@ -28,7 +29,6 @@ import {MatInputModule} from '@angular/material/input';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
-import {MatDividerModule} from '@angular/material/divider';
 import {MatIconModule} from '@angular/material/icon';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatRadioModule} from '@angular/material/radio';
@@ -40,17 +40,20 @@ import {MatTooltip} from '@angular/material/tooltip';
 import {Observable, combineLatest} from 'rxjs';
 import {DateAdapter} from '@angular/material/core';
 import {TranslateModule} from '@ngx-translate/core';
-import { Router } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {CanLeaveWithUnsavedChanges} from "../../../shared/interfaces/unsaved-changes";
 import {CustomDateAdapter} from "../../../shared/adapters/custom-date-adapter";
 import {UserService} from "../../../shared/services/user.service";
 import {TranslationsService, Language} from "../../../shared/services/translation.service";
 import {ConfirmationDialog} from "../../../shared/components/confirm-dialog/confirm-dialog";
 import {UNIHEALTH_CONSTANTS} from "../../../shared/constants/unihealth.constants";
-import {User} from "../../../shared/interfaces/user";
+import {User, UserStatus} from "../../../shared/interfaces/user";
 import {ConstantSelectComponent, SelectOption} from "../../../shared/components/constant-select/constant-select";
+import {EntityStatus, StatusToggle} from "../../../shared/components/status-toggle/status-toggle";
+import {PermissionService} from "../../../core/auth/permission.service";
 import {TextInputComponent} from "../../../shared/components/text-input/text-input";
 import {SaveButtonComponent} from "../../../shared/components/save-button/save-button";
+import {SectionTitle} from "../../../shared/components/section-title/section-title";
 import {DatePickerComponent} from "../../../shared/components/date-picker/date-picker";
 import {UnsavedChangesBeforeUnloadDirective} from "../../../shared/directives/unsaved-changes-beforeunload.directive";
 import {GroupDTO, UniGroupOption} from "../../../shared/interfaces/group";
@@ -59,6 +62,9 @@ import {GroupService} from "../../../shared/services/group.service";
 import {DepartmentService} from "../../../shared/services/department.service";
 
 type DeactivationMode = 'automatic' | 'scheduled';
+
+/** Mirrors the backend `UserRoles` enum. */
+type UserRole = 'USER' | 'ADMIN';
 
 type UserForm = FormGroup<{
     firstname: FormControl<string>;
@@ -71,6 +77,7 @@ type UserForm = FormGroup<{
     language: FormControl<string>;
     activateUsernameSuggestion: FormControl<boolean>;
     scheduledDeactivationReason: FormControl<string | null>;
+    role: FormControl<UserRole>;
     group: FormControl<string>;
     department: FormControl<string>;
 }>;
@@ -92,7 +99,6 @@ type UserFormField = keyof UserForm['controls'];
         MatCheckboxModule,
         MatFormFieldModule,
         MatSelectModule,
-        MatDividerModule,
         MatIconModule,
         MatDatepickerModule,
         MatNativeDateModule,
@@ -104,14 +110,16 @@ type UserFormField = keyof UserForm['controls'];
         ConstantSelectComponent,
         TextInputComponent,
         SaveButtonComponent,
+        SectionTitle,
+        StatusToggle,
         DatePickerComponent,
         UnsavedChangesBeforeUnloadDirective
     ],
-    providers: [{provide: MAT_DATE_LOCALE, useValue: 'de-DE'}, {provide: DateAdapter, useClass: CustomDateAdapter}],
+    providers: [{provide: MAT_DATE_LOCALE, useValue: 'el-GR'}, {provide: DateAdapter, useClass: CustomDateAdapter}],
     templateUrl: './create-user.html',
     styleUrl: './create-user.scss',
 })
-export class CreateUser implements OnInit,CanLeaveWithUnsavedChanges {
+export class CreateUser implements OnInit, CanLeaveWithUnsavedChanges {
     /** True after the user clicked save once (used to show validation errors). */
     submitted = false;
     /** Reactive form used by the create-user screen. */
@@ -121,7 +129,74 @@ export class CreateUser implements OnInit,CanLeaveWithUnsavedChanges {
     /** Default status for new users. */
     defaultStatus: string = 'UNVERIFIED';
     /** Default user pref language. */
-    defaultPrefLang: string = 'DE';
+    defaultPrefLang: string = 'EL';
+
+    /** Which of the three routes rendered this screen: create, read-only view, or edit. */
+    readonly mode = (inject(ActivatedRoute).snapshot.data['mode'] ?? 'create') as
+        'create' | 'edit' | 'view';
+    /** Id of the user being viewed or edited; null when creating. */
+    readonly userId = inject(ActivatedRoute).snapshot.paramMap.get('id');
+    /** The loaded user, so fields the form does not edit survive a round trip. */
+    private loadedUser: User | null = null;
+
+    /** Mirrors the role control, so the template can hide the school/department section. */
+    isAdminRole = false;
+
+    readonly roleOptions: SelectOption<UserRole>[] = [
+        {key: 'USER', label: 'user.role.user'},
+        {key: 'ADMIN', label: 'user.role.admin'},
+    ];
+
+    /**
+     * Current status of the loaded user; null until loaded, so the toggle stays hidden.
+     *
+     * Kept as the backend enum rather than a boolean because UNVERIFIED is a third state: the
+     * account is enabled in Keycloak and only waiting on email confirmation.
+     */
+    readonly status = signal<UserStatus | null>(null);
+
+    /** The status pill's appearance, which doubles as its CSS class. */
+    readonly statusTone = computed<EntityStatus>(() => {
+        switch (this.status()) {
+            case UserStatus.ACTIVE:
+                return 'active';
+            case UserStatus.UNVERIFIED:
+                return 'unverified';
+            default:
+                return 'inactive';
+        }
+    });
+    /** True when deactivating this user would leave the app with no administrator. */
+    readonly lastAdmin = signal(false);
+
+    /** Exposed so the template can compare against the backend enum. */
+    readonly UserStatusEnum = UserStatus;
+
+    /**
+     * Whether the offered action switches the account off. Anything that is not already deactivated
+     * can only be deactivated — an unverified account is enabled, it is just awaiting confirmation.
+     */
+    private readonly statusDeactivates = computed(
+        () => this.status() !== UserStatus.DEACTIVATED,
+    );
+
+    /**
+     * The last-admin rule only blocks deactivation. Reactivating a deactivated last administrator
+     * must stay possible, otherwise the only route back into the administration screens is closed
+     * for good.
+     */
+    readonly statusActionDisabled = computed(
+        () => this.statusDeactivates() && this.lastAdmin(),
+    );
+    readonly isAdmin = inject(PermissionService).isAdmin;
+
+    get isCreate(): boolean {
+        return this.mode === 'create';
+    }
+
+    get titleKey(): string {
+        return this.isCreate ? 'user.management.action.create' : 'user.edit.title';
+    }
     readonly dialog = inject(MatDialog);
 
     /**The modal content to be shown. Address template. */
@@ -140,6 +215,8 @@ export class CreateUser implements OnInit,CanLeaveWithUnsavedChanges {
         username_already_exists: 'Το όνομα χρήστη υπάρχει ήδη.',
         email_already_exists: 'Το email υπάρχει ήδη.',
         email_invalid: 'Μη έγκυρη διεύθυνση email.',
+        department_required: 'Το τμήμα είναι υποχρεωτικό για χρήστες που δεν είναι διαχειριστές.',
+        cannot_deactivate_last_admin: 'Δεν μπορεί να απενεργοποιηθεί ο τελευταίος διαχειριστής.',
     };
 
     /**
@@ -191,19 +268,43 @@ export class CreateUser implements OnInit,CanLeaveWithUnsavedChanges {
     ngOnInit(): void {
         this.translationsService.getLanguages().subscribe((languages) => {
             this.languageOptions = languages;
-            this.form.controls.language.setValue(languages[0].key);
+            // Only default the language when creating; an existing user already has one.
+            if (this.isCreate) {
+                this.form.controls.language.setValue(languages[0].key);
+            }
         });
 
         this.loadGroups();
         // this.loadDepartments();
         this.setupGroupDepartmentLogic();
+        this.setupRoleLogic();
+
+        if (this.userId) {
+            this.loadUser(this.userId);
+        }
+
+        if (this.mode === 'view') {
+            this.form.disable();
+        } else if (this.mode === 'edit') {
+            // UserMapper.mapForUpdate ignores role, so a change here would be silently dropped.
+            this.form.controls.role.disable();
+            // User.username is @Column(updatable = false); a rename via PUT is silently ignored,
+            // so the field must not look editable — and suggesting one makes no sense here.
+            this.form.controls.username.disable();
+            this.form.controls.activateUsernameSuggestion.setValue(false);
+            this.form.controls.activateUsernameSuggestion.disable();
+        }
 
         const firstname$ = this.form.controls.firstname.valueChanges.pipe(startWith(this.form.controls.firstname.value));
         const lastname$ = this.form.controls.lastname.valueChanges.pipe(startWith(this.form.controls.lastname.value));
 
         combineLatest([firstname$, lastname$]).pipe(
+            // Only while creating: an existing user's username cannot change, so suggesting one
+            // would be a request per keystroke for a value that can never be applied.
+            filter(() => this.isCreate),
             map(([first, last]) => first.length > 0 && last.length > 0),
-            filter(bothFilled => bothFilled)
+            filter(bothFilled => bothFilled),
+            takeUntilDestroyed(this.destroyRef),
         ).subscribe(() => {
             this.userService.suggestUsername(this.form.controls.firstname.value, this.form.controls.lastname.value).subscribe(suggested => {
                 if (this.form.controls.activateUsernameSuggestion.value) {
@@ -228,11 +329,19 @@ export class CreateUser implements OnInit,CanLeaveWithUnsavedChanges {
         if (!this.form.valid) return;
         // Create DTO from current form values.
         const dto = this.toUserDto();
-        // Call backend create api.
-        this.userService.create(dto).subscribe({
-            next: (res) => {
-                // Success toast and back navigation
-                this.showToast('Ο χρήστης δημιουργήθηκε επιτυχώς.', 'success');
+
+        const request$ = this.userId
+            ? this.userService.update(this.userId, dto)
+            : this.userService.create(dto);
+
+        request$.subscribe({
+            next: () => {
+                this.showToast(
+                    this.userId
+                        ? 'Ο χρήστης ενημερώθηκε επιτυχώς.'
+                        : 'Ο χρήστης δημιουργήθηκε επιτυχώς.',
+                    'success',
+                );
                 this.form.markAsPristine(); // dont call canDeactivate
                 this.goBack();
             },
@@ -259,6 +368,84 @@ export class CreateUser implements OnInit,CanLeaveWithUnsavedChanges {
 
     private goBack() {
         this.router.navigateByUrl('/users');
+    }
+
+    /**
+     * Loads the user behind `:id` and fills the form.
+     *
+     * The group must be applied before the department: `setupGroupDepartmentLogic` reloads the
+     * department options whenever the group changes and clears the selection, so patching both at
+     * once would wipe the department straight back out.
+     */
+    private loadUser(id: string): void {
+        this.userService.get(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+            next: (user) => {
+                this.loadedUser = user;
+
+                this.form.patchValue({
+                    firstname: user.firstname,
+                    lastname: user.lastname,
+                    username: user.username,
+                    email: user.email,
+                    phoneNumber: user.phoneNumber ?? '',
+                    language: user.language ?? '',
+                    deactivationMode: user.deactivationMode === 'SCHEDULED' ? 'scheduled' : 'automatic',
+                    deactivateAfter: user.deactivateAfter ? new Date(user.deactivateAfter) : null,
+                    scheduledDeactivationReason: user.scheduledDeactivationReason ?? null,
+                    group: user.group ?? '',
+                });
+
+                // Role is patched separately so setupRoleLogic reacts to it and applies the
+                // school/department rules before the department value is restored below.
+                this.form.controls.role.setValue((user.role as UserRole) ?? 'USER');
+                this.form.controls.department.setValue(user.department ?? '');
+                this.status.set(user.status as UserStatus);
+                this.form.markAsPristine();
+
+                this.loadLastAdminFlag(id);
+            },
+            error: () => {
+                this.showToast('Ο χρήστης δεν βρέθηκε.', 'error');
+                this.goBack();
+            },
+        });
+    }
+
+    /**
+     * Asks the backend whether this user is the only remaining administrator, which is the one
+     * case where the status toggle must stay disabled.
+     */
+    private loadLastAdminFlag(id: string): void {
+        this.userService.isLastAdmin(id)
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe({
+                next: (isLast) => this.lastAdmin.set(isLast),
+                // Fail closed: if we cannot tell, do not offer to deactivate.
+                error: () => this.lastAdmin.set(true),
+            });
+    }
+
+    /** Applied immediately: the status has its own endpoint and is not a form field. */
+    onStatusChange(active: boolean): void {
+        if (!this.userId) {
+            return;
+        }
+
+        const status = active ? UserStatus.ACTIVE : UserStatus.DEACTIVATED;
+        this.userService.setUserStatus(this.userId, status, null)
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe({
+                next: (answer) => {
+                    // Trust the answer: activating an unverified account keeps it UNVERIFIED.
+                    this.status.set(answer.userStatus as UserStatus);
+                    this.showToast(
+                        active ? 'Ο χρήστης ενεργοποιήθηκε.' : 'Ο χρήστης απενεργοποιήθηκε.',
+                        'success',
+                    );
+                    this.loadLastAdminFlag(this.userId!);
+                },
+                error: (err) => this.handleBackendError(err),
+            });
     }
 
     /**
@@ -291,6 +478,42 @@ export class CreateUser implements OnInit,CanLeaveWithUnsavedChanges {
     //     });
     // }
 
+    /**
+     * An administrator is staff, not a student, so they belong to no school or department. Picking
+     * ADMIN clears both selects, disables them and drops their `required` validators; picking USER
+     * restores all three. The backend applies the same rule in `UserServiceImpl.validateForCreate`.
+     */
+    private setupRoleLogic(): void {
+        const roleCtrl = this.form.controls.role;
+        const groupCtrl = this.form.controls.group;
+        const departmentCtrl = this.form.controls.department;
+
+        roleCtrl.valueChanges
+            .pipe(startWith(roleCtrl.value), distinctUntilChanged(),
+                takeUntilDestroyed(this.destroyRef))
+            .subscribe((role) => {
+                this.isAdminRole = role === 'ADMIN';
+
+                if (this.isAdminRole) {
+                    groupCtrl.clearValidators();
+                    departmentCtrl.clearValidators();
+                    groupCtrl.setValue('', {emitEvent: false});
+                    departmentCtrl.setValue('', {emitEvent: false});
+                    groupCtrl.disable({emitEvent: false});
+                    departmentCtrl.disable({emitEvent: false});
+                } else {
+                    groupCtrl.setValidators([Validators.required]);
+                    departmentCtrl.setValidators([Validators.required]);
+                    groupCtrl.enable({emitEvent: false});
+                    // The department stays disabled until a school is chosen; that is owned by
+                    // setupGroupDepartmentLogic, so it is not enabled here.
+                }
+
+                groupCtrl.updateValueAndValidity({emitEvent: false});
+                departmentCtrl.updateValueAndValidity({emitEvent: false});
+            });
+    }
+
     private setupGroupDepartmentLogic(): void {
         const groupCtrl = this.form.controls.group;
         const departmentCtrl = this.form.controls.department;
@@ -302,11 +525,11 @@ export class CreateUser implements OnInit,CanLeaveWithUnsavedChanges {
                 takeUntilDestroyed(this.destroyRef)
             )
             .subscribe((groupName) => {
-                departmentCtrl.reset('', { emitEvent: false });
+                departmentCtrl.reset('', {emitEvent: false});
 
                 if (!groupName) {
                     this.departmentOptions = [];
-                    departmentCtrl.disable({ emitEvent: false });
+                    departmentCtrl.disable({emitEvent: false});
                     return;
                 }
 
@@ -317,9 +540,9 @@ export class CreateUser implements OnInit,CanLeaveWithUnsavedChanges {
                     }));
 
                     if (this.departmentOptions.length > 0) {
-                        departmentCtrl.enable({ emitEvent: false });
+                        departmentCtrl.enable({emitEvent: false});
                     } else {
-                        departmentCtrl.disable({ emitEvent: false });
+                        departmentCtrl.disable({emitEvent: false});
                     }
                 });
             });
@@ -346,8 +569,14 @@ export class CreateUser implements OnInit,CanLeaveWithUnsavedChanges {
     private buildForm(): UserForm {
         // Build the form with defaults and validators.
         return this.fb.nonNullable.group({
-            firstname: ['', {updateOn: 'blur', validators: [Validators.required, Validators.pattern(UNIHEALTH_CONSTANTS.PATTERNS.FIRSTNAME_LASTNAME_PTN), Validators.minLength(2), Validators.maxLength(50)]}],
-            lastname: ['', {updateOn: 'blur', validators: [Validators.required, Validators.pattern(UNIHEALTH_CONSTANTS.PATTERNS.FIRSTNAME_LASTNAME_PTN), Validators.minLength(2), Validators.maxLength(50)]}],
+            firstname: ['', {
+                updateOn: 'blur',
+                validators: [Validators.required, Validators.pattern(UNIHEALTH_CONSTANTS.PATTERNS.FIRSTNAME_LASTNAME_PTN), Validators.minLength(2), Validators.maxLength(50)]
+            }],
+            lastname: ['', {
+                updateOn: 'blur',
+                validators: [Validators.required, Validators.pattern(UNIHEALTH_CONSTANTS.PATTERNS.FIRSTNAME_LASTNAME_PTN), Validators.minLength(2), Validators.maxLength(50)]
+            }],
             username: ['', [Validators.required, Validators.pattern(UNIHEALTH_CONSTANTS.PATTERNS.USERNAME_PTN), Validators.minLength(3), Validators.maxLength(20)]],
             email: ['', [Validators.required, Validators.pattern(UNIHEALTH_CONSTANTS.PATTERNS.EMAIL_PTN), Validators.maxLength(255)]],
             phoneNumber: ['', [Validators.pattern(UNIHEALTH_CONSTANTS.PATTERNS.PHONE_PTN), Validators.minLength(5), Validators.maxLength(30)]],
@@ -362,12 +591,15 @@ export class CreateUser implements OnInit,CanLeaveWithUnsavedChanges {
             scheduledDeactivationReason: this.fb.control<string | null>(null, {
                 validators: [Validators.maxLength(255)],
             }),
+            role: this.fb.nonNullable.control<UserRole>('USER', {
+                validators: [Validators.required],
+            }),
             group: this.fb.nonNullable.control('', {
                 validators: [Validators.required],
             }),
             department: this.fb.nonNullable.control(
-                { value: '', disabled: true },
-                { validators: [Validators.required] }
+                {value: '', disabled: true},
+                {validators: [Validators.required]}
             ),
         }) as UserForm;
     }
@@ -425,7 +657,7 @@ export class CreateUser implements OnInit,CanLeaveWithUnsavedChanges {
     private toUserDto(): User {
         const raw = this.form.getRawValue();
         return {
-            id: (raw as any).id ?? '',
+            id: this.loadedUser?.id ?? '',
             username: raw.username,
             email: raw.email,
             firstname: raw.firstname,
@@ -440,13 +672,17 @@ export class CreateUser implements OnInit,CanLeaveWithUnsavedChanges {
             // Map UI values to backend enum strings.
             deactivationMode: this.mapDeactivationMode(raw.deactivationMode),
             language: raw.language?.trim() || '',
-            // Default values for the below fields
-            lastLogin: '',
-            role: 'USER',
             group: raw.group?.trim() || '',
             department: raw.department?.trim() || '',
-            status: this.defaultStatus,
-            deactivatedDueToInactivity: false,
+            // Carried from the loaded user when editing rather than reset to create-time defaults.
+            // UserMapper.mapForUpdate ignores status and role anyway, so this is about not sending
+            // a payload that misstates the record.
+            lastLogin: this.loadedUser?.lastLogin ?? '',
+            // On create the chosen role is authoritative; on update the backend ignores it, so the
+            // loaded value is echoed back rather than the (disabled) control's.
+            role: this.loadedUser?.role ?? raw.role,
+            status: this.loadedUser?.status ?? this.defaultStatus,
+            deactivatedDueToInactivity: this.loadedUser?.deactivatedDueToInactivity ?? false,
             scheduledDeactivationReason: raw.scheduledDeactivationReason?.trim() || null,
         };
     }
@@ -489,11 +725,11 @@ export class CreateUser implements OnInit,CanLeaveWithUnsavedChanges {
      * @param type Success or Error toast to display.
      */
     private showToast(message: string, type: 'success' | 'error' = 'success') {
-        this.snackBar.open(message, UNIHEALTH_CONSTANTS.TOAST.ACTION_LABEL, {
+        this.snackBar.open(message, UNIHEALTH_CONSTANTS.TOAST.ACTION_LABEL_KEY, {
             duration: UNIHEALTH_CONSTANTS.TOAST.DURATION_MS,
             horizontalPosition: UNIHEALTH_CONSTANTS.TOAST.HORIZONTAL_POSITION,
             verticalPosition: UNIHEALTH_CONSTANTS.TOAST.VERTICAL_POSITION,
-            panelClass: [`piaf-snackbar-${type}`],
+            panelClass: [`unihealth-snackbar-${type}`],
         });
     }
 
@@ -665,7 +901,7 @@ export class CreateUser implements OnInit,CanLeaveWithUnsavedChanges {
 
     checkUsernameExists(): void {
         const username = this.form.controls.username.value;
-        if (!username){
+        if (!username) {
             return;
         }
         this.userService.checkUsernameExists(username).subscribe(exists => {

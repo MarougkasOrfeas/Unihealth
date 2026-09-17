@@ -1,0 +1,30 @@
+@if (safeItems.length) {
+  <div #container class="container">
+      <span [matTooltip]="tooltipText" matTooltipPosition="above" matTooltipShowDelay="300" data-testid="view-more-list">
+        @for (item of visibleItems; track item; let i = $index) {
+          <span #measureItems [class.chip-slot]="chips">
+            @if (chips) {
+              <app-chip [dense]="true">
+                @if (qlackTranslate) { {{ item | translate }} } @else { {{ item }} }
+              </app-chip>
+            } @else {
+              @if(qlackTranslate) {
+                <span>{{item | translate}}</span>
+              } @else {
+                <span>{{ item }}</span>
+              }
+              @if (hasComma(i)) {
+                <span>, </span>
+              }
+            }
+          </span>
+        }
+        @if (hiddenItemsCount > 0) {
+          <span class="more-count" tabindex="0" role="button" data-testid="btn-view-more" (click)="openDialog($event)"
+                (keydown)="onKeydown($event)">
+            +{{ hiddenItemsCount }} {{ moreText }}
+          </span>
+        }
+      </span>
+  </div>
+}

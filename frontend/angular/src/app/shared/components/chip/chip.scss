@@ -1,0 +1,68 @@
+:host {
+  display: inline-block;
+  padding: var(--sys-spacing-xs) var(--sys-spacing-sm);
+  border-radius: var(--sys-radius-full);
+  font-size: var(--sys-type-label-lg-size);
+  line-height: var(--sys-type-label-lg-line-height);
+  font-weight: var(--sys-type-label-lg-weight);
+  /* long values break inside the chip rather than overflowing their column */
+  overflow-wrap: anywhere;
+}
+
+:host(.chip--tonal) {
+  background-color: var(--sys-primary-container);
+  color: var(--sys-on-primary-container);
+}
+
+:host(.chip--filled) {
+  background-color: var(--sys-primary);
+  color: var(--sys-on-primary);
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+
+:host(.chip--muted) {
+  background-color: var(--sys-surface-container);
+  color: var(--sys-on-surface-variant);
+  font-style: italic;
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+
+/*
+ * The clear button turns the chip into a row, so the value can shrink beside it. Sized in em, so it
+ * follows whichever variant the chip is in rather than needing one rule per variant.
+ */
+:host(.chip--clearable) {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.125rem;
+}
+
+.chip__clear {
+  /* Holds its size while the value beside it truncates, or clearing becomes unreachable. */
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+
+  mat-icon {
+    width: 1em;
+    height: 1em;
+    font-size: 1em;
+  }
+}
+
+/* A table row cannot grow, so a dense chip stays on one line and lets the cell truncate. */
+:host(.chip--dense) {
+  padding: var(--sys-spacing-2xs) var(--sys-spacing-xs);
+  font-size: var(--sys-type-label-md-size);
+  line-height: var(--sys-type-label-md-line-height);
+  font-weight: var(--sys-type-label-md-weight);
+  white-space: nowrap;
+  overflow-wrap: normal;
+}

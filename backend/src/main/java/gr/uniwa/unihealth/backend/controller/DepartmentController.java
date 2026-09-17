@@ -1,85 +1,39 @@
 package gr.uniwa.unihealth.backend.controller;
 
-import com.querydsl.core.types.Predicate;
-import gr.uniwa.unihealth.backend.controller.request.SetGroupStatusCommand;
-import gr.uniwa.unihealth.backend.controller.util.ControllerUtils;
+import gr.uniwa.unihealth.backend.controller.request.SetActiveStatusCommand;
 import gr.uniwa.unihealth.backend.dto.DepartmentDTO;
-import gr.uniwa.unihealth.backend.model.User;
 import gr.uniwa.unihealth.backend.model.enums.Permission;
+import gr.uniwa.unihealth.backend.service.BaseReaderService;
+import gr.uniwa.unihealth.backend.service.BaseUpdatableService;
 import gr.uniwa.unihealth.backend.service.DepartmentReaderService;
 import gr.uniwa.unihealth.backend.service.DepartmentService;
+import gr.uniwa.unihealth.backend.service.export.ExportService;
 import gr.uniwa.unihealth.backend.service.permission.UserPermissionService;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
 @RequestMapping("department")
 @RequiredArgsConstructor
-public class DepartmentController {
+public class DepartmentController extends BaseUpdateableController<DepartmentDTO> {
 
   private final DepartmentReaderService readerService;
   private final DepartmentService service;
-  private final ControllerUtils controllerUtils;
   private final UserPermissionService userPermissionService;
 
-  @PostMapping
-  @Operation(summary = "Creates a new group",
-      description = "Creates a new group in the application database.")
-  public String create(@RequestBody @Valid DepartmentDTO dto) {
+  @Operation(summary = "Change the status of a Department.",
+      description = "Changes the status of a Department to disabled or enabled.")
+  @PutMapping("_set_department_status")
+  public boolean setDepartmentStatus(@RequestBody SetActiveStatusCommand setActiveStatusCommand) {
     userPermissionService.userHasGlobalPermissionOrThrow(Permission.ADMIN);
-    return service.create(dto);
-  }
-
-  @Operation(summary = "Updates an existing group",
-      description = "Updates an existing group in the application database.")
-  @PutMapping("{id}")
-  public void update(@PathVariable String id, @RequestBody @Valid DepartmentDTO dto) {
-    userPermissionService.userHasGlobalPermissionOrThrow(Permission.ADMIN);
-    service.update(id, dto);
-  }
-
-  @Operation(summary = "Deletes an existing group",
-      description = "Deletes an existing group from the application database.")
-  @DeleteMapping("{id}")
-  public void delete(@PathVariable String id) {
-    userPermissionService.userHasGlobalPermissionOrThrow(Permission.ADMIN);
-    service.delete(id);
-  }
-
-  @Operation(summary = "Finds a single group by id",
-      description = "Returns the details of a single group.")
-  @GetMapping("{id}")
-  public DepartmentDTO findById(@PathVariable String id) {
-    userPermissionService.userHasGlobalPermissionOrThrow(Permission.ADMIN);
-    return readerService.findById(id);
-  }
-
-  @Operation(summary = "Finds all Groups.",
-      description = "Returns the data of the available Groups along with pagination information.")
-  @PostMapping("_page")
-  public Page<DepartmentDTO> findPage(
-      @RequestBody(required = false) Map<String, Object> requestBody) {
-    userPermissionService.userHasGlobalPermissionOrThrow(Permission.ADMIN);
-    Map.Entry<Predicate, Pageable> predicateAndPageable =
-        controllerUtils.getPredicateAndPageable(requestBody, User.class);
-    return readerService.findAll(predicateAndPageable.getKey(), predicateAndPageable.getValue());
-  }
-
-  @Operation(summary = "Change the status of a Group.",
-      description = "Changes the status of a Group to disabled or enabled.")
-  @PutMapping("_set_group_status")
-  public boolean setGroupStatus(@RequestBody SetGroupStatusCommand setGroupStatusCommand) {
-    userPermissionService.userHasGlobalPermissionOrThrow(Permission.ADMIN);
-    return service.setGroupStatus(setGroupStatusCommand.id(), setGroupStatusCommand.active());
+    return service.setDepartmentStatus(setActiveStatusCommand.id(),
+        setActiveStatusCommand.active());
   }
 
   @Operation(summary = "Finds all active Departments.",
@@ -96,5 +50,26 @@ public class DepartmentController {
   public List<DepartmentDTO> findAllActiveByGroupName(@PathVariable String groupName) {
     userPermissionService.userHasGlobalPermissionOrThrow(Permission.ADMIN);
     return readerService.findAllActiveByGroupName(groupName);
+  }
+
+
+  @Override
+  protected BaseUpdatableService<DepartmentDTO> getService() {
+    return service;
+  }
+
+  @Override
+  protected BaseReaderService<DepartmentDTO> getReaderService() {
+    return readerService;
+  }
+
+  @Override
+  protected Collection<Permission> getReadPermissions() {
+    return List.of(Permission.ADMIN);
+  }
+
+  @Override
+  protected ExportService<DepartmentDTO> getExportService() {
+    return null;
   }
 }

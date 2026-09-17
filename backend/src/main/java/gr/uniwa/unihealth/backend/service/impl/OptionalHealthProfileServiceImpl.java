@@ -89,4 +89,9 @@ public class OptionalHealthProfileServiceImpl
   protected BaseRepository<OptionalHealthProfile> getRepository() {
     return repository;
   }
+
+  @Override
+  public void validateAvailable(String id, OptionalHealthProfileDTO dto) {
+
+  }
 }

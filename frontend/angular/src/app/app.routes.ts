@@ -1,5 +1,7 @@
 import {Routes} from '@angular/router';
 import {UNIHEALTH_CONSTANTS} from "./shared/constants/unihealth.constants";
+import {adminGuard} from "./core/guards/admin.guard";
+import {unsavedChangesGuard} from "./core/guards/unsaved-changes.guard";
 
 export const routes: Routes = [
     {path: '', redirectTo: UNIHEALTH_CONSTANTS.ROUTE_HOME, pathMatch: 'full'},
@@ -21,8 +23,13 @@ export const routes: Routes = [
             }
         ],
     },
+    // Administration. `canActivate` sits on the parent, which Angular resolves before any child,
+    // so one entry covers the list, create, detail and edit routes. Without it these screens are
+    // reachable by typing the URL — hiding the nav links is not access control.
+    // Note: 'create' must stay above ':id', or it would be read as an id.
     {
         path: 'users',
+        canActivate: [adminGuard],
         data: {breadcrumb: 'breadcrumb.users'},
         children: [
             {
@@ -35,12 +42,28 @@ export const routes: Routes = [
                 path: 'create',
                 pathMatch: 'full',
                 loadComponent: () => import('./features/users/create-user/create-user').then((m) => m.CreateUser),
-                data: {breadcrumb: 'breadcrumb.users.create'},
-            }
+                canDeactivate: [unsavedChangesGuard],
+                data: {breadcrumb: 'breadcrumb.users.create', mode: 'create'},
+            },
+            {
+                path: ':id',
+                pathMatch: 'full',
+                loadComponent: () => import('./features/users/create-user/create-user').then((m) => m.CreateUser),
+                canDeactivate: [unsavedChangesGuard],
+                data: {breadcrumb: 'breadcrumb.details', mode: 'view'},
+            },
+            {
+                path: ':id/edit',
+                pathMatch: 'full',
+                loadComponent: () => import('./features/users/create-user/create-user').then((m) => m.CreateUser),
+                canDeactivate: [unsavedChangesGuard],
+                data: {breadcrumb: 'breadcrumb.users.edit', mode: 'edit'},
+            },
         ]
     },
     {
         path: 'groups',
+        canActivate: [adminGuard],
         data: {breadcrumb: 'breadcrumb.groups'},
         children: [
             {
@@ -48,11 +71,33 @@ export const routes: Routes = [
                 pathMatch: 'full',
                 loadComponent: () => import('./features/groups/groups').then((m) => m.Groups),
                 data: {breadcrumb: 'breadcrumb.overview'},
-            }
+            },
+            {
+                path: 'create',
+                pathMatch: 'full',
+                loadComponent: () => import('./features/groups/group-form/group-form').then((m) => m.GroupForm),
+                canDeactivate: [unsavedChangesGuard],
+                data: {breadcrumb: 'breadcrumb.groups.create', mode: 'create'},
+            },
+            {
+                path: ':id',
+                pathMatch: 'full',
+                loadComponent: () => import('./features/groups/group-form/group-form').then((m) => m.GroupForm),
+                canDeactivate: [unsavedChangesGuard],
+                data: {breadcrumb: 'breadcrumb.details', mode: 'view'},
+            },
+            {
+                path: ':id/edit',
+                pathMatch: 'full',
+                loadComponent: () => import('./features/groups/group-form/group-form').then((m) => m.GroupForm),
+                canDeactivate: [unsavedChangesGuard],
+                data: {breadcrumb: 'breadcrumb.groups.edit', mode: 'edit'},
+            },
         ]
     },
     {
         path: 'departments',
+        canActivate: [adminGuard],
         data: {breadcrumb: 'breadcrumb.departments'},
         children: [
             {
@@ -60,7 +105,28 @@ export const routes: Routes = [
                 pathMatch: 'full',
                 loadComponent: () => import('./features/departments/departments').then((m) => m.Departments),
                 data: {breadcrumb: 'breadcrumb.overview'},
-            }
+            },
+            {
+                path: 'create',
+                pathMatch: 'full',
+                loadComponent: () => import('./features/departments/department-form/department-form').then((m) => m.DepartmentForm),
+                canDeactivate: [unsavedChangesGuard],
+                data: {breadcrumb: 'breadcrumb.departments.create', mode: 'create'},
+            },
+            {
+                path: ':id',
+                pathMatch: 'full',
+                loadComponent: () => import('./features/departments/department-form/department-form').then((m) => m.DepartmentForm),
+                canDeactivate: [unsavedChangesGuard],
+                data: {breadcrumb: 'breadcrumb.details', mode: 'view'},
+            },
+            {
+                path: ':id/edit',
+                pathMatch: 'full',
+                loadComponent: () => import('./features/departments/department-form/department-form').then((m) => m.DepartmentForm),
+                canDeactivate: [unsavedChangesGuard],
+                data: {breadcrumb: 'breadcrumb.departments.edit', mode: 'edit'},
+            },
         ]
     },
     {

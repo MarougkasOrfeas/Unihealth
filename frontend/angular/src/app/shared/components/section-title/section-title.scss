@@ -1,0 +1,10 @@
+:host {
+  display: block;
+}
+
+/* Self-contained rather than relying on create-user.scss, whose rules are only global because
+ * that component uses ViewEncapsulation.None. */
+.mat-divider {
+  border-top-color: #d9e3f0;
+  padding-bottom: 12px;
+}

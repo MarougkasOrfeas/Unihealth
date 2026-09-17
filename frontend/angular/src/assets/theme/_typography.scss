@@ -1,0 +1,446 @@
+/* ==========================================================================
+   Typography Tokens
+   ========================================================================== */
+
+/**
+ * Typography foundations and helper mixins for the design system.
+ *
+ * GOALS
+ * - Keep typography decisions centralized
+ * - Provide a consistent and reusable type scale
+ * - Make text roles easy to apply in components
+ * - Avoid hardcoded font sizes, weights, and line-heights
+ *
+ * RULES
+ * - Do NOT define raw typography values in feature components
+ * - Use the mixins in this file or approved typography utility classes
+ * - Prefer practical text roles (page title, section title, body, caption)
+ *   instead of inventing one-off heading/body combinations
+ *
+ * STRUCTURE
+ * 1. Font foundations
+ * 2. Formal typography roles
+ * 3. Practical application aliases
+ * 4. Mobile overrides
+ * 5. Helper mixins
+ */
+
+/* ==========================================================================
+   Imports
+   ========================================================================== */
+
+/* Load the @font-faces from _fonts.scss */
+@use 'fonts';
+
+:root {
+  /* ==========================================================================
+     Font Foundations
+     ========================================================================== */
+
+  --sys-font-family-base: 'Inter', system-ui, -apple-system, sans-serif;
+
+  --sys-font-root-size: 16px;
+
+  /* Font Weights */
+  --sys-font-weight-regular: 400;
+  --sys-font-weight-medium: 500;
+  --sys-font-weight-semibold: 600;
+  --sys-font-weight-bold: 700;
+
+  /* Letter Spacing */
+  --sys-type-letter-spacing-tight: 0.1px;
+  --sys-type-letter-spacing-default: 0.25px;
+  --sys-type-letter-spacing-wide: 0.4px;
+  --sys-type-letter-spacing-wider: 0.5px;
+
+  /* ==========================================================================
+     Formal Typography Roles
+     ========================================================================== */
+
+  /* Headings */
+  --sys-type-h1-size: 2rem; /* 32px */
+  --sys-type-h1-line-height: 1.2;
+  --sys-type-h1-weight: var(--sys-font-weight-medium);
+
+  --sys-type-h2-size: 1.5rem; /* 24px */
+  --sys-type-h2-line-height: 1.3;
+  --sys-type-h2-weight: var(--sys-font-weight-medium);
+
+  --sys-type-h3-size: 1.25rem; /* 20px */
+  --sys-type-h3-line-height: 1.4;
+  --sys-type-h3-weight: var(--sys-font-weight-medium);
+
+  --sys-type-h4-size: 1rem; /* 16px */
+  --sys-type-h4-line-height: 1.5;
+  --sys-type-h4-weight: var(--sys-font-weight-medium);
+
+  /* Labels */
+  --sys-type-label-lg-size: 0.875rem; /* 14px */
+  --sys-type-label-lg-line-height: 1.4;
+  --sys-type-label-lg-weight: var(--sys-font-weight-medium);
+
+  --sys-type-label-md-size: 0.75rem; /* 12px */
+  --sys-type-label-md-line-height: 1.4;
+  --sys-type-label-md-weight: var(--sys-font-weight-medium);
+
+  --sys-type-label-sm-size: 0.688rem; /* 11px */
+  --sys-type-label-sm-line-height: 1.4;
+  --sys-type-label-sm-weight: var(--sys-font-weight-medium);
+
+  /* Body */
+  --sys-type-body-lg-size: 1rem; /* 16px */
+  --sys-type-body-lg-line-height: 1.5;
+  --sys-type-body-lg-weight: var(--sys-font-weight-regular);
+
+  --sys-type-body-md-size: 0.875rem; /* 14px */
+  --sys-type-body-md-line-height: 1.4;
+  --sys-type-body-md-weight: var(--sys-font-weight-regular);
+
+  --sys-type-body-sm-size: 0.75rem; /* 12px */
+  --sys-type-body-sm-line-height: 1.3;
+  --sys-type-body-sm-weight: var(--sys-font-weight-regular);
+
+  /* Buttons */
+  --sys-type-btn-lg-size: 1rem; /* 16px */
+  --sys-type-btn-lg-line-height: 1.5;
+  --sys-type-btn-lg-weight: var(--sys-font-weight-medium);
+
+  --sys-type-btn-md-size: 0.875rem; /* 14px */
+  --sys-type-btn-md-line-height: 1.4;
+  --sys-type-btn-md-weight: var(--sys-font-weight-medium);
+
+  /* ==========================================================================
+     Practical Application Aliases
+     ========================================================================== */
+
+  /* Page and section titles */
+  --sys-type-page-title-size: var(--sys-type-h1-size);
+  --sys-type-page-title-line-height: var(--sys-type-h1-line-height);
+  --sys-type-page-title-weight: var(--sys-type-h1-weight);
+
+  --sys-type-section-title-size: var(--sys-type-h2-size);
+  --sys-type-section-title-line-height: var(--sys-type-h2-line-height);
+  --sys-type-section-title-weight: var(--sys-type-h2-weight);
+
+  --sys-type-card-title-size: var(--sys-type-h3-size);
+  --sys-type-card-title-line-height: var(--sys-type-h3-line-height);
+  --sys-type-card-title-weight: var(--sys-type-h3-weight);
+
+  --sys-type-subsection-title-size: var(--sys-type-h4-size);
+  --sys-type-subsection-title-line-height: var(--sys-type-h4-line-height);
+  --sys-type-subsection-title-weight: var(--sys-type-h4-weight);
+
+  /* Body roles */
+  --sys-type-body-default-size: var(--sys-type-body-lg-size);
+  --sys-type-body-default-line-height: var(--sys-type-body-lg-line-height);
+  --sys-type-body-default-weight: var(--sys-type-body-lg-weight);
+
+  --sys-type-body-compact-size: var(--sys-type-body-md-size);
+  --sys-type-body-compact-line-height: var(--sys-type-body-md-line-height);
+  --sys-type-body-compact-weight: var(--sys-type-body-md-weight);
+
+  --sys-type-caption-size: var(--sys-type-body-sm-size);
+  --sys-type-caption-line-height: var(--sys-type-body-sm-line-height);
+  --sys-type-caption-weight: var(--sys-type-body-sm-weight);
+
+  /* Form and helper text */
+  --sys-type-field-label-size: var(--sys-type-label-lg-size);
+  --sys-type-field-label-line-height: var(--sys-type-label-lg-line-height);
+  --sys-type-field-label-weight: var(--sys-type-label-lg-weight);
+
+  --sys-type-helper-text-size: var(--sys-type-label-md-size);
+  --sys-type-helper-text-line-height: var(--sys-type-label-md-line-height);
+  --sys-type-helper-text-weight: var(--sys-type-label-md-weight);
+
+  /* Table / dense UI */
+  --sys-type-table-header-size: var(--sys-type-label-lg-size);
+  --sys-type-table-header-line-height: var(--sys-type-label-lg-line-height);
+  --sys-type-table-header-weight: var(--sys-type-label-lg-weight);
+
+  --sys-type-table-cell-size: var(--sys-type-body-md-size);
+  --sys-type-table-cell-line-height: var(--sys-type-body-md-line-height);
+  --sys-type-table-cell-weight: var(--sys-type-body-md-weight);
+
+  /* Buttons */
+  --sys-type-button-default-size: var(--sys-type-button-md-size);
+  --sys-type-button-default-line-height: var(--sys-type-button-md-line-height);
+  --sys-type-button-default-weight: var(--sys-type-button-md-weight);
+
+  --sys-type-button-large-size: var(--sys-type-button-lg-size);
+  --sys-type-button-large-line-height: var(--sys-type-button-lg-line-height);
+  --sys-type-button-large-weight: var(--sys-type-button-lg-weight);
+
+  /* ==========================================================================
+     Mobile Scale Overrides
+     ========================================================================== */
+
+  @media (max-width: 767px) {
+    --sys-type-h1-size: 1.5rem; /* 24px */
+    --sys-type-h1-line-height: 1.2;
+
+    --sys-type-h2-size: 1.25rem; /* 20px */
+    --sys-type-h2-line-height: 1.2;
+
+    --sys-type-h3-size: 1.125rem; /* 18px */
+    --sys-type-h3-line-height: 1.3;
+
+    --sys-type-h4-line-height: 1.4;
+    --sys-type-h4-weight: var(--sys-font-weight-semibold);
+  }
+}
+
+/* ==========================================================================
+   Helper Mixins
+   ========================================================================== */
+
+/**
+ * Internal helper for applying typography consistently.
+ * Use the public mixins below instead of calling this directly.
+ */
+@mixin apply-type(
+  $size,
+  $line-height,
+  $weight,
+  $letter-spacing: normal,
+  $family: var(--sys-font-family-base)
+) {
+  font-family: $family;
+  font-size: $size;
+  line-height: $line-height;
+  font-weight: $weight;
+  letter-spacing: $letter-spacing;
+}
+
+/* Formal Role Mixins
+   ========================================================================== */
+
+/* Headings */
+@mixin type-h1 {
+  @include apply-type(
+    var(--sys-type-h1-size),
+    var(--sys-type-h1-line-height),
+    var(--sys-type-h1-weight)
+  );
+}
+
+@mixin type-h2 {
+  @include apply-type(
+    var(--sys-type-h2-size),
+    var(--sys-type-h2-line-height),
+    var(--sys-type-h2-weight)
+  );
+}
+
+@mixin type-h3 {
+  @include apply-type(
+    var(--sys-type-h3-size),
+    var(--sys-type-h3-line-height),
+    var(--sys-type-h3-weight)
+  );
+}
+
+@mixin type-h4 {
+  @include apply-type(
+    var(--sys-type-h4-size),
+    var(--sys-type-h4-line-height),
+    var(--sys-type-h4-weight),
+    var(--sys-type-letter-spacing-tight)
+  );
+}
+
+/* Labels */
+@mixin type-label-lg {
+  @include apply-type(
+    var(--sys-type-label-lg-size),
+    var(--sys-type-label-lg-line-height),
+    var(--sys-type-label-lg-weight),
+    var(--sys-type-letter-spacing-tight)
+  );
+}
+
+@mixin type-label-md {
+  @include apply-type(
+    var(--sys-type-label-md-size),
+    var(--sys-type-label-md-line-height),
+    var(--sys-type-label-md-weight),
+    var(--sys-type-letter-spacing-wider)
+  );
+}
+
+@mixin type-label-sm {
+  @include apply-type(
+    var(--sys-type-label-sm-size),
+    var(--sys-type-label-sm-line-height),
+    var(--sys-type-label-sm-weight),
+    var(--sys-type-letter-spacing-wider)
+  );
+}
+
+/* Body */
+@mixin type-body-lg {
+  @include apply-type(
+    var(--sys-type-body-lg-size),
+    var(--sys-type-body-lg-line-height),
+    var(--sys-type-body-lg-weight),
+    var(--sys-type-letter-spacing-wider)
+  );
+}
+
+@mixin type-body-md {
+  @include apply-type(
+    var(--sys-type-body-md-size),
+    var(--sys-type-body-md-line-height),
+    var(--sys-type-body-md-weight),
+    var(--sys-type-letter-spacing-default)
+  );
+}
+
+@mixin type-body-sm {
+  @include apply-type(
+    var(--sys-type-body-sm-size),
+    var(--sys-type-body-sm-line-height),
+    var(--sys-type-body-sm-weight),
+    var(--sys-type-letter-spacing-wide)
+  );
+}
+
+/* Buttons */
+@mixin type-button-lg {
+  @include apply-type(
+    var(--sys-type-button-lg-size),
+    var(--sys-type-button-lg-line-height),
+    var(--sys-type-button-lg-weight),
+    var(--sys-type-letter-spacing-tight)
+  );
+}
+
+@mixin type-button-md {
+  @include apply-type(
+    var(--sys-type-button-md-size),
+    var(--sys-type-button-md-line-height),
+    var(--sys-type-button-md-weight),
+    var(--sys-type-letter-spacing-tight)
+  );
+}
+
+/* Practical Role Mixins
+   ========================================================================== */
+
+/* Page and section titles */
+@mixin type-page-title {
+  @include apply-type(
+    var(--sys-type-page-title-size),
+    var(--sys-type-page-title-line-height),
+    var(--sys-type-page-title-weight)
+  );
+}
+
+@mixin type-section-title {
+  @include apply-type(
+    var(--sys-type-section-title-size),
+    var(--sys-type-section-title-line-height),
+    var(--sys-type-section-title-weight)
+  );
+}
+
+@mixin type-card-title {
+  @include apply-type(
+    var(--sys-type-card-title-size),
+    var(--sys-type-card-title-line-height),
+    var(--sys-type-card-title-weight)
+  );
+}
+
+@mixin type-subsection-title {
+  @include apply-type(
+    var(--sys-type-subsection-title-size),
+    var(--sys-type-subsection-title-line-height),
+    var(--sys-type-subsection-title-weight),
+    var(--sys-type-letter-spacing-tight)
+  );
+}
+
+/* Body roles */
+@mixin type-body-default {
+  @include apply-type(
+    var(--sys-type-body-default-size),
+    var(--sys-type-body-default-line-height),
+    var(--sys-type-body-default-weight),
+    var(--sys-type-letter-spacing-wider)
+  );
+}
+
+@mixin type-body-compact {
+  @include apply-type(
+    var(--sys-type-body-compact-size),
+    var(--sys-type-body-compact-line-height),
+    var(--sys-type-body-compact-weight),
+    var(--sys-type-letter-spacing-default)
+  );
+}
+
+@mixin type-caption {
+  @include apply-type(
+    var(--sys-type-caption-size),
+    var(--sys-type-caption-line-height),
+    var(--sys-type-caption-weight),
+    var(--sys-type-letter-spacing-wide)
+  );
+}
+
+/* Form and helper text */
+@mixin type-field-label {
+  @include apply-type(
+    var(--sys-type-field-label-size),
+    var(--sys-type-field-label-line-height),
+    var(--sys-type-field-label-weight),
+    var(--sys-type-letter-spacing-tight)
+  );
+}
+
+@mixin type-helper-text {
+  @include apply-type(
+    var(--sys-type-helper-text-size),
+    var(--sys-type-helper-text-line-height),
+    var(--sys-type-helper-text-weight),
+    var(--sys-type-letter-spacing-wider)
+  );
+}
+
+/* Table / dense UI */
+@mixin type-table-header {
+  @include apply-type(
+    var(--sys-type-table-header-size),
+    var(--sys-type-table-header-line-height),
+    var(--sys-type-table-header-weight),
+    var(--sys-type-letter-spacing-tight)
+  );
+}
+
+@mixin type-table-cell {
+  @include apply-type(
+    var(--sys-type-table-cell-size),
+    var(--sys-type-table-cell-line-height),
+    var(--sys-type-table-cell-weight),
+    var(--sys-type-letter-spacing-default)
+  );
+}
+
+/* Buttons */
+@mixin type-button-default {
+  @include apply-type(
+    var(--sys-type-button-default-size),
+    var(--sys-type-button-default-line-height),
+    var(--sys-type-button-default-weight),
+    var(--sys-type-letter-spacing-tight)
+  );
+}
+
+@mixin type-button-large {
+  @include apply-type(
+    var(--sys-type-button-large-size),
+    var(--sys-type-button-large-line-height),
+    var(--sys-type-button-large-weight),
+    var(--sys-type-letter-spacing-tight)
+  );
+}

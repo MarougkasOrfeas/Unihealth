@@ -19,39 +19,6 @@
   background: linear-gradient(90deg, #1976d2 0%, #64b5f6 100%);
 }
 
-.page-subtitle::before {
-  content: '';
-  width: 8px;
-  height: 8px;
-  //border-radius: 50%;
-  background: #1976d2;
-  margin-bottom:1px;
-  //box-shadow: 0 0 0 4px rgba(25, 118, 210, 0.12);
-}
-
-.page-subtitle {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 24px;
-  margin-bottom: 8px;
-  padding: 8px 14px;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  font-size: 1rem;
-  font-weight: 600;
-  line-height: 1.2;
-  color: #174a8b;
-  background: linear-gradient(180deg, #f4f8ff 0%, #edf4ff 100%);
-  border: 1px solid #d7e6fb;
-  border-left: 4px solid #1976d2;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
-}
-
-.divider-space{
-  margin-top: 10px;
-}
-
 /* Flexbox layout for the form-row */
 .form-row {
   display: flex;
@@ -61,18 +28,6 @@
   justify-content: space-between;
 }
 
-.form-container {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  font-family: Roboto Regular, sans-serif;
-  padding: 0 16px;
-  background: #fdfefe;
-  border: 1px solid #e5edf7;
-  border-radius: 16px;
-  box-shadow: 0 6px 18px rgba(16, 52, 96, 0.06);
-  /* small side padding on narrow screens */
-}
 
 .mat-divider {
   border-top-color: #d9e3f0 !important;
@@ -329,11 +284,6 @@
 }
 
 @media (max-width: 400px) {
-  .form-container {
-    padding: 0 8px;
-    gap: 16px;
-  }
-
   h3 {
     font-size: 16px;
   }
@@ -482,3 +432,10 @@
   }
 }
 
+
+/* Explanation under the status control, e.g. why an unverified account cannot be activated. */
+.status-hint {
+    margin: 0.25rem 0 0;
+    font-size: 12px;
+    color: var(--mat-sys-outline, #666);
+}

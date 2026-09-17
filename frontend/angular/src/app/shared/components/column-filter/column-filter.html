@@ -1,34 +1,55 @@
-<button class="trigger" mat-icon-button [ngClass]="selected.size ? 'active' : 'inactive'" #tr="matMenuTrigger"
+<button mat-icon-button [ngClass]="(selected.size || forceActive) ? 'active' : 'inactive'" #tr="matMenuTrigger"
         [matMenuTriggerFor]="menu"
         [matMenuTriggerRestoreFocus]="false"
         (click)="$event.stopPropagation()"
+        [disabled]="disabled"
         (menuOpened)="onMenuOpened()"
         aria-label="Filter">
     <mat-icon>filter_list</mat-icon>
 </button>
 
-<mat-menu #menu="matMenu" [overlapTrigger]="false" [hasBackdrop]="true">
+<mat-menu #menu="matMenu" [overlapTrigger]="false" [hasBackdrop]="true" data-testid="menu-column-filter">
     <!-- IMPORTANT: stop clicks inside from bubbling and accidentally closing things -->
     <div class="panel" (click)="$event.stopPropagation()">
         @if (searchable) {
             <mat-form-field appearance="outline" class="search">
-                <input #searchInput matInput [formControl]="searchCtrl" placeholder="Εισαγάγετε όρο φίλτρου..."/>
+                <input #searchInput matInput [formControl]="searchCtrl" placeholder="Filterbegriff eingeben..."/>
             </mat-form-field>
         }
 
-        <div class="list">
-            @for (opt of filteredOptions; track opt) {
-                <div class="opt">
-                    <mat-checkbox [checked]="selected.has(opt)" (change)="toggle(opt, $event.checked!)">
-                        {{ opt }}
-                    </mat-checkbox>
+        <div class="hidden">
+            <ng-content select="[filter-extra]"></ng-content>
+        </div>
+
+        <div class="list overflow-auto">
+            @if (loading) {
+                <div class="flex justify-center p-8">
+                    <mat-spinner diameter="24" strokeWidth="3"></mat-spinner>
                 </div>
+            } @else {
+                @for (opt of filteredOptions; track opt) {
+                    <div class="flex items-center pt-4">
+                        <mat-checkbox [checked]="selected.has(opt)" (change)="toggle(opt, $event.checked!)">
+                            {{ displayWith(opt) }}
+                        </mat-checkbox>
+                    </div>
+                }
             }
         </div>
 
-        <div class="footer">
-            <button mat-stroked-button type="button" (click)="clear()">Απορρίπτω</button>
-            <button mat-stroked-button type="button" (click)="selectAll()">Επιλέξτε όλα</button>
-        </div>
+        @if (!oneElementSelected) {
+            <div class="flex justify-between gap-8 mt-8 footer">
+                <app-button buttonStyle="text" size="medium" testId="btn-column-filter-unselect-all" variant="primary"
+                            (clicked)="clear()">
+                    {{ 'global.unselect.all' | translate }}
+                </app-button>
+
+                <app-button buttonStyle="filled" size="medium" testId="btn-column-filter-select-all" variant="primary"
+                            (clicked)="selectAll()">
+                    {{ 'global.select.all' | translate }}
+                </app-button>
+            </div>
+        }
+
     </div>
 </mat-menu>

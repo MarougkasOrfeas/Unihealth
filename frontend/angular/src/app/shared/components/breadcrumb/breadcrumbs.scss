@@ -1,52 +1,22 @@
-@import '../../../../../node_modules/material-symbols/index.css';
+@use 'typography' as type;
 
-.bc {
+:host {
+  display: block;
+}
+
+.breadcrumb {
+
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 4px;
-
-  font-size: 16px;
-  line-height: 24px;
-  margin-left: 19px;
-  margin-top: 12px;
+  margin-left: 20px;
 }
 
-.bc a.mat-mdc-button.bc-link {
-  min-width: 0;
-  padding: 0 6px;
-  height: 24px;
-  line-height: 24px;
-  display: inline-flex;
-  align-items: center;
-
-  font-size: inherit;
+.breadcrumb-separator {
+  color: var(--sys-outline-variant);
 }
 
-.bc a.mat-mdc-button.bc-link mat-icon,
-.bc-sep {
-  width: 20px;
-  height: 20px;
-  line-height: 20px;
-  font-size: 20px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 3px;
-}
-
-.bc-sep {
-  opacity: .6;
-}
-
-.bc-current {
-  padding: 0 6px;
-  opacity: .8;
-  font-size: inherit; /* IMPORTANT: don’t use “medium” here */
-  line-height: 24px;
-  display: inline-flex;
-  align-items: center;
-
-  text-decoration: underline;
-  text-underline-offset: 3px;
+.breadcrumb-current-link {
+  color: var(--sys-text-variant);
+  padding: 0 var(--sys-spacing-xs);
+  @include type.type-label-lg;
 }

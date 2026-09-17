@@ -90,19 +90,10 @@
                 </a>
             </div>
 
-            <app-table
+            <app-mock-table
                 [columns]="resultColumns"
-                [data]="resultRows()"
-                [totalElements]="totalElements()"
-                [pageSize]="currentPageSize"
-                [loading]="isLoading"
-                [facetOptions]="facetOptions()"
-                [facetSelection]="facetSelection"
-                (pageChange)="onPageChange($event)"
-                (sortChange)="onSortChange($event)"
-                (facetOpened)="onFacetOpened($event)"
-                (facetChange)="onFacetChange($event)">
-            </app-table>
+                [data]="resultRows()">
+            </app-mock-table>
         </section>
         <section class="mock-destination" aria-live="polite">
             <mat-icon>construction</mat-icon>

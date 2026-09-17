@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd">
+
+    <!-- Email preferences shown under Profile > Preferences, plus the bookkeeping the
+         optional-health-profile reminder needs to cap itself at two sends. -->
+    <changeSet id="unihealth_00011" author="uniwa">
+        <addColumn tableName="t_user">
+            <!-- Stored positive ("subscribed"), not as "unsubscribed": the UI inverts it for the
+                 label, and persisting a negative invites double-negative bugs. -->
+            <column name="newsletter_subscribed" type="boolean" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="notifications_enabled" type="boolean" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="optional_form_reminders_sent" type="int" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="optional_form_reminder_last_sent_on" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

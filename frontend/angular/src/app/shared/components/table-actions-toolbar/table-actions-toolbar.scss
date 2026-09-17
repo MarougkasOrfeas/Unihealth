@@ -1,0 +1,18 @@
+.table-actions-toolbar {
+  width: 100%;
+}
+
+.search-field {
+  flex: 0 0 330px;
+  max-width: 330px;
+}
+
+.toolbar-separator {
+  width: 1px;
+  height: 24px;
+  background-color: var(--sys-outline-variant, #d0d0d0);
+}
+
+.mat-mdc-form-field-subscript-wrapper {
+  display: none !important;
+}

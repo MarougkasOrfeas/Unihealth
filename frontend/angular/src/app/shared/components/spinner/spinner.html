@@ -1,0 +1,19 @@
+@if (fullscreen) {
+  <div class="page-loading-overlay">
+    <div class="page-loading-content">
+      <mat-spinner [diameter]="diameter"></mat-spinner>
+
+      @if (hasText) {
+        <div class="page-loading-text">{{ text }}</div>
+      }
+
+      @if (hasSubtext) {
+        <div class="page-loading-subtext">{{ subtext }}</div>
+      }
+    </div>
+  </div>
+} @else {
+  <div class="inline-spinner">
+    <mat-spinner [diameter]="diameter"></mat-spinner>
+  </div>
+}

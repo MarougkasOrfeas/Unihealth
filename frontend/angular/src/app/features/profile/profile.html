@@ -69,7 +69,7 @@
 
                             <div class="detail-row">
                                 <div class="detail-label">{{ 'profile.fields.memberSince' | translate }}</div>
-                                <div class="detail-value">{{ u.createdOn }}</div>
+                                <div class="detail-value">{{ (u.createdOn | date: 'dd-MM-yyyy HH:mm') || '-' }}</div>
                             </div>
                         </div>
 
@@ -108,12 +108,22 @@
                     </div>
 
                     <div class="settings-card">
+                        <!-- Disabled only while a request is in flight. If the load fails the
+                             switches fall back to the defaults and stay usable, so a broken
+                             request never leaves a control that silently does nothing. -->
                         <div class="settings-item">
                             <span>{{ 'profile.preferences.unsubscribeNewsFeeds' | translate }}</span>
                             <label
                                 class="toggle-switch"
                                 [title]="'profile.preferences.unsubscribeNewsFeeds.tooltip' | translate">
-                                <input type="checkbox"/>
+                                <!-- Label says "unsubscribe", storage says "subscribed": inverted here. -->
+                                <input
+                                    type="checkbox"
+                                    data-testid="toggle-unsubscribe-news"
+                                    data-preference="newsletter"
+                                    [disabled]="loadingPreferences() || savingPreferences()"
+                                    [checked]="!preferences().newsletterSubscribed"
+                                    (change)="onUnsubscribeToggle($event)"/>
                                 <span class="slider round"></span>
                             </label>
                         </div>
@@ -123,7 +133,13 @@
                             <label
                                 class="toggle-switch"
                                 [title]="'profile.preferences.enableNotifications.tooltip' | translate">
-                                <input type="checkbox"/>
+                                <input
+                                    type="checkbox"
+                                    data-testid="toggle-enable-notifications"
+                                    data-preference="notifications"
+                                    [disabled]="loadingPreferences() || savingPreferences()"
+                                    [checked]="preferences().notificationsEnabled"
+                                    (change)="onNotificationsToggle($event)"/>
                                 <span class="slider round"></span>
                             </label>
                         </div>

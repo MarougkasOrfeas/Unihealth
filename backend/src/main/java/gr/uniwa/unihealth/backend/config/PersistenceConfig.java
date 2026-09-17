@@ -3,6 +3,7 @@ package gr.uniwa.unihealth.backend.config;
 import com.eurodyn.qlack.fuse.lexicon.service.LexiconConfigService;
 import com.eurodyn.qlack.fuse.mailing.monitor.MailQueueMonitor;
 import com.eurodyn.qlack.fuse.mailing.service.MailService;
+import com.zaxxer.hikari.HikariDataSource;
 import gr.uniwa.unihealth.backend.config.context.AuthenticationContext;
 import gr.uniwa.unihealth.backend.config.context.TenantContext;
 import gr.uniwa.unihealth.backend.repository.ExtendedJpaRepositoryImpl;
@@ -34,6 +35,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.concurrent.*;
 
 /**
  * Persistence configuration for the application.
@@ -67,6 +69,12 @@ public class PersistenceConfig {
   @Value("${schema.validation}")
   private boolean schemaValidation;
 
+  @Value("${datasource.pool.maximum-pool-size:10}")
+  private int maximumPoolSize;
+
+  @Value("${datasource.pool.minimum-idle:0}")
+  private int minimumIdle;
+
   private final ApplicationContext applicationContext;
   private final TenantContext tenantContext;
   private final AuthenticationContext authenticationContext;
@@ -74,35 +82,49 @@ public class PersistenceConfig {
 
   @Bean
   public DataSource dataSource() throws IOException, LiquibaseException {
-    Map<String, DataSource> resolvedDataSources = new HashMap<>();
+    Map<String, Properties> tenantProperties = tenantContext.getAllTenantProperties();
+    String tenantToValidateSchema = tenantProperties.keySet().stream().findAny().orElseThrow();
 
-    for (Map.Entry<String, Properties> entry : tenantContext.getAllTenantProperties().entrySet()) {
-      String tenantId = entry.getKey();
-      Properties properties = entry.getValue();
+    Map<String, DataSource> resolvedDataSources = new ConcurrentHashMap<>();
 
-      String url = properties.getProperty("url");
-      String username = properties.getProperty("username");
-      String password = properties.getProperty("password");
+    try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
+      CompletableFuture.allOf(
+          tenantProperties.entrySet().stream().map(entry -> CompletableFuture.runAsync(() -> {
+            String tenantId = entry.getKey();
+            Properties properties = entry.getValue();
 
-      log.info("Configuring datasource for tenant '{}' at '{}' with user '{}'", tenantId, url,
-          username);
+            String url = properties.getProperty("url");
+            String username = properties.getProperty("username");
+            String password = properties.getProperty("password");
 
-      DataSource dataSource =
-          DataSourceBuilder.create().url(url).username(username).password(password)
-              .driverClassName(driverClassName).build();
+            log.info("Configuring datasource for tenant '{}' at '{}' with user '{}'", tenantId, url,
+                username);
 
-      resolvedDataSources.put(tenantId, dataSource);
+            DataSource dataSource = createDataSource(tenantId, url, username, password);
 
-      SpringLiquibase liquibase = new SpringLiquibase();
-      liquibase.setDataSource(dataSource);
-      liquibase.setChangeLog(changelogLocation);
-      liquibase.setShouldRun(true);
-      liquibase.setResourceLoader(applicationContext);
-      liquibase.afterPropertiesSet();
+            resolvedDataSources.put(tenantId, dataSource);
 
-      if (schemaValidation) {
-        validateSchema(tenantId, dataSource);
-      }
+            SpringLiquibase liquibase = new SpringLiquibase();
+            liquibase.setDataSource(dataSource);
+            liquibase.setChangeLog(changelogLocation);
+            liquibase.setShouldRun(true);
+            liquibase.setResourceLoader(applicationContext);
+            try {
+              liquibase.afterPropertiesSet();
+            } catch (LiquibaseException e) {
+              throw new IllegalStateException(
+                  "Error running Liquibase for tenant '" + tenantId + "'.", e);
+            }
+
+            if (schemaValidation && tenantToValidateSchema.equals(tenantId)) {
+              validateSchema(tenantId, dataSource);
+            }
+          }, executor)).toList().toArray(CompletableFuture[]::new)).get();
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new IllegalStateException("Error configuring datasources for tenants", e);
+    } catch (ExecutionException e) {
+      throw new IllegalStateException("Error configuring datasources for tenants", e);
     }
 
     AbstractRoutingDataSource dataSource = new AbstractRoutingDataSource() {
@@ -122,6 +144,20 @@ public class PersistenceConfig {
   @Bean
   public AuditorAware<String> auditorProvider() {
     return () -> Optional.of(authenticationContext.getCurrentUsername());
+  }
+
+  private DataSource createDataSource(String tenantId, String url, String username,
+      String password) {
+    HikariDataSource dataSource = new HikariDataSource();
+    dataSource.setDriverClassName(driverClassName);
+    dataSource.setJdbcUrl(url);
+    dataSource.setUsername(username);
+    dataSource.setPassword(password);
+    dataSource.setPoolName("unihealth-" + tenantId + "-pool");
+    dataSource.setMaximumPoolSize(maximumPoolSize);
+    dataSource.setMinimumIdle(minimumIdle);
+    dataSource.setInitializationFailTimeout(-1);
+    return dataSource;
   }
 
   private void validateSchema(String tenantId, DataSource dataSource) {

@@ -11,4 +11,6 @@ public interface OptionalHealthProfileRepository extends BaseRepository<Optional
   Optional<OptionalHealthProfile> findByHealthProfileUserUsername(String username);
 
   Optional<OptionalHealthProfile> findByHealthProfileId(String healthProfileId);
+
+  Optional<OptionalHealthProfile> findByHealthProfileUserId(String userId);
 }

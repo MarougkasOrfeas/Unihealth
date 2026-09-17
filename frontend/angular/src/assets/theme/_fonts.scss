@@ -1,0 +1,113 @@
+/* ==========================================================================
+   Fonts
+   ========================================================================== */
+
+/**
+ * In this file we define the custom font of the application.
+ * We use the Inter font family, which is a popular sans-serif typeface
+ * designed for readability on screens. The font files are stored locally
+ * in the assets/fonts/inter directory, and we define @font-face rules for
+ * each weight and style of the Inter font that we want to use in our application.
+ *
+ * Inter v4.1
+ * https://github.com/rsms/inter/
+ */
+
+/* ==========================================================================
+   Light 300
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('../fonts/inter/Inter-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: italic;
+  font-weight: 300;
+  font-display: swap;
+  src: url('../fonts/inter/Inter-LightItalic.woff2') format('woff2');
+}
+
+/* ==========================================================================
+   Regular 400
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/inter/Inter-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/inter/Inter-Italic.woff2') format('woff2');
+}
+
+/* ==========================================================================
+   Medium 500
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../fonts/inter/Inter-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../fonts/inter/Inter-MediumItalic.woff2') format('woff2');
+}
+
+/* ==========================================================================
+   SemiBold 600
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../fonts/inter/Inter-SemiBold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../fonts/inter/Inter-SemiBoldItalic.woff2') format('woff2');
+}
+
+/* ==========================================================================
+   Bold 700
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../fonts/inter/Inter-Bold.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../fonts/inter/Inter-BoldItalic.woff2') format('woff2');
+}

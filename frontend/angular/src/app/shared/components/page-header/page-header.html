@@ -1,0 +1,36 @@
+<header class="page-header" [attr.data-testid]="testId()"
+        [class.page-header--section]="headingScale() === 'section'">
+  <div class="left-section">
+    <!-- Back Button -->
+    @if (backLink() || manualBackControl()) {
+      <app-button
+        buttonStyle="text"
+        icon="arrow_back"
+        size="large"
+        [attr.data-testid]="testId() + '-back-btn'"
+        (clicked)="handleBackClick($event)"
+      >
+        {{ 'global.back' | translate }}
+      </app-button>
+    }
+    <!-- Title -->
+    <div class="title-group">
+      <div class="title-row">
+        <h1 class="title" [attr.data-testid]="testId() + '-title'">{{ title() }}</h1>
+        @if (hasUnsavedChanges()) {
+          <mat-chip class="unsaved-indicator" [attr.data-testid]="testId() + '-unsaved-indicator'">
+            {{ 'global.unsaved' | translate }}
+          </mat-chip>
+        }
+      </div>
+      @if (subtitle()) {
+        <p class="mw-50 subtitle truncate-cell" [appOverflowTooltip]="subtitle() ?? ''" [attr.data-testid]="testId() + '-subtitle'">{{ subtitle() }}</p>
+      }
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="actions-section" [attr.data-testid]="testId() + '-actions'">
+    <ng-content select="[actions]" />
+  </div>
+</header>

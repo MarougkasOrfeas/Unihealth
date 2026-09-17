@@ -1,0 +1,178 @@
+/* ==========================================================================
+   Primitive Tokens
+   ========================================================================== */
+
+/**
+ * These are the foundational design values that should not be used directly in components.
+ * Instead, we map these primitives to semantic tokens that reflect their intended use.
+ *
+ * This file includes:
+ * - Color tokens derived from the HCT model, organized into palettes (primary, secondary,
+ * tertiary, error, warning, success, neutral).
+ * - Custom color tokens for specific use cases (black, white, on-surface variants).
+ * - Size tokens for consistent layout and spacing.
+ * - Radius tokens for consistent border-radius values.
+ * - Drop shadow tokens for consistent shadow effects.
+ */
+
+/* ==========================================================================
+   Colors
+   ========================================================================== */
+
+/**
+ * These are the foundational color values derived from the HCT model. Each
+ * palette includes a range of shades from 10 (darkest) to 99 (lightest),
+ * with 95 as a near-white option. Additional colors are provided for specific
+ * use cases like black, white, and on-surface variants.
+ */
+
+/* Primary palette (Brand color, main actions) */
+$primary-10: #001b3f;
+$primary-20: #002f65;
+$primary-30: #00458e;
+$primary-40: #005cbb;
+$primary-50: #2875d2;
+$primary-60: #4a8fea;
+$primary-70: #70a9ff;
+$primary-80: #a6c8ff;
+$primary-90: #d5e3ff;
+$primary-95: #ecf1ff;
+$primary-99: #fdfbff;
+
+
+/* Secondary palette (Secondary actions, complementary elements) */
+$secondary-10: #111c2b;
+$secondary-20: #263141;
+$secondary-30: #3c4758;
+$secondary-40: #545f70;
+$secondary-50: #6c7789;
+$secondary-60: #8691a3;
+$secondary-70: #a0abbf;
+$secondary-80: #bbc7db;
+$secondary-90: #d7e3f8;
+$secondary-95: #ecf1ff;
+$secondary-99: #fdfbff;
+
+/* Tertiary palette (Tertiary actions, accents) */
+$tertiary-10: #211047;
+$tertiary-20: #37265e;
+$tertiary-30: #4e3d76;
+$tertiary-40: #66558f;
+$tertiary-50: #7f6da9;
+$tertiary-60: #9987c4;
+$tertiary-70: #b4a1df;
+$tertiary-80: #cfbcfb;
+$tertiary-90: #eaddff;
+$tertiary-95: #f6edff;
+$tertiary-99: #fffbff;
+
+/* Error palette (Error states, destructive actions) */
+$error-10: #410002;
+$error-20: #690005;
+$error-30: #93000a;
+$error-40: #ba1a1a;
+$error-50: #de3730;
+$error-60: #ff5449;
+$error-70: #ff897d;
+$error-80: #ffb4ab;
+$error-90: #ffdad6;
+$error-95: #ffedea;
+$error-99: #fffbff;
+
+/* Warning palette (Warning states, cautionary actions) */
+$warning-10: #301400;
+$warning-20: #4f2500;
+$warning-30: #703800;
+$warning-40: #934b00;
+$warning-50: #b55f00;
+$warning-60: #de7400;
+$warning-70: #ff8e28;
+$warning-80: #ffb782;
+$warning-90: #ffdcc5;
+$warning-95: #ffede3;
+$warning-99: #fffbff;
+
+/* Success palette (Success states, positive actions) */
+$success-10: #002204;
+$success-20: #00390a;
+$success-30: #005313;
+$success-40: #006e1c;
+$success-50: #16892d;
+$success-60: #36a445;
+$success-70: #53c05d;
+$success-80: #6ddd75;
+$success-90: #89fa8e;
+$success-95: #c8ffc5;
+$success-99: #f6fff1;
+
+/* Neutral palette (grayscale, surfaces, backgrounds) */
+$neutral-10: #1a1c1e;
+$neutral-20: #2f3033;
+$neutral-30: #45474a;
+$neutral-40: #5d5e62;
+$neutral-50: #75777a;
+$neutral-60: #8f9094;
+$neutral-70: #aaabae;
+$neutral-80: #c5c6ca;
+$neutral-90: #e2e2e6;
+$neutral-95: #f0f0f4;
+$neutral-99: #fcfcff;
+
+/* Custom colors (for custom use cases, not part of the core HCT-derived palettes) */
+$black: #000000;
+$white: #ffffff;
+$on-surface: #1a1c1e;
+$on-surface-variant: #44474e;
+$outline: #74777f;
+$outline-variant: #c4c6d0;
+
+/* ==========================================================================
+   Size
+   ========================================================================== */
+
+$size-4: 4px;
+$size-6: 6px;
+$size-8: 8px;
+$size-12: 12px;
+$size-16: 16px;
+$size-24: 24px;
+$size-32: 32px;
+$size-40: 40px;
+$size-48: 48px;
+$size-56: 56px;
+$size-64: 64px;
+
+/* ==========================================================================
+   Radius
+   ========================================================================== */
+
+$radius-2: 2px;
+$radius-4: 4px;
+$radius-8: 8px;
+$radius-16: 16px;
+$radius-full: 1000px;
+
+/* ==========================================================================
+   Elevation (Drop Shadows)
+   ========================================================================== */
+
+$elevation-1: 0 1px 4px 0 rgba(12 12 13 / 0.05);
+$elevation-2: 0 1px 4px 0 rgba(12 12 13 / 0.05),
+0 1px 4px 0 rgba(12 12 13 / 0.1);
+$elevation-3: 0 4px 4px -1px rgba(12 12 13 / 0.05),
+0 4px 4px -1px rgba(12 12 13 / 0.1);
+$elevation-4: 0 4px 4px -4px rgba(12 12 13 / 0.05),
+0 16px 32px -4px rgba(12 12 13 / 0.1);
+$elevation-5: 0 4px 4px -4px rgba(12 12 13 / 0.05),
+0 16px 16px -8px rgba(12 12 13 / 0.1);
+$elevation-6: 0 16px 32px -8px rgba(12 12 13 / 0.4);
+
+/* ==========================================================================
+   Breakpoints
+   ========================================================================== */
+
+$breakpoint-mobile-min: 320px;
+$breakpoint-mobile-max: 767px;
+$breakpoint-tablet-min: 768px;
+$breakpoint-tablet-max: 1023px;
+$breakpoint-desktop-min: 1024px;

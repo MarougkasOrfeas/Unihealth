@@ -38,13 +38,28 @@ public class DepartmentServiceImpl extends BaseUpdatableServiceImpl<DepartmentDT
   }
 
   @Override
+  public void validateAvailable(String id, DepartmentDTO dto) {
+
+  }
+
+  @Override
   public void update(String id, DepartmentDTO dto) {
     super.update(id, dto);
   }
 
   @Override
-  public boolean setGroupStatus(String id, boolean active) {
-    return false;
+  public boolean setDepartmentStatus(String id, boolean active) {
+    Department department = readerService.findEntityById(id);
+
+    // Don't update if status in entity is same with the requested.
+    if (department.isActive() == active) {
+      return department.isActive();
+    }
+
+    department.setActive(active);
+    repository.save(department);
+
+    return department.isActive();
   }
 
   @Override

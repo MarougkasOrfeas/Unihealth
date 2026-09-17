@@ -58,4 +58,12 @@ public interface UserService extends BaseUpdatableService<UserDTO> {
    * @return a boolean denoting whether the username already exists or not (true/false)
    */
   boolean checkUsernameExists(String username);
+
+  /**
+   * Checks whether a given email already exists in the database for a user
+   *
+   * @param email The email to check
+   * @return a boolean denoting whether the email already exists or not (true/false)
+   */
+  boolean checkEmailExists(String email);
 }

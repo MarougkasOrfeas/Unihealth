@@ -1,0 +1,30 @@
+@if (hasAnyAction) {
+  <app-button toolbar-actions buttonStyle="outlined" icon="arrow_drop_down" iconPosition="right"
+              [testId]="triggerTestId" [disabled]="disabled" [matMenuTriggerFor]="disabled ? null : moreActionsMenu">
+    {{ triggerLabelKey | translate }}
+  </app-button>
+
+  <mat-menu #moreActionsMenu="matMenu" data-testid="menu-import-export-actions">
+    @if (showImport) {
+      <button [attr.data-testid]="importTestId" mat-menu-item type="button" [disabled]="isImporting || isImportDisabled"
+              [matTooltip]="importTooltip | translate"
+              (click)="onImport()">
+        <mat-icon>upload</mat-icon>
+        {{ importLabelKey | translate }}
+      </button>
+    }
+
+    @if (showExport) {
+      <button [attr.data-testid]="exportTestId" mat-menu-item type="button" [disabled]="isExportDisabled"
+              [matTooltip]="exportTooltip | translate"
+              (click)="onExport()">
+        <mat-icon>download</mat-icon>
+        {{ exportLabelKey | translate }}
+      </button>
+    }
+  </mat-menu>
+
+  <!-- Outside the menu: the menu is destroyed on close, which would take the input with it before
+       the file picker returns. -->
+  <input #fileInput type="file" hidden accept=".xlsx,.xls" (change)="onImportFileSelected($event)"/>
+}

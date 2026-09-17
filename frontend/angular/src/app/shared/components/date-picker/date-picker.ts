@@ -7,6 +7,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-date-picker',
@@ -19,6 +20,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatNativeDateModule,
     MatIconModule,
     MatTooltipModule,
+    TranslatePipe,
   ],
   templateUrl: './date-picker.html',
   styleUrls: ['./date-picker.scss'],
@@ -70,9 +72,6 @@ export class DatePickerComponent {
     return !this.control.hasError('required') && !this.control.hasError('matDatepickerParse');
   }
 
-  genericErrorMessage(): string {
-    return 'Ungültiges Datum.';
-  }
 
   onDateInput() {
     this.dateChanged.emit(this.control.value);

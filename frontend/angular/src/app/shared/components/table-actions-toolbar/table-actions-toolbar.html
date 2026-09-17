@@ -1,0 +1,24 @@
+<div class="flex flex-wrap justify-between items-center gap-16 mb-16 table-actions-toolbar">
+  <mat-form-field class="search-field" appearance="outline" data-testid="section-search-field">
+    <mat-label>{{ label }}</mat-label>
+
+    <input matInput [placeholder]="placeholder" [formControl]="ctrl" data-testid="input-search"/>
+
+    @if (hasValue) {
+      <button mat-icon-button matSuffix type="button" aria-label="Clear" (click)="clear()" data-testid="btn-search-clear" [disabled]="disabled">
+        <mat-icon>close</mat-icon>
+      </button>
+    } @else {
+      <button mat-icon-button matSuffix type="button" aria-label="Search" data-testid="btn-search-icon" [disabled]="disabled">
+        <mat-icon>search</mat-icon>
+      </button>
+    }
+  </mat-form-field>
+  <!-- Actions -->
+  @if (!hideActions) {
+    <div class="flex gap-8 items-center">
+      <ng-content select="[toolbar-actions]"/>
+    </div>
+  }
+
+</div>

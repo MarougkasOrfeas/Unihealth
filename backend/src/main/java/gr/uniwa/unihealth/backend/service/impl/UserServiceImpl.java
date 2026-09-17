@@ -11,6 +11,7 @@ import gr.uniwa.unihealth.backend.exception.ExceptionUtils;
 import gr.uniwa.unihealth.backend.mapper.UserMapper;
 import gr.uniwa.unihealth.backend.model.User;
 import gr.uniwa.unihealth.backend.model.enums.DeactivationMode;
+import gr.uniwa.unihealth.backend.model.enums.UserRoles;
 import gr.uniwa.unihealth.backend.model.enums.UserStatus;
 import gr.uniwa.unihealth.backend.repository.UserRepository;
 import gr.uniwa.unihealth.backend.service.UserService;
@@ -103,7 +104,14 @@ public class UserServiceImpl extends BaseUpdatableServiceImpl<UserDTO, User>
         userDTO.setLastname(adminLastname);
         userDTO.setLanguage(languageDTO.getId());
         userDTO.setDeactivationMode(DeactivationMode.AUTOMATIC);
+        // Without this there is no ADMIN in a fresh database and nothing can reach the
+        // administration screens. No department: the deployment administrator is staff, not a
+        // student. Status stays UNVERIFIED — justLoggedIn() derives it from Keycloak once the
+        // account is verified, and RightsMatrixResolver only grants ADMIN while ACTIVE.
+        userDTO.setRole(UserRoles.ADMIN.name());
+
         create(userDTO);
+        log.info("Created the deployment administrator '{}'", adminUsername);
       });
     }, "UserServiceImpl.init");
   }
@@ -159,6 +167,11 @@ public class UserServiceImpl extends BaseUpdatableServiceImpl<UserDTO, User>
 
     cacheService.evictByUsername(username);
     log.info("Successfully deleted user with id {} and username {}", id, userDTO.getUsername());
+  }
+
+  @Override
+  public void validateAvailable(String id, UserDTO dto) {
+
   }
 
   @Override
@@ -245,13 +258,23 @@ public class UserServiceImpl extends BaseUpdatableServiceImpl<UserDTO, User>
     return userWithUsername.isPresent();
   }
 
+  @Override
+  public boolean checkEmailExists(String email) {
+    return userRepository.findByEmail(email.toLowerCase()).isPresent();
+  }
+
   private void deactivateUser(User userToChange, boolean deactivatedDueToInactivity,
       String reason) {
-    //    if (userToChange.isGlobalAdmin() && readerService.isUserLastGlobalAdmin(userToChange.getId())) {
-    //      log.warn("User with id {} is the last global admin and cannot be deactivated",
-    //          userToChange.getId());
-    //      return;
-    //    }
+    // Throw rather than skip: setUserStatus reports DEACTIVATED unconditionally, so returning
+    // quietly would tell the caller the account was deactivated when it was not. Batch jobs check
+    // isLastAdmin themselves and skip before reaching this point.
+    if (readerService.isLastAdmin(userToChange.getId())) {
+      log.warn("User with id {} is the last administrator and cannot be deactivated",
+          userToChange.getId());
+      throw ExceptionUtils.createException(IllegalStateException.class,
+          "cannot_deactivate_last_admin",
+          "The last user with the Admin role cannot be deactivated");
+    }
 
     userToChange.setStatus(UserStatus.DEACTIVATED);
     userToChange.setDeactivatedDueToInactivity(deactivatedDueToInactivity);
@@ -307,6 +330,15 @@ public class UserServiceImpl extends BaseUpdatableServiceImpl<UserDTO, User>
   protected void validateForCreate(UserDTO dto) {
     super.validateForCreate(dto);
 
+    // A student belongs to a department; an administrator is staff and belongs to none. Enforced
+    // here rather than in the mapper, so the deployment administrator created at startup — which
+    // goes through the service, not the controller — is not held to the student rule.
+    if (!UserRoles.ADMIN.name().equalsIgnoreCase(dto.getRole())
+        && (dto.getDepartment() == null || dto.getDepartment().isBlank())) {
+      throw ExceptionUtils.createException(IllegalArgumentException.class, "department_required",
+          "A department is required for users who are not administrators");
+    }
+
     if (keycloakAdminClient.userExistsByUsername(dto.getUsername())) {
       throw ExceptionUtils.createException(QAlreadyExistsException.class, "username_already_exists",
           "Username already exists");
@@ -346,12 +378,12 @@ public class UserServiceImpl extends BaseUpdatableServiceImpl<UserDTO, User>
           "Default users added through deployment properties cannot be deleted");
     }
 
-    // Check if user is the last global admin
-    //    if (user.isGlobalAdmin() && readerService.isUserLastGlobalAdmin(user.getId())) {
-    //      log.warn("Cannot delete user with id {} as they are the last global admin", id);
-    //      throw ExceptionUtils.createException(IllegalStateException.class, "cannot_delete_last_admin",
-    //          "The last user with the global Admin role cannot be deleted");
-    //    }
+    // Check if user is the last administrator
+    if (readerService.isLastAdmin(user.getId())) {
+      log.warn("Cannot delete user with id {} as they are the last administrator", id);
+      throw ExceptionUtils.createException(IllegalStateException.class, "cannot_delete_last_admin",
+          "The last user with the Admin role cannot be deleted");
+    }
 
     // Check if user is trying to delete their own account
     String currentUsername = authenticationContext.getCurrentUsername();

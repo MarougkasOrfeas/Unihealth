@@ -1,0 +1,600 @@
+/* ==========================================================================
+   Semantic Tokens
+   ========================================================================== */
+
+/**
+ * This file defines the semantic tokens for the design system.
+ * These tokens are the values that should be used in components and
+ * stylesheets, as they represent the intended use of the design elements.
+ * They are mapped to the primitive tokens defined in _primitives.scss,
+ * which are the raw design values that should not be used directly in components.
+ */
+
+/* ==========================================================================
+   Imports
+   ========================================================================== */
+
+@use 'primitives' as p;
+
+:root {
+  /* ==========================================================================
+     Main Brand Colors
+     ========================================================================== */
+
+  /**
+   * Core semantic colors used across the application.
+   *
+   * Use these for:
+   * - buttons
+   * - links
+   * - emphasis
+   * - semantic feedback states
+   * - badges and alerts
+   *
+   * These are the main public-facing color roles of the system.
+   */
+
+  --sys-primary: #{p.$primary-40};
+  --sys-on-primary: #{p.$white};
+
+  --sys-secondary: #{p.$secondary-40};
+  --sys-on-secondary: #{p.$white};
+
+  --sys-tertiary: #{p.$tertiary-40};
+  --sys-on-tertiary: #{p.$white};
+
+  --sys-error: #{p.$error-40};
+  --sys-on-error: #{p.$white};
+
+  --sys-warning: #{p.$warning-40};
+  --sys-on-warning: #{p.$white};
+
+  --sys-success: #{p.$success-40};
+  --sys-on-success: #{p.$white};
+
+  /* ==========================================================================
+     Containers
+     ========================================================================== */
+
+  /**
+   * Softer semantic surfaces used for:
+   * - badges
+   * - alerts
+   * - status chips
+   * - highlighted information blocks
+   * - tonal surfaces
+   *
+   * Container roles should be used when a full strong semantic
+   * color would be too intense for the UI.
+   */
+
+  --sys-primary-container: #{p.$primary-90};
+  --sys-on-primary-container: #{p.$primary-30};
+
+  --sys-secondary-container: #{p.$secondary-90};
+  --sys-on-secondary-container: #{p.$secondary-30};
+
+  --sys-tertiary-container: #{p.$tertiary-90};
+  --sys-on-tertiary-container: #{p.$tertiary-30};
+
+  --sys-error-container: #{p.$error-90};
+  --sys-on-error-container: #{p.$error-30};
+
+  --sys-warning-container: #{p.$warning-90};
+  --sys-on-warning-container: #{p.$warning-20};
+
+  --sys-success-container: #{p.$success-90};
+  --sys-on-success-container: #{p.$success-20};
+
+  /* ==========================================================================
+     Fixed Color Roles
+     ========================================================================== */
+
+  /**
+   * Advanced roles intended for shared design-system components
+   * and theme-level implementations.
+   *
+   * Use these ONLY when you need stable brand values that should
+   * not shift with surface/context usage.
+   *
+   * DO NOT use these directly in feature components unless there
+   * is a clear design-system reason.
+   */
+
+  --sys-inverse-primary: #{p.$primary-80};
+  --sys-primary-fixed: #{p.$primary-90};
+  --sys-primary-fixed-dim: #{p.$primary-80};
+  --sys-on-primary-fixed: #{p.$primary-10};
+  --sys-on-primary-fixed-variant: #{p.$primary-30};
+
+  --sys-inverse-secondary: #{p.$secondary-80};
+  --sys-secondary-fixed: #{p.$secondary-90};
+  --sys-secondary-fixed-dim: #{p.$secondary-80};
+  --sys-on-secondary-fixed: #{p.$secondary-10};
+  --sys-on-secondary-fixed-variant: #{p.$secondary-30};
+
+  --sys-inverse-tertiary: #{p.$tertiary-80};
+  --sys-tertiary-fixed: #{p.$tertiary-90};
+  --sys-tertiary-fixed-dim: #{p.$tertiary-80};
+  --sys-on-tertiary-fixed: #{p.$tertiary-10};
+  --sys-on-tertiary-fixed-variant: #{p.$tertiary-30};
+
+  /* ==========================================================================
+     Surface Colors
+     ========================================================================== */
+
+  /**
+   * Application background and layered surfaces.
+   *
+   * Use these for:
+   * - page backgrounds
+   * - cards
+   * - panels
+   * - nested containers
+   * - inverse surfaces
+   *
+   * Surface levels help distinguish elevation and grouping
+   * without inventing ad hoc grays.
+   */
+
+  --sys-white: #{p.$white};
+  --sys-black: #{p.$black};
+
+  --sys-background: #{p.$white};
+  --sys-on-background: #{p.$neutral-10};
+
+  --sys-surface: #{p.$neutral-99};
+  --sys-surface-dim: #{p.$neutral-90};
+  --sys-surface-bright: #{p.$neutral-99};
+
+  --sys-surface-container-lowest: #{p.$white};
+  --sys-surface-container-low: #{p.$neutral-95};
+  --sys-surface-container: #{p.$neutral-90};
+  --sys-surface-container-high: #{p.$neutral-80};
+  --sys-surface-container-highest: #{p.$neutral-70};
+
+  --sys-inverse-surface: #{p.$neutral-20};
+  --sys-inverse-on-surface: #{p.$neutral-95};
+
+  --sys-surface-hover: #{p.$neutral-95};
+  --sys-surface-selected: #{p.$primary-95};
+
+  /* ==========================================================================
+     Text Colors
+     ========================================================================== */
+
+  /**
+   * Primary text roles for application content.
+   *
+   * Use these instead of inventing custom text colors.
+   *
+   * TEXT ROLES:
+   * - base: main readable content
+   * - variant: secondary/supporting content
+   * - muted: less prominent information
+   * - inverse: text shown on dark surfaces
+   * - disabled: disabled labels/content
+   * - link: interactive inline text
+   * - semantic roles: status-specific text
+   */
+
+  --sys-text-base: #{p.$on-surface};
+  --sys-text-variant: #{p.$on-surface-variant};
+  --sys-text-muted: #{p.$neutral-50};
+  --sys-text-inverse: #{p.$white};
+  --sys-text-disabled: #{p.$neutral-50};
+
+  --sys-text-link: var(--sys-primary);
+
+  --sys-text-error: var(--sys-error);
+  --sys-text-warning: #{p.$warning-30};
+  --sys-text-success: #{p.$success-30};
+
+  /* Material-style aliases for theme usage */
+  --sys-on-surface: var(--sys-text-base);
+  --sys-on-surface-variant: var(--sys-text-variant);
+
+  /* ==========================================================================
+     Borders & Focus Tokens
+     ========================================================================== */
+
+  /**
+   * Borders and focus indicators for components.
+   *
+   * Use:
+   * - subtle borders for separators and light surfaces
+   * - default borders for standard controls
+   * - strong borders only when additional emphasis is needed
+   *
+   * Focus tokens should be used for keyboard accessibility.
+   */
+
+  --sys-outline: #{p.$outline};
+  --sys-outline-variant: #{p.$outline-variant};
+
+  --sys-border-subtle: var(--sys-outline-variant);
+  --sys-border-default: var(--sys-outline);
+  --sys-border-strong: #{p.$neutral-40};
+
+  --sys-focus-outline: #{p.$black};
+  --sys-focus-ring: #{p.$black};
+  --sys-focus-ring-offset: var(--sys-surface);
+
+  /* ==========================================================================
+     Spacing & Layout
+     ========================================================================== */
+
+  /* Generic semantic spacing
+     ========================================================================== */
+
+  /**
+   * General-purpose spacing tokens used in components.
+   *
+   * These should be the DEFAULT choice for:
+   * - padding
+   * - margin
+   * - gap
+   * - spacing between elements
+   *
+   * Example usage:
+   * gap: var(--sys-spacing-sm);
+   * padding: var(--sys-spacing-md);
+   */
+
+  --sys-spacing-2xs: #{p.$size-4};  /* 4 */
+  --sys-spacing-xs: #{p.$size-8};   /* 8 */
+  --sys-spacing-sm: #{p.$size-16};   /* 16 */
+  --sys-spacing-md: #{p.$size-24};   /* 24 */
+  --sys-spacing-lg: #{p.$size-32};   /* 32 */
+  --sys-spacing-xl: #{p.$size-40};   /* 40 */
+  --sys-spacing-2xl: #{p.$size-48};  /* 48 */
+  --sys-spacing-3xl: #{p.$size-56};  /* 56 */
+
+  /* Layout tokens (page-level)
+     ========================================================================== */
+
+  /**
+   * Defines page structure and large-scale layout behavior.
+   *
+   * These tokens should be used for:
+   * - page padding
+   * - section spacing
+   * - layout gaps
+   * - content width constraints
+   *
+   * Do NOT use these for small component spacing.
+   */
+
+  /* Page width constraints */
+  --sys-layout-page-max-width: 1440px;
+  --sys-layout-content-width: 960px;
+  --sys-layout-reading-width: 720px;
+
+  /* Page horizontal padding (responsive) */
+  --sys-layout-page-padding-desktop: var(--sys-spacing-lg);
+  --sys-layout-page-padding-tablet: var(--sys-spacing-md);
+  --sys-layout-page-padding-mobile: var(--sys-spacing-sm);
+
+  /* Vertical spacing between major sections */
+  --sys-layout-section-gap: var(--sys-spacing-sm);
+
+  /* General content spacing inside pages */
+  --sys-layout-content-gap: var(--sys-spacing-md);
+
+  /* Grid and layout gaps */
+  --sys-layout-grid-gap: var(--sys-spacing-md);
+
+  /* App shell tokens
+     ========================================================================== */
+
+  /**
+   * Defines fixed layout elements of the application shell.
+   *
+   * Includes:
+   * - header
+   * - sidebar
+   * - navigation areas
+   *
+   * These values should not be duplicated elsewhere.
+   */
+
+  --sys-layout-header-height: 56px;
+
+  --sys-layout-sidebar-width: 272px;
+  --sys-layout-sidebar-width-collapsed: 96px;
+
+  /* Generic component spacing
+     ========================================================================== */
+
+  /**
+   * Default spacing used inside reusable components.
+   *
+   * Use these for:
+   * - spacing between elements inside components
+   * - generic padding inside containers
+   *
+   * These provide consistency across all shared UI.
+   */
+
+  --sys-component-gap-tight:   var(--sys-spacing-xs);
+  --sys-component-gap-default: var(--sys-spacing-sm);
+  --sys-component-gap-loose:   var(--sys-spacing-md);
+
+  --sys-component-padding-sm: var(--sys-spacing-sm);
+  --sys-component-padding-md: var(--sys-spacing-md);
+  --sys-component-padding-lg: var(--sys-spacing-lg);
+
+
+  /** DEPRECATED
+   * The following tokens are deprecated and should not be used in new components or styles.
+   * If used, please replace with the appropriate generic spacing tokens defined above.
+   */
+  --sys-spacing-stack-tight: #{p.$size-4}; /* TO BE REMOVED */
+  --sys-spacing-stack-base: #{p.$size-8}; /* TO BE REMOVED */
+  --sys-spacing-inline-md: #{p.$size-16}; /* TO BE REMOVED */
+
+  /* Surface/container tokens
+     ========================================================================== */
+
+  /**
+   * Standard spacing for common container types.
+   *
+   * Prevents repeated custom spacing for:
+   * - cards
+   * - dialogs
+   * - panels
+   */
+
+  /* Cards */
+  --sys-card-padding: var(--sys-spacing-md);
+  --sys-card-gap:     var(--sys-spacing-sm);
+
+  /* Dialogs / modals */
+  --sys-dialog-padding: var(--sys-spacing-lg);
+  --sys-dialog-gap:     var(--sys-spacing-md);
+
+  /**
+   * Reserved height to not resize on data fetching contrast with spinner height and actual data size.
+   */
+  --sys-dialog-table-height: 62vh;
+
+  /* Panels / sections */
+  --sys-panel-padding: var(--sys-spacing-md);
+  --sys-panel-gap:     var(--sys-spacing-sm);
+
+  /* Form tokens
+     ========================================================================== */
+
+  /**
+   * Defines consistent spacing for form layouts.
+   *
+   * Use these instead of manually spacing form elements.
+   */
+
+  --sys-form-row-gap:     var(--sys-spacing-sm);
+  --sys-form-section-gap: var(--sys-spacing-lg);
+  --sys-form-field-gap:   var(--sys-spacing-xs);
+
+  /* Table & data display tokens
+     ========================================================================== */
+
+  /**
+   * Standard spacing for tables and data-heavy components.
+   *
+   * Helps keep density consistent across the app.
+   */
+
+  --sys-table-cell-padding-x: var(--sys-spacing-sm);
+  --sys-table-cell-padding-y: var(--sys-spacing-xs);
+
+  --sys-table-row-gap: var(--sys-spacing-xs);
+
+  /* Toolbar & action area tokens
+     ========================================================================== */
+
+  /**
+   * Spacing for toolbars, filters, and action groups.
+   *
+   * Commonly used in:
+   * - page headers
+   * - filter bars
+   * - action sections
+   */
+
+  --sys-toolbar-gap: var(--sys-spacing-sm);
+  --sys-action-group-gap: var(--sys-spacing-xs);
+
+  /* List & grouping tokens
+   ========================================================================== */
+
+  /**
+   * Spacing for lists, chips, and grouped elements.
+   *
+   * Ensures consistent grouping behavior.
+   */
+
+  --sys-list-item-gap: var(--sys-spacing-sm);
+  --sys-chip-gap: var(--sys-spacing-xs);
+
+  /* ==========================================================================
+     Radius Tokens
+     ========================================================================== */
+
+  /**
+   * Corner radius scale used across the application.
+   *
+   * Use the generic radius scale unless a component-specific
+   * radius token exists.
+   *
+   * Avoid defining local border-radius values in components.
+   */
+
+  --sys-radius-xs: #{p.$radius-2};
+  --sys-radius-sm: #{p.$radius-4};
+  --sys-radius-md: #{p.$radius-8};
+  --sys-radius-lg: #{p.$radius-16};
+  --sys-radius-full: #{p.$radius-full};
+
+  /* ==========================================================================
+     Elevation / Shadow Tokens
+     ========================================================================== */
+
+  /**
+   * Shadow system for visual depth.
+   *
+   * Use these instead of custom box-shadow values.
+
+   * Typical usage:
+   * - elevation-1: subtle raised surfaces (cards)
+   * - elevation-2: popovers, floating panels
+   * - elevation-3: dialogs, modals
+   * - elevation-4: drawers, high overlays
+   * - elevation-5: highest overlays
+   */
+
+  --sys-elevation-1: #{p.$elevation-1};
+  --sys-elevation-2: #{p.$elevation-2};
+  --sys-elevation-3: #{p.$elevation-3};
+  --sys-elevation-4: #{p.$elevation-4};
+  --sys-elevation-5: #{p.$elevation-5};
+
+  /* Shadow aliases for convenience (legacy, prefer --sys-elevation-n) */
+  --sys-shadow-sm: var(--sys-elevation-1);
+  --sys-shadow-md: var(--sys-elevation-2);
+  --sys-shadow-lg: var(--sys-elevation-3);
+  --sys-shadow-xl: var(--sys-elevation-4);
+  --sys-shadow-xxl: var(--sys-elevation-5);
+
+  /* ==========================================================================
+     State Tokens
+     ========================================================================== */
+
+  /**
+   * Interaction-state tokens used for hover, focus, press,
+   * drag, and disabled states.
+   *
+   * Prefer these when building shared interactive components.
+   */
+
+  --sys-state-hover-opacity: 0.08;
+  --sys-state-focus-opacity: 0.12;
+  --sys-state-pressed-opacity: 0.12;
+  --sys-state-dragged-opacity: 0.16;
+  --sys-state-disabled-opacity: 0.38;
+
+  --sys-state-hover-surface: rgba(0, 0, 0, 0.04);
+  --sys-state-focus-surface: rgba(0, 0, 0, 0.08);
+  --sys-state-pressed-surface: rgba(0, 0, 0, 0.08);
+  --sys-state-selected-surface: rgba(88, 100, 32, 0.10);
+
+  /* ==========================================================================
+     Opacity Tokens
+     ========================================================================== */
+
+  /**
+   * Standard opacity values for disabled or de-emphasized UI.
+   *
+   * Use these instead of hardcoded opacity values.
+   */
+
+  --sys-opacity-disabled: 0.38;
+  --sys-opacity-subtle: 0.72;
+  --sys-opacity-overlay: 0.48;
+
+  /* ==========================================================================
+     Icon Tokens
+     ========================================================================== */
+
+  /**
+   * Standard icon sizing and default icon colors.
+   *
+   * Use these for:
+   * - inline icons
+   * - status icons
+   * - navigation icons
+   */
+
+  --sys-icon-size-sm: 16px;
+  --sys-icon-size-md: 20px;
+  --sys-icon-size-lg: 24px;
+  --sys-icon-size-xl: 32px;
+
+  --sys-icon-color-default: var(--sys-text-variant);
+  --sys-icon-color-muted: var(--sys-text-muted);
+  --sys-icon-color-inverse: var(--sys-text-inverse);
+  --sys-icon-color-primary: var(--sys-primary);
+  --sys-icon-color-error: var(--sys-error);
+
+  /* ==========================================================================
+     Motion Tokens
+     ========================================================================== */
+
+  /**
+   * Standard animation timing and easing values.
+   *
+   * Use these to keep transitions consistent throughout the app.
+   */
+
+  --sys-motion-duration-fast: 120ms;
+  --sys-motion-duration-base: 200ms;
+  --sys-motion-duration-slow: 280ms;
+
+  --sys-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --sys-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1.2);
+
+  /* ==========================================================================
+     Z-Index Tokens
+     ========================================================================== */
+
+  /**
+   * Layering system for floating and stacked UI.
+   *
+   * Use these instead of arbitrary z-index values.
+   *
+   * This prevents layering conflicts across menus, dialogs,
+   * sticky headers, and overlays.
+   */
+
+  --sys-z-base: 1;
+  --sys-z-sticky: 100;
+  --sys-z-dropdown: 1000;
+  --sys-z-overlay: 1100;
+  --sys-z-modal: 1200;
+  --sys-z-toast: 1300;
+  --sys-z-tooltip: 1400;
+
+  /* ==========================================================================
+     Buttons
+     ========================================================================== */
+
+  /**
+    * Button tokens for consistent styling of buttons across the application.
+    * These include border radius, touch target size, height, spacing, and state
+    * colors for different button variants (filled, outlined, text, and their danger
+    * versions).
+    */
+
+  --sys-btn-radius: #{p.$radius-8};
+
+  --sys-btn-height-sm: #{p.$size-32};
+  --sys-btn-height-md: #{p.$size-40};
+  --sys-btn-height-lg: #{p.$size-48};
+
+  --sys-btn-space-sm: #{p.$size-12};
+  --sys-btn-space-md: #{p.$size-16};
+  --sys-btn-space-lg: #{p.$size-24};
+
+  --sys-btn-disabled-outline-color: #{p.$neutral-60};
+  --sys-btn-disabled-container-color: #{p.$neutral-90};
+  --sys-btn-disabled-text-color: #{p.$neutral-50};
+
+  /* ==========================================================================
+     Form Fields
+     ========================================================================== */
+
+  --sys-form-field-label-color: var(--sys-text-muted);
+  --sys-form-field-float-label-size: 18px;
+  --sys-form-field-icon-color: var(--sys-text-variant);
+  --sys-form-field-container-color: transparent;
+  --sys-form-field-disabled-container-color: rgba(0, 0, 0, 0.04);
+}

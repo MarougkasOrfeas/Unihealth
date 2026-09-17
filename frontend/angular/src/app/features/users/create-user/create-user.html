@@ -1,26 +1,46 @@
 <form [formGroup]="form" [appUnsavedChangesBeforeUnload]="form.dirty" data-testid="create-user-form">
 
     <div class="toolbar-row" data-testid="create-user-toolbar">
-        <h1 class="page-title" data-testid="create-user-title">Δημιουργία χρήστη</h1>
+        <h1 class="page-title" data-testid="create-user-title">{{ titleKey | translate }}</h1>
 
         <span class="actions">
-            <app-save-button [disabled]="form.invalid || form.pending"
-                             [tooltip]="(form.invalid || form.pending) ? 'Παρακαλώ ελέγξτε τα πεδία' : undefined"
-                             (save)="onSave()"
-                             data-testid="btn-save">
-            </app-save-button>
+            @if (mode !== 'view') {
+              <app-save-button [disabled]="form.invalid || form.pending"
+                               [tooltip]="(form.invalid || form.pending) ? 'Παρακαλώ ελέγξτε τα πεδία' : undefined"
+                               (save)="onSave()"
+                               data-testid="btn-save">
+              </app-save-button>
+            }
             <span class="btn-wrapper" matTooltip="Επιστροφή στους χρήστες" matTooltipPosition="above">
               <button mat-stroked-button color="warn" class="delete-btn" (click)="onCancel()" data-testid="btn-cancel">
                   <mat-icon>cancel</mat-icon>
-                  Ακύρωση
-
+                  {{ (mode === 'view' ? 'global.back' : 'global.cancel') | translate }}
               </button>
             </span>
         </span>
     </div>
+    <!-- Status first: it is the thing an administrator most often came here to change, and the
+         shared component carries its own card and heading. -->
+    @if (mode === 'edit' && isAdmin() && status() !== null) {
+        <app-status-toggle
+                testId="user-status"
+                [status]="statusTone()"
+                [entityKey]="'global.entity.user'"
+                [disabled]="statusActionDisabled()"
+                [disabledReason]="'user.status.last.admin'"
+                (statusChange)="onStatusChange($event)"
+        >
+            <!-- Explains the orange pill: the account is enabled, the email just is not
+                 confirmed yet, so there is nothing to activate. -->
+            @if (status() === UserStatusEnum.UNVERIFIED) {
+                <p class="status-hint" data-testid="user-status-unverified-hint">
+                    {{ 'user.status.unverified.hint' | translate }}
+                </p>
+            }
+        </app-status-toggle>
+    }
     <div class="form-container" data-testid="create-user-form-container">
-        <h3 class="page-subtitle" data-testid="section-user-settings">Ρυθμίσεις χρήστη</h3>
-        <mat-divider class="divider-space"></mat-divider>
+        <app-section-title [titleKey]="'user.section.settings'" testId="section-user-settings"/>
         <div class="user-settings">
             <div class="user-settings-row">
                 <div class="username-block">
@@ -35,6 +55,14 @@
                                      [options]="languageOptions" [required]="true" [submitted]="submitted"
                                      tooltip="Γλώσσα για το email ενεργοποίησης/απενεργοποίησης του λογαριασμού"
                                      data-testid="select-language"></app-constant-select>
+
+                <!-- Disabled outside create mode: UserMapper.mapForUpdate ignores the role, so an
+                     editable control here would silently do nothing. -->
+                <app-constant-select [label]="'user.column.role' | translate"
+                                     [control]="form.controls.role"
+                                     [options]="roleOptions" [required]="true" [submitted]="submitted"
+                                     [tooltip]="(isCreate ? 'user.role.tooltip' : 'user.role.tooltip.locked') | translate"
+                                     data-testid="select-role"></app-constant-select>
 
             </div>
 
@@ -59,8 +87,7 @@
         </div>
 
         <!-- Personal Information Section -->
-        <h3 class="page-subtitle" data-testid="section-personal-info">Στοιχεία χρήστη</h3>
-        <mat-divider class="divider-space"></mat-divider>
+        <app-section-title [titleKey]="'user.section.personal'" testId="section-personal-info"/>
         <div class="personal-info-flex">
             <app-text-input label="Όνομα" [required]="true" [submitted]="submitted" [maxlength]="50"
                             tooltip="Όνομα του χρήστη" [control]="form.controls.firstname"
@@ -76,30 +103,32 @@
         </div>
     </div>
 
-    <div class="form-container">
-        <h3 class="page-subtitle" data-testid="section-group-department">Σχολή και Τμήμα</h3>
-        <mat-divider class="divider-space"></mat-divider>
+    <!-- An administrator is staff, not a student, so they belong to no school or department. -->
+    @if (!isAdminRole) {
+        <div class="form-container">
+            <app-section-title [titleKey]="'user.section.groupDepartment'" testId="section-group-department"/>
 
-        <div class="group-department-flex">
-            <app-constant-select
-                label="Ομάδα"
-                [control]="form.controls.group"
-                [options]="groupOptions"
-                [required]="true"
-                [submitted]="submitted"
-                tooltip="Επιλέξτε ομάδα"
-                data-testid="select-group">
-            </app-constant-select>
+            <div class="group-department-flex">
+                <app-constant-select
+                    label="Σχολή"
+                    [control]="form.controls.group"
+                    [options]="groupOptions"
+                    [required]="true"
+                    [submitted]="submitted"
+                    tooltip="Επιλέξτε σχολή"
+                    data-testid="select-group">
+                </app-constant-select>
 
-            <app-constant-select
-                label="Τμήμα"
-                [control]="form.controls.department"
-                [options]="departmentOptions"
-                [required]="true"
-                [submitted]="submitted"
-                tooltip="Επιλέξτε τμήμα"
-                data-testid="select-department">
-            </app-constant-select>
+                <app-constant-select
+                    label="Τμήμα"
+                    [control]="form.controls.department"
+                    [options]="departmentOptions"
+                    [required]="true"
+                    [submitted]="submitted"
+                    tooltip="Επιλέξτε τμήμα"
+                    data-testid="select-department">
+                </app-constant-select>
+            </div>
         </div>
-    </div>
+    }
 </form>

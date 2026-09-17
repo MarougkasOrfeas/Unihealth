@@ -5,11 +5,11 @@ import gr.uniwa.unihealth.backend.dto.DepartmentDTO;
 public interface DepartmentService extends BaseUpdatableService<DepartmentDTO> {
 
   /**
-   * Updates the status of the given group.
+   * Updates the status of the given department.
    *
-   * @param id     The id of the group.
+   * @param id     The id of the department.
    * @param active The new status to set.
-   * @return The updated status of the group.
+   * @return The updated status of the department.
    */
-  boolean setGroupStatus(String id, boolean active);
+  boolean setDepartmentStatus(String id, boolean active);
 }

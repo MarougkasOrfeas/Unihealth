@@ -10,15 +10,15 @@
 
   <mat-error>
     @if (showError('matDatepickerParse')) {
-      Ungültiges Datumsformat
+      {{ 'global.date.invalid' | translate }}
     } @else if (showError('matDatepickerMin')) {
-      Datum liegt in der Vergangenheit.
+      {{ 'global.date.tooEarly' | translate }}
     } @else if (showError('matDatepickerMax')) {
-      Datum ist zu spät
+      {{ 'global.date.tooLate' | translate }}
     } @else if (showGenericError()) {
-      {{ genericErrorMessage() }}
+      {{ 'global.date.invalid' | translate }}
     } @else if (showError('required')) {
-        Pflichtfeld
+      {{ 'global.field.required' | translate }}
     }
   </mat-error>
 </mat-form-field>

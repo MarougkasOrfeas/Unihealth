@@ -1,0 +1,54 @@
+<app-page-header
+  testId="group-form-header"
+  [title]="titleKey | translate"
+  [backLink]="'/groups'"
+  [hasUnsavedChanges]="form.dirty"
+/>
+
+<!-- Status first: it is the thing an administrator most often came here to change, and the
+     shared component carries its own card and heading. -->
+@if (mode === 'edit' && isAdmin() && active() !== null) {
+  <app-status-toggle
+    testId="group-status"
+    [status]="active() ? 'active' : 'inactive'"
+    [entityKey]="'global.entity.group'"
+    (statusChange)="onStatusChange($event)"
+  />
+}
+
+<form [formGroup]="form" (ngSubmit)="onSave()">
+  <div class="form-container">
+    <app-section-title [titleKey]="'global.section.general'" testId="section-group-general"/>
+
+    <div class="group-form">
+      <app-text-input
+        [control]="form.controls.name"
+        [label]="'group.form.name.label' | translate"
+        [required]="true"
+        [maxlength]="255"
+        [submitted]="submitted()"
+        [tooltip]="mode === 'edit' ? ('group.form.name.tooltip' | translate) : undefined"
+      />
+
+      <app-text-input
+        [control]="form.controls.description"
+        [label]="'group.form.description.label' | translate"
+        [maxlength]="1000"
+        [submitted]="submitted()"
+      />
+    </div>
+  </div>
+
+  @if (mode !== 'view') {
+    <div class="group-form__actions">
+      <app-button buttonStyle="text" testId="btn-group-cancel" (clicked)="onCancel()">
+        {{ 'global.cancel' | translate }}
+      </app-button>
+
+      <app-save-button
+        [disabled]="saving()"
+        (save)="onSave()"
+      />
+    </div>
+  }
+</form>

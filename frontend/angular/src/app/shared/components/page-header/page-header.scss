@@ -1,0 +1,89 @@
+@use 'typography' as type;
+@use 'utilities' as u;
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--sys-spacing-lg);
+
+  @include u.c-query('tablet') {
+    flex-direction: column;
+    gap: var(--sys-spacing-sm);
+  }
+
+  .left-section {
+    display: flex;
+    gap: var(--sys-spacing-xs);
+    align-items: center;
+
+    @include u.c-query('tablet') {
+      flex-direction: column;
+    }
+  }
+
+  .title-group {
+    @include u.c-query('tablet'){
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    }
+  }
+
+  .title-row {
+    display: flex;
+    align-items: center;
+    gap: var(--sys-spacing-xs);
+
+    @include u.c-query('tablet') {
+      flex-direction: column-reverse;
+      justify-content: center;
+    }
+  }
+
+  .title {
+    margin: 0;
+    padding: 0;
+  }
+
+  .unsaved-indicator {
+    background-color: var(--sys-warning-container);
+    border: none;
+    color: var(--sys-on-warning-container);
+  }
+
+  .subtitle {
+    @include type.type-h3;
+    color: var(--sys-text-variant);
+    margin: 0;
+    padding: 0;
+
+    @include u.c-query('tablet') {
+      margin-top: var(--sys-spacing-xs);
+      text-align: center;
+    }
+  }
+
+  .actions-section {
+    display: flex;
+    gap: var(--sys-spacing-xs);
+    align-items: center;
+
+    @include u.c-query('mobile') {
+      flex-direction: column;
+    }
+  }
+}
+
+/* headingScale="section". Same specificity as the rules above, so it has to stay after them. */
+.page-header--section {
+  margin-bottom: var(--sys-spacing-sm);
+
+  .title {
+    @include type.type-h3;
+  }
+
+  .subtitle {
+    @include type.type-h4;
+  }
+}

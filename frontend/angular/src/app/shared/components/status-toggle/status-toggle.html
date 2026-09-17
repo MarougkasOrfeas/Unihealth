@@ -1,0 +1,28 @@
+<!-- Owns its whole section — card, titled heading and divider — so every edit page renders the
+     status block identically without repeating the chrome. -->
+<div class="form-container" [attr.data-testid]="testId() + '-section'">
+  <app-section-title [titleKey]="'global.status.label'" [testId]="testId() + '-heading'"/>
+
+  <div class="status-toggle" [attr.data-testid]="testId()">
+    <span class="status-toggle__label">{{ 'global.status.label' | translate }}</span>
+
+    <span [class]="'status ' + status()" [attr.data-testid]="testId() + '-current'">
+      <span class="status_dot"></span>
+      <span class="status_text">{{ statusKey() | translate }}</span>
+    </span>
+
+    <app-button
+      buttonStyle="outlined"
+      [variant]="deactivates() ? 'danger' : 'primary'"
+      [disabled]="disabled()"
+      [disabledReason]="disabled() ? (disabledReason() | translate) : null"
+      [testId]="testId() + '-btn'"
+      (clicked)="onToggle()"
+    >
+      {{ actionKey() | translate }}
+    </app-button>
+  </div>
+
+  <!-- Caller-supplied note, e.g. why an unverified account cannot be activated. -->
+  <ng-content/>
+</div>

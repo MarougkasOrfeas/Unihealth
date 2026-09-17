@@ -1,0 +1,13 @@
+<span class="inline-flex items-center mt-8 gap-4 sort-indicator"
+  [class.hover]="hover && !isSorted" [class.sorted]="isSorted">
+
+  @if (isSorted || hover) {
+    <mat-icon aria-hidden="true" class="sort-dir-icon">{{ icon }}</mat-icon>
+  }
+
+  @if (index) {
+    <span class="sort-order-badge" [attr.aria-label]="'Sorlevelung ' + index">
+      {{ index }}
+    </span>
+  }
+</span>

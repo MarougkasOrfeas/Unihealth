@@ -104,4 +104,9 @@ public class HealthProfileServiceImpl extends BaseServiceImpl<HealthProfileDTO, 
   protected BaseRepository<HealthProfile> getRepository() {
     return repository;
   }
+
+  @Override
+  public void validateAvailable(String id, HealthProfileDTO dto) {
+
+  }
 }

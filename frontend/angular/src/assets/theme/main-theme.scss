@@ -1,0 +1,411 @@
+/* ==========================================================================
+   Main Theme
+   ========================================================================== */
+
+/**
+ * In this file, we define the Angular Material theme and override specific
+ * component styles to align with our design system. This includes:
+ * 1. Defining color palettes based on our primitive tokens.
+ * 2. Setting up the Angular Material theme with our custom colors, typography, and density.
+ * 3. Overriding styles for specific Material components (e.g., dividers, tooltips, buttons)
+ * to use our custom CSS variables for colors, shapes, and sizes.
+ */
+
+/* ==========================================================================
+   Imports
+   ========================================================================== */
+
+/* Load the Angular Material theme engine */
+@use '@angular/material' as mat;
+/* Load the primitive SASS variables to use for the custom palettes */
+@use 'primitives' as p;
+
+/* ==========================================================================
+   Theme Color Palettes
+   ========================================================================== */
+
+$primary-palette: (
+        0: #000000,
+        10: p.$primary-10,
+        20: p.$primary-20,
+        30: p.$primary-30,
+        40: p.$primary-40,
+        50: p.$primary-50,
+        60: p.$primary-60,
+        70: p.$primary-70,
+        80: p.$primary-80,
+        90: p.$primary-90,
+        95: p.$primary-95,
+        99: p.$primary-99,
+        100: #ffffff,
+);
+
+$secondary-palette: (
+        0: #000000,
+        10: p.$secondary-10,
+        20: p.$secondary-20,
+        30: p.$secondary-30,
+        40: p.$secondary-40,
+        50: p.$secondary-50,
+        60: p.$secondary-60,
+        70: p.$secondary-70,
+        80: p.$secondary-80,
+        90: p.$secondary-90,
+        95: p.$secondary-95,
+        99: p.$secondary-99,
+        100: #ffffff,
+);
+
+$tertiary-palette: (
+        0: #000000,
+        10: p.$tertiary-10,
+        20: p.$tertiary-20,
+        30: p.$tertiary-30,
+        40: p.$tertiary-40,
+        50: p.$tertiary-50,
+        60: p.$tertiary-60,
+        70: p.$tertiary-70,
+        80: p.$tertiary-80,
+        90: p.$tertiary-90,
+        95: p.$tertiary-95,
+        99: p.$tertiary-99,
+        100: #ffffff,
+);
+
+$error-palette: (
+        0: #000000,
+        10: p.$error-10,
+        20: p.$error-20,
+        30: p.$error-30,
+        40: p.$error-40,
+        50: p.$error-50,
+        60: p.$error-60,
+        70: p.$error-70,
+        80: p.$error-80,
+        90: p.$error-90,
+        95: p.$error-95,
+        99: p.$error-99,
+        100: #ffffff,
+);
+
+$neutral-palette: (
+        0: #000000,
+        10: p.$neutral-10,
+        20: p.$neutral-20,
+        30: p.$neutral-30,
+        40: p.$neutral-40,
+        50: p.$neutral-50,
+        60: p.$neutral-60,
+        70: p.$neutral-70,
+        80: p.$neutral-80,
+        90: p.$neutral-90,
+        95: p.$neutral-95,
+        99: p.$neutral-99,
+        100: #ffffff,
+);
+
+html {
+  /* ==========================================================================
+     Angular Material Theme Setup
+     ========================================================================== */
+  color-scheme: light;
+
+  @include mat.theme(
+                  (
+                          color: (
+                                  primary: $primary-palette,
+                                  secondary: $secondary-palette,
+                                  tertiary: $tertiary-palette,
+                                  error: $error-palette,
+                                  neutral: $neutral-palette,
+                                  theme-type: light,
+                          ),
+                          typography: (
+                                  brand-family: 'Inter',
+                                  plain-family: 'Inter',
+                          ),
+                          density: -2,
+                  )
+  );
+}
+
+/* ==========================================================================
+   Custom CSS Variables for Angular Material Components
+   ========================================================================== */
+
+:root {
+
+  /* System
+     ========================================================================== */
+
+  @include mat.theme-overrides((
+          primary: var(--sys-primary),
+          on-primary: var(--sys-white),
+          primary-container: var(--sys-primary-container),
+          on-primary-container: var(--sys-on-primary-container),
+          inverse-primary: var(--sys-inverse-primary),
+          primary-fixed: var(--sys-primary-fixed),
+          primary-fixed-dim: var(--sys-primary-fixed-dim),
+          on-primary-fixed: var(--sys-on-primary-fixed),
+          on-primary-fixed-variant: var(--sys-on-primary-fixed-variant),
+          secondary: var(--sys-secondary),
+          on-secondary: var(--sys-white),
+          secondary-container: var(--sys-secondary-container),
+          on-secondary-container: var(--sys-on-secondary-container),
+          inverse-secondary: var(--sys-inverse-secondary),
+          secondary-fixed: var(--sys-secondary-fixed),
+          secondary-fixed-dim: var(--sys-secondary-fixed-dim),
+          on-secondary-fixed: var(--sys-on-secondary-fixed),
+          on-secondary-fixed-variant: var(--sys-on-secondary-fixed-variant),
+          tertiary: var(--sys-tertiary),
+          on-tertiary: var(--sys-white),
+          tertiary-container: var(--sys-tertiary-container),
+          on-tertiary-container: var(--sys-on-tertiary-container),
+          inverse-tertiary: var(--sys-inverse-tertiary),
+          tertiary-fixed: var(--sys-tertiary-fixed),
+          tertiary-fixed-dim: var(--sys-tertiary-fixed-dim),
+          on-tertiary-fixed: var(--sys-on-tertiary-fixed),
+          on-tertiary-fixed-variant: var(--sys-on-tertiary-fixed-variant),
+          error: var(--sys-error),
+          on-error: var(--sys-white),
+          error-container: var(--sys-error-container),
+          on-error-container: var(--sys-on-error-container),
+          background: var(--sys-background),
+          on-background: var(--sys-on-background),
+          surface: var(--sys-surface),
+          on-surface: var(--sys-text-base),
+          surface-dim: var(--sys-surface-dim),
+          surface-bright: var(--sys-surface-bright),
+          surface-container-low: var(--sys-surface-container-low),
+          surface-container-lowest: var(--sys-surface-container-lowest),
+          surface-container: var(--sys-surface-container),
+          surface-container-high: var(--sys-surface-container-high),
+          surface-container-highest: var(--sys-surface-container-highest),
+          inverse-surface: var(--sys-inverse-surface),
+          inverse-on-surface: var(--sys-inverse-on-surface),
+          outline: var(--sys-outline),
+          outline-variant: var(--sys-outline-variant),
+          shadow: var(--sys-black),
+          scrim: var(--sys-black),
+  ));
+
+  /* Divider
+     ========================================================================== */
+
+  @include mat.divider-overrides(
+                  (
+                          color: var(--sys-outline),
+                  )
+  );
+
+  /* Variant */
+  [data-variant='variant'] {
+    @include mat.divider-overrides(
+                    (
+                            color: var(--sys-outline-variant),
+                    )
+    );
+  }
+
+  /* Tooltip
+     ========================================================================== */
+
+  @include mat.tooltip-overrides(
+                  (
+                          container-color: var(--sys-inverse-surface),
+                          container-shape: var(--sys-radius-md),
+                          supporting-text-color: var(--sys-inverse-on-surface),
+                  )
+  );
+
+  /* Buttons
+     ========================================================================== */
+
+  /* Standard Button */
+  @include mat.button-overrides(
+                  (
+                          filled-container-shape: var(--sys-btn-radius),
+                          filled-container-height: var(--sys-btn-height-md),
+                          filled-horizontal-padding: var(--sys-btn-space-md),
+                          filled-disabled-container-color: var(--sys-btn-disabled-container-color),
+                          filled-disabled-label-text-color: var(--sys-btn-disabled-text-color),
+                          outlined-container-shape: var(--sys-btn-radius),
+                          outlined-container-height: var(--sys-btn-height-md),
+                          outlined-horizontal-padding: var(--sys-btn-space-md),
+                          outlined-outline-color: var(--sys-secondary),
+                          outlined-state-layer-color: var(--sys-secondary),
+                          outlined-label-text-color: var(--sys-secondary),
+                          outlined-disabled-outline-color: var(--sys-btn-disabled-outline-color),
+                          outlined-disabled-label-text-color: var(--sys-btn-disabled-outline-color),
+                          text-container-shape: var(--sys-btn-radius),
+                          text-container-height: var(--sys-btn-height-md),
+                          text-horizontal-padding: var(--sys-btn-space-md),
+                          text-with-icon-horizontal-padding: var(--sys-btn-space-md),
+                          text-disabled-label-text-color: var(--sys-btn-disabled-text-color),
+                  )
+  );
+
+  /* Icon Button */
+  @include mat.icon-button-overrides(
+                  (
+                          state-layer-size: var(--sys-btn-height-md),
+                          icon-color: var(--sys-secondary),
+                          state-layer-color: var(--sys-secondary),
+                          disabled-icon-color: var(--sys-btn-disabled-text-color),
+                  )
+  );
+
+  // Style overrides for visually disabled state
+  .is-disabled {
+    @include mat.button-overrides((
+            filled-container-color: var(--sys-btn-disabled-container-color),
+            filled-label-text-color: var(--sys-btn-disabled-text-color),
+            filled-hover-state-layer-opacity: 0,
+            filled-pressed-state-layer-opacity: 0,
+            outlined-outline-color: var(--sys-btn-disabled-outline-color),
+            outlined-label-text-color: var(--sys-btn-disabled-outline-color),
+            outlined-hover-state-layer-opacity: 0,
+            outlined-pressed-state-layer-opacity: 0,
+            text-label-text-color: var(--sys-btn-disabled-text-color),
+            text-hover-state-layer-opacity: 0,
+            text-pressed-state-layer-opacity: 0,
+    ));
+
+    @include mat.icon-button-overrides(
+                    (
+                            icon-color: var(--sys-btn-disabled-text-color),
+                            hover-state-layer-opacity: 0,
+                            pressed-state-layer-opacity: 0,
+                    )
+    );
+  }
+
+  /* Danger Variants */
+  [data-variant='danger'] {
+    @include mat.button-overrides(
+                    (
+                            filled-container-color: var(--sys-error),
+                            outlined-outline-color: var(--sys-error),
+                            outlined-label-text-color: var(--sys-error),
+                            outlined-state-layer-color: var(--sys-error),
+                            text-label-text-color: var(--sys-error),
+                            text-state-layer-color: var(--sys-error),
+                    )
+    );
+
+    @include mat.icon-button-overrides(
+                    (
+                            icon-color: var(--sys-error),
+                            state-layer-color: var(--sys-error),
+                    )
+    );
+  }
+
+  /* Small Size Variant */
+  [data-size='small'] {
+    @include mat.button-overrides(
+                    (
+                            filled-container-height: var(--sys-btn-height-sm),
+                            filled-horizontal-padding: var(--sys-btn-space-sm),
+                            outlined-container-height: var(--sys-btn-height-sm),
+                            outlined-horizontal-padding: var(--sys-btn-space-sm),
+                            text-container-height: var(--sys-btn-height-sm),
+                            text-horizontal-padding: var(--sys-btn-space-sm),
+                            text-with-icon-horizontal-padding: var(--sys-btn-space-sm),
+                    )
+    );
+  }
+
+  /* Large Size Variant */
+  [data-size='large'] {
+    @include mat.button-overrides(
+                    (
+                            filled-container-height: var(--sys-btn-height-lg),
+                            filled-horizontal-padding: var(--sys-btn-space-lg),
+                            outlined-container-height: var(--sys-btn-height-lg),
+                            outlined-horizontal-padding: var(--sys-btn-space-lg),
+                            text-container-height: var(--sys-btn-height-lg),
+                            text-horizontal-padding: var(--sys-btn-space-lg),
+                            text-with-icon-horizontal-padding: var(--sys-btn-space-lg),
+                    )
+    );
+  }
+
+  /* Select
+     ========================================================================== */
+
+  @include mat.select-overrides((
+          panel-background-color: var(--sys-surface-bright),
+  ));
+
+  /* Menu
+     ========================================================================== */
+
+  @include mat.menu-overrides((
+          container-color: var(--sys-surface-bright),
+  ));
+
+  /* List
+     ========================================================================== */
+
+  @include mat.list-overrides((
+          active-indicator-shape: var(--sys-radius-md),
+          list-item-container-color: var(--sys-list-item-container-color),
+  ));
+
+  /* Form Field
+     ========================================================================== */
+
+  @include mat.form-field-density(-3);
+
+  @include mat.form-field-overrides((
+          outlined-label-text-color: var(--sys-form-field-label-color),
+          outlined-label-text-populated-size: var(--sys-form-field-float-label-size),
+          leading-icon-color: var(--sys-form-field-icon-color),
+          trailing-icon-color: var(--sys-form-field-icon-color),
+  ));
+
+  /* Use class override since the outlined form fields don't have a container-color token */
+  .mat-mdc-form-field {
+    .mat-mdc-text-field-wrapper {
+      background-color: var(--sys-form-field-container-color);
+    }
+
+    &.mat-form-field-disabled .mat-mdc-text-field-wrapper {
+      background-color: var(--sys-form-field-disabled-container-color);
+    }
+  }
+
+  /* Dialog
+     ========================================================================== */
+
+  @include mat.dialog-overrides((
+          container-max-width: calc(100vw - var(--sys-spacing-lg)),
+          container-shape: var(--sys-radius-md),
+          container-color: var(--sys-background),
+          headline-padding: var(--sys-spacing-sm) var(--sys-spacing-md),
+          content-padding: var(--sys-spacing-sm) var(--sys-spacing-md),
+          with-actions-content-padding: var(--sys-spacing-sm) var(--sys-spacing-md),
+          actions-padding: var(--sys-spacing-sm) var(--sys-spacing-md),
+          supporting-text-size: var(--sys-type-body-lg-size)
+  ));
+
+  /* Margin to prevent dialog from "touching" the edges of the viewport when max-width is overridden */
+  .cdk-overlay-pane {
+    margin: var(--sys-spacing-sm);
+  }
+
+  /* Chip
+     ========================================================================== */
+
+  @include mat.chips-density(-1);
+
+  /* Sidenav
+     ========================================================================== */
+
+  @include mat.sidenav-overrides((
+          container-shape: 0,
+          container-width: var(--sys-layout-sidebar-width),
+          scrim-color: rgba(0, 0, 0, 0.4),
+  ));
+}

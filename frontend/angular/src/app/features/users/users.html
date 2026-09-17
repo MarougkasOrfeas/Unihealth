@@ -1,33 +1,25 @@
-<!-- Header section -->
-<div class="toolbar-row" data-testid="section-user-header">
-    <h1 class="page-title" data-testid="user-title">{{ 'user.management.title' | translate }}</h1>
-    <span class="actions" data-testid="section-fee-header-actions">
-    <span class="btn-wrapper" [matTooltip]="'user.management.tooltip.create' | translate" matTooltipPosition="above">
-      <button mat-button class="add-user-btn" data-testid="btn-user-create" (click)="onCreate()">
-        <mat-icon>add</mat-icon>
-          {{ 'user.management.action.create' | translate }}
-      </button>
-    </span>
-    <span class="btn-wrapper" [matTooltip]="'global.back.tooltip' | translate" matTooltipPosition="above">
-      <button mat-stroked-button color="warn" class="delete-btn" (click)="onCancel()" data-testid="btn-cancel">
-          <mat-icon>arrow_back</mat-icon>
-          {{ 'global.back' | translate }}
-      </button>
-    </span>
-  </span>
-</div>
+<app-page-header [title]="'user.management.title' | translate">
+    <ng-container actions>
+        <app-button icon="add" size="large" testId="btn-create" (clicked)="onCreate()">
+            {{ 'user.management.action.create' | translate }}
+        </app-button>
+    </ng-container>
+</app-page-header>
 
-<app-table
+<app-base-table
+    pageName="users"
+    [service]="userService"
     [columns]="columns"
-    [data]="users"
-    [totalElements]="totalElements"
-    [pageSize]="currentPageSize"
-    [loading]="isLoading"
-    [facetOptions]="facetOptions"
-    [facetSelection]="facetSelection"
-    (pageChange)="onPageChange($event)"
-    (sortChange)="onSortChange($event)"
-    (facetOpened)="onFacetOpened($event)"
-    (facetChange)="onFacetChange($event)">
-</app-table>
-
+    [mapToRow]="toRow"
+    [emptyState]="emptyState"
+    [defaultSort]="['username,asc']"
+    [rowActions]="['view', 'edit', 'delete']"
+    [showExport]="true"
+    [showImport]="true"
+    [importDisabled]="true"
+    [emptyStateCreate]="true"
+    (create)="onCreate()"
+    (view)="onView($event)"
+    (edit)="onEdit($event)"
+    (delete)="onDelete($event)"
+/>

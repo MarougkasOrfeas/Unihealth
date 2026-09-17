@@ -1,157 +1,86 @@
-import {Component, OnInit} from "@angular/core";
-import {Table} from "../../shared/components/table/table";
-import {PageEvent} from "@angular/material/paginator";
-import {TableColumn} from "../../shared/interfaces/table-column";
-import {GroupService} from "../../shared/services/group.service";
-import {Sort} from "@angular/material/sort";
-import {GroupDTO} from "../../shared/interfaces/group";
-import {MatButton} from "@angular/material/button";
-import {MatIcon} from "@angular/material/icon";
-import {TranslatePipe} from "@ngx-translate/core";
-import {MatTooltip} from "@angular/material/tooltip";
-import {Router} from "@angular/router";
-
-interface GroupRow {
-    id: string;
-    name: string;
-    description: string;
-    departments: string[];
-}
-
+import {ChangeDetectionStrategy, Component, DestroyRef, inject, viewChild} from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {Router} from '@angular/router';
+import {TranslatePipe} from '@ngx-translate/core';
+import {filter, switchMap} from 'rxjs';
+import {BaseTable, EmptyStateData} from '../../shared/components/base-table/base-table';
+import {Button} from '../../shared/components/button/button';
+import {PageHeader} from '../../shared/components/page-header/page-header';
+import {UNIHEALTH_CONSTANTS} from '../../shared/constants/unihealth.constants';
+import {GroupDTO} from '../../shared/interfaces/group';
+import {GroupService} from '../../shared/services/group.service';
+import {MessageService} from '../../shared/services/message.service';
+import {GROUP_COLUMNS, GroupRow} from './groups.columns';
 
 @Component({
     selector: 'app-groups',
     standalone: true,
-    imports: [Table, MatButton, MatIcon, TranslatePipe, MatTooltip],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [BaseTable, PageHeader, Button, TranslatePipe],
     templateUrl: './groups.html',
-    styleUrls: ['./groups.scss']
+    styleUrls: ['./groups.scss'],
 })
-export class Groups implements OnInit {
+export class Groups {
 
-    groups: GroupRow[] = [];
-    totalElements = 0;
+    private readonly router = inject(Router);
+    private readonly messages = inject(MessageService);
+    private readonly destroyRef = inject(DestroyRef);
+    protected readonly groupService = inject(GroupService);
 
-    isLoading = false;
+    private readonly table = viewChild.required(BaseTable<GroupDTO, GroupRow>);
 
-    currentPageIndex = 0;
-    currentPageSize = 10;
-    currentSortActive = 'name';
-    currentSortDirection: 'asc' | 'desc' = 'asc';
+    protected readonly columns = GROUP_COLUMNS;
 
-    columns: TableColumn<GroupRow>[] = [
-        {key: 'name', header: 'Name', sortable: true, filterable: true, filterSearchable: true},
-        {key: 'description', header: 'Description', sortable: true, filterable: true, filterSearchable: true},
-        {key: 'departments', header: 'Departments', sortable: true, filterable: true, filterSearchable: true},
-        {
-            key: 'action',
-            header: 'Action',
-            type: 'actions',
-            actions: [
-                {
-                    icon: 'edit',
-                    tooltip: 'Edit a group',
-                    onClick: (row) => this.onEditGroup(row.id)
-                }
-            ]
-        }
-    ];
-
-    facetOptions: Record<string, string[]> = {
-        name: [],
-        description: [],
+    protected readonly emptyState: EmptyStateData = {
+        titleKey: 'group.list.empty.title',
+        subtitleKey: 'group.list.empty.subtitle',
+        titleErrorKey: 'global.list.error.title',
+        subtitleErrorKey: 'global.list.error.subtitle',
+        buttonLabelKey: 'group.management.action.create',
     };
 
-    facetSelection: Record<string, Set<string>> = {
-        name: new Set<string>(),
-        description: new Set<string>(),
-    };
+    protected readonly toRow = (dto: GroupDTO): GroupRow => ({
+        id: dto.id,
+        name: dto.name,
+        description: dto.description ?? '',
+        departments: dto.departments ?? [],
+        active: dto.active,
+    });
 
-    constructor(private groupService: GroupService, private readonly router: Router,) {
+    protected onCreate(): void {
+        this.navigate(['/', UNIHEALTH_CONSTANTS.ROUTE_GROUPS, 'create']);
     }
 
-    ngOnInit(): void {
-        this.loadGroups();
+    protected onView(row: GroupRow): void {
+        this.navigate(['/', UNIHEALTH_CONSTANTS.ROUTE_GROUPS, row.id]);
     }
 
-    onPageChange(event: PageEvent): void {
-        this.currentPageIndex = event.pageIndex;
-        this.currentPageSize = event.pageSize;
-        this.loadGroups();
+    protected onEdit(row: GroupRow): void {
+        this.navigate(['/', UNIHEALTH_CONSTANTS.ROUTE_GROUPS, row.id, 'edit']);
     }
 
-    onSortChange(sort: Sort): void {
-        this.currentSortActive = sort.active || 'username';
-        this.currentSortDirection = (sort.direction as 'asc' | 'desc') || 'asc';
-        this.currentPageIndex = 0;
-        this.loadGroups();
+    protected onDelete(row: GroupRow): void {
+        this.messages.confirmDelete(UNIHEALTH_CONSTANTS.ENTITY.GROUP)
+            .afterClosed()
+            .pipe(
+                filter(Boolean),
+                switchMap(() => this.groupService.delete(row.id)),
+                takeUntilDestroyed(this.destroyRef),
+            )
+            .subscribe({
+                next: () => {
+                    this.messages.deleteSuccess(UNIHEALTH_CONSTANTS.ENTITY.GROUP);
+                    // From page one: removing a row shifts every later one, so the current page
+                    // index may no longer point where the user thinks it does.
+                    this.table().reloadFirstPage();
+                },
+                error: () => this.messages.deleteError(),
+            });
     }
 
-    onEditGroup(id: string): void {
-        console.log('edit user', id);
+    /** Saves the query before leaving, so coming back restores the filters, sort and page. */
+    private navigate(commands: unknown[]): void {
+        this.table().saveCurrentState();
+        void this.router.navigate(commands);
     }
-
-    onFacetOpened(key: string): void {
-        console.log('facet opened', key);
-    }
-
-    onFacetChange(event: { key: string; selection: Set<string> }): void {
-        console.log('facet changed', event.key, event.selection);
-    }
-
-    onCreate() {
-
-    }
-
-    onCancel() {
-        this.router.navigateByUrl('/');
-    }
-
-    private loadGroups(): void {
-        this.isLoading = true;
-
-        const requestBody = this.buildRequestBody();
-
-        this.groupService.getPage(requestBody).subscribe({
-            next: (page) => {
-                this.groups = (page.content ?? []).map(user => this.toRow(user));
-                this.totalElements = page.totalElements ?? 0;
-                this.isLoading = false;
-            },
-            error: (err) => {
-                console.error('Failed to load users', err);
-                this.groups = [];
-                this.totalElements = 0;
-                this.isLoading = false;
-            }
-        });
-    }
-
-    private buildRequestBody(): Record<string, unknown> {
-        return {
-            page: this.currentPageIndex,
-            size: this.currentPageSize,
-            sort: [this.buildSortParameter()]
-        };
-    }
-
-    private buildSortParameter(): string {
-        const columnMapping: Record<string, string> = {
-            name: 'name',
-            description: 'description',
-            departments: 'departments',
-        };
-
-        const backendField = columnMapping[this.currentSortActive] || 'name';
-        return `${backendField},${this.currentSortDirection}`;
-    }
-
-    private toRow(g: GroupDTO): GroupRow {
-        return {
-            id: (g as any).id ?? '',
-            name: g.name,
-            description: g.description,
-            departments: Array.isArray(g.departments) ? g.departments : [],
-        };
-    }
-
 }

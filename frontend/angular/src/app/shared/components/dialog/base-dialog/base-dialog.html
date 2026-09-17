@@ -1,0 +1,34 @@
+<!-- Header -->
+<app-dialog-header
+  [title]="data.title ?? 'global.warning' | translate"
+  (dialogClose)="dialogRef.close(false)"
+/>
+
+<!-- Content -->
+<mat-dialog-content data-testid="dialog-content">
+  @if (isString(data.content)) {
+    <p>{{ data.content | translate }}</p>
+  } @else if (isTemplate(data.content)) {
+    <ng-container
+      [ngTemplateOutlet]="data.content"
+      [ngTemplateOutletContext]="{ $implicit: data.contentData }"
+    />
+  }
+</mat-dialog-content>
+
+<!-- Actions -->
+<app-dialog-actions>
+  <app-button testId="btn-dialog-cancel" [buttonStyle]="'text'" (clicked)="dialogRef.close(false)">
+    {{ data.cancelText ?? 'global.cancel' | translate }}
+  </app-button>
+
+  @if (!data.hideConfirm) {
+    <app-button
+      testId="btn-dialog-confirm"
+      [variant]="data.isDestructive ? 'danger' : 'primary'"
+      (clicked)="dialogRef.close(true)"
+    >
+      {{ data.confirmText ?? 'global.confirm.label' | translate }}
+    </app-button>
+  }
+</app-dialog-actions>

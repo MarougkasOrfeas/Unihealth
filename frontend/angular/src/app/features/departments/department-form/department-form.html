@@ -1,0 +1,62 @@
+<app-page-header
+  testId="department-form-header"
+  [title]="titleKey | translate"
+  [backLink]="'/departments'"
+  [hasUnsavedChanges]="form.dirty"
+/>
+
+<!-- Status first: it is the thing an administrator most often came here to change, and the
+     shared component carries its own card and heading. -->
+@if (mode === 'edit' && isAdmin() && active() !== null) {
+  <app-status-toggle
+    testId="department-status"
+    [status]="active() ? 'active' : 'inactive'"
+    [entityKey]="'global.entity.department'"
+    (statusChange)="onStatusChange($event)"
+  />
+}
+
+<form [formGroup]="form" (ngSubmit)="onSave()">
+  <div class="form-container">
+    <app-section-title [titleKey]="'global.section.general'" testId="section-department-general"/>
+
+    <div class="department-form">
+      <app-text-input
+        [control]="form.controls.name"
+        [label]="'department.form.name.label' | translate"
+        [required]="true"
+        [maxlength]="255"
+        [submitted]="submitted()"
+        [tooltip]="mode === 'edit' ? ('department.form.name.tooltip' | translate) : undefined"
+      />
+
+      <app-constant-select
+        [control]="form.controls.group"
+        [label]="'department.form.group.label' | translate"
+        [options]="groupOptions()"
+        [required]="true"
+        [submitted]="submitted()"
+      />
+
+      <app-text-input
+        [control]="form.controls.description"
+        [label]="'department.form.description.label' | translate"
+        [maxlength]="1000"
+        [submitted]="submitted()"
+      />
+    </div>
+  </div>
+
+  @if (mode !== 'view') {
+    <div class="department-form__actions">
+      <app-button buttonStyle="text" testId="btn-department-cancel" (clicked)="onCancel()">
+        {{ 'global.cancel' | translate }}
+      </app-button>
+
+      <app-save-button
+        [disabled]="saving()"
+        (save)="onSave()"
+      />
+    </div>
+  }
+</form>

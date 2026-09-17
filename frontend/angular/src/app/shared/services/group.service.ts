@@ -17,4 +17,12 @@ export class GroupService extends BaseService<GroupDTO> {
         );
     }
 
+    /**
+     * Activates or deactivates a school. A dedicated endpoint because `active` is deliberately
+     * ignored by the update mapper — the status is not an editable form field.
+     */
+    setActive(id: string, active: boolean): Observable<boolean> {
+        return this.httpClient.put<boolean>(`${this.basePath}/_set_group_status`, {id, active});
+    }
+
 }

@@ -1,20 +1,21 @@
-import {Injectable, inject} from '@angular/core';
+import {Injectable, inject, DestroyRef} from '@angular/core';
 import {MatPaginatorIntl} from '@angular/material/paginator';
 import {TranslateService} from '@ngx-translate/core';
+import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 
 @Injectable()
 export class Paginator extends MatPaginatorIntl {
     private translate = inject(TranslateService);
+    private readonly destroyRef = inject(DestroyRef);
 
     constructor() {
         super();
 
         this.translateLabels();
 
-        this.translate.onLangChange.subscribe(() => {
-            this.translateLabels();
-            this.changes.next();
-        });
+        this.translate.onLangChange
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(() => this.translateLabels());
     }
 
     private translateLabels(): void {
@@ -23,6 +24,8 @@ export class Paginator extends MatPaginatorIntl {
         this.previousPageLabel = this.translate.instant('paginator.previousPage');
         this.firstPageLabel = this.translate.instant('paginator.firstPage');
         this.lastPageLabel = this.translate.instant('paginator.lastPage');
+
+        this.changes.next();
     }
 
     override getRangeLabel = (page: number, pageSize: number, length: number): string => {

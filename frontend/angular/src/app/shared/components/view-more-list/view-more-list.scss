@@ -1,0 +1,20 @@
+.more-count {
+  font-size: 0.72rem;
+  font-style: italic;
+  opacity: 0.6;
+  margin-left: 4px;
+  cursor: pointer;
+  display:block;
+}
+
+.container {
+  overflow: visible;
+  width: 0;
+}
+
+/* The gap sits inside the measured element so the overflow calculation accounts for it. */
+.chip-slot {
+  display: inline-block;
+  padding-right: var(--sys-chip-gap);
+}
+

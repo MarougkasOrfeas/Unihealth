@@ -1,13 +1,11 @@
-import {Component, computed, OnDestroy, signal} from '@angular/core';
+import {Component, OnDestroy, signal} from '@angular/core';
 import {ActivatedRoute, ParamMap, RouterLink} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
-import {PageEvent} from '@angular/material/paginator';
-import {Sort} from '@angular/material/sort';
-import {Table} from '../../shared/components/table/table';
-import {TableColumn} from '../../shared/interfaces/table-column';
+import {MockTable} from '../../shared/components/mock-table/mock-table';
+import {MockTableColumn} from '../../shared/components/mock-table/mock-table-column';
 import {CareResultRow, FIND_CARE_MOCK_RESULTS} from './find-care.mock';
 
 type CareCard = {
@@ -31,7 +29,7 @@ type DoctorSpecialty = {
         MatButtonModule,
         MatIconModule,
         MatMenuModule,
-        Table,
+        MockTable,
     ],
     templateUrl: './find-care.html',
     styleUrl: './find-care.scss',
@@ -72,31 +70,22 @@ export class FindCare implements OnDestroy {
 
     readonly selectedTitle = signal<string | null>(null);
     readonly resultRows = signal<CareResultRow[]>([]);
-    readonly resultColumns: TableColumn<CareResultRow>[] = [
-        {key: 'name', header: 'Όνομα', sortable: true, filterable: true, filterSearchable: true},
-        {key: 'type', header: 'Είδος', sortable: true, filterable: true, filterSearchable: true},
-        {key: 'place', header: 'Περιοχή', sortable: true, filterable: true, filterSearchable: true},
-        {key: 'services', header: 'Υπηρεσίες', sortable: true, filterable: true, filterSearchable: true},
-        {key: 'contact', header: 'Επικοινωνία', sortable: true},
-        {key: 'availability', header: 'Διαθεσιμότητα', sortable: true, filterable: true, filterSearchable: true},
+    readonly resultColumns: MockTableColumn<CareResultRow>[] = [
+        {key: 'name', header: 'Όνομα', sortable: true},
+        {key: 'type', header: 'Είδος', sortable: true, filterable: true, filterSearchable: false},
+        {key: 'place', header: 'Περιοχή', sortable: true, filterable: true},
+        {
+            key: 'services',
+            header: 'Υπηρεσίες',
+            sortable: true,
+            filterable: true,
+            // One cell lists several services, so split it — otherwise the facet offers one
+            // option per row, which filters nothing useful.
+            facetValues: (row) => row.services.split(',').map((service) => service.trim()),
+        },
+        {key: 'contact', header: 'Επικοινωνία'},
+        {key: 'availability', header: 'Διαθεσιμότητα', sortable: true, filterable: true},
     ];
-    readonly totalElements = computed(() => this.resultRows().length);
-    readonly currentPageSize = 10;
-    readonly isLoading = false;
-    readonly facetOptions = computed<Record<string, string[]>>(() => ({
-        name: this.uniqueValues('name'),
-        type: this.uniqueValues('type'),
-        place: this.uniqueValues('place'),
-        services: this.uniqueValues('services'),
-        availability: this.uniqueValues('availability'),
-    }));
-    readonly facetSelection: Record<string, Set<string>> = {
-        name: new Set<string>(),
-        type: new Set<string>(),
-        place: new Set<string>(),
-        services: new Set<string>(),
-        availability: new Set<string>(),
-    };
     private readonly routeSubscription: Subscription;
 
     constructor(private readonly route: ActivatedRoute) {
@@ -108,22 +97,6 @@ export class FindCare implements OnDestroy {
 
     ngOnDestroy(): void {
         this.routeSubscription.unsubscribe();
-    }
-
-    onPageChange(event: PageEvent): void {
-        console.log('find care page changed', event);
-    }
-
-    onSortChange(sort: Sort): void {
-        console.log('find care sort changed', sort);
-    }
-
-    onFacetOpened(key: string): void {
-        console.log('find care facet opened', key);
-    }
-
-    onFacetChange(event: { key: string; selection: Set<string> }): void {
-        console.log('find care facet changed', event.key, event.selection);
     }
 
     private resolveSelectionTitle(params: ParamMap): string | null {
@@ -157,9 +130,5 @@ export class FindCare implements OnDestroy {
         }
 
         return FIND_CARE_MOCK_RESULTS[category] ?? [];
-    }
-
-    private uniqueValues(key: keyof CareResultRow): string[] {
-        return [...new Set(this.resultRows().map(row => row[key]).filter(Boolean))];
     }
 }

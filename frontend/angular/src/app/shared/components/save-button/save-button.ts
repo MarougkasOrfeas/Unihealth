@@ -12,7 +12,8 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrls: ['./save-button.scss'],
 })
 export class SaveButtonComponent {
-  @Input() label = 'Speichern';
+  /** Lexicon key; the template translates it. */
+  @Input() label = 'global.save';
 
   @Input() disabled = false;
 

@@ -1,0 +1,69 @@
+@if (isIconButton()) {
+  <!-- Icon Button -->
+  <button
+    mat-icon-button
+    type="button"
+    [attr.aria-busy]="loading()"
+    [attr.aria-disabled]="disabled()"
+    [attr.aria-label]="computedAriaLabel() | translate"
+    [attr.data-loading]="loading()"
+    [attr.data-testid]="testId()"
+    [attr.data-variant]="variant()"
+    [class.is-disabled]="disabled()"
+    [disableRipple]="disabled()"
+    [disabled]="disabled() && !disabledReason()"
+    [matTooltip]="(disabled() ? disabledReason() : tooltip()) | translate"
+    [matTooltipPosition]="tooltipPosition()"
+    (click)="handleButtonClick($event)"
+  >
+    <mat-icon>{{ icon() }}</mat-icon>
+  </button>
+} @else {
+  <!-- Standard Button -->
+  <button
+    type="button"
+    [attr.aria-busy]="loading()"
+    [attr.aria-disabled]="disabled()"
+    [attr.aria-label]="computedAriaLabel() | translate"
+    [attr.data-loading]="loading()"
+    [attr.data-size]="size()"
+    [attr.data-testid]="testId()"
+    [attr.data-variant]="variant()"
+    [class.is-disabled]="disabled()"
+    [class.is-loading]="loading()"
+    [disableRipple]="disabled()"
+    [disabled]="disabled() && !disabledReason()"
+    [matButton]="buttonStyle()"
+    [matTooltip]="(disabled() ? disabledReason() : tooltip()) | translate"
+    [matTooltipPosition]="tooltipPosition()"
+    (click)="handleButtonClick($event)"
+  >
+    @if (!icon() && loading()) {
+      <mat-icon><mat-spinner [diameter]="spinnerDiameter()" /></mat-icon>
+    }
+
+    @if (icon() && iconPosition() === 'left') {
+      <mat-icon>
+        @if (loading()) {
+          <mat-spinner [diameter]="spinnerDiameter()" />
+        } @else {
+          {{ icon() }}
+        }
+      </mat-icon>
+    }
+
+    <span class="button-content">
+      <ng-content />
+    </span>
+
+    @if (icon() && iconPosition() === 'right') {
+      <mat-icon iconPositionEnd>
+        @if (loading()) {
+          <mat-spinner [diameter]="spinnerDiameter()" />
+        } @else {
+          {{ icon() }}
+        }
+      </mat-icon>
+    }
+  </button>
+}

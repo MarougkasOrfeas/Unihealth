@@ -1,0 +1,47 @@
+@use 'utilities' as u;
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  padding: var(--sys-spacing-sm) var(--sys-spacing-md);
+
+  .title-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .title {
+      margin: 0;
+      padding: 0;
+    }
+
+    .title--small {
+      font-size: 1rem;
+      line-height: 1.25rem;
+    }
+
+    .subtitle {
+      color: var(--sys-text-variant);
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  .title-row {
+    display: flex;
+    align-items: center;
+    gap: var(--sys-spacing-xs);
+
+    @include u.c-query('tablet') {
+      flex-direction: column-reverse;
+      justify-content: center;
+    }
+  }
+
+  .unsaved-indicator {
+    background-color: var(--sys-warning-container);
+    border: none;
+    color: var(--sys-on-warning-container);
+  }
+}

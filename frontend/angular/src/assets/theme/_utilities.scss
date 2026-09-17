@@ -1,0 +1,456 @@
+/* ==========================================================================
+   Utilities
+   ========================================================================== */
+
+/**
+ * Low-level utility classes for layout and composition.
+ *
+ * PURPOSE
+ * - Reduce repetitive CSS for common layout patterns
+ * - Support fast template composition
+ * - Provide a small, predictable utility layer
+ *
+ * RULES
+ * - Use utilities for layout/composition only
+ * - Do NOT use utilities to recreate reusable UI patterns
+ * - Do NOT use utilities to fight component APIs or Material overrides
+ * - If the same utility combination appears repeatedly, extract a shared component
+ *
+ * NOTES
+ * - Utilities intentionally use !important so they remain predictable in templates
+ * - Spacing utilities only expose approved values from the design-system scale
+ */
+
+/* ==========================================================================
+   Imports
+   ========================================================================== */
+
+@use 'primitives' as p;
+
+/* ==========================================================================
+   Spacing Utilities (Based on 8px Grid)
+   ========================================================================== */
+
+/**
+ * Based on the approved design-system spacing scale.
+ * 4px is allowed as a half-step.
+ * 12px is intentionally omitted to keep the utility layer aligned with the
+ * 8px rhythm. Add it only if there is a strong recurring need.
+ */
+
+$spacers: (
+  '0': 0,
+  '4': var(--sys-spacing-2xs),
+  '8': var(--sys-spacing-xs),
+  '16': var(--sys-spacing-sm),
+  '24': var(--sys-spacing-md),
+  '32': var(--sys-spacing-lg),
+  '40': var(--sys-spacing-xl),
+  '48': var(--sys-spacing-2xl),
+  '56': var(--sys-spacing-3xl),
+);
+
+@each $name, $value in $spacers {
+  /* Padding utilities */
+  .p-#{$name} {
+    padding: $value !important;
+  }
+  .pt-#{$name} {
+    padding-top: $value !important;
+  }
+  .pr-#{$name} {
+    padding-right: $value !important;
+  }
+  .pb-#{$name} {
+    padding-bottom: $value !important;
+  }
+  .pl-#{$name} {
+    padding-left: $value !important;
+  }
+  .px-#{$name} {
+    padding-left: $value !important;
+    padding-right: $value !important;
+  }
+  .py-#{$name} {
+    padding-top: $value !important;
+    padding-bottom: $value !important;
+  }
+
+  /* Margin utilities */
+  .m-#{$name} {
+    margin: $value !important;
+  }
+  .mt-#{$name} {
+    margin-top: $value !important;
+  }
+  .mr-#{$name} {
+    margin-right: $value !important;
+  }
+  .mb-#{$name} {
+    margin-bottom: $value !important;
+  }
+  .ml-#{$name} {
+    margin-left: $value !important;
+  }
+  .mx-#{$name} {
+    margin-left: $value !important;
+    margin-right: $value !important;
+  }
+  .my-#{$name} {
+    margin-top: $value !important;
+    margin-bottom: $value !important;
+  }
+
+  /* Gap */
+  .gap-#{$name} {
+    gap: $value !important;
+  }
+
+  .row-gap-#{$name} {
+    row-gap: $value !important;
+  }
+
+  .col-gap-#{$name} {
+    column-gap: $value !important;
+  }
+}
+
+/* Auto margins */
+.ml-auto {
+  margin-left: auto !important;
+}
+
+.mr-auto {
+  margin-right: auto !important;
+}
+
+.mx-auto {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* ==========================================================================
+   Display Utilities
+   ========================================================================== */
+
+.block {
+  display: block !important;
+}
+
+.inline-block {
+  display: inline-block !important;
+}
+
+.inline {
+  display: inline !important;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.invisible {
+  visibility: hidden !important;
+}
+
+/* ==========================================================================
+   Flex Utilities
+   ========================================================================== */
+
+.flex {
+  display: flex !important;
+}
+
+.inline-flex {
+  display: inline-flex !important;
+}
+
+/* Flex direction */
+.flex-row {
+  flex-direction: row !important;
+}
+
+.flex-row-reverse {
+  flex-direction: row-reverse !important;
+}
+
+.flex-col {
+  flex-direction: column !important;
+}
+
+.flex-col-reverse {
+  flex-direction: column-reverse !important;
+}
+
+/* Flex wrap */
+.flex-wrap {
+  flex-wrap: wrap !important;
+}
+
+.flex-nowrap {
+  flex-wrap: nowrap !important;
+}
+
+.flex-wrap-reverse {
+  flex-wrap: wrap-reverse !important;
+}
+
+/* Flex grow / shrink / basis */
+.flex-1 {
+  flex: 1 1 0 !important;
+}
+
+.flex-auto {
+  flex: 1 1 auto !important;
+}
+
+.flex-none {
+  flex: none !important;
+}
+
+.grow {
+  flex-grow: 1 !important;
+}
+
+.grow-0 {
+  flex-grow: 0 !important;
+}
+
+.shrink {
+  flex-shrink: 1 !important;
+}
+
+.shrink-0 {
+  flex-shrink: 0 !important;
+}
+
+/* Align items */
+.items-start {
+  align-items: flex-start !important;
+}
+
+.items-center {
+  align-items: center !important;
+}
+
+.items-end {
+  align-items: flex-end !important;
+}
+
+.items-baseline {
+  align-items: baseline !important;
+}
+
+.items-stretch {
+  align-items: stretch !important;
+}
+
+/* Justify content */
+.justify-start {
+  justify-content: flex-start !important;
+}
+
+.justify-center {
+  justify-content: center !important;
+}
+
+.justify-end {
+  justify-content: flex-end !important;
+}
+
+.justify-between {
+  justify-content: space-between !important;
+}
+
+.justify-around {
+  justify-content: space-around !important;
+}
+
+.justify-evenly {
+  justify-content: space-evenly !important;
+}
+
+/* Align content */
+.content-start {
+  align-content: flex-start !important;
+}
+
+.content-center {
+  align-content: center !important;
+}
+
+.content-end {
+  align-content: flex-end !important;
+}
+
+.content-between {
+  align-content: space-between !important;
+}
+
+.content-around {
+  align-content: space-around !important;
+}
+
+.content-evenly {
+  align-content: space-evenly !important;
+}
+
+/* Align self */
+.self-auto {
+  align-self: auto !important;
+}
+
+.self-start {
+  align-self: flex-start !important;
+}
+
+.self-center {
+  align-self: center !important;
+}
+
+.self-end {
+  align-self: flex-end !important;
+}
+
+.self-stretch {
+  align-self: stretch !important;
+}
+
+/* ==========================================================================
+   Grid Utilities
+   ========================================================================== */
+
+.grid {
+  display: grid !important;
+}
+
+.inline-grid {
+  display: inline-grid !important;
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+.col-span-full {
+  grid-column: 1 / -1 !important;
+}
+
+/* Grid / placement helpers */
+.place-items-center {
+  place-items: center !important;
+}
+
+.place-content-center {
+  place-content: center !important;
+}
+
+/* ==========================================================================
+   Text & Overflow Utilities
+   ========================================================================== */
+
+.text-left {
+  text-align: left !important;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+.truncate {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.overflow-hidden {
+  overflow: hidden !important;
+}
+
+.overflow-auto {
+  overflow: auto !important;
+}
+
+.overflow-x-auto {
+  overflow-x: auto !important;
+}
+
+.overflow-y-auto {
+  overflow-y: auto !important;
+}
+
+/* ==========================================================================
+   Position Utilities
+   ========================================================================== */
+
+.relative {
+  position: relative !important;
+}
+
+.absolute {
+  position: absolute !important;
+}
+
+.sticky {
+  position: sticky !important;
+}
+
+/* ==========================================================================
+   Accessibility Utilities
+   ========================================================================== */
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* ==========================================================================
+   Responsiveness Utilities
+   ========================================================================== */
+
+@mixin m-query($device) {
+  @if $device == mobile {
+    @media screen and (width < #{p.$breakpoint-tablet-min}) {
+      @content;
+    }
+  } @else if $device == tablet {
+    @media screen and (width < #{p.$breakpoint-desktop-min}) {
+      @content;
+    }
+  } @else {
+    @media screen and (width > #{p.$breakpoint-tablet-max}) {
+      @content;
+    }
+  }
+}
+
+@mixin c-query($device) {
+  @if $device == mobile {
+    @container (width < #{p.$breakpoint-tablet-min}) {
+      @content;
+    }
+  } @else if $device == tablet {
+    @container (width < #{p.$breakpoint-desktop-min}) {
+      @content;
+    }
+  } @else {
+    @container (width > #{p.$breakpoint-tablet-max}) {
+      @content;
+    }
+  }
+}

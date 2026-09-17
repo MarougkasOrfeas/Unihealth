@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 /**
  * Implementation for {@link GroupService}.
  *
- * @author European Dynamics SA
+ * @author omaro
  */
 @Service
 @RequiredArgsConstructor
@@ -40,6 +40,11 @@ public class GroupServiceImpl extends BaseUpdatableServiceImpl<GroupDTO, UniGrou
   @Override
   public String create(GroupDTO dto) {
     return super.create(dto);
+  }
+
+  @Override
+  public void validateAvailable(String id, GroupDTO dto) {
+
   }
 
   @Override

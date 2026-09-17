@@ -1,0 +1,29 @@
+<header class="header-container" [attr.data-testid]="testId()">
+  <div class="title-group">
+    <div class="title-row">
+      <h2 class="title" id="dialog-title" [attr.data-testid]="testId() + '-title'" [class.title--small]="titleSize() === 'small'">
+        {{ title() }}
+      </h2>
+      @if (hasUnsavedChanges()) {
+        <mat-chip class="unsaved-indicator" [attr.data-testid]="testId() + '-unsaved-indicator'">
+          {{ 'global.unsaved' | translate }}
+        </mat-chip>
+      }
+    </div>
+    @if (subtitle()) {
+      <p class="mw-20 mt-8 subtitle truncate-cell" [appOverflowTooltip]="subtitle() ?? ''" [attr.data-testid]="testId() + '-subtitle'">
+        {{ subtitle() }}
+      </p>
+    }
+  </div>
+
+  @if (showClose()) {
+    <app-button
+      icon="close"
+      [ariaLabel]="'fee.dialog.close' | translate"
+      [isIconButton]="true"
+      [testId]="testId() + '-close-btn'"
+      (clicked)="dialogClose.emit()"
+    />
+  }
+</header>

@@ -1,11 +1,170 @@
-@use '@angular/material' as mat;
+/* ==========================================================================
+   Main Styles Orchestrator
+   ========================================================================== */
 
-@include mat.form-field-density(-4);
+/**
+ * This file serves as the entry point for the global CSS architecture.
+ * We follow a strict 'Chain of Command' to ensure scalability and
+ * prevent style leaks in our UI.
+ *
+ * 1. Primitives (_primitives.scss)
+ * Raw values (hex codes, pixel units). Never use these directly in
+ * this file or in components. They are the 'raw materials'.
+ *
+ * 2. Semantic Tokens (_tokens.scss)
+ * Maps primitives to functional roles (e.g., --sys-primary, --sys-outline).
+ * These are made available globally by importing them here.
+ * This allows for runtime theme switching and build-time validation.
+ *
+ * 3. Typography Tokens (_typography.scss)
+ * Defines font families, sizes, weights, and line heights as CSS variables.
+ * Includes mixins for applying typography styles to components.
+ * Imported globally to ensure consistency across the app.
+ *
+ * 4. Theme Overrides (main-theme.scss)
+ * Where we bridge our custom tokens to Angular Material.
+ * Keeps our custom components and Material components in sync.
+ *
+ * 5. Global Styles
+ * Resets, typography defaults, layout styles etc.
+ */
+
+/* ==========================================================================
+   Guidelines
+   ========================================================================== */
+
+/**
+ * - DO NOT add component-specific styles here. Use the component's .scss file.
+ * - NEVER use hardcoded hex values; find the appropriate semantic token.
+ */
+
+/* ==========================================================================
+   Imports
+   ========================================================================== */
+
+/* Import the tokens in order to make them available globally */
+@use 'tokens';
+/* Import the typography tokens in order to make them available globally */
+@use "typography" as type;
+/* Initialize Angular Material Theme */
+@use "main-theme";
+/* Scoped overrides of Material internals (replaces per-component ::ng-deep) */
+@use "material-overrides";
+/* Load Material Symbols (Outlined style) */
+@use 'material-symbols/outlined';
+/* Load utility classes to make them available globally */
+@use "utilities";
+
+/* ==========================================================================
+   Global Styles
+   ========================================================================== */
 
 html, body {
   height: 100%;
   margin: 0;
-  font-size: 14px;
+  font-family: var(--sys-font-family-base);
+  font-size: var(--sys-font-root-size);
+}
+
+body {
+  background-color: var(--sys-surface-bright);
+  color: var(--sys-text-base);
+  @include type.type-body-md;
+}
+
+h1 {
+  @include type.type-h1;
+}
+
+h2 {
+  @include type.type-h2;
+}
+
+h3 {
+  @include type.type-h3;
+}
+
+h4 {
+  @include type.type-h4;
+}
+
+a:not([class]) {
+  color: var(--sys-primary);
+  display: inline-block;
+  position: relative;
+  text-decoration: none;
+  @include type.type-label-lg;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  /* Accessibility: Expand touch target */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 44px;
+    min-height: 44px;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background: transparent;
+    pointer-events: auto;
+  }
+}
+
+mat-sidenav-content {
+  container-type: inline-size;
+}
+
+/* ==========================================================================
+   Temporary styles until refactored or common component is created
+   ========================================================================== */
+
+.pagination-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sys-spacing-xs);
+  margin-bottom: var(--sys-spacing-sm);
+}
+
+/* ==========================================================================
+   Styles to be reviewed and removed if deemed necessary
+   ========================================================================== */
+
+/* shrink the selected value text */
+.mat-mdc-select-value {
+  line-height: 18px !important;
+  font-size: 12px !important;
+}
+
+/* shrink header row */
+.mat-mdc-header-row {
+  height: 28px !important;
+  min-height: 28px !important;
+}
+
+.mat-mdc-header-cell {
+  padding: 0 8px !important;
+  font-size: 12px !important;
+  line-height: 28px !important;
+}
+
+/* shrink data rows */
+.mat-mdc-row {
+  height: 22px !important;
+  min-height: 22px !important;
+}
+
+.mat-mdc-cell {
+  padding: 0 8px !important;
+  font-size: 12px !important;
+  line-height: 24px !important;
 }
 
 .page-title {
@@ -14,155 +173,391 @@ html, body {
   font-weight: 400;
   margin-left: 20px;
   margin-top: 25px;
-  margin-bottom: 0;
+  margin-bottom: 0px
 }
 
+.form-row {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  padding-left: 20px;
+
+  .mdc-list-item.mdc-list-item--with-one-line {
+    height: var(--mat-list-list-item-one-line-container-height, 35px);
+  }
+
+  .card {
+
+    .mat-mdc-card-content {
+      padding: 0;
+    }
+
+    .mat-mdc-card-header {
+      background: #eef6ff;
+      color: #0f3f73;
+      display: flex;
+      padding: 8px 16px 10px;
+      border-top-right-radius: 12px;
+      border-top-left-radius: 12px;
+
+      .mat-mdc-card-title {
+        font-size: 17px;
+        font-weight: 500;
+      }
+    }
+
+    a {
+      color: #0f3f73;
+      font-size: 14px;
+    }
+
+    //flex: 1;
+    width: 24%;
+    margin-top: 10px;
+    background: white;
+  }
+}
+
+.icon-32 {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  font-variation-settings: 'opsz' 32;
+}
 
 .delete-btn {
-  margin-left: 10px;
-  border-color: #2F5DA8 !important;
-  color: #2F5DA8 !important;
+  border-color: #b40000 !important;
+  color: #b40000 !important;
   border-radius: 4px !important;
 }
 
-.mat-mdc-form-field {
-  width: 100%;
+/* Toast CSS background override */
+// Success toast
+.unihealth-snackbar-success.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  background: #1565c0 !important;
+  color: #fff !important;
 }
 
-.mat-mdc-text-field-wrapper.mdc-text-field--outlined {
-  background-color: #fff !important;
-  border-radius: 4px;
+.unihealth-snackbar-warning.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  background: #b45309a9 !important;
+  color: #fff !important;
 }
 
-/* Fix the actual outlined border colors */
-.mat-mdc-form-field .mdc-notched-outline__leading,
-.mat-mdc-form-field .mdc-notched-outline__notch,
-.mat-mdc-form-field .mdc-notched-outline__trailing {
-  border-color: grey !important;
-  border-width: 0.5px !important;
+// Error toast
+.unihealth-snackbar-error.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  background: #c62828 !important;
+  color: #fff !important;
 }
 
-.mat-mdc-form-field .mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above{
-  transform: translateY(-2.5em) scale(0.75) !important;
+// Info toast
+.unihealth-snackbar-info.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  background: #37474f !important;
+  color: #fff !important;
 }
 
-.mat-mdc-form-field.mat-form-field-disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
+/* Toast CSS label + action button color */
+.unihealth-snackbar-success .mdc-snackbar__label,
+.unihealth-snackbar-error .mdc-snackbar__label,
+.unihealth-snackbar-info .mdc-snackbar__label,
+.unihealth-snackbar-warning .mdc-snackbar__label {
+  color: #fff !important;
 }
 
-
-/* Hover */
-.mat-mdc-form-field:hover .mdc-notched-outline__leading,
-.mat-mdc-form-field:hover .mdc-notched-outline__notch,
-.mat-mdc-form-field:hover .mdc-notched-outline__trailing {
-  border-color: #8c94a3 !important;
+.unihealth-snackbar-success .mat-mdc-button,
+.unihealth-snackbar-error .mat-mdc-button,
+.unihealth-snackbar-info .mat-mdc-button,
+.unihealth-snackbar-warning .mat-mdc-button {
+  color: #fff !important;
 }
 
-/* Focus */
-.mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
-.mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
-.mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
-  border-color: #3f51b5 !important;
-  border-width: 1px !important;
+//Address modal header width
+.custom-address .mat-sort-header-container {
+  width: max-content;
 }
 
-/* Input + select text */
-.mat-mdc-input-element,
-.mat-mdc-select-value,
-.mat-mdc-select-min-line,
+.address-dialog .mat-mdc-dialog-container {
+  padding: 0 !important; // remove default container padding
+  overflow: hidden !important; // prevent outer scroll
+  border-radius: 8px !important;
+}
+
+.address-dialog .mat-mdc-dialog-surface {
+  overflow: hidden !important; // lock the surface too
+  border-radius: 8px !important;
+}
+
+.cdk-overlay-pane.list-dialog .mat-mdc-dialog-surface {
+  border-radius: 8px !important;
+}
+
+.cdk-overlay-pane.confirm-exit-dialog .mat-mdc-dialog-surface {
+  border-radius: 8px !important;
+}
+
+.fee-dialog-panel {
+  .mat-mdc-dialog-container {
+    padding: 0 !important;
+  }
+
+  .mdc-dialog__surface {
+    border-radius: 8px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .18) !important;
+    overflow: hidden;
+  }
+}
+
+.import-file-error-dialog {
+  .mat-mdc-dialog-container {
+    padding: 0 !important;
+  }
+
+  .mdc-dialog__surface {
+    border-radius: 8px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .18) !important;
+    overflow: hidden;
+  }
+}
+
 .mat-mdc-select-value-text {
-  color: #1f2937 !important;
-  font-size: 14px;
-  line-height: 1.4;
-  caret-color: #3f51b5;
-  margin-left: 2px;
+  @include type.type-label-lg;
 }
 
-.mat-mdc-select-arrow-wrapper {
-  height: 24px;
-  flex-shrink: 0;
+/* Mat sort overrides for multisort */
+.mat-sort-custom {
+  .mat-sort-header-arrow {
+    opacity: 0 !important;
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .mat-sort-header:not(.custom-sorted):hover .mat-sort-header-arrow {
+    opacity: 1 !important;
+  }
+
+  .mat-sort-header.custom-sorted .mat-sort-header-arrow {
+    opacity: 0 !important;
+  }
+}
+
+.custom-modal-body-table {
+  width: 100%;
+  overflow: auto;
+
+  table {
+    width: 100%;
+    min-width: 48rem;
+    border-collapse: separate;
+    border-left: 1px solid rgba(0, 0, 0, 0.12);
+    border-right: 1px solid rgba(0, 0, 0, 0.12);
+  }
+
+  th {
+    background: var(--mat-sys-primary) !important;
+    color: white;
+    padding: 0.75rem;
+    //border:  1px solid var(--mat-sys-primary);
+  }
+
+  td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #eee;
+    border-spacing: 0 4px;
+  }
+
+  .art-row {
+    cursor: pointer;
+    transition: background-color 120ms ease;
+  }
+
+  .art-row:hover td {
+    background: var(--mat-sys-surface-container-high);
+  }
+
+  .art-row.selected-row td {
+    background: var(--mat-sys-primary-container);
+    color: var(--mat-sys-on-primary-container);
+    font-weight: 600;
+  }
+
+  .mat-sort-header-arrow, .mat-mdc-icon-button, .mat-icon {
+    color: white;
+  }
+
+}
+
+.unihealth-data-table {
+  background-color: white !important;
+}
+
+// Left border on the sticky action column
+.mat-column-action,
+.mat-column-actions {
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
+  white-space: nowrap !important;
+}
+
+.truncate-cell {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mw-0 {
+  max-width: 0;
+}
+
+.mw-50 {
+  max-width: 50vw;
+}
+
+.mw-20 {
+  max-width: 20vw;
+}
+
+.mw-150px {
+  max-width: 150px;
+}
+
+.mw-200px {
+  max-width: 200px;
+}
+
+
+.status {
   display: inline-flex;
   align-items: center;
-  margin-right: 5px;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 0.25rem 0;
+
+  &_dot {
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  &_text {
+    font-size: 12px;
+    margin-left: 0.5rem;
+  }
+
+  &.active {
+    .status_dot {
+      background-color: #1565c0;
+    }
+  }
+
+  &.inactive {
+    .status_dot {
+      background-color: #cc0000;
+    }
+  }
+
+  /* Orange, not grey: unverified means the account is enabled and awaiting email verification — pending, not switched off. */
+  &.unverified {
+    .status_dot {
+      background-color: #ef6c00;
+    }
+  }
+}
+
+/* Compact autocomplete panel for the layout field group input. */
+.layout-group-autocomplete.mat-mdc-autocomplete-panel {
+  --mat-option-label-text-size: var(--sys-type-body-md-size);
+  --mat-option-label-text-line-height: 1rem;
+
+  .mat-mdc-option {
+    min-height: 2rem;
+    font-size: var(--sys-type-body-md-size);
+    line-height: 1rem;
+  }
+}
+
+.clear-filters.mat-mdc-icon-button .mat-mdc-button-persistent-ripple::before {
+  border-radius: unset;
+}
+
+button.clear-filters {
+  color: #000;
+  border: 1px solid var(--mat-sys-outline);
+  border-radius: inherit;
+}
+
+.sort-off {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 2px;
+    background: currentColor;
+    transform: rotate(-45deg);
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    pointer-events: none;
+  }
 }
 
 
-/* Focused label */
-.mat-mdc-form-field.mat-focused .mdc-floating-label {
-  color: #3f51b5 !important;
+/* ─── Form section chrome ──────────────────────────────────────────────────────
+ * Card + titled-section pattern shared by every create/edit screen. These lived in
+ * create-user.scss, which only reached the other forms because that component uses
+ * ViewEncapsulation.None — so the styling depended on create-user having been loaded first.
+ * Global is where app-wide chrome belongs.
+ * ---------------------------------------------------------------------------- */
+
+.form-container {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  font-family: Roboto Regular, sans-serif;
+  padding: 0 16px 16px;
+  background: #fdfefe;
+  border: 1px solid #e5edf7;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(16, 52, 96, 0.06);
 }
 
-/* Remove weird inherited transparency */
-.mdc-text-field,
-.mat-mdc-text-field-wrapper,
-.mat-mdc-form-field-flex,
-.mat-datepicker-content, .mat-calendar{
-  background-color: #fff !important;
+.page-subtitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 24px;
+  margin-bottom: 8px;
+  padding: 8px 14px;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #174a8b;
+  background: linear-gradient(180deg, #f4f8ff 0%, #edf4ff 100%);
+  border: 1px solid #d7e6fb;
+  border-left: 4px solid #1976d2;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+
+  &::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: #1976d2;
+    margin-bottom: 1px;
+  }
 }
 
-.mat-datepicker-toggle button,
-.mat-mdc-icon-button {
-  width: 40px;
-  height: 40px;
-  padding: 8px;
-  line-height: 1;
+.divider-space {
+  margin-top: 10px;
 }
 
-/* Make the calendar icon match field alignment better */
-.mat-datepicker-toggle svg,
-.mat-datepicker-toggle mat-icon,
-.mat-mdc-form-field-icon-suffix mat-icon {
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
-  line-height: 20px;
+@media (max-width: 400px) {
+  .form-container {
+    padding: 0 8px;
+    gap: 16px;
+  }
 }
-
-/* Hint / subscript */
-.mat-mdc-form-field-subscript-wrapper,
-.mat-mdc-form-field-hint-wrapper,
-.mat-mdc-form-field-error-wrapper {
-  margin-top: 4px;
-  min-height: 18px;
-}
-
-/* Hint text */
-.mat-mdc-form-field-hint,
-.mat-mdc-form-field-required-marker {
-  color: #6b7280 !important;
-  font-size: 12px;
-}
-
-/* ERROR STATE */
-.mat-mdc-form-field.mat-form-field-invalid .mdc-notched-outline__leading,
-.mat-mdc-form-field.mat-form-field-invalid .mdc-notched-outline__notch,
-.mat-mdc-form-field.mat-form-field-invalid .mdc-notched-outline__trailing {
-  border-color: #d32f2f !important;
-}
-
-.mat-mdc-form-field.mat-form-field-invalid .mdc-floating-label,
-.mat-mdc-form-field.mat-form-field-invalid .mat-mdc-input-element,
-.mat-mdc-form-field.mat-form-field-invalid .mat-mdc-select-value-text,
-.mat-mdc-form-field.mat-form-field-invalid .mat-mdc-form-field-error,
-.mat-mdc-form-field.mat-form-field-invalid .mat-mdc-form-field-required-marker {
-  color: #d32f2f !important;
-}
-
-.mat-mdc-form-field-error {
-  color: #d32f2f !important;
-  font-size: 12px;
-}
-
-/* Disabled state */
-.mat-mdc-form-field.mat-form-field-disabled .mat-mdc-text-field-wrapper {
-  background-color: #f5f7fa !important;
-}
-
-.mat-mdc-form-field.mat-form-field-disabled .mat-mdc-input-element,
-.mat-mdc-form-field.mat-form-field-disabled .mat-mdc-select-value-text {
-  color: #9aa3b2 !important;
-}
-
-
-

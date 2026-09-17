@@ -1,16 +1,25 @@
-<nav class="bc" aria-label="Breadcrumb" data-testid="breadcrumb-nav">
-    <a mat-button class="bc-link" routerLink="/home" data-testid="breadcrumb-home">
-        <mat-icon fontSet="material-symbols-outlined">home</mat-icon>
-    </a>
+<nav aria-label="Breadcrumb" class="breadcrumb" data-testid="breadcrumb-nav">
+    <!-- Home Button -->
+    <button
+        aria-label="Breadcrumb"
+        data-testid="breadcrumb-nav"
+        matIconButton
+        matTooltipPosition="above"
+        routerLink="/home"
+        type="button"
+        [matTooltip]="'Home' | translate"
+    >
+        <mat-icon>home</mat-icon>
+    </button>
 
+    <!-- Links -->
     @for (c of crumbs(); track $index; let last = $last) {
-        <mat-icon class="bc-sep" fontSet="material-symbols-outlined">chevron_right</mat-icon>
+        <mat-icon class="breadcrumb-separator">chevron_right</mat-icon>
 
         @if (last) {
-            <span class="bc-current" data-testid="breadcrumb-current">{{ c.label | translate }}</span>
+            <span class="breadcrumb-current-link" data-testid="breadcrumb-current">{{ c.label | translate }}</span>
         } @else {
-            <a mat-button class="bc-link" [routerLink]="c.url"
-               data-testid="breadcrumb-link">{{ c.label | translate }}</a>
+            <a data-testid="breadcrumb-link" matButton [routerLink]="c.url">{{ c.label | translate }}</a>
         }
     }
 </nav>

@@ -1,20 +1,19 @@
 package gr.uniwa.unihealth.backend.controller;
 
-import com.querydsl.core.types.Predicate;
-import gr.uniwa.unihealth.backend.controller.util.ControllerUtils;
 import gr.uniwa.unihealth.backend.dto.RssFeedDTO;
-import gr.uniwa.unihealth.backend.model.RssFeed;
+import gr.uniwa.unihealth.backend.model.enums.Permission;
+import gr.uniwa.unihealth.backend.service.BaseReaderService;
+import gr.uniwa.unihealth.backend.service.BaseService;
 import gr.uniwa.unihealth.backend.service.RssFeedReaderService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -22,23 +21,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("rss")
 @RequiredArgsConstructor
-public class RssFeedController {
+public class RssFeedController extends BaseController<RssFeedDTO> {
 
   private final RssFeedReaderService service;
-  private final ControllerUtils controllerUtils;
-
-  @Operation(summary = "Finds RSS feeds",
-      description = "Returns RSS feed items with pagination information.")
-  @PostMapping("_page")
-  public Page<RssFeedDTO> findPage(@RequestBody(required = false) Map<String, Object> requestBody) {
-
-    Map.Entry<Predicate, Pageable> predicateAndPageable =
-        controllerUtils.getPredicateAndPageable(requestBody, RssFeed.class);
-
-    Predicate predicateToUse = predicateAndPageable.getKey();
-
-    return service.findAll(predicateToUse, predicateAndPageable.getValue());
-  }
 
   @Operation(summary = "Refresh RSS feeds",
       description = "Fetches latest RSS feeds from configured sources and stores them.")
@@ -59,5 +44,21 @@ public class RssFeedController {
     }
 
     return service.findRelevantFeeds(limit);
+  }
+
+
+  @Override
+  protected BaseService<RssFeedDTO> getService() {
+    return null;
+  }
+
+  @Override
+  protected BaseReaderService<RssFeedDTO> getReaderService() {
+    return service;
+  }
+
+  @Override
+  protected Collection<Permission> getReadPermissions() {
+    return List.of();
   }
 }

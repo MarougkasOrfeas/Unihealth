@@ -1,20 +1,19 @@
 package gr.uniwa.unihealth.backend.controller;
 
-import com.querydsl.core.types.Predicate;
-import gr.uniwa.unihealth.backend.controller.util.ControllerUtils;
 import gr.uniwa.unihealth.backend.dto.ConditionDTO;
 import gr.uniwa.unihealth.backend.dto.ConditionDetailDTO;
-import gr.uniwa.unihealth.backend.model.Condition;
+import gr.uniwa.unihealth.backend.model.enums.Permission;
+import gr.uniwa.unihealth.backend.service.BaseReaderService;
+import gr.uniwa.unihealth.backend.service.BaseService;
 import gr.uniwa.unihealth.backend.service.ConditionReaderService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -22,10 +21,9 @@ import java.util.Objects;
 @RestController
 @RequestMapping("conditions")
 @RequiredArgsConstructor
-public class ConditionController {
+public class ConditionController extends BaseController<ConditionDTO> {
 
   private final ConditionReaderService service;
-  private final ControllerUtils controllerUtils;
 
   @Operation(summary = "Find conditions",
       description = "Returns active conditions ordered alphabetically. Supports global search.")
@@ -48,13 +46,18 @@ public class ConditionController {
     return service.findBySlug(slug);
   }
 
-  @Operation(summary = "Find conditions page", description = "Returns a page of conditions.")
-  @PostMapping("_page")
-  public Page<ConditionDTO> findPage(@RequestBody Map<String, Object> requestBody) {
+  @Override
+  protected BaseService<ConditionDTO> getService() {
+    return null;
+  }
 
-    Map.Entry<Predicate, Pageable> predicateAndPageable =
-        controllerUtils.getPredicateAndPageable(requestBody, Condition.class);
+  @Override
+  protected BaseReaderService<ConditionDTO> getReaderService() {
+    return service;
+  }
 
-    return service.findAll(predicateAndPageable.getKey(), predicateAndPageable.getValue());
+  @Override
+  protected Collection<Permission> getReadPermissions() {
+    return List.of();
   }
 }

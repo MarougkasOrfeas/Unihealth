@@ -1,0 +1,31 @@
+@if (activeSorts.length > 0) {
+  <div class="mt-8 mb-8 flex items-center gap-8 sort-row" data-testid="section-sort">
+    <div class="sort-label">{{ label }}</div>
+
+    <mat-chip-set class="flex-auto" data-testid="sort-chips" [attr.aria-label]="ariaLabel">
+      @for (s of activeSorts; track s.key; let last = $last) {
+        <div class="inline-flex items-center">
+          <mat-chip class="inline-flex items-center" disableRipple>
+            <span class="sort-chip__text">
+              {{ s.label | translate }} ({{ s.dirLabel | translate }})
+            </span>
+            <button aria-label="remove" class="sort-chip__remove" data-testid="btn-remove-sort" mat-icon-button
+              type="button"
+              (click)="removeSort.emit(s.key); $event.stopPropagation()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-chip>
+
+          @if (!last) {
+            <span class="sort-separator">›</span>
+          }
+        </div>
+      }
+    </mat-chip-set>
+    <button  type="button" mat-icon-button aria-label="clearTooltip" class="clear-filters sort-off" data-testId="btn-clear-sort"
+            [matTooltip]="clearTooltip | translate"
+            (click)="clearSort.emit()">
+      <mat-icon>sort</mat-icon>
+    </button>
+  </div>
+}

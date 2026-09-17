@@ -1,11 +1,6 @@
-.trigger {
-  margin-left: 6px;
-}
-
 .panel {
-  padding: 10px 12px;
-  width: 260px;
-  background: #ffffff !important;
+  padding: 4px 12px;
+  max-width: 260px;
 }
 
 .search {
@@ -14,21 +9,11 @@
 
 .list {
   max-height: 240px;
-  margin-top: 8px;
-  padding-right: 6px;
 }
-
-.opt {
-  display: flex;
-  align-items: center;
-}
-
 
 .footer {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  margin-top: 10px;
+  white-space: nowrap;
+  margin-left: -4px
 }
 
 .active {
@@ -37,5 +22,5 @@
 }
 
 .inactive {
-  opacity: .55;
+  opacity: var(--sys-state-disabled-opacity);
 }

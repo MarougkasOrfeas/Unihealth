@@ -1,33 +1,27 @@
-<!-- Header section -->
-<div class="toolbar-row" data-testid="section-department-header">
-    <h1 class="page-title" data-testid="department-title">{{ 'department.management.title' | translate }}</h1>
-    <span class="actions" data-testid="section-fee-header-actions">
-    <span class="btn-wrapper" [matTooltip]="'department.management.tooltip.create' | translate"
-          matTooltipPosition="above">
-      <button mat-button class="add-department-btn" data-testid="btn-department-create" (click)="onCreate()">
-        <mat-icon>add</mat-icon>
-          {{ 'department.management.action.create' | translate }}
-      </button>
-    </span>
-    <span class="btn-wrapper" [matTooltip]="'global.back.tooltip' | translate" matTooltipPosition="above">
-      <button mat-stroked-button color="warn" class="delete-btn" (click)="onCancel()" data-testid="btn-cancel">
-          <mat-icon>arrow_back</mat-icon>
-          {{ 'global.back' | translate }}
-      </button>
-    </span>
-  </span>
-</div>
+<app-page-header [title]="'department.management.title' | translate">
+    <ng-container actions>
+        <app-button icon="add" size="large" testId="btn-create" (clicked)="onCreate()">
+            {{ 'department.management.action.create' | translate }}
+        </app-button>
+    </ng-container>
+</app-page-header>
 
-<app-table
+<!-- No export: DepartmentController.getExportService() returns null, so POST /department/_export
+     would answer with QDoesNotExistException. -->
+<app-base-table
+    pageName="departments"
+    [service]="departmentService"
     [columns]="columns"
-    [data]="departments"
-    [totalElements]="totalElements"
-    [pageSize]="currentPageSize"
-    [loading]="isLoading"
-    [facetOptions]="facetOptions"
-    [facetSelection]="facetSelection"
-    (pageChange)="onPageChange($event)"
-    (sortChange)="onSortChange($event)"
-    (facetOpened)="onFacetOpened($event)"
-    (facetChange)="onFacetChange($event)">
-</app-table>
+    [mapToRow]="toRow"
+    [emptyState]="emptyState"
+    [defaultSort]="['name,asc']"
+    [rowActions]="['view', 'edit', 'delete']"
+    [showExport]="false"
+    [showImport]="true"
+    [importDisabled]="true"
+    [emptyStateCreate]="true"
+    (create)="onCreate()"
+    (view)="onView($event)"
+    (edit)="onEdit($event)"
+    (delete)="onDelete($event)"
+/>

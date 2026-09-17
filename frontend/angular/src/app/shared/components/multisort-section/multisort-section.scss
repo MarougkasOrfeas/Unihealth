@@ -1,0 +1,64 @@
+.sort-row {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #e7e7e7;
+  border-radius: 0.5rem;
+  background: #f3f3ef;
+}
+
+.sort-label {
+  color: #5a5a5a;
+  white-space: nowrap;
+}
+
+.sort-chip__text {
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.sort-chip__remove {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  min-height: 16px;
+  margin-left: 6px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--sys-text-variant);
+  color: var(--sys-surface);
+  line-height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* make the icon itself visible */
+.sort-chip__remove mat-icon {
+  width: 12px;
+  height: 12px;
+  font-size: 14px;
+  line-height: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clear-sort {
+  opacity: var( --sys-opacity-subtle);
+}
+
+.sort-separator {
+  font-size: 24px;
+  line-height: 1;
+  color: #6d7165;
+  margin: 0 8px ;
+}
+
+.mat-mdc-chip-set .mdc-evolution-chip{
+  margin: 0;
+}
+
+/* Chip-set margin override lives in _material-override.scss (app-multisort-section rule),
+   scoped there to this component instead of the previous global ::ng-deep leak. */
+

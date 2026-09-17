@@ -16,7 +16,7 @@ translations:
     keys:
       # Header
       - header.title: UNIHEALTH
-      - header.subtitle: Students personal health and wellbeing hub
+      - header.subtitle: Κέντρο προσωπικής υγείας και ευεξίας φοιτητών
       - header.top.banner.text: Αυτός ο ιστότοπος απευθύνεται σε φοιτητές του Πανεπιστημίου Δυτικής Αττικής (UNIWA)
       - header.browse: Περιήγηση
       - header.help: Βοήθεια
@@ -32,12 +32,14 @@ translations:
       - global.save.tooltip: Πάτα για Αποθήκευση
       - global.yes: "Ναι"
       - global.no: "Όχι"
+      - global.select.all: Επιλέξτε όλα
+      - global.unselect.all: Απορρίπτω
 
       # Side Navigation
       - side.admin: Διαχείριση
       - side.admin.users: Χρήστες
       - side.admin.departments: Τμήματα
-      - side.admin.groups: Ομάδες
+      - side.admin.groups: Σχολές
       - side.overview: Επισκόπηση
       - side.overview.profile: Επισκόπηση Προφίλ
       - side.overview.plans: Τα Πλάνα Μου
@@ -63,8 +65,13 @@ translations:
       - breadcrumb.health.news.today: Τα σημερινά νέα υγείας
       - breadcrumb.users: Χρήστες
       - breadcrumb.users.create: Δημιουργία Χρήστη
-      - breadcrumb.groups: Ομάδες
+      - breadcrumb.users.edit: Επεξεργασία Χρήστη
+      - breadcrumb.groups: Σχολές
+      - breadcrumb.groups.create: Δημιουργία Σχολής
+      - breadcrumb.groups.edit: Επεξεργασία Σχολής
       - breadcrumb.departments: Τμήματα
+      - breadcrumb.departments.create: Δημιουργία Τμήματος
+      - breadcrumb.departments.edit: Επεξεργασία Τμήματος
       - breadcrumb.profile: Προφίλ
       - breadcrumb.profile.form: Η Φόρμα Μου
       - breadcrumb.symptoms: Συμπτώματα
@@ -143,22 +150,155 @@ translations:
       - paginator.lastPage: Τελευταία σελίδα
       - paginator.of: από
 
+      # Table (shared)
+      - global.search: Αναζήτηση
+      - global.search.placeholder: Αναζήτηση…
+      - global.sort.label: Ταξινόμηση
+      - global.sort.asc: αύξουσα
+      - global.sort.desc: φθίνουσα
+      - global.multisort.clear: Καθαρισμός ταξινόμησης
+      - global.filter.label: Φίλτρα
+      - global.filter.clear: Καθαρισμός φίλτρων
+      - global.btn.more.actions: Περισσότερες ενέργειες
+      - global.more: περισσότερα
+      - global.close: Κλείσιμο
+      - global.cancel: Άκυρο
+      - global.confirm.label: Επιβεβαίωση
+      - global.warning: Προσοχή
+      - global.unsaved: Μη αποθηκευμένες αλλαγές
+      - global.leave: Αποχώρηση
+      - global.actions: Ενέργειες
+      - global.field.required: Υποχρεωτικό πεδίο
+      - global.date.invalid: Μη έγκυρη ημερομηνία
+      - global.date.tooEarly: Η ημερομηνία είναι πολύ πρώιμη
+      - global.date.tooLate: Η ημερομηνία είναι πολύ όψιμη
+      - global.action.view: Προβολή
+      - global.action.edit: Επεξεργασία
+      - global.action.delete: Διαγραφή
+      - global.unexpected.error: Παρουσιάστηκε απρόσμενο σφάλμα.
+      - global.back.end.unavailable: Ο διακομιστής δεν είναι διαθέσιμος.
+
+      # Status
+      - global.section.general: Βασικά στοιχεία
+      - global.status.label: Κατάσταση
+      - global.action.activate: Ενεργοποίηση
+      - global.action.deactivate: Απενεργοποίηση
+      - global.activate.confirm.title: Ενεργοποίηση {{entity}}
+      - global.activate.confirm.content: Θέλετε σίγουρα να ενεργοποιήσετε αυτό το {{entity}};
+      - global.deactivate.confirm.title: Απενεργοποίηση {{entity}}
+      - global.deactivate.confirm.content: Θέλετε σίγουρα να απενεργοποιήσετε αυτό το {{entity}};
+      - global.status.active: Ενεργός
+      - global.status.inactive: Ανενεργός
+      - global.status.deactivated: Απενεργοποιημένος
+      - global.status.unverified: Μη επιβεβαιωμένος
+
+      # Import / Export
+      - global.export.action.label: Εξαγωγή σε Excel
+      - global.action.export.tooltip: Εξαγωγή των τρεχόντων αποτελεσμάτων
+      - global.action.export.disabled: Δεν υπάρχουν δεδομένα για εξαγωγή
+      - global.action.import: Εισαγωγή από Excel
+      - global.action.import.tooltip: Επιλέξτε ένα αρχείο Excel
+      - global.action.import.running: Η εισαγωγή βρίσκεται σε εξέλιξη
+      - global.action.import.unavailable: Η εισαγωγή δεν είναι διαθέσιμη ακόμη
+      - global.import.spinner.text: Εισαγωγή δεδομένων…
+      - global.import.spinner.subtext: Μην κλείσετε αυτή τη σελίδα.
+
+      # Empty / error states
+      - global.list.noResults.title: Δεν βρέθηκαν αποτελέσματα
+      - global.list.noResults.subtitle: Δοκιμάστε να αλλάξετε την αναζήτηση ή τα φίλτρα.
+      - global.list.error.title: Η φόρτωση απέτυχε
+      - global.list.error.subtitle: Δεν ήταν δυνατή η φόρτωση των δεδομένων. Δοκιμάστε ξανά.
+
+      # Entities
+      - global.entity.user: Χρήστης
+      - global.entity.group: Σχολή
+      - global.entity.department: Τμήμα
+
+      # Messages
+      - global.message.create.success: Το {{entity}} δημιουργήθηκε.
+      - global.message.create.error: Η δημιουργία απέτυχε.
+      - global.message.update.success: Το {{entity}} ενημερώθηκε.
+      - global.message.update.error: Η ενημέρωση απέτυχε.
+      - global.message.delete.success: Το {{entity}} διαγράφηκε.
+      - global.message.delete.error: Η διαγραφή απέτυχε.
+      - global.message.save.success: Το {{entity}} αποθηκεύτηκε.
+      - global.message.save.error: Η αποθήκευση απέτυχε.
+      - global.message.delete.confirm.title: Διαγραφή {{entity}}
+      - global.message.delete.confirm.content: Θέλετε σίγουρα να διαγράψετε αυτό το {{entity}};
+      - global.message.delete.confirm.confirm: Διαγραφή
+      - global.message.discard.content: Υπάρχουν μη αποθηκευμένες αλλαγές. Θέλετε σίγουρα να αποχωρήσετε;
+      - global.message.not.found: Το {{entity}} δεν βρέθηκε.
+      - global.message.has.reference.warning: Το {{entity}} χρησιμοποιείται και δεν μπορεί να διαγραφεί.
+      - global.message.export.progress: Προετοιμασία της εξαγωγής…
+      - global.message.export.success: Η εξαγωγή ολοκληρώθηκε.
+      - global.message.export.error: Η εξαγωγή απέτυχε.
+
       # Users
       - user.management.title: Χρήστες
       - user.management.action.create: Προσθήκη Χρήστη
       - user.management.tooltip.create: Πάτα για να προσθέσεις ένα Χρήστη
+      - user.column.username: Όνομα χρήστη
+      - user.column.firstname: Όνομα
+      - user.column.lastname: Επώνυμο
+      - user.column.email: Email
+      - user.column.role: Ρόλος
+      - user.column.group: Σχολή
+      - user.column.department: Τμήμα
+      - user.column.lastLogin: Τελευταία σύνδεση
+      - user.column.status: Κατάσταση
+      - user.list.empty.title: Δεν υπάρχουν χρήστες
+      - user.list.empty.subtitle: Προσθέστε τον πρώτο χρήστη για να ξεκινήσετε.
+      - user.section.settings: Ρυθμίσεις χρήστη
+      - user.section.personal: Στοιχεία χρήστη
+      - user.section.groupDepartment: Σχολή και Τμήμα
+      - user.role.user: Χρήστης
+      - user.role.admin: Διαχειριστής
+      - user.role.tooltip: Επιλέξτε τον ρόλο του χρήστη
+      - user.role.tooltip.locked: Ο ρόλος δεν μπορεί να αλλάξει μετά τη δημιουργία
+      - user.status.last.admin: Είναι ο τελευταίος διαχειριστής και δεν μπορεί να απενεργοποιηθεί
+      - user.status.unverified.hint: Ο λογαριασμός είναι ενεργός αλλά ο χρήστης δεν έχει επιβεβαιώσει ακόμη το email του. Θα γίνει Ενεργός μόλις το επιβεβαιώσει και συνδεθεί.
+      - user.edit.title: Επεξεργασία Χρήστη
 
       # Groups
       - group.management.title: Σχολές
       - group.management.action.create: Προσθήκη Σχολής
-      - user.management.tooltip.create: Πάτα για να προσθέσεις μια Σχολή
+      - group.management.tooltip.create: Πάτα για να προσθέσεις μια Σχολή
+      - group.column.name: Ονομασία
+      - group.column.description: Περιγραφή
+      - group.column.departments: Τμήματα
+      - group.column.departments.empty: Χωρίς τμήματα
+      - group.column.active: Κατάσταση
+      - group.list.empty.title: Δεν υπάρχουν σχολές
+      - group.list.empty.subtitle: Προσθέστε την πρώτη σχολή για να ξεκινήσετε.
+      - group.create.title: Νέα Σχολή
+      - group.edit.title: Επεξεργασία Σχολής
+      - group.form.name.label: Ονομασία
+      - group.form.name.tooltip: Η ονομασία δεν μπορεί να αλλάξει μετά τη δημιουργία.
+      - group.form.description.label: Περιγραφή
+      - group.error.name.exists: Υπάρχει ήδη σχολή με αυτή την ονομασία.
 
       # Departments
       - department.management.title: Τμήματα
       - department.management.action.create: Προσθήκη Τμήματος
       - department.management.tooltip.create: Πάτα για να προσθέσεις ένα Τμήμα
+      - department.column.name: Ονομασία
+      - department.column.description: Περιγραφή
+      - department.column.group: Σχολή
+      - department.column.users: Χρήστες
+      - department.column.users.empty: Χωρίς χρήστες
+      - department.column.active: Κατάσταση
+      - department.list.empty.title: Δεν υπάρχουν τμήματα
+      - department.list.empty.subtitle: Προσθέστε το πρώτο τμήμα για να ξεκινήσετε.
+      - department.create.title: Νέο Τμήμα
+      - department.edit.title: Επεξεργασία Τμήματος
+      - department.form.name.label: Ονομασία
+      - department.form.name.tooltip: Η ονομασία δεν μπορεί να αλλάξει μετά τη δημιουργία.
+      - department.form.description.label: Περιγραφή
+      - department.form.group.label: Σχολή
+      - department.error.name.exists: Υπάρχει ήδη τμήμα με αυτή την ονομασία.
 
       # Profile
+      - profile.badge: UniHealth
       - profile.title: Το Προφίλ Μου
       - profile.subtitle: Διαχειριστείτε τα στοιχεία του λογαριασμού σας, τις προσωπικές προτιμήσεις και τις ρυθμίσεις του προφίλ υγείας σας.
       - profile.overview.title: Επισκόπηση Προφίλ
@@ -185,6 +325,12 @@ translations:
       - profile.preferences.unsubscribeNewsFeeds.tooltip: Ενεργοποιήστε για να μη λαμβάνετε ροές ειδήσεων
       - profile.preferences.enableNotifications: Ενεργοποίηση Ειδοποιήσεων
       - profile.preferences.enableNotifications.tooltip: Ενεργοποιήστε για να λαμβάνετε ειδοποιήσεις
+      - profile.preferences.load.error: Δεν ήταν δυνατή η φόρτωση των προτιμήσεων.
+      - profile.preferences.save.success: Οι προτιμήσεις σας αποθηκεύτηκαν.
+      - profile.preferences.save.error: Δεν ήταν δυνατή η αποθήκευση των προτιμήσεων.
+      - profile.preferences.unsubscribe.confirm.title: Κατάργηση εγγραφής από τα νέα υγείας
+      - profile.preferences.unsubscribe.confirm.content: Δεν θα λαμβάνετε πλέον email με νέα υγείας. Τα σημαντικά email του λογαριασμού σας θα συνεχίσουν να σας φτάνουν. Θέλετε να συνεχίσετε;
+      - profile.preferences.unsubscribe.confirm.confirm: Κατάργηση εγγραφής
       - profile.healthForm.title: Φόρμα Υγείας
       - profile.healthForm.subtitle: Διαχειριστείτε τα στοιχεία του ιατρικού και ευεξιακού προφίλ σας.
       - profile.healthForm.description: Το προφίλ υγείας σας είναι ενεργό και μπορεί να ενημερωθεί οποιαδήποτε στιγμή.
@@ -385,7 +531,7 @@ translations:
     keys:
       # Header
       - header.title: UNIHEALTH
-      - header.subtitle: Κέντρο προσωπικής υγείας και ευεξίας φοιτητών
+      - header.subtitle: Students personal health and wellbeing hub
       - header.top.banner.text: This site is intended for university students of UNIWA
       - header.browse: Browse
       - header.help: Help
@@ -401,12 +547,14 @@ translations:
       - global.save.tooltip: Press to Save
       - global.yes: "Yes"
       - global.no: "No"
+      - global.select.all: Select all
+      - global.unselect.all: Clear
 
       # Side Navigation
       - side.admin: Administration
       - side.admin.users: Users
       - side.admin.departments: Departments
-      - side.admin.groups: Groups
+      - side.admin.groups: Schools
       - side.overview: Overview
       - side.overview.profile: Profile Overview
       - side.overview.plans: My Plans
@@ -432,8 +580,13 @@ translations:
       - breadcrumb.health.news.today: Today's Health News
       - breadcrumb.users: Users
       - breadcrumb.users.create: Create User
-      - breadcrumb.groups: Groups
+      - breadcrumb.users.edit: Edit User
+      - breadcrumb.groups: Schools
+      - breadcrumb.groups.create: Create School
+      - breadcrumb.groups.edit: Edit School
       - breadcrumb.departments: Departments
+      - breadcrumb.departments.create: Create Department
+      - breadcrumb.departments.edit: Edit Department
       - breadcrumb.profile: Profile
       - breadcrumb.profile.form: My Form
       - breadcrumb.symptoms: Symptoms
@@ -512,20 +665,152 @@ translations:
       - paginator.lastPage: Last page
       - paginator.of: from
 
+      # Table (shared)
+      - global.search: Search
+      - global.search.placeholder: Search…
+      - global.sort.label: Sort
+      - global.sort.asc: ascending
+      - global.sort.desc: descending
+      - global.multisort.clear: Clear sorting
+      - global.filter.label: Filters
+      - global.filter.clear: Clear filters
+      - global.btn.more.actions: More actions
+      - global.more: more
+      - global.close: Close
+      - global.cancel: Cancel
+      - global.confirm.label: Confirm
+      - global.warning: Warning
+      - global.unsaved: Unsaved changes
+      - global.leave: Leave
+      - global.actions: Actions
+      - global.field.required: Required field
+      - global.date.invalid: Invalid date
+      - global.date.tooEarly: The date is too early
+      - global.date.tooLate: The date is too late
+      - global.action.view: View
+      - global.action.edit: Edit
+      - global.action.delete: Delete
+      - global.unexpected.error: An unexpected error occurred.
+      - global.back.end.unavailable: The server is unavailable.
+
+      # Status
+      - global.section.general: General information
+      - global.status.label: Status
+      - global.action.activate: Activate
+      - global.action.deactivate: Deactivate
+      - global.activate.confirm.title: Activate {{entity}}
+      - global.activate.confirm.content: Are you sure you want to activate this {{entity}}?
+      - global.deactivate.confirm.title: Deactivate {{entity}}
+      - global.deactivate.confirm.content: Are you sure you want to deactivate this {{entity}}?
+      - global.status.active: Active
+      - global.status.inactive: Inactive
+      - global.status.deactivated: Deactivated
+      - global.status.unverified: Unverified
+
+      # Import / Export
+      - global.export.action.label: Export to Excel
+      - global.action.export.tooltip: Export the current results
+      - global.action.export.disabled: There is no data to export
+      - global.action.import: Import from Excel
+      - global.action.import.tooltip: Choose an Excel file
+      - global.action.import.running: An import is already running
+      - global.action.import.unavailable: Import is not available yet
+      - global.import.spinner.text: Importing data…
+      - global.import.spinner.subtext: Please do not close this page.
+
+      # Empty / error states
+      - global.list.noResults.title: No results found
+      - global.list.noResults.subtitle: Try changing your search or filters.
+      - global.list.error.title: Loading failed
+      - global.list.error.subtitle: The data could not be loaded. Please try again.
+
+      # Entities
+      - global.entity.user: User
+      - global.entity.group: School
+      - global.entity.department: Department
+
+      # Messages
+      - global.message.create.success: "{{entity}} created."
+      - global.message.create.error: Creation failed.
+      - global.message.update.success: "{{entity}} updated."
+      - global.message.update.error: Update failed.
+      - global.message.delete.success: "{{entity}} deleted."
+      - global.message.delete.error: Deletion failed.
+      - global.message.save.success: "{{entity}} saved."
+      - global.message.save.error: Saving failed.
+      - global.message.delete.confirm.title: Delete {{entity}}
+      - global.message.delete.confirm.content: Are you sure you want to delete this {{entity}}?
+      - global.message.delete.confirm.confirm: Delete
+      - global.message.discard.content: You have unsaved changes. Are you sure you want to leave?
+      - global.message.not.found: "{{entity}} not found."
+      - global.message.has.reference.warning: "{{entity}} is still in use and cannot be deleted."
+      - global.message.export.progress: Preparing your export…
+      - global.message.export.success: Export completed.
+      - global.message.export.error: Export failed.
+
       # Users
       - user.management.title: Users
       - user.management.action.create: Add User
       - user.management.tooltip.create: Press to Add a User
+      - user.column.username: Username
+      - user.column.firstname: First name
+      - user.column.lastname: Last name
+      - user.column.email: Email
+      - user.column.role: Role
+      - user.column.group: School
+      - user.column.department: Department
+      - user.column.lastLogin: Last login
+      - user.column.status: Status
+      - user.list.empty.title: No users yet
+      - user.list.empty.subtitle: Add the first user to get started.
+      - user.section.settings: User settings
+      - user.section.personal: User details
+      - user.section.groupDepartment: School and Department
+      - user.role.user: User
+      - user.role.admin: Administrator
+      - user.role.tooltip: Choose the user's role
+      - user.role.tooltip.locked: The role cannot be changed after creation
+      - user.status.last.admin: This is the last administrator and cannot be deactivated
+      - user.status.unverified.hint: The account is enabled but the user has not confirmed their email yet. It becomes Active once they confirm it and sign in.
+      - user.edit.title: Edit User
 
       # Groups
       - group.management.title: Schools
       - group.management.action.create: Add School
-      - user.management.tooltip.create: Press to add School
+      - group.management.tooltip.create: Press to add School
+      - group.column.name: Name
+      - group.column.description: Description
+      - group.column.departments: Departments
+      - group.column.departments.empty: No departments
+      - group.column.active: Status
+      - group.list.empty.title: No schools yet
+      - group.list.empty.subtitle: Add the first school to get started.
+      - group.create.title: New School
+      - group.edit.title: Edit School
+      - group.form.name.label: Name
+      - group.form.name.tooltip: The name cannot be changed after creation.
+      - group.form.description.label: Description
+      - group.error.name.exists: A school with this name already exists.
 
       # Departments
       - department.management.title: Departments
       - department.management.action.create: Add Department
       - department.management.tooltip.create: Press to Add Department
+      - department.column.name: Name
+      - department.column.description: Description
+      - department.column.group: School
+      - department.column.users: Users
+      - department.column.users.empty: No users
+      - department.column.active: Status
+      - department.list.empty.title: No departments yet
+      - department.list.empty.subtitle: Add the first department to get started.
+      - department.create.title: New Department
+      - department.edit.title: Edit Department
+      - department.form.name.label: Name
+      - department.form.name.tooltip: The name cannot be changed after creation.
+      - department.form.description.label: Description
+      - department.form.group.label: School
+      - department.error.name.exists: A department with this name already exists.
 
         # Profile
       - profile.badge: UniHealth
@@ -555,6 +840,12 @@ translations:
       - profile.preferences.unsubscribeNewsFeeds.tooltip: Enable to stop receiving news feeds
       - profile.preferences.enableNotifications: Enable Notifications
       - profile.preferences.enableNotifications.tooltip: Enable to receive notifications
+      - profile.preferences.load.error: Your preferences could not be loaded.
+      - profile.preferences.save.success: Your preferences have been saved.
+      - profile.preferences.save.error: Your preferences could not be saved.
+      - profile.preferences.unsubscribe.confirm.title: Unsubscribe from health news
+      - profile.preferences.unsubscribe.confirm.content: You will no longer receive health news emails. Important account emails will still reach you. Do you want to continue?
+      - profile.preferences.unsubscribe.confirm.confirm: Unsubscribe
       - profile.healthForm.title: Health Form
       - profile.healthForm.subtitle: Manage your medical and wellness profile details.
       - profile.healthForm.description: Your health profile is active and can be updated at any time.

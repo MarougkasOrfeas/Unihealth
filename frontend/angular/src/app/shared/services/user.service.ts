@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BaseService} from './base.service';
-import {RightsMatrix, User, UserStatus} from '../interfaces/user';
-import {Observable, shareReplay} from "rxjs";
+import {RightsMatrix, User, UserPreferences, UserStatus} from '../interfaces/user';
+import {Observable} from "rxjs";
 import {UNIHEALTH_CONSTANTS} from "../constants/unihealth.constants";
 
 class UserEndpoints {
@@ -45,10 +45,12 @@ export class UserService extends BaseService<User> {
         return this.httpClient.get<User>(`${this.basePath}/_me`);
     }
 
+    /**
+     * Callers should go through `PermissionService`, which owns the caching. A `shareReplay` here
+     * would do nothing — the operator would be applied to a fresh request on every call.
+     */
     getLoggedinUserRightsMatrix(): Observable<RightsMatrix> {
-        return this.httpClient.get<RightsMatrix>(UserEndpoints.GET_USER_RIGHTS_MATRIX_URI).pipe(
-            shareReplay(1)
-        );
+        return this.httpClient.get<RightsMatrix>(UserEndpoints.GET_USER_RIGHTS_MATRIX_URI);
     }
 
     setUserStatus(id: string, newUserStatus: UserStatus, deactivationReason: string | null): Observable<SetUserStatusAnswer> {
@@ -68,6 +70,30 @@ export class UserService extends BaseService<User> {
 
     checkUsernameExists(username: string): Observable<boolean> {
         return this.httpClient.get<boolean>(`${UserEndpoints.CHECK_USERNAME_EXISTS_URI}?username=${username}`);
+    }
+
+    /**
+     * Whether deactivating or deleting this user would leave the application with no administrator
+     * who can sign in. Used to disable the status toggle on the edit page.
+     */
+    isLastAdmin(id: string): Observable<boolean> {
+        return this.httpClient.get<boolean>(`${this.basePath}/${id}/_last_admin`);
+    }
+
+    /**
+     * The logged-in user's own email preferences. Self-scoped, so it needs no admin permission —
+     * the admin-guarded user update cannot be reached through it.
+     */
+    getMyPreferences(): Observable<UserPreferences> {
+        return this.httpClient.get<UserPreferences>(`${this.basePath}/_self/_preferences`);
+    }
+
+    /**
+     * Saves them. Unsubscribing from the digest also queues the goodbye email server-side, but only
+     * on the subscribed -> unsubscribed transition.
+     */
+    updateMyPreferences(preferences: UserPreferences): Observable<UserPreferences> {
+        return this.httpClient.put<UserPreferences>(`${this.basePath}/_self/_preferences`, preferences);
     }
 
 }

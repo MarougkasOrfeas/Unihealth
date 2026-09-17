@@ -1,14 +1,17 @@
 package gr.uniwa.unihealth.backend.service.impl;
 
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import gr.uniwa.unihealth.backend.dto.DepartmentDTO;
 import gr.uniwa.unihealth.backend.mapper.BaseEntityMapper;
 import gr.uniwa.unihealth.backend.mapper.DepartmentMapper;
 import gr.uniwa.unihealth.backend.model.Department;
+import gr.uniwa.unihealth.backend.model.QDepartment;
 import gr.uniwa.unihealth.backend.model.User;
 import gr.uniwa.unihealth.backend.repository.BaseRepository;
 import gr.uniwa.unihealth.backend.repository.DepartmentRepository;
 import gr.uniwa.unihealth.backend.repository.UserRepository;
+import gr.uniwa.unihealth.backend.service.BaseReaderWithSearchService;
 import gr.uniwa.unihealth.backend.service.DepartmentReaderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,7 +23,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class DepartmentReaderServiceImpl extends BaseReaderServiceImpl<DepartmentDTO, Department>
-    implements DepartmentReaderService {
+    implements DepartmentReaderService, BaseReaderWithSearchService<DepartmentDTO> {
 
   private final DepartmentMapper mapper;
   private final DepartmentRepository repository;
@@ -39,6 +42,26 @@ public class DepartmentReaderServiceImpl extends BaseReaderServiceImpl<Departmen
   @Override
   public List<DepartmentDTO> findAllActive() {
     return repository.findByActiveTrue().stream().map(mapper::mapToDTO).toList();
+  }
+
+  /**
+   * Free-text search over the columns the list screen actually shows. Without this,
+   * {@link BaseReaderServiceImpl#createPredicateFromParams} drops the {@code search} parameter
+   * entirely, because it only applies it to readers implementing
+   * {@link BaseReaderWithSearchService}.
+   */
+  @Override
+  public BooleanExpression buildSearchPredicate(BuildSearchPredicateParams params) {
+    String search = params.search();
+    if (search == null || search.isBlank()) {
+      return null;
+    }
+
+    // Own columns only. Traversing `group.name` here would emit an implicit inner join and
+    // silently drop every department without a school; use the School facet to filter on that.
+    QDepartment department = QDepartment.department;
+    return department.name.containsIgnoreCase(search)
+        .or(department.description.containsIgnoreCase(search));
   }
 
   @Override

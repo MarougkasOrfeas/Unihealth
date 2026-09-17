@@ -1,0 +1,88 @@
+<mat-paginator
+    class="generic-paginator"
+    showFirstLastButtons
+    [pageSizeOptions]="pageSizeOptions()"
+    [pageIndex]="currentPageIndex()"
+    [pageSize]="currentPageSize()"
+    [length]="totalElements()"
+    (page)="onPageChanged($event)">
+</mat-paginator>
+
+<div class="form-row">
+    <div class="table-wrapper">
+        <table mat-table matSort class="unihealth-data-table mat-elevation-z8"
+               [dataSource]="pagedRows()"
+               (matSortChange)="onSortChanged($event)">
+
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" [attr.colspan]="displayedColumns().length">
+                    @if (!loading()) {
+                        <div class="no-data">
+                            <div class="no-data_title">{{ emptyTitle() }}</div>
+                            <div class="no-data_subtitle">{{ emptySubtitle() }}</div>
+                        </div>
+                    }
+                </td>
+            </tr>
+
+            @for (column of columns(); track column.key) {
+                <ng-container [matColumnDef]="$any(column.key)">
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef
+                        [mat-sort-header]="$any(column.key)"
+                        [disabled]="!column.sortable"
+                        [class]="column.headerClass || ''">
+
+                        <div class="th-flex">
+                            <span>{{ column.header }}</span>
+
+                            @if (column.filterable) {
+                                <app-column-filter
+                                    [options]="getFacetOptions($any(column.key))"
+                                    [searchable]="column.filterSearchable ?? true"
+                                    [selection]="getFacetSelection($any(column.key))"
+                                    (selectionChange)="onFacetChange($any(column.key), $event)">
+                                </app-column-filter>
+                            }
+                        </div>
+                    </th>
+
+                    <td mat-cell *matCellDef="let row" class="wrap-text" [class]="column.cellClass || ''">
+                        @if (column.type === 'date') {
+                            {{ $any(getCellValue(row, column)) | date:'dd-MM-yyyy HH:mm' }}
+                        } @else if (column.type === 'status') {
+                            <span
+                                class="status"
+                                [class.active]="getCellValue(row, column) === 'Active'"
+                                [class.inactive]="getCellValue(row, column) === 'Deactivated'"
+                                [class.unverified]="getCellValue(row, column) === 'Unverified'">
+                              <span class="status_dot"></span>
+                              <span class="status_text">{{ getCellValue(row, column) }}</span>
+                            </span>
+                        } @else if (column.type === 'actions') {
+                            <div class="action-buttons">
+                                @for (action of column.actions ?? []; track action.icon) {
+                                    <button
+                                        mat-icon-button
+                                        [disabled]="action.disabled ? action.disabled(row) : false"
+                                        [matTooltip]="action.tooltip"
+                                        (click)="action.onClick(row)">
+                                        <mat-icon>{{ action.icon }}</mat-icon>
+                                    </button>
+                                }
+                            </div>
+                        } @else {
+                            <span class="empty-cell" [class.dash]="getCellValue(row, column) === '-'">
+                              {{ getCellValue(row, column) }}
+                            </span>
+                        }
+                    </td>
+                </ng-container>
+            }
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns();"></tr>
+        </table>
+    </div>
+</div>

@@ -1,155 +1,85 @@
-import {Component, OnInit} from "@angular/core";
-import {Table} from "../../shared/components/table/table";
-import {MatPaginatorIntl, PageEvent} from "@angular/material/paginator";
-import {TableColumn} from "../../shared/interfaces/table-column";
-import {Sort} from "@angular/material/sort";
-import {DepartmentService} from "../../shared/services/department.service";
-import {DepartmentDTO} from "../../shared/interfaces/department";
-import {MatButton} from "@angular/material/button";
-import {MatIcon} from "@angular/material/icon";
-import {TranslatePipe} from "@ngx-translate/core";
-import {MatTooltip} from "@angular/material/tooltip";
-import {Router} from "@angular/router";
-
-
-interface DepartmentRow {
-    id: string;
-    name: string;
-    description: string;
-    users: string[];
-}
+import {ChangeDetectionStrategy, Component, DestroyRef, inject, viewChild} from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {Router} from '@angular/router';
+import {TranslatePipe} from '@ngx-translate/core';
+import {filter, switchMap} from 'rxjs';
+import {BaseTable, EmptyStateData} from '../../shared/components/base-table/base-table';
+import {Button} from '../../shared/components/button/button';
+import {PageHeader} from '../../shared/components/page-header/page-header';
+import {UNIHEALTH_CONSTANTS} from '../../shared/constants/unihealth.constants';
+import {DepartmentDTO} from '../../shared/interfaces/department';
+import {DepartmentService} from '../../shared/services/department.service';
+import {MessageService} from '../../shared/services/message.service';
+import {DEPARTMENT_COLUMNS, DepartmentRow} from './departments.columns';
 
 @Component({
     selector: 'app-departments',
     standalone: true,
-    imports: [Table, MatButton, MatIcon, TranslatePipe, MatTooltip],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [BaseTable, PageHeader, Button, TranslatePipe],
     templateUrl: './departments.html',
-    styleUrls: ['./departments.scss']
+    styleUrls: ['./departments.scss'],
 })
-export class Departments implements OnInit {
-    departments: DepartmentRow[] = [];
-    totalElements = 0;
+export class Departments {
 
-    isLoading = false;
+    private readonly router = inject(Router);
+    private readonly messages = inject(MessageService);
+    private readonly destroyRef = inject(DestroyRef);
+    protected readonly departmentService = inject(DepartmentService);
 
-    currentPageIndex = 0;
-    currentPageSize = 10;
+    private readonly table = viewChild.required(BaseTable<DepartmentDTO, DepartmentRow>);
 
-    currentSortActive = 'name';
-    currentSortDirection: 'asc' | 'desc' = 'asc';
+    protected readonly columns = DEPARTMENT_COLUMNS;
 
-    columns: TableColumn<DepartmentRow>[] = [
-        {key: 'name', header: 'Name', sortable: true, filterable: true, filterSearchable: true},
-        {key: 'description', header: 'Description', sortable: true, filterable: true, filterSearchable: true},
-        {key: 'users', header: 'Users', sortable: true, filterable: true, filterSearchable: true},
-        {
-            key: 'action',
-            header: 'Action',
-            type: 'actions',
-            actions: [
-                {
-                    icon: 'edit',
-                    tooltip: 'Edit a department',
-                    onClick: (row) => this.onEditDepartment(row.id)
-                }
-            ]
-        }
-    ];
-
-    facetOptions: Record<string, string[]> = {
-        name: [],
-        description: [],
+    protected readonly emptyState: EmptyStateData = {
+        titleKey: 'department.list.empty.title',
+        subtitleKey: 'department.list.empty.subtitle',
+        titleErrorKey: 'global.list.error.title',
+        subtitleErrorKey: 'global.list.error.subtitle',
+        buttonLabelKey: 'department.management.action.create',
     };
 
-    facetSelection: Record<string, Set<string>> = {
-        name: new Set<string>(),
-        description: new Set<string>(),
-    };
+    protected readonly toRow = (dto: DepartmentDTO): DepartmentRow => ({
+        id: dto.id,
+        name: dto.name,
+        description: dto.description ?? '',
+        group: dto.group ?? '',
+        users: dto.users ?? [],
+        active: dto.active,
+    });
 
-    constructor(private departmentService: DepartmentService, private readonly router: Router,) {
+    protected onCreate(): void {
+        this.navigate(['/', UNIHEALTH_CONSTANTS.ROUTE_DEPARTMENTS, 'create']);
     }
 
-    ngOnInit(): void {
-        this.loadDepartments();
+    protected onView(row: DepartmentRow): void {
+        this.navigate(['/', UNIHEALTH_CONSTANTS.ROUTE_DEPARTMENTS, row.id]);
     }
 
-    onPageChange(event: PageEvent): void {
-        this.currentPageIndex = event.pageIndex;
-        this.currentPageSize = event.pageSize;
-        this.loadDepartments();
+    protected onEdit(row: DepartmentRow): void {
+        this.navigate(['/', UNIHEALTH_CONSTANTS.ROUTE_DEPARTMENTS, row.id, 'edit']);
     }
 
-    onSortChange(sort: Sort): void {
-        this.currentSortActive = sort.active || 'username';
-        this.currentSortDirection = (sort.direction as 'asc' | 'desc') || 'asc';
-        this.currentPageIndex = 0;
-        this.loadDepartments();
+    protected onDelete(row: DepartmentRow): void {
+        this.messages.confirmDelete(UNIHEALTH_CONSTANTS.ENTITY.DEPARTMENT)
+            .afterClosed()
+            .pipe(
+                filter(Boolean),
+                switchMap(() => this.departmentService.delete(row.id)),
+                takeUntilDestroyed(this.destroyRef),
+            )
+            .subscribe({
+                next: () => {
+                    this.messages.deleteSuccess(UNIHEALTH_CONSTANTS.ENTITY.DEPARTMENT);
+                    this.table().reloadFirstPage();
+                },
+                error: () => this.messages.deleteError(),
+            });
     }
 
-    onEditDepartment(id: string): void {
-        console.log('edit user', id);
-    }
-
-    onFacetOpened(key: string): void {
-        console.log('facet opened', key);
-    }
-
-    onFacetChange(event: { key: string; selection: Set<string> }): void {
-        console.log('facet changed', event.key, event.selection);
-    }
-
-    onCreate() {
-    }
-
-    onCancel() {
-        this.router.navigateByUrl('/');
-    }
-
-    private loadDepartments(): void {
-        this.isLoading = true;
-
-        const requestBody = this.buildRequestBody();
-
-        this.departmentService.getPage(requestBody).subscribe({
-            next: (page) => {
-                this.departments = (page.content ?? []).map(user => this.toRow(user));
-                this.totalElements = page.totalElements ?? 0;
-                this.isLoading = false;
-            },
-            error: (err) => {
-                console.error('Failed to load users', err);
-                this.departments = [];
-                this.totalElements = 0;
-                this.isLoading = false;
-            }
-        });
-    }
-
-    private buildRequestBody(): Record<string, unknown> {
-        return {
-            page: this.currentPageIndex,
-            size: this.currentPageSize,
-            sort: [this.buildSortParameter()]
-        };
-    }
-
-    private buildSortParameter(): string {
-        const columnMapping: Record<string, string> = {
-            name: 'name',
-            description: 'description',
-            departments: 'departments',
-        };
-
-        const backendField = columnMapping[this.currentSortActive] || 'name';
-        return `${backendField},${this.currentSortDirection}`;
-    }
-
-    private toRow(d: DepartmentDTO): DepartmentRow {
-        return {
-            id: (d as any).id ?? '',
-            name: d.name,
-            description: d.description,
-            users: Array.isArray(d.users) ? d.users : [],
-        };
+    /** Saves the query before leaving, so coming back restores the filters, sort and page. */
+    private navigate(commands: unknown[]): void {
+        this.table().saveCurrentState();
+        void this.router.navigate(commands);
     }
 }

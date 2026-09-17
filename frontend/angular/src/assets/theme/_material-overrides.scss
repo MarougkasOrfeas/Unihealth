@@ -1,0 +1,10 @@
+/* ==========================================================================
+   Material internals overrides
+   ==========================================================================
+
+   Rules that must reach inside Angular Material's generated DOM
+   (.mat-mdc-* / .mdc-* classes). They live here, in the global layer,
+   instead of per-component ::ng-deep (deprecated). Every rule is scoped:
+   either to a specific wrapper component's element selector, or to an
+   opt-in utility class, so other components are not affected. */
+

@@ -1,0 +1,19 @@
+<div class="no-data" [attr.data-testid]="testId">
+  <div class="no-data_title" [attr.data-testid]="titleTestId">
+    {{ titleKey | translate }}
+  </div>
+
+  <div class="no-data_subtitle" [attr.data-testid]="subtitleTestId">
+    {{ subtitleKey | translate }}
+  </div>
+
+  @if (hasButton) {
+    <app-button buttonStyle="text" icon="add"
+      [disabled]="disabled"
+      [routerLink]="routerLink || null"
+      [testId]="buttonTestId"
+      (clicked)="onCreate()">
+        {{ buttonLabelKey | translate }}
+    </app-button>
+  }
+</div>

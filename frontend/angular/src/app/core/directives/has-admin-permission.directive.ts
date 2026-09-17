@@ -1,38 +1,28 @@
-import {Directive, inject, OnInit, TemplateRef, ViewContainerRef} from "@angular/core";
-import {UserService} from "../../shared/services/user.service";
-import {catchError, of, tap} from "rxjs";
-import {Permission} from "../interface/permission";
+import {Directive, effect, inject, TemplateRef, ViewContainerRef} from "@angular/core";
+import {PermissionService} from "../auth/permission.service";
 
-
+/**
+ * Renders its content only for administrators.
+ *
+ * Reads the cached `isAdmin` signal, so however many instances are on the page they share a single
+ * rights-matrix request, and all of them flip together once it resolves.
+ */
 @Directive({
     selector: '[appHasAdminPermission]',
     standalone: true,
 })
-export class HasAdminPermissionDirective implements OnInit {
+export class HasAdminPermissionDirective {
 
-    private userService = inject(UserService);
-    private templateRef = inject(TemplateRef<any>);
-    private vcr = inject(ViewContainerRef);
+    constructor() {
+        const permissions = inject(PermissionService);
+        const templateRef = inject(TemplateRef<unknown>);
+        const vcr = inject(ViewContainerRef);
 
-    ngOnInit(): void {
-        this.userService
-            .getLoggedinUserRightsMatrix()
-            .pipe(
-                tap((rightsMatrix) => {
-                    this.vcr.clear();
-                    const perms: string[] = rightsMatrix?.globalPermissions ?? [];
-                    const hasAccess = perms.includes(Permission.ADMIN);
-
-                    if (hasAccess) {
-                        this.vcr.createEmbeddedView(this.templateRef);
-                    }
-                }),
-                catchError((err) => {
-                    this.vcr.clear();
-                    console.error('Error fetching permissions:', err);
-                    return of(null);
-                }),
-            )
-            .subscribe();
+        effect(() => {
+            vcr.clear();
+            if (permissions.isAdmin()) {
+                vcr.createEmbeddedView(templateRef);
+            }
+        });
     }
 }

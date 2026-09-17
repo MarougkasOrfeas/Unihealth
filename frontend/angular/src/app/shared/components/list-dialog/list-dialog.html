@@ -1,0 +1,35 @@
+<app-dialog-header
+  testId="list-dialog"
+  [title]="title + ' (' + items.length + ')'"
+  (dialogClose)="close()"
+/>
+<mat-dialog-content
+  class="dialog-content"
+  data-testid="list-dialog-content"
+>
+  @for (item of items; track item; let i = $index) {
+    <div
+      class="dialog-item-row"
+      data-testid="list-dialog-item"
+    >
+      <span class="users-dialog__index">
+        {{ i + 1 }}
+      </span>
+
+      <span class="users-dialog__name">
+        {{ item }}
+      </span>
+    </div>
+  }
+</mat-dialog-content>
+
+<app-dialog-actions>
+  <app-button
+    buttonStyle="text"
+    testId="btn-list-dialog-close"
+    (clicked)="close()"
+  >
+    {{ 'fee.dialog.close' | translate }}
+  </app-button>
+</app-dialog-actions>
+

@@ -1,5 +1,6 @@
 package gr.uniwa.unihealth.backend.config.context;
 
+import gr.uniwa.unihealth.backend.config.cache.RequestCache;
 import gr.uniwa.unihealth.backend.exception.ExceptionUtils;
 import gr.uniwa.unihealth.backend.exception.UNIHEALTHException;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +19,7 @@ import java.io.InputStream;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -35,8 +33,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TenantContext {
 
-  private final ScopedValue<String> CURRENT_TENANT = ScopedValue.newInstance();
-  private final Map<String, Properties> TENANT_PROPERTIES = new HashMap<>();
+  private final ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
+  private final Semaphore semaphore = new Semaphore(50);
+
+  private final ScopedValue<RequestCache> REQUEST_CACHE = ScopedValue.newInstance();
+  private final Map<String, Properties> TENANT_PROPERTIES = new TreeMap<>();
 
   private final ApplicationContext applicationContext;
 
@@ -49,9 +50,19 @@ public class TenantContext {
    * @return The current tenant id.
    */
   public String getCurrentTenant() {
-    return getSingleTenantOr(() -> CURRENT_TENANT.orElseThrow(
+    return getSingleTenantOr(() -> getRequestCache().getTenantId().trim().toUpperCase(Locale.ROOT));
+  }
+
+  /**
+   * Get the request cache for the current tenant.
+   *
+   * @return The request cache for the current tenant.
+   * @throws IllegalStateException if no tenant is set in the tenant context.
+   */
+  public RequestCache getRequestCache() {
+    return REQUEST_CACHE.orElseThrow(
         () -> ExceptionUtils.createException(IllegalStateException.class, null,
-            "No tenant set in the tenant context")));
+            "No tenant set in the tenant context"));
   }
 
   /**
@@ -75,11 +86,23 @@ public class TenantContext {
    */
   public CompletableFuture<Void> runAs(String tenant, Runnable runnable, boolean inVirtualThread) {
     if (inVirtualThread) {
-      ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
-      return CompletableFuture.runAsync(
-          () -> ScopedValue.where(CURRENT_TENANT, tenant).run(runnable), executor);
+      return CompletableFuture.runAsync(() -> {
+        boolean acquired = false;
+        try {
+          semaphore.acquire();
+          acquired = true;
+          ScopedValue.where(REQUEST_CACHE, new RequestCache(tenant)).run(runnable);
+        } catch (InterruptedException e) {
+          Thread.currentThread().interrupt();
+          throw new UNIHEALTHException(null, "Task interrupted", e);
+        } finally {
+          if (acquired) {
+            semaphore.release();
+          }
+        }
+      }, executor);
     } else {
-      ScopedValue.where(CURRENT_TENANT, tenant).run(runnable);
+      ScopedValue.where(REQUEST_CACHE, new RequestCache(tenant)).run(runnable);
       return CompletableFuture.completedFuture(null);
     }
   }
@@ -131,8 +154,8 @@ public class TenantContext {
    * @return The single tenant or the result of the elseSupplier.
    */
   public String getSingleTenantOr(Supplier<String> elseSupplier) {
-    return TENANT_PROPERTIES.size() == 1 ?
-        TENANT_PROPERTIES.keySet().iterator().next() :
+    return getAllTenantProperties().size() == 1 ?
+        getAllTenantProperties().keySet().iterator().next() :
         elseSupplier.get();
   }
 
@@ -150,7 +173,7 @@ public class TenantContext {
    *
    * @return A map of tenant ids to their properties.
    */
-  public Map<String, Properties> getAllTenantProperties() {
+  public synchronized Map<String, Properties> getAllTenantProperties() {
     if (TENANT_PROPERTIES.isEmpty()) {
       try {
         ClassLoader classLoader = getClass().getClassLoader();
@@ -161,7 +184,7 @@ public class TenantContext {
 
         TENANT_PROPERTIES.putAll(List.of(resources).stream().collect(Collectors.toMap(
             resource -> Optional.ofNullable(resource.getFilename())
-                .map(fName -> fName.trim().toLowerCase())
+                .map(fName -> fName.trim().toUpperCase())
                 .map(fName -> fName.substring(0, fName.lastIndexOf('.'))).orElseThrow(),
             resource -> {
               Properties properties = new Properties();

@@ -1,0 +1,111 @@
+:host {
+  --mat-progress-spinner-active-indicator-color: white;
+
+  &[buttonStyle='outlined'] {
+    --mat-progress-spinner-active-indicator-color: var(--sys-secondary);
+
+    &[variant='danger'] {
+      --mat-progress-spinner-active-indicator-color: var(--sys-error);
+    }
+  }
+
+  /* Extra-compact variant for tight layouts (e.g. side panels).
+     Standard (labelled) buttons only — for icon buttons use size="compact",
+     hence the .mat-mdc-icon-button guard. */
+  &[size='xsmall'] {
+    button:not(.mat-mdc-icon-button) {
+      min-width: 0;
+      height: 1.75rem;
+      padding: 0 var(--sys-spacing-xs);
+      font-size: var(--sys-type-body-sm-size);
+
+      .mat-icon {
+        width: 1rem;
+        height: 1rem;
+        font-size: 1rem;
+      }
+
+      .button-content {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+
+  /*
+   * Compact icon-only variant for row/panel quick actions. Keeps the WCAG 2.5.8
+   * minimum target of 24x24 CSS px with headroom (2rem = 32px).
+   */
+  &[size='compact'] {
+    button.mat-mdc-icon-button {
+      --mdc-icon-button-state-layer-size: 2rem;
+      --mat-icon-button-state-layer-size: 2rem;
+      --mdc-icon-button-icon-size: 1.25rem;
+
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+      width: 2rem;
+      height: 2rem;
+      padding: 0;
+      line-height: 1;
+
+      .mat-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.25rem;
+        height: 1.25rem;
+        margin: 0;
+        font-size: 1.25rem;
+        line-height: 1;
+      }
+    }
+  }
+
+  &[buttonStyle='text'] {
+    .mat-icon:not([iconpositionend]) {
+      margin-left: -8px; /* force same margin as for filled and outlined buttons */
+    }
+
+    .mat-icon[iconpositionend] {
+      margin-right: -8px; /* force same margin as for filled and outlined buttons */
+    }
+
+    --mat-progress-spinner-active-indicator-color: var(--sys-primary);
+
+    &[variant='danger'] {
+      --mat-progress-spinner-active-indicator-color: var(--sys-error);
+    }
+  }
+
+  button {
+    border-radius: 4px;
+
+    &:focus-visible {
+      outline: 2px solid var(--sys-focus-outline);
+      outline-offset: 2px;
+    }
+
+    &.is-disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+
+      mat-icon,
+      .button-content {
+        color: var(--sys-btn-disabled-text-color) !important;
+      }
+    }
+
+    &.is-loading {
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    &[disabled], .is-disabled {
+      --mat-progress-spinner-active-indicator-color: var(--sys-btn-disabled-text-color);
+    }
+  }
+}

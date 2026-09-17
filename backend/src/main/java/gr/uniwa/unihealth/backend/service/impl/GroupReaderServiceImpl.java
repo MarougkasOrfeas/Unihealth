@@ -1,12 +1,15 @@
 package gr.uniwa.unihealth.backend.service.impl;
 
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import gr.uniwa.unihealth.backend.dto.GroupDTO;
 import gr.uniwa.unihealth.backend.mapper.UniGroupMapper;
 import gr.uniwa.unihealth.backend.model.Department;
+import gr.uniwa.unihealth.backend.model.QUniGroup;
 import gr.uniwa.unihealth.backend.model.UniGroup;
 import gr.uniwa.unihealth.backend.repository.DepartmentRepository;
 import gr.uniwa.unihealth.backend.repository.UniGroupRepository;
+import gr.uniwa.unihealth.backend.service.BaseReaderWithSearchService;
 import gr.uniwa.unihealth.backend.service.GroupReaderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,12 +21,12 @@ import java.util.List;
 /**
  * Implementation for {@link GroupReaderService}.
  *
- * @author European Dynamics SA
+ * @author omaro
  */
 @Service
 @RequiredArgsConstructor
 public class GroupReaderServiceImpl extends BaseReaderServiceImpl<GroupDTO, UniGroup>
-    implements GroupReaderService {
+    implements GroupReaderService, BaseReaderWithSearchService<GroupDTO> {
 
   private final UniGroupMapper mapper;
   private final UniGroupRepository repository;
@@ -42,6 +45,24 @@ public class GroupReaderServiceImpl extends BaseReaderServiceImpl<GroupDTO, UniG
   @Override
   public List<GroupDTO> findAllActive() {
     return repository.findByActiveTrue().stream().map(mapper::mapToDTO).toList();
+  }
+
+  /**
+   * Free-text search over the columns the list screen actually shows. Without this,
+   * {@link BaseReaderServiceImpl#createPredicateFromParams} drops the {@code search} parameter
+   * entirely, because it only applies it to readers implementing
+   * {@link BaseReaderWithSearchService}.
+   */
+  @Override
+  public BooleanExpression buildSearchPredicate(BuildSearchPredicateParams params) {
+    String search = params.search();
+    if (search == null || search.isBlank()) {
+      return null;
+    }
+
+    QUniGroup group = QUniGroup.uniGroup;
+    return group.name.containsIgnoreCase(search)
+        .or(group.description.containsIgnoreCase(search));
   }
 
   @Override

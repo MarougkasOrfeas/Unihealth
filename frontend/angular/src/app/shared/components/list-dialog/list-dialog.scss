@@ -1,0 +1,13 @@
+.dialog-item-row {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  align-items: center;
+  gap: 10px;
+  min-height: 18px;
+  padding: 4px 6px;
+  border-radius: 6px;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.04);
+  }
+}

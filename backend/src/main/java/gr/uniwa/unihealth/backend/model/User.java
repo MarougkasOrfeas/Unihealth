@@ -75,6 +75,27 @@ public class User extends BaseUpdatableEntity {
   @Column(name = "scheduled_deactivation_reason")
   private String scheduledDeactivationReason;
 
+  /**
+   * Whether the user still wants the health-news digest. Stored positive: the profile screen shows
+   * it as "unsubscribe", and persisting the negative invites double-negative bugs.
+   */
+  @Column(name = "newsletter_subscribed", nullable = false)
+  private boolean newsletterSubscribed = true;
+
+  /**
+   * Whether the user accepts occasional non-critical notifications, e.g. the reminder to finish
+   * the optional health profile. Account-critical mail ignores this — see EmailPreferenceService.
+   */
+  @Column(name = "notifications_enabled", nullable = false)
+  private boolean notificationsEnabled = true;
+
+  /** How many optional-profile reminders have gone out, so the reminder never becomes spam. */
+  @Column(name = "optional_form_reminders_sent", nullable = false)
+  private int optionalFormRemindersSent;
+
+  @Column(name = "optional_form_reminder_last_sent_on")
+  private LocalDateTime optionalFormReminderLastSentOn;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "department_id")
   private Department department;

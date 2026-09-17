@@ -6,7 +6,7 @@ import gr.uniwa.unihealth.backend.dto.GroupDTO;
 /**
  * Service interface for the groups.
  *
- * @author European Dynamics SA
+ * @author omaro
  */
 public interface GroupService extends BaseUpdatableService<GroupDTO> {
 

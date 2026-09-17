@@ -1,0 +1,23 @@
+@if (filters.length > 0) {
+  <div class="mt-8 mb-8 flex items-center gap-8 filter-row" data-testid="section-active-filters">
+    <div class="filter-label">{{ 'global.filter.label' | translate }}</div>
+    <mat-chip-set class="flex-auto" aria-label="Filter chips">
+      @for (f of filters; track f.key) {
+        <mat-chip class="filter-chip" disableRipple>
+          <span class="filter-chip__text">
+            {{ f.label | translate }}: {{ formatValues(f.key, f.values) }}
+          </span>
+          <button type="button" mat-icon-button class="filter-chip__remove" aria-label="remove"
+                  (click)="removeFilter.emit(f.key); $event.stopPropagation()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-chip>
+      }
+    </mat-chip-set>
+    <button mat-icon-button class="clear-filters" data-testid="btn-clear-filter"
+            [matTooltip]="'global.filter.clear' | translate"
+            (click)="clearAll.emit()">
+      <mat-icon>filter_list_off</mat-icon>
+    </button>
+  </div>
+}
