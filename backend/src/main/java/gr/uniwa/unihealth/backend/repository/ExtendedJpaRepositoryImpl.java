@@ -14,7 +14,6 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import gr.uniwa.unihealth.backend.dto.FacetDTO;
 import gr.uniwa.unihealth.backend.exception.ExceptionUtils;
-import gr.uniwa.unihealth.backend.service.util.DateUtils;
 import gr.uniwa.unihealth.backend.service.util.ServiceUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
@@ -281,9 +280,17 @@ public class ExtendedJpaRepositoryImpl<T, I> extends SimpleJpaRepository<T, I>
     } else if (LocalDate.class.equals(
         rawExpressionToSelect.getType()) || LocalDateTime.class.equals(
         rawExpressionToSelect.getType())) {
+      // A literal Postgres pattern, not a Java formatter constant. Concatenating
+      // DateUtils.TIMESTAMP_FORMATTER rendered its toString() — a field-structure description such
+      // as Value(YearOfEra,4,19,EXCEEDS_PAD)… — which is not a to_char pattern and, because the
+      // formatter's own pattern contains a quoted '_', embedded single quotes that terminated the
+      // SQL literal. Faceting any date column was a syntax error; no screen faceted one, so it went
+      // unnoticed.
+      //
+      // Day granularity is required rather than stylistic: it is the only shape the filter side can
+      // parse back when the option the user picked returns as a predicate.
       stringExpressionToSelect =
-          Expressions.stringTemplate("to_char({0}, '" + DateUtils.TIMESTAMP_FORMATTER + "')",
-              rawExpressionToSelect);
+          Expressions.stringTemplate("to_char({0}, 'YYYY-MM-DD')", rawExpressionToSelect);
     } else if (BigDecimal.class.equals(rawExpressionToSelect.getType())) {
       stringExpressionToSelect = Expressions.stringTemplate(
           "trim(trailing '.' from trim(trailing '0' from CAST({0} as text)))",

@@ -1,0 +1,99 @@
+<section class="upload-panel">
+
+    <app-file-drop-zone
+        testId="exam-file-drop-zone"
+        titleKey="examFile.upload.dropzone.title"
+        hintKey="examFile.upload.dropzone.hint"
+        buttonLabelKey="examFile.upload.dropzone.button"
+        [accept]="accept"
+        [maxSizeBytes]="maxSizeBytes"
+        [isAccepted]="isAccepted"
+        [busy]="uploading()"
+        (filesSelected)="onFilesSelected($event)"
+        (filesRejected)="onFilesRejected($event)"
+    />
+
+    @if (staged().length) {
+        <div class="staged">
+            <div class="staged-header">
+                <h3>{{ 'examFile.upload.staged.title' | translate }}</h3>
+
+                @if (staged().length > 1) {
+                    <app-button
+                        buttonStyle="text"
+                        size="small"
+                        testId="btn-exam-file-apply-all"
+                        [disabled]="uploading()"
+                        (clicked)="applyToAll()"
+                    >
+                        {{ 'examFile.upload.applyToAll' | translate }}
+                    </app-button>
+                }
+            </div>
+
+            <ul class="staged-list">
+                @for (item of staged(); track item.file.name + item.file.size) {
+                    <li class="staged-item" [formGroup]="item.form">
+                        <mat-icon class="staged-icon" aria-hidden="true">
+                            {{ fileIconFor(item.file.type) }}
+                        </mat-icon>
+
+                        <div class="staged-identity">
+                            <span class="staged-name" [title]="item.file.name">{{ item.file.name }}</span>
+                            <span class="staged-size">{{ formatBytes(item.file.size) }}</span>
+                        </div>
+
+                        <app-date-picker
+                            class="staged-field"
+                            [control]="item.form.controls.examDate"
+                            [label]="'examFile.field.examDate' | translate"
+                            [submitted]="submitted()"
+                            [max]="today"
+                        />
+
+                        <app-constant-select
+                            class="staged-field"
+                            [control]="item.form.controls.category"
+                            [label]="'examFile.field.category' | translate"
+                            [options]="categoryOptions"
+                            [submitted]="submitted()"
+                            [required]="true"
+                        />
+
+                        <app-button
+                            variant="danger"
+                            icon="close"
+                            size="compact"
+                            [isIconButton]="true"
+                            [disabled]="uploading()"
+                            ariaLabel="examFile.upload.remove"
+                            [testId]="'btn-exam-file-remove-' + $index"
+                            (clicked)="remove(item)"
+                        />
+                    </li>
+                }
+            </ul>
+
+            <div class="staged-actions">
+                <app-button
+                    buttonStyle="text"
+                    testId="btn-exam-file-clear"
+                    [disabled]="uploading()"
+                    (clicked)="clear()"
+                >
+                    {{ 'examFile.upload.clear' | translate }}
+                </app-button>
+
+                <app-button
+                    icon="upload"
+                    testId="btn-exam-file-submit"
+                    [loading]="uploading()"
+                    [disabled]="uploading()"
+                    (clicked)="submit()"
+                >
+                    {{ 'examFile.upload.submit' | translate }}
+                </app-button>
+            </div>
+        </div>
+    }
+</section>

@@ -148,6 +148,21 @@ export const routes: Routes = [
         ]
     },
     {
+        // The path the side navigation and the header have always pointed at. It was a dead link
+        // until now, so the spelling is kept rather than corrected: renaming it would mean editing
+        // two navigation templates and their test ids, and would still leave the old path dead.
+        //
+        // Flat, with no children: one page needs one crumb, and wrapping a single '' child makes
+        // the breadcrumb builder emit one for the parent segment as well.
+        //
+        // No guard, matching /profile. Scoping belongs to the backend here — every endpoint resolves
+        // the owner from the principal — so an unexpected visitor sees an empty table rather than
+        // somebody else's documents.
+        path: 'my-blood-tests',
+        loadComponent: () => import('./features/exam-files/exam-files').then((m) => m.ExamFiles),
+        data: {breadcrumb: 'breadcrumb.my.exams'},
+    },
+    {
         path: 'topics',
         data: {breadcrumb: 'breadcrumb.topics'},
         children: [

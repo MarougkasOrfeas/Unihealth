@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd">
+
+    <changeSet id="unihealth_00014" author="uniwa">
+        <createTable tableName="t_file">
+            <column name="id" type="varchar(36)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_file"/>
+            </column>
+            <column name="created_by" type="varchar(255)"/>
+            <column name="created_on" type="timestamp"/>
+            <column name="modified_by" type="varchar(255)"/>
+            <column name="modified_on" type="timestamp"/>
+            <column name="version" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="content_type" type="varchar(255)"/>
+            <column name="description" type="varchar(250)"/>
+            <column name="active" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="size" type="bigint"/>
+            <column name="user_id" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="exam_date" type="date"/>
+            <column name="exam_year" type="varchar(4)"/>
+            <column name="category" type="varchar(32)"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="t_file"
+                baseColumnNames="user_id"
+                constraintName="fk_file_user"
+                referencedTableName="t_user"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+
+        <createIndex tableName="t_file" indexName="idx_file_user_id">
+            <column name="user_id"/>
+        </createIndex>
+        <createIndex tableName="t_file" indexName="idx_file_user_id_name">
+            <column name="user_id"/>
+            <column name="name"/>
+        </createIndex>
+        <createIndex tableName="t_file" indexName="idx_file_user_id_exam_year">
+            <column name="user_id"/>
+            <column name="exam_year"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

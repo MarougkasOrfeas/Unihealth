@@ -73,6 +73,7 @@ translations:
       - breadcrumb.departments.create: Δημιουργία Τμήματος
       - breadcrumb.departments.edit: Επεξεργασία Τμήματος
       - breadcrumb.profile: Προφίλ
+      - breadcrumb.my.exams: Οι Εξετάσεις Μου
       - breadcrumb.profile.form: Η Φόρμα Μου
       - breadcrumb.symptoms: Συμπτώματα
       - breadcrumb.symptoms.az: Συμπτώματα A έως Z
@@ -195,6 +196,7 @@ translations:
       - global.action.view: Προβολή
       - global.action.edit: Επεξεργασία
       - global.action.delete: Διαγραφή
+      - global.action.download: Λήψη
       - global.unexpected.error: Παρουσιάστηκε απρόσμενο σφάλμα.
       - global.back.end.unavailable: Ο διακομιστής δεν είναι διαθέσιμος.
 
@@ -233,6 +235,7 @@ translations:
       - global.entity.user: Χρήστης
       - global.entity.group: Σχολή
       - global.entity.department: Τμήμα
+      - global.entity.examFile: αρχείο εξέτασης
 
       # Messages
       - global.message.create.success: Το {{entity}} δημιουργήθηκε.
@@ -772,6 +775,69 @@ translations:
 
   ################################################################################:
   # ENGLISH translations:
+
+      # File upload - shared drop zone
+      - global.dropzone.title: Σύρετε τα αρχεία σας εδώ
+      - global.dropzone.hint: PDF, JPEG, PNG ή TIFF
+      - global.dropzone.button: Επιλογή αρχείων
+      - global.dropzone.aria.dragging: Τα αρχεία θα προστεθούν όταν τα αφήσετε.
+      - global.dropzone.aria.rejected: "{{count}} αρχεία απορρίφθηκαν."
+      - global.dropzone.error.type: "Το {{name}} δεν είναι αποδεκτός τύπος αρχείου."
+      - global.dropzone.error.size: "Το {{name}} υπερβαίνει το επιτρεπτό μέγεθος."
+      # File handling - backend messages
+      - global.file.available: Διαθέσιμο
+      - global.file.unavailable: Μη διαθέσιμο
+      - global.file.empty: Το αρχείο είναι κενό.
+      - global.file.unsupported.type: Ο τύπος του αρχείου δεν υποστηρίζεται.
+      - global.file.too.large: Το αρχείο υπερβαίνει το επιτρεπτό μέγεθος.
+      - global.file.name.empty: Το αρχείο δεν έχει έγκυρη ονομασία.
+      - global.file.name.too.long: Η ονομασία του αρχείου είναι πολύ μεγάλη.
+      - global.file.name.taken: Υπάρχει ήδη αρχείο με αυτή την ονομασία.
+      - global.import.file.virus.found: Το αρχείο απορρίφθηκε από τον έλεγχο ασφαλείας.
+      - global.import.file.unreadable: Το αρχείο δεν ήταν δυνατό να αναγνωστεί.
+      - global.import.file.scan.failed: Ο έλεγχος ασφαλείας απέτυχε. Δοκιμάστε ξανά.
+      # My medical tests
+      - examFile.page.title: Οι Εξετάσεις Μου
+      - examFile.page.subtitle: Ανεβάστε και οργανώστε τα αποτελέσματα των εξετάσεών σας.
+      - examFile.upload.dropzone.title: Σύρετε εδώ τις εξετάσεις σας
+      - examFile.upload.dropzone.hint: PDF, JPEG, PNG ή TIFF, έως 20 MB
+      - examFile.upload.dropzone.button: Επιλογή αρχείων
+      - examFile.upload.staged.title: Αρχεία προς μεταφόρτωση
+      - examFile.upload.submit: Μεταφόρτωση
+      - examFile.upload.clear: Καθαρισμός
+      - examFile.upload.applyToAll: Εφαρμογή σε όλα
+      - examFile.upload.remove: Αφαίρεση αρχείου
+      - examFile.upload.progress: Μεταφόρτωση…
+      - examFile.upload.success: "Ολοκληρώθηκε η μεταφόρτωση {{count}} αρχείων."
+      - examFile.upload.partial: "Απέτυχαν {{count}} αρχεία: {{names}}"
+      - examFile.field.examDate: Ημερομηνία εξέτασης
+      - examFile.field.category: Κατηγορία
+      # My medical tests - categories
+      - examFile.category.BLOOD_TEST: Αιματολογική
+      - examFile.category.IMAGING: Απεικονιστική
+      - examFile.category.CARDIOLOGY: Καρδιολογική
+      - examFile.category.MICROBIOLOGY: Μικροβιολογική
+      - examFile.category.OTHER: Άλλο
+      # My medical tests - file types
+      - examFile.contentType.application/pdf: PDF
+      - examFile.contentType.image/jpeg: JPEG
+      - examFile.contentType.image/png: PNG
+      - examFile.contentType.image/tiff: TIFF
+      # My medical tests - table
+      - examFile.column.fileType: Τύπος
+      - examFile.column.name: Ονομασία αρχείου
+      - examFile.column.category: Κατηγορία
+      - examFile.column.examDate: Ημερομηνία εξέτασης
+      - examFile.column.fileSize: Μέγεθος
+      - examFile.list.empty.title: Δεν υπάρχουν εξετάσεις
+      - examFile.list.empty.subtitle: Ανεβάστε την πρώτη σας εξέταση για να ξεκινήσετε.
+      # My medical tests - errors
+      - examFile.error.unsupported_media_type: Ο τύπος του αρχείου δεν υποστηρίζεται.
+      - examFile.error.file_too_large: Το αρχείο είναι πολύ μεγάλο.
+      - examFile.error.name_too_long: Η ονομασία του αρχείου είναι πολύ μεγάλη.
+      - examFile.preview.subtitle: Προεπισκόπηση εξέτασης
+      - examFile.preview.error: Η προεπισκόπηση δεν ήταν δυνατή.
+      - examFile.preview.unsupported: Αυτός ο τύπος αρχείου δεν προβάλλεται στο πρόγραμμα περιήγησης. Κατεβάστε το για να το δείτε.
   ################################################################################:
   - group: ui_labels
     locale: en
@@ -835,6 +901,7 @@ translations:
       - breadcrumb.departments.create: Create Department
       - breadcrumb.departments.edit: Edit Department
       - breadcrumb.profile: Profile
+      - breadcrumb.my.exams: My Medical Tests
       - breadcrumb.profile.form: My Form
       - breadcrumb.symptoms: Symptoms
       - breadcrumb.symptoms.az: Symptoms A to Z
@@ -957,6 +1024,7 @@ translations:
       - global.action.view: View
       - global.action.edit: Edit
       - global.action.delete: Delete
+      - global.action.download: Download
       - global.unexpected.error: An unexpected error occurred.
       - global.back.end.unavailable: The server is unavailable.
 
@@ -995,6 +1063,7 @@ translations:
       - global.entity.user: User
       - global.entity.group: School
       - global.entity.department: Department
+      - global.entity.examFile: medical test file
 
       # Messages
       - global.message.create.success: "{{entity}} created."
@@ -1529,4 +1598,67 @@ translations:
       # Advice and tips - themed sections
       - advice.sections.title: Tips by theme
       - advice.sections.subtitle: Every tip matching your profile, grouped by theme.
+
+      # File upload - shared drop zone
+      - global.dropzone.title: Drag your files here
+      - global.dropzone.hint: PDF, JPEG, PNG or TIFF
+      - global.dropzone.button: Choose files
+      - global.dropzone.aria.dragging: Files will be added when you drop them.
+      - global.dropzone.aria.rejected: "{{count}} files were rejected."
+      - global.dropzone.error.type: "{{name}} is not an accepted file type."
+      - global.dropzone.error.size: "{{name}} is larger than the allowed size."
+      # File handling - backend messages
+      - global.file.available: Available
+      - global.file.unavailable: Unavailable
+      - global.file.empty: The file is empty.
+      - global.file.unsupported.type: That file type is not supported.
+      - global.file.too.large: The file is larger than the allowed size.
+      - global.file.name.empty: The file has no usable name.
+      - global.file.name.too.long: The file name is too long.
+      - global.file.name.taken: You already have a file with this name.
+      - global.import.file.virus.found: The file was rejected by the security scan.
+      - global.import.file.unreadable: The file could not be read.
+      - global.import.file.scan.failed: The security scan failed. Please try again.
+      # My medical tests
+      - examFile.page.title: My Medical Tests
+      - examFile.page.subtitle: Upload and organise your test results.
+      - examFile.upload.dropzone.title: Drag your test results here
+      - examFile.upload.dropzone.hint: PDF, JPEG, PNG or TIFF, up to 20 MB
+      - examFile.upload.dropzone.button: Choose files
+      - examFile.upload.staged.title: Files to upload
+      - examFile.upload.submit: Upload
+      - examFile.upload.clear: Clear
+      - examFile.upload.applyToAll: Apply to all
+      - examFile.upload.remove: Remove file
+      - examFile.upload.progress: Uploading…
+      - examFile.upload.success: "{{count}} files uploaded."
+      - examFile.upload.partial: "{{count}} files failed: {{names}}"
+      - examFile.field.examDate: Examination date
+      - examFile.field.category: Category
+      # My medical tests - categories
+      - examFile.category.BLOOD_TEST: Blood test
+      - examFile.category.IMAGING: Imaging
+      - examFile.category.CARDIOLOGY: Cardiology
+      - examFile.category.MICROBIOLOGY: Microbiology
+      - examFile.category.OTHER: Other
+      # My medical tests - file types
+      - examFile.contentType.application/pdf: PDF
+      - examFile.contentType.image/jpeg: JPEG
+      - examFile.contentType.image/png: PNG
+      - examFile.contentType.image/tiff: TIFF
+      # My medical tests - table
+      - examFile.column.fileType: Type
+      - examFile.column.name: File name
+      - examFile.column.category: Category
+      - examFile.column.examDate: Examination date
+      - examFile.column.fileSize: Size
+      - examFile.list.empty.title: No tests yet
+      - examFile.list.empty.subtitle: Upload your first test to get started.
+      # My medical tests - errors
+      - examFile.error.unsupported_media_type: That file type is not supported.
+      - examFile.error.file_too_large: That file is too large.
+      - examFile.error.name_too_long: The file name is too long.
+      - examFile.preview.subtitle: Test preview
+      - examFile.preview.error: The preview could not be loaded.
+      - examFile.preview.unsupported: This file type cannot be shown in the browser. Download it to view it.
 

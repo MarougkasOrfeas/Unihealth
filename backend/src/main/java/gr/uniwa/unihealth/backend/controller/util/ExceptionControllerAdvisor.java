@@ -11,6 +11,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 /**
  * Advisor to handle HTTP response codes for various exceptions thrown.
@@ -49,6 +50,10 @@ public class ExceptionControllerAdvisor {
       return new ResponseEntity<>("error_core_401", HttpStatus.UNAUTHORIZED);
     } else if (toCheck instanceof ObjectOptimisticLockingFailureException) {
       return new ResponseEntity<>("concurrent_update_conflict", HttpStatus.CONFLICT);
+    } else if (toCheck instanceof MaxUploadSizeExceededException) {
+      // Otherwise an oversized upload falls through to the catch-all below and the user is told
+      // nothing at all: a 500 with an empty body, for something they can actually fix.
+      return new ResponseEntity<>("global.file.too.large", HttpStatus.PAYLOAD_TOO_LARGE);
     } else {
       return new ResponseEntity<>(responseEntity, HttpStatus.INTERNAL_SERVER_ERROR);
     }

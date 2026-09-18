@@ -32,6 +32,7 @@ export const UNIHEALTH_CONSTANTS = {
         USER: 'global.entity.user',
         GROUP: 'global.entity.group',
         DEPARTMENT: 'global.entity.department',
+        EXAM_FILE: 'global.entity.examFile',
     },
 
     LARGE_EXPORT_THRESHOLD: 100,

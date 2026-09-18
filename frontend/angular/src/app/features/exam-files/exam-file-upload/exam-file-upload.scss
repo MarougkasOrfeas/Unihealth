@@ -1,0 +1,85 @@
+/* Design tokens only — see the note in file-drop-zone.scss. */
+
+.upload-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sys-component-gap-default);
+}
+
+.staged {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sys-spacing-sm);
+  padding: var(--sys-card-padding);
+  border: 1px solid var(--sys-border-subtle);
+  border-radius: var(--sys-radius-md);
+  background: var(--sys-surface-container-lowest);
+}
+
+.staged-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sys-spacing-sm);
+
+  h3 {
+    margin: 0;
+    color: var(--sys-text-base);
+  }
+}
+
+.staged-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sys-spacing-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.staged-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sys-spacing-sm);
+  padding: var(--sys-spacing-sm);
+  border: 1px solid var(--sys-border-subtle);
+  border-radius: var(--sys-radius-md);
+  /* The row wraps rather than scrolls: on a narrow screen the two fields drop below the name
+     instead of pushing the remove button off the edge. */
+  flex-wrap: wrap;
+}
+
+.staged-icon {
+  color: var(--sys-icon-color-primary);
+  flex: 0 0 auto;
+}
+
+.staged-identity {
+  display: flex;
+  flex-direction: column;
+  /* min-width: 0 is what lets the ellipsis below actually engage inside a flex item. */
+  min-width: 0;
+  flex: 1 1 12rem;
+}
+
+.staged-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--sys-text-base);
+}
+
+.staged-size {
+  color: var(--sys-text-muted);
+}
+
+.staged-field {
+  flex: 0 1 12rem;
+  min-width: 9rem;
+}
+
+.staged-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--sys-spacing-sm);
+}

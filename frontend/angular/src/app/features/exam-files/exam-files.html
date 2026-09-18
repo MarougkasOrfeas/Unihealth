@@ -1,0 +1,30 @@
+<app-page-header
+    [title]="'examFile.page.title' | translate"
+    [subtitle]="'examFile.page.subtitle' | translate"
+/>
+
+<app-exam-file-upload (uploaded)="onUploaded()"/>
+
+<!--
+  Not wrapped in an @if: viewChild.required throws when the child is absent, and the page reads the
+  table handle to reload it after an upload or a delete.
+
+  canManage is true because the rule on this page is "it is my own file", not "I am an admin" —
+  without it the table falls back to the admin check and every student sees a disabled delete
+  button.
+-->
+<app-base-table
+    pageName="exam-files"
+    [service]="examFileService"
+    [columns]="columns"
+    [mapToRow]="toRow"
+    [emptyState]="emptyState"
+    [defaultSort]="['createdOn,desc']"
+    [rowActions]="['view', 'download', 'edit', 'delete']"
+    [canManage]="true"
+    [inlineEdit]="true"
+    (view)="onPreview($event)"
+    (download)="onDownload($event)"
+    (saveInlineEdit)="onSaveEdit($event)"
+    (delete)="onDelete($event)"
+/>

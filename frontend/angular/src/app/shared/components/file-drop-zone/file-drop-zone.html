@@ -1,0 +1,58 @@
+<!--
+  Hidden with .visually-hidden rather than `hidden` or `display: none`: an input removed from the
+  layout tree cannot be clicked programmatically in Safari.
+
+  The click is stopped here, or the programmatic .click() bubbles back up to the host's own click
+  handler, which opens the picker again — an endless loop.
+-->
+<input
+  #fileInput
+  type="file"
+  class="visually-hidden"
+  tabindex="-1"
+  aria-hidden="true"
+  [accept]="accept()"
+  [multiple]="multiple()"
+  [disabled]="disabled() || busy()"
+  [attr.data-testid]="testId() + '-input'"
+  (click)="$event.stopPropagation()"
+  (change)="onInputChange($event)"
+/>
+
+<mat-icon class="drop-icon" aria-hidden="true">cloud_upload</mat-icon>
+
+<p class="drop-title" [id]="testId() + '-title'">{{ titleKey() | translate }}</p>
+<p class="drop-hint" [id]="testId() + '-hint'">{{ hintKey() | translate }}</p>
+
+<!-- The accessible way in. Dragging is an enhancement layered over this, never a replacement. -->
+<app-button
+  buttonStyle="outlined"
+  icon="upload"
+  [disabled]="disabled() || busy()"
+  [testId]="testId() + '-button'"
+  (clicked)="$event.stopPropagation(); openPicker()"
+>
+  {{ buttonLabelKey() | translate }}
+</app-button>
+
+<!-- Drag state and rejections are announced, not signalled by colour alone. -->
+<p class="visually-hidden" role="status" aria-live="polite">
+  @if (isDragging()) {
+    {{ 'global.dropzone.aria.dragging' | translate }}
+  } @else if (rejections().length) {
+    {{ 'global.dropzone.aria.rejected' | translate: {count: rejections().length} }}
+  }
+</p>
+
+@if (rejections().length) {
+  <ul class="drop-errors" [attr.data-testid]="testId() + '-errors'">
+    @for (rejection of rejections(); track rejection.file.name + rejection.file.size) {
+      <li>
+        <mat-icon aria-hidden="true">error_outline</mat-icon>
+        {{ (rejection.reason === 'type'
+              ? 'global.dropzone.error.type'
+              : 'global.dropzone.error.size') | translate: {name: rejection.file.name} }}
+      </li>
+    }
+  </ul>
+}

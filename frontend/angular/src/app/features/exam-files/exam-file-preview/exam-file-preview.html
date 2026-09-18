@@ -1,0 +1,50 @@
+<app-dialog-header
+    testId="exam-file-preview-header"
+    [title]="data.name"
+    [subtitle]="'examFile.preview.subtitle' | translate"
+    (dialogClose)="close()"
+/>
+
+<mat-dialog-content class="preview-body">
+    @if (loading()) {
+        <app-spinner/>
+    } @else if (failed()) {
+        <div class="preview-state" data-testid="exam-file-preview-error">
+            <mat-icon aria-hidden="true">error_outline</mat-icon>
+            <p>{{ 'examFile.preview.error' | translate }}</p>
+        </div>
+    } @else if (kind() === 'image') {
+        <!-- A blob: URL passes Angular's URL sanitiser as-is, so no bypass is needed here — unlike
+             the iframe below, whose src is a RESOURCE_URL. -->
+        <img class="preview-image" [src]="imageUrl()" [alt]="data.name"
+             data-testid="exam-file-preview-image"/>
+    } @else if (kind() === 'pdf') {
+        <iframe class="preview-pdf" [src]="pdfUrl()" [title]="data.name"
+                data-testid="exam-file-preview-pdf"></iframe>
+    } @else {
+        <!-- TIFF lands here: an accepted upload type that Chrome and Firefox cannot render. -->
+        <div class="preview-state" data-testid="exam-file-preview-unsupported">
+            <mat-icon aria-hidden="true">visibility_off</mat-icon>
+            <p>{{ 'examFile.preview.unsupported' | translate }}</p>
+        </div>
+    }
+</mat-dialog-content>
+
+<app-dialog-actions>
+    <app-button
+        buttonStyle="text"
+        testId="btn-exam-file-preview-close"
+        (clicked)="close()"
+    >
+        {{ 'global.close' | translate }}
+    </app-button>
+
+    <app-button
+        icon="download"
+        testId="btn-exam-file-preview-download"
+        [disabled]="loading()"
+        (clicked)="download()"
+    >
+        {{ 'global.action.download' | translate }}
+    </app-button>
+</app-dialog-actions>

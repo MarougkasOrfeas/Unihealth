@@ -1,0 +1,131 @@
+/*
+ * Design tokens only, no literal colours — the rule stated in styles.scss.
+ *
+ * The two most recent feature pages hardcode hex; that is debt rather than a pattern to copy, and
+ * every shared component already complies. Nothing needs to be `@use`d here: the tokens are custom
+ * properties published on :root.
+ */
+
+:host {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sys-component-gap-default);
+  min-height: 11rem;
+  padding: var(--sys-card-padding);
+  border: 2px dashed var(--sys-border-default);
+  border-radius: var(--sys-radius-md);
+  background: var(--sys-surface-container-lowest);
+  color: var(--sys-text-variant);
+  text-align: center;
+  cursor: pointer;
+  transition:
+    border-color var(--sys-motion-duration-fast) var(--sys-motion-easing-standard),
+    background-color var(--sys-motion-duration-fast) var(--sys-motion-easing-standard);
+}
+
+:host(:hover) {
+  border-color: var(--sys-border-strong);
+  background: var(--sys-surface-hover);
+}
+
+/* On the whole zone, so a focused button reads as being inside the drop area. */
+:host(:focus-within) {
+  outline: 2px solid var(--sys-focus-ring);
+  outline-offset: 2px;
+}
+
+/* ─── dragging ─────────────────────────────────────────────────────────── */
+
+:host(.is-dragging) {
+  border-style: solid;
+  border-color: var(--sys-primary);
+}
+
+/*
+ * An overlay rather than a colour-mix on the background: --sys-state-dragged-opacity is defined as
+ * an opacity, so using it as one keeps the token honest.
+ */
+:host(.is-dragging)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--sys-primary);
+  opacity: var(--sys-state-dragged-opacity);
+  pointer-events: none;
+}
+
+/* ─── uploading and disabled ───────────────────────────────────────────── */
+
+:host(.is-busy) {
+  cursor: progress;
+}
+
+:host(.is-disabled) {
+  cursor: not-allowed;
+  opacity: var(--sys-state-disabled-opacity);
+}
+
+:host(.is-busy) .drop-icon,
+:host(.is-disabled) .drop-icon {
+  color: var(--sys-icon-color-muted);
+}
+
+/* ─── rejected files ───────────────────────────────────────────────────── */
+
+:host(.has-error) {
+  border-color: var(--sys-error);
+  background: var(--sys-error-container);
+  color: var(--sys-on-error-container);
+}
+
+/* ─── contents ─────────────────────────────────────────────────────────── */
+
+.drop-icon {
+  /* mat-icon sizes from font-size, so width and height have to follow or the box stays 24px. */
+  font-size: var(--sys-icon-size-xl);
+  width: var(--sys-icon-size-xl);
+  height: var(--sys-icon-size-xl);
+  color: var(--sys-icon-color-primary);
+}
+
+.drop-title {
+  margin: 0;
+  color: var(--sys-text-base);
+}
+
+.drop-hint {
+  margin: 0;
+  color: var(--sys-text-muted);
+}
+
+.drop-errors {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sys-spacing-2xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--sys-text-error);
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: var(--sys-spacing-xs);
+  }
+
+  mat-icon {
+    font-size: var(--sys-icon-size-sm);
+    width: var(--sys-icon-size-sm);
+    height: var(--sys-icon-size-sm);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host {
+    transition: none;
+  }
+}

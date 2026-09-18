@@ -121,7 +121,36 @@
           >
             <!-- @if chains rather than @switch: the template type-checker narrows the column
                  union across `===` comparisons, which `col.status!(row)` below relies on. -->
-            @if (col.cellType === 'status') {
+            @if (col.editor && isEditing(row)) {
+              <!-- Only columns carrying an editor become writable; everything else on the row stays
+                   as it reads, so an in-place edit cannot quietly change more than it shows. -->
+              @if (col.editor.kind === 'select') {
+                <mat-form-field appearance="outline" subscriptSizing="dynamic" class="cell-editor">
+                  <mat-select
+                    [value]="editValue(col.key)"
+                    [attr.data-testid]="'edit-' + pageName() + '-' + col.key"
+                    (selectionChange)="onEditValueChange(col.key, $event.value)"
+                  >
+                    @for (option of col.editor.options; track option.key) {
+                      <mat-option [value]="option.key">{{ option.label | translate }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              } @else {
+                <mat-form-field appearance="outline" subscriptSizing="dynamic" class="cell-editor">
+                  <input
+                    matInput
+                    [matDatepicker]="cellPicker"
+                    [max]="col.editor.max ?? null"
+                    [value]="editDate(col.key)"
+                    [attr.data-testid]="'edit-' + pageName() + '-' + col.key"
+                    (dateChange)="onEditValueChange(col.key, $event.value)"
+                  />
+                  <mat-datepicker-toggle matIconSuffix [for]="cellPicker"/>
+                  <mat-datepicker #cellPicker/>
+                </mat-form-field>
+              }
+            } @else if (col.cellType === 'status') {
               @let badge = col.status!(row);
               <!-- Tone values match the .status.active / .inactive / .unverified rules in styles.scss. -->
               <span [class]="'status ' + badge.tone">
@@ -172,6 +201,31 @@
           </th>
           <td mat-cell *matCellDef="let row" class="actions-cell"
               [attr.data-testid]="'cell-' + pageName() + '-actions'">
+            @if (isEditing(row)) {
+              <!-- The row's own actions are replaced rather than added to: while an edit is open,
+                   confirming or abandoning it are the only two things that make sense. -->
+              <button
+                type="button"
+                mat-icon-button
+                color="primary"
+                [attr.data-testid]="'btn-' + pageName() + '-save-' + row.id"
+                [matTooltip]="'global.save' | translate"
+                (click)="$event.stopPropagation(); onSaveInlineEdit(row)"
+              >
+                <mat-icon>check</mat-icon>
+              </button>
+              <button
+                type="button"
+                mat-icon-button
+                [attr.data-testid]="'btn-' + pageName() + '-cancel-edit-' + row.id"
+                [matTooltip]="'global.cancel' | translate"
+                (click)="$event.stopPropagation(); onCancelInlineEdit()"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            } @else {
+            <!-- Rendered in a fixed order regardless of how rowActions is written, so every list
+                 reads the same way: look, then take a copy, then change, then destroy. -->
             @if (rowActions().includes('view')) {
               <button
                 type="button"
@@ -182,6 +236,19 @@
                 (click)="$event.stopPropagation(); onView(row)"
               >
                 <mat-icon>visibility</mat-icon>
+              </button>
+            }
+            @if (rowActions().includes('download')) {
+              <!-- Not gated on manageAllowed(): downloading is a read, like view. -->
+              <button
+                type="button"
+                mat-icon-button
+                color="primary"
+                [attr.data-testid]="'btn-' + pageName() + '-download-' + row.id"
+                [matTooltip]="'global.action.download' | translate"
+                (click)="$event.stopPropagation(); onDownload(row)"
+              >
+                <mat-icon>download</mat-icon>
               </button>
             }
             @if (rowActions().includes('edit')) {
@@ -207,6 +274,7 @@
                 [tooltip]="'global.action.delete' | translate"
                 (clicked)="$event.stopPropagation(); onDelete(row)"
               />
+            }
             }
           </td>
         </ng-container>

@@ -11,7 +11,11 @@ import {
 } from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {DatePipe} from '@angular/common';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIcon} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
 import {MatIconButton} from '@angular/material/button';
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {MatTableModule} from '@angular/material/table';
@@ -53,7 +57,24 @@ export type CellType = 'text' | 'date' | 'status' | 'list' | 'check';
 
 export type StatusTone = 'active' | 'inactive' | 'unverified';
 
-export type RowAction = 'view' | 'edit' | 'delete';
+export type RowAction = 'view' | 'edit' | 'delete' | 'download';
+
+/**
+ * How an editable cell renders while its row is in edit mode.
+ *
+ * Only the two kinds a row edit actually needs so far. Adding a third means adding a branch to the
+ * cell template, so it is a deliberate act rather than an open extension point.
+ */
+export type ColumnEditor =
+    | { kind: 'select'; options: readonly { key: string; label: string }[] }
+    | { kind: 'date'; max?: Date };
+
+/** What a finished inline edit hands back to the page. */
+export type InlineEdit<TRow> = {
+    readonly row: TRow;
+    /** Edited column keys to their new values. Only columns carrying an editor appear. */
+    readonly values: Record<string, unknown>;
+};
 
 export type EmptyStateData = {
     titleKey: string;
@@ -111,6 +132,21 @@ export type TableColumnData<TRow extends BaseTableRow> = {
     facetLabel?: (value: string) => string;
     /** Selected raw values to whatever goes on {@link field} in the request body. */
     facetToBackend?: (values: string[]) => unknown[];
+    /**
+     * Overrides {@link field} for the facet dropdown and its filter, leaving sorting on `field`.
+     *
+     * For a derived facet over a column that cannot usefully offer its own values. A date column is
+     * the case this exists for: `_facet` answers with whole dates, so filtering by year needs a
+     * separate backend field while the column itself still sorts by the full date.
+     */
+    facetField?: string;
+    /**
+     * Makes this column editable in place, when the table has {@link BaseTable.inlineEdit} on.
+     *
+     * A column without this stays read-only while its row is being edited, which is the point: a
+     * row edit is not "edit everything on this row".
+     */
+    editor?: ColumnEditor;
     /** Fixed option list. When set, opening the dropdown never calls `_facet`. */
     facetOptions?: readonly string[];
     /** Defaults to `true`. Turn off for a facet with only a handful of values. */
@@ -139,9 +175,15 @@ export type TableColumnData<TRow extends BaseTableRow> = {
         ColumnFilterComponent,
         DatePipe,
         ImportExportActionsMenuComponent,
+        // Only reached when a column declares an editor and inlineEdit is on; every other list
+        // pulls them in as dead weight, which is the price of keeping one table component.
+        MatDatepickerModule,
+        MatFormFieldModule,
         MatIcon,
         MatIconButton,
+        MatInputModule,
         MatPaginator,
+        MatSelectModule,
         MatTableModule,
         MatTooltip,
         MultisortSection,
@@ -210,6 +252,16 @@ export class BaseTable<TDto extends BaseEntity, TRow extends BaseTableRow> imple
     readonly view = output<TRow>();
     readonly edit = output<TRow>();
     readonly delete = output<TRow>();
+    readonly download = output<TRow>();
+
+    /**
+     * Turns the edit action into an in-place row edit rather than an `(edit)` emission.
+     *
+     * Off by default, so every existing list keeps navigating to its form exactly as before.
+     */
+    readonly inlineEdit = input<boolean>(false);
+    /** Emitted when an inline edit is confirmed. The page performs the save. */
+    readonly saveInlineEdit = output<InlineEdit<TRow>>();
     readonly importFileSelected = output<Event>();
 
     // ─── Query state ───
@@ -251,6 +303,15 @@ export class BaseTable<TDto extends BaseEntity, TRow extends BaseTableRow> imple
     );
 
     protected readonly hasActions = computed(() => this.rowActions().length > 0);
+
+    /** The row currently being edited in place, if any. One at a time, by design. */
+    protected readonly editingRowId = signal<string | null>(null);
+    /** Pending values, discarded on cancel. The row itself is never touched until the page saves. */
+    private readonly editDraft = signal<Record<string, unknown>>({});
+
+    protected isEditing(row: TRow): boolean {
+        return this.editingRowId() === row.id;
+    }
 
     protected readonly displayedColumns = computed(() => {
         const keys = this.columns().map((column) => column.key as string);
@@ -423,7 +484,7 @@ export class BaseTable<TDto extends BaseEntity, TRow extends BaseTableRow> imple
                 continue;
             }
             const values = Array.from(selected);
-            filters[column.field ?? column.key] =
+            filters[column.facetField ?? column.field ?? column.key] =
                 column.facetToBackend ? column.facetToBackend(values) : values;
         }
 
@@ -559,7 +620,7 @@ export class BaseTable<TDto extends BaseEntity, TRow extends BaseTableRow> imple
 
     private loadFacetOptions(column: TableColumnData<TRow>, excludeSelf = false): void {
         const key = column.key as string;
-        const field = column.field ?? key;
+        const field = column.facetField ?? column.field ?? key;
         const requestedTerm = this.facetSearchTerms.get(key) ?? '';
 
         this.setFacetLoading(key, true);
@@ -658,11 +719,59 @@ export class BaseTable<TDto extends BaseEntity, TRow extends BaseTableRow> imple
     }
 
     protected onEdit(row: TRow): void {
-        this.edit.emit(row);
+        if (!this.inlineEdit()) {
+            this.edit.emit(row);
+            return;
+        }
+
+        // Seeded from the row itself, so cancelling is simply throwing the draft away — the row was
+        // never mutated.
+        const draft: Record<string, unknown> = {};
+        for (const column of this.columns()) {
+            if (column.editor) {
+                draft[column.key as string] = row[column.key];
+            }
+        }
+        this.editDraft.set(draft);
+        this.editingRowId.set(row.id);
+    }
+
+    protected onEditValueChange(key: string, value: unknown): void {
+        this.editDraft.update((draft) => ({...draft, [key]: value}));
+    }
+
+    protected onCancelInlineEdit(): void {
+        this.editingRowId.set(null);
+        this.editDraft.set({});
+    }
+
+    protected onSaveInlineEdit(row: TRow): void {
+        this.saveInlineEdit.emit({row, values: this.editDraft()});
+        this.onCancelInlineEdit();
+    }
+
+    /**
+     * Reads a draft value for the template, which cannot narrow `unknown` itself.
+     *
+     * A date editor is bound to a `Date | null` and a select to a `string`, so each is coerced at
+     * the one place the template needs it rather than scattering casts through the markup.
+     */
+    protected editDate(key: string): Date | null {
+        const value = this.editDraft()[key];
+        return value instanceof Date ? value : null;
+    }
+
+    protected editValue(key: string): string {
+        const value = this.editDraft()[key];
+        return value == null ? '' : String(value);
     }
 
     protected onDelete(row: TRow): void {
         this.delete.emit(row);
+    }
+
+    protected onDownload(row: TRow): void {
+        this.download.emit(row);
     }
 
     // ─── Cell value coercion ───
