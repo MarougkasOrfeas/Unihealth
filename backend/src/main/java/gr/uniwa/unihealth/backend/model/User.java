@@ -89,6 +89,16 @@ public class User extends BaseUpdatableEntity {
   @Column(name = "notifications_enabled", nullable = false)
   private boolean notificationsEnabled = true;
 
+  /**
+   * Whether the user consented to usage measurement per health label.
+   *
+   * <p>Boxed and nullable, unlike the flags above: {@code null} means "never asked", which is what
+   * triggers the consent dialog, and is deliberately distinct from {@code FALSE} meaning "declined".
+   * Only {@code TRUE} permits collection.
+   */
+  @Column(name = "analytics_consent")
+  private Boolean analyticsConsent;
+
   /** How many optional-profile reminders have gone out, so the reminder never becomes spam. */
   @Column(name = "optional_form_reminders_sent", nullable = false)
   private int optionalFormRemindersSent;

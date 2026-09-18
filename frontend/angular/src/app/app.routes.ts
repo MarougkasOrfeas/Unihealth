@@ -149,26 +149,36 @@ export const routes: Routes = [
     },
     {
         path: 'topics',
-        data: {breadcrumb: 'Health Topics'},
+        data: {breadcrumb: 'breadcrumb.topics'},
         children: [
             {
                 path: '',
                 pathMatch: 'full',
                 loadComponent: () =>
                     import('./features/health-topics/health-topics').then((m) => m.HealthTopics),
-                data: {breadcrumb: 'Health Topics'},
+                data: {breadcrumb: 'breadcrumb.topics.overview'},
+            },
+            {
+                path: 'all',
+                pathMatch: 'full',
+                loadComponent: () =>
+                    import('./features/health-topics/all-health-topics/all-health-topics')
+                        .then((m) => m.AllHealthTopics),
+                data: {breadcrumb: 'breadcrumb.topics.all'},
             }
         ],
     },
     {
         path: 'advice-tips',
-        data: {breadcrumb: 'Advice & Tips'},
+        data: {breadcrumb: 'breadcrumb.advice'},
         children: [
             {
                 path: '',
                 pathMatch: 'full',
                 loadComponent: () => import('./features/advice-tips/advice-tips').then((m) => m.AdviceTips),
-                data: {breadcrumb: 'Advice & Tips'},
+                // A distinct key from the parent's: the breadcrumb builder emits a crumb for both
+                // the parent segment and the '' child, so a shared label renders twice.
+                data: {breadcrumb: 'breadcrumb.advice.overview'},
             }
         ]
     },
@@ -250,17 +260,18 @@ export const routes: Routes = [
             },
         ]
     },
+    // Flat, with no children: one page needs one crumb. Wrapping a single '' child made the
+    // breadcrumb builder emit a crumb for the parent segment and another for the child.
+    {
+        path: 'cookies-policy',
+        loadComponent: () => import('./features/legal/cookies-policy/cookies-policy')
+            .then((m) => m.CookiesPolicy),
+        data: {breadcrumb: 'breadcrumb.cookies'},
+    },
     {
         path: 'unihealth-ai',
-        data: {breadcrumb: 'breadcrumb.ai.assist'},
-        children: [
-            {
-                path: '',
-                pathMatch: 'full',
-                loadComponent: () => import('./features/unihealth-ai/unihealth-ai').then((m) => m.UnihealthAi),
-                data: {breadcrumb: 'breadcrumb.ai.unihealth'},
-            }
-        ]
+        loadComponent: () => import('./features/unihealth-ai/unihealth-ai').then((m) => m.UnihealthAi),
+        data: {breadcrumb: 'breadcrumb.ai.chat'},
     }
 
 ];

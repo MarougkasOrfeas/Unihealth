@@ -1,254 +1,88 @@
+// The suggestion card, its "because you told us" chips and their layout now live in
+// shared/components/suggestion-hero and shared/components/match-reasons, shared with advice.
 .topics-page {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 32px;
   color: #172026;
 }
 
-.topics-hero,
-.featured-topic,
-.topic-card,
-.empty-state,
-.education-note {
-  border: 1px solid #e1e8ee;
-  border-radius: 8px;
-  background: #fff;
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.07);
-}
-
-.topics-hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 24px;
-  align-items: end;
-  padding: 30px;
-  background: linear-gradient(135deg, rgba(232, 248, 246, 0.94), #fff);
-}
-
-h1 {
-  margin: 4px 0 10px;
-  font-size: 42px;
-  line-height: 1.05;
-  font-weight: 850;
-}
-
-.topics-hero p:not(.eyebrow),
-.featured-topic p:not(.eyebrow),
-.topic-card > p,
-.education-note,
-.empty-state p {
-  color: #586673;
-  line-height: 1.6;
-}
-
-.eyebrow {
-  margin: 0;
-  color: #245d68;
-  font-size: 12px;
-  font-weight: 850;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.hero-stat {
-  display: grid;
-  min-width: 136px;
-  padding: 18px;
-  border: 1px solid #c9dbdf;
-  border-radius: 8px;
+.page-state {
+  padding: 40px 24px;
   text-align: center;
+  color: #586673;
 }
 
-.hero-stat span {
-  color: #1f5f68;
-  font-size: 42px;
-  line-height: 1;
-  font-weight: 850;
-}
-
-.hero-stat small,
-.quick-tags > span {
-  color: #65717d;
-  font-weight: 800;
-}
-
-.toolbar-section,
-.topics-grid,
-.featured-topic {
-  display: grid;
-  gap: 18px;
-}
-
-.toolbar-section {
-  grid-template-columns: minmax(260px, 420px) 1fr;
-}
-
-.search-field {
-  width: 100%;
-}
-
-.category-list,
-.quick-tags,
-.featured-meta,
-.tag-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.category-button,
-.quick-tags button {
-  min-height: 34px;
-  border: 1px solid #d5dde5;
-  border-radius: 8px;
-  padding: 7px 12px;
-  background: #fff;
-  color: #33414d;
-  font-weight: 750;
-  cursor: pointer;
-}
-
-.category-button:hover,
-.category-button.active,
-.quick-tags button:hover {
-  background: #edf8f8;
-  color: #1f5661;
-}
-
-.featured-topic {
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: center;
-  padding: 24px;
-}
-
-.featured-topic h2,
-.library-heading h2 {
-  margin: 4px 0 8px;
-  font-size: 28px;
-}
-
-.featured-icon,
-.topic-icon {
-  display: grid;
-  place-items: center;
-  border-radius: 8px;
-  background: var(--topic-accent);
-  color: #fff;
-}
-
-.featured-icon {
-  width: 68px;
-  height: 68px;
-}
-
-.featured-meta {
-  margin-top: 14px;
-}
-
-.featured-meta span,
-.topic-card-header > span,
-.tag-row span {
-  padding: 6px 10px;
-  border-radius: 8px;
-  background: #f4f7f9;
-  color: #53616e;
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.library-heading,
-.topic-card-header,
-.education-note {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-
-.library-heading {
-  justify-content: space-between;
+.page-state--error {
+  color: #a3372c;
 }
 
 .topics-grid {
+  display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  align-items: stretch;
 }
 
-.topic-card {
-  display: flex;
-  flex-direction: column;
-  min-height: 380px;
-  padding: 20px;
-}
-
-.topic-card h3 {
-  margin: 18px 0 8px;
-  font-size: 22px;
-  line-height: 1.2;
-}
-
-.topic-card > p {
-  min-height: 72px;
-  margin: 0 0 18px;
-}
-
-.topic-card button {
-  align-self: flex-start;
-  margin-top: auto;
-  font-weight: 850;
-}
-
-.topic-card-header {
-  justify-content: space-between;
-}
-
-.topic-icon {
-  width: 46px;
-  height: 46px;
-}
-
-.topic-icon mat-icon {
-  width: 25px;
-  height: 25px;
-  font-size: 25px;
-}
-
-.facts-row {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  margin-bottom: 16px;
-}
-
-.facts-row div {
-  padding: 10px;
+.section-empty {
+  margin: 0;
+  padding: 24px;
+  border: 1px dashed #d5dde5;
   border-radius: 8px;
-  background: #f7f9fb;
-}
-
-.facts-row strong,
-.facts-row span {
-  display: block;
-}
-
-.tag-row {
-  margin-bottom: 18px;
-}
-
-.empty-state {
-  display: grid;
-  justify-items: center;
-  padding: 40px 24px;
+  color: #586673;
   text-align: center;
 }
 
-.empty-state mat-icon {
-  color: #60717b;
-  font-size: 42px;
+.education-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 18px;
+  border: 1px solid #e1e8ee;
+  border-radius: 8px;
+  background: #fff;
+  color: #586673;
+  line-height: 1.6;
+
+  p {
+    margin: 0;
+  }
 }
 
-.education-note {
-  align-items: flex-start;
-  padding: 16px 18px;
-  box-shadow: none;
+// Sample-data banner. Deliberately loud: the topic text below reads as real clinical advice.
+.mock-notice {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 14px 18px;
+  border: 1px solid #e3c06a;
+  border-left: 5px solid #c8912a;
+  border-radius: 8px;
+  background: #fdf6e6;
+  color: #6b4f14;
+  line-height: 1.5;
+
+  mat-icon {
+    flex-shrink: 0;
+    color: #a9761d;
+  }
+
+  p {
+    flex: 1 1 260px;
+    margin: 0;
+  }
+}
+
+.mock-badge {
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: #c8912a;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
 }
 
 @media (max-width: 1100px) {
@@ -258,15 +92,7 @@ h1 {
 }
 
 @media (max-width: 760px) {
-  .topics-hero,
-  .toolbar-section,
-  .featured-topic,
   .topics-grid {
     grid-template-columns: 1fr;
-  }
-
-  .library-heading {
-    align-items: flex-start;
-    flex-direction: column;
   }
 }

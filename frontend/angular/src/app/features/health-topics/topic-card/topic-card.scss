@@ -1,0 +1,90 @@
+.topic-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 8px 0px 0px 16px;
+  border: 1px solid #e1e8ee;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.07);
+  color: #172026;
+}
+
+.topic-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.header-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.topic-icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 8px;
+  background: var(--topic-accent);
+  color: #fff;
+
+  mat-icon {
+    width: 25px;
+    height: 25px;
+    font-size: 25px;
+  }
+}
+
+.topic-category,
+.topic-rank,
+.tag-row span {
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #f4f7f9;
+  color: #53616e;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.topic-rank {
+  background: var(--topic-accent);
+  color: #fff;
+}
+
+.favourite-button {
+  color: #8a97a3;
+
+  &.is-favourite {
+    color: #c4443a;
+  }
+}
+
+.topic-card h3 {
+  margin: 18px 0 8px;
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+.topic-brief {
+  margin: 0 0 18px;
+  color: #586673;
+  line-height: 1.6;
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+// Pushed to the bottom so cards of differing text length still line their actions up.
+.read-button {
+  align-self: flex-start;
+  margin-top: auto;
+  font-weight: 850;
+}

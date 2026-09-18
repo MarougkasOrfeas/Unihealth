@@ -1,0 +1,9 @@
+@if (reasons().length > 0) {
+    <div class="reason-row" data-testid="match-reasons">
+        <span class="reason-label">{{ 'profile.label.because' | translate }}</span>
+
+        @for (reason of reasons(); track reason) {
+            <span class="reason-chip">{{ reason }}</span>
+        }
+    </div>
+}

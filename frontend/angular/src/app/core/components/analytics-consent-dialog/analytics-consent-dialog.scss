@@ -1,0 +1,116 @@
+.consent-dialog {
+  color: #172026;
+}
+
+.consent-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 4px 0 8px;
+
+  h2 {
+    margin: 0;
+    font-size: 21px;
+    line-height: 1.25;
+  }
+}
+
+.consent-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #2f5da8;
+  color: #fff;
+
+  mat-icon {
+    width: 24px;
+    height: 24px;
+    font-size: 24px;
+  }
+}
+
+.consent-intro {
+  margin: 0 0 16px;
+  color: #586673;
+  line-height: 1.6;
+}
+
+.consent-points {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0 0 18px;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: #33414d;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  mat-icon {
+    flex-shrink: 0;
+    width: 19px;
+    height: 19px;
+    font-size: 19px;
+    color: #1f6f78;
+  }
+}
+
+.consent-policy-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #2f5da8;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+
+  mat-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.consent-error {
+  margin: 16px 0 0;
+  padding: 10px 14px;
+  border: 1px solid #e6c3bb;
+  border-radius: 8px;
+  background: #fdf0ec;
+  color: #a3372c;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+// Both buttons share one style and split the row: consent is not freely given if refusing looks
+// like the lesser option.
+.consent-actions {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0 4px;
+}
+
+.consent-button {
+  flex: 1 1 0;
+  min-height: 42px;
+  font-weight: 750;
+}
+
+@media (max-width: 480px) {
+  .consent-actions {
+    flex-direction: column;
+  }
+}

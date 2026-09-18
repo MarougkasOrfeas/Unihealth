@@ -1,0 +1,66 @@
+<section class="legal-page">
+
+    <header class="legal-header">
+        <p class="eyebrow">{{ 'cookies.page.eyebrow' | translate }}</p>
+        <h1>{{ 'cookies.page.title' | translate }}</h1>
+        <p class="legal-subtitle">{{ 'cookies.page.subtitle' | translate }}</p>
+        <p class="legal-updated">{{ 'cookies.page.updated' | translate }}</p>
+    </header>
+
+    <article class="legal-card">
+        <section class="legal-section">
+            <h2>
+                <mat-icon>block</mat-icon>
+                {{ 'cookies.section.noCookies.title' | translate }}
+            </h2>
+            <p>{{ 'cookies.section.noCookies.body' | translate }}</p>
+        </section>
+
+        <section class="legal-section">
+            <h2>
+                <mat-icon>key</mat-icon>
+                {{ 'cookies.section.necessary.title' | translate }}
+            </h2>
+            <p>{{ 'cookies.section.necessary.body' | translate }}</p>
+        </section>
+
+        <section class="legal-section">
+            <h2>
+                <mat-icon>tune</mat-icon>
+                {{ 'cookies.section.functional.title' | translate }}
+            </h2>
+            <p>{{ 'cookies.section.functional.body' | translate }}</p>
+        </section>
+
+        <section class="legal-section">
+            <h2>
+                <mat-icon>insights</mat-icon>
+                {{ 'cookies.section.analytics.title' | translate }}
+            </h2>
+            <p>{{ 'cookies.section.analytics.body' | translate }}</p>
+            <p class="legal-callout">{{ 'cookies.section.analytics.optIn' | translate }}</p>
+        </section>
+
+        <section class="legal-section">
+            <h2>
+                <mat-icon>settings</mat-icon>
+                {{ 'cookies.section.control.title' | translate }}
+            </h2>
+            <p>{{ 'cookies.section.control.body' | translate }}</p>
+
+            <a mat-flat-button routerLink="/profile" fragment="preferences"
+               data-testid="cookies-open-preferences">
+                <mat-icon>arrow_forward</mat-icon>
+                {{ 'cookies.section.control.cta' | translate }}
+            </a>
+        </section>
+
+        <section class="legal-section">
+            <h2>
+                <mat-icon>help</mat-icon>
+                {{ 'cookies.section.contact.title' | translate }}
+            </h2>
+            <p>{{ 'cookies.section.contact.body' | translate }}</p>
+        </section>
+    </article>
+</section>

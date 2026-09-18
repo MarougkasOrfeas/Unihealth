@@ -9,6 +9,10 @@
                 <app-side-nav></app-side-nav>
             </div>
 
+            <!-- Sits directly above the FAB. Hidden while the FAB's dialog is open, because the
+                 dialog is positioned over this same corner. -->
+            <app-ai-assistant-bubble [isHidden]="assistantOpen()"/>
+
             <button class="health-assistant-fab" (click)="openHealthAssistant()">
                 <mat-icon>health_and_safety</mat-icon>
             </button>

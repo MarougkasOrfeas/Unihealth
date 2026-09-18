@@ -1,0 +1,53 @@
+<article class="topic-card"
+         [style.--topic-accent]="topic().accentColor"
+         [attr.data-testid]="'topic-card-' + topic().id">
+
+    <div class="topic-card-header">
+        <div class="topic-icon">
+            <mat-icon>{{ topic().icon }}</mat-icon>
+        </div>
+
+        <div class="header-meta">
+            @if (rank(); as rankValue) {
+                <span class="topic-rank">#{{ rankValue }}</span>
+            }
+
+            @if (showCategory()) {
+                <span class="topic-category">
+                    {{ 'topics.category.' + topic().category | translate }}
+                </span>
+            }
+
+            @if (showFavourite()) {
+                <button mat-icon-button
+                        type="button"
+                        class="favourite-button"
+                        [class.is-favourite]="topic().isFavourite"
+                        [attr.data-testid]="'topic-favourite-' + topic().id"
+                        [attr.aria-pressed]="topic().isFavourite"
+                        [matTooltip]="(topic().isFavourite
+                            ? 'topics.favourites.remove.tooltip'
+                            : 'topics.favourites.add.tooltip') | translate"
+                        (click)="favouriteToggled.emit(topic())">
+                    <mat-icon>{{ topic().isFavourite ? 'favorite' : 'favorite_border' }}</mat-icon>
+                </button>
+            }
+        </div>
+    </div>
+
+    <h3>{{ topic().title }}</h3>
+    <p class="topic-brief">{{ topic().brief }}</p>
+
+    <ng-content select="[card-reasons]"/>
+
+    <div class="tag-row">
+        @for (tag of topic().tags; track tag) {
+            <span>{{ tag }}</span>
+        }
+    </div>
+
+    <button mat-button type="button" class="read-button" (click)="open.emit(topic())">
+        {{ 'topics.card.read' | translate }}
+        <mat-icon>arrow_forward</mat-icon>
+    </button>
+</article>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd">
+
+    <!-- Health topics the user marked as favourites, shown as their own section on /topics. -->
+    <changeSet id="unihealth_00012" author="uniwa">
+
+        <createTable tableName="t_user_favourite_topic">
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="created_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <!-- Topic ids are the content ids as served today. No foreign key yet: topic content
+                 is not in the database until it is ingested, and the constraint belongs in the
+                 same changeset that creates that table. -->
+            <column name="topic_id" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="t_user_favourite_topic"
+                baseColumnNames="user_id"
+                constraintName="fk_user_favourite_topic_user"
+                referencedTableName="t_user"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+
+        <!-- Makes double-favouriting impossible in the database, not just in the service. -->
+        <addUniqueConstraint
+                tableName="t_user_favourite_topic"
+                columnNames="user_id, topic_id"
+                constraintName="uq_user_favourite_topic"/>
+
+        <createIndex indexName="idx_user_favourite_topic_user_id"
+                     tableName="t_user_favourite_topic">
+            <column name="user_id"/>
+        </createIndex>
+
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,325 @@
+.all-topics-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  color: #172026;
+}
+
+.page-heading,
+.empty-state,
+.education-note {
+  border: 1px solid #e1e8ee;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.07);
+}
+
+.page-heading {
+  padding: 30px;
+  background: linear-gradient(135deg, rgba(232, 248, 246, 0.94), #fff);
+
+  h1 {
+    margin: 4px 0 10px;
+    font-size: 38px;
+    line-height: 1.1;
+    font-weight: 850;
+  }
+
+  p:not(.eyebrow) {
+    margin: 0;
+    color: #586673;
+    line-height: 1.6;
+  }
+}
+
+.eyebrow {
+  margin: 0;
+  color: #245d68;
+  font-size: 12px;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.page-state {
+  padding: 40px 24px;
+  text-align: center;
+  color: #586673;
+}
+
+.page-state--error {
+  color: #a3372c;
+}
+
+.toolbar-section {
+  grid-template-columns: minmax(260px, 420px) 1fr;
+  gap: 18px;
+}
+
+.search-field {
+  width: 100%;
+}
+
+.category-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.category-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 34px;
+  border: 1px solid #d5dde5;
+  border-radius: 8px;
+  padding: 7px 12px;
+  background: #fff;
+  color: #33414d;
+  font-weight: 750;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+
+  mat-icon {
+    width: 15px;
+    height: 15px;
+    font-size: 15px;
+  }
+
+  &:hover {
+    border-color: #1f6f78;
+    background: #edf8f8;
+    color: #1f5661;
+  }
+
+  // Filled rather than tinted: several can be on at once, so "selected" has to be unmistakable.
+  &.active {
+    border-color: #1f6f78;
+    background: #1f6f78;
+    color: #fff;
+
+    &:hover {
+      background: #1a5f67;
+      color: #fff;
+    }
+  }
+}
+
+// Explains that selections widen rather than narrow, which is the opposite of the usual filter.
+.combine-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 10px 16px;
+  border: 1px dashed #cfe0e2;
+  border-radius: 8px;
+  background: #f6fbfb;
+  color: #1f5661;
+  font-size: 13px;
+  line-height: 1.5;
+
+  mat-icon {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+    color: #1f6f78;
+  }
+}
+
+// Popular searches: a distinct band rather than loose buttons, so it reads as a shortcut row
+// instead of a second set of category filters.
+.quick-tags {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 14px 18px;
+  border: 1px solid #e1e8ee;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(232, 248, 246, 0.6), #fff);
+}
+
+.quick-tags-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #1f5661;
+  font-size: 13px;
+  font-weight: 850;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+
+  mat-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+  }
+}
+
+.quick-tags-list {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 6px 14px;
+  border: 1px solid #cfe0e2;
+  border-radius: 999px;
+  background: #fff;
+  color: #33414d;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+
+  mat-icon {
+    width: 15px;
+    height: 15px;
+    font-size: 15px;
+    color: #7f939a;
+  }
+
+  &:hover {
+    border-color: #1f6f78;
+    background: #edf8f8;
+    color: #1f5661;
+    transform: translateY(-1px);
+
+    mat-icon {
+      color: #1f6f78;
+    }
+  }
+
+  // The tag currently driving the search, so the row shows state instead of just firing actions.
+  &.active {
+    border-color: #1f6f78;
+    background: #1f6f78;
+    color: #fff;
+
+    mat-icon,
+    &:hover mat-icon {
+      color: #fff;
+    }
+
+    &:hover {
+      background: #1a5f67;
+      color: #fff;
+    }
+  }
+}
+
+.library-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  h2 {
+    margin: 0;
+    font-size: 28px;
+  }
+}
+
+.topics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  align-items: stretch;
+}
+
+.empty-state {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 40px 24px;
+  text-align: center;
+
+  mat-icon {
+    color: #60717b;
+    font-size: 42px;
+    width: 42px;
+    height: 42px;
+  }
+
+  p {
+    color: #586673;
+  }
+}
+
+.education-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 18px;
+  box-shadow: none;
+  color: #586673;
+  line-height: 1.6;
+
+  p {
+    margin: 0;
+  }
+}
+
+@media (max-width: 1100px) {
+  .topics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .toolbar-section,
+  .topics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .library-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+// Sample-data banner. Deliberately loud: the topic text below reads as real clinical advice.
+.mock-notice {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 14px 18px;
+  border: 1px solid #e3c06a;
+  border-left: 5px solid #c8912a;
+  border-radius: 8px;
+  background: #fdf6e6;
+  color: #6b4f14;
+  line-height: 1.5;
+
+  mat-icon {
+    flex-shrink: 0;
+    color: #a9761d;
+  }
+
+  p {
+    flex: 1 1 260px;
+    margin: 0;
+  }
+}
+
+.mock-badge {
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: #c8912a;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}

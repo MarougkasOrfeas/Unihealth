@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd">
+
+    <!-- Opt-in measurement of which health topics a user actually reads, plus the consent that
+         gates it. Nothing is collected unless analytics_consent is explicitly true. -->
+    <changeSet id="unihealth_00013" author="uniwa">
+
+        <!-- Nullable on purpose, unlike the preference columns added in 00011: "not asked yet"
+             must be distinguishable from "said no", because only the former prompts the dialog. -->
+        <addColumn tableName="t_user">
+            <column name="analytics_consent" type="boolean">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <!-- One accumulating row per (user, label) rather than an event log, which would grow
+             without bound and need aggregating on every read. -->
+        <createTable tableName="t_user_label_metric">
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="created_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <!-- No foreign key to t_label_field_mapping: codes are produced by the label
+                 evaluator, and a mapping can be deactivated while metrics for it remain. -->
+            <column name="label_code" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="view_seconds" type="bigint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="interaction_count" type="int" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_seen_on" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="t_user_label_metric"
+                baseColumnNames="user_id"
+                constraintName="fk_user_label_metric_user"
+                referencedTableName="t_user"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+
+        <!-- The real guard for the read-then-upsert in the service, which races under concurrency. -->
+        <addUniqueConstraint
+                tableName="t_user_label_metric"
+                columnNames="user_id, label_code"
+                constraintName="uq_user_label_metric"/>
+
+        <createIndex indexName="idx_user_label_metric_user_id"
+                     tableName="t_user_label_metric">
+            <column name="user_id"/>
+        </createIndex>
+
+    </changeSet>
+
+</databaseChangeLog>

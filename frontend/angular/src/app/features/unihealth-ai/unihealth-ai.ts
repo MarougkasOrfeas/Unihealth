@@ -1,6 +1,6 @@
 import {Component, computed, inject, signal} from '@angular/core';
-import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
+import {TranslatePipe} from '@ngx-translate/core';
 import {finalize} from 'rxjs';
 import {UnihealthAiService} from '../../shared/services/unihealth-ai.service';
 import {ChatMessage} from '../../shared/interfaces/unihealth-ai';
@@ -8,7 +8,7 @@ import {ChatMessage} from '../../shared/interfaces/unihealth-ai';
 @Component({
     selector: 'app-unihealth-ai',
     standalone: true,
-    imports: [CommonModule, FormsModule],
+    imports: [FormsModule, TranslatePipe],
     templateUrl: './unihealth-ai.html',
     styleUrls: ['./unihealth-ai.scss'],
 })
@@ -17,13 +17,14 @@ export class UnihealthAi {
 
     readonly message = signal('');
     readonly loading = signal(false);
-    readonly errorMessage = signal('');
+    /** A lexicon key rather than text, so the message follows a language switch. */
+    readonly errorKey = signal('');
 
+    // Seeded as a key, not as text: this greeting is ours, not the model's.
     readonly messages = signal<ChatMessage[]>([
         {
             role: 'assistant',
-            content:
-                'Hi, I’m UniHealth. You can ask me about student wellbeing, sleep, stress, exercise, nutrition, and general health guidance.',
+            contentKey: 'ai.chat.greeting',
             createdAt: new Date(),
         },
     ]);
@@ -39,7 +40,7 @@ export class UnihealthAi {
             return;
         }
 
-        this.errorMessage.set('');
+        this.errorKey.set('');
 
         this.messages.update((messages) => [
             ...messages,
@@ -68,15 +69,7 @@ export class UnihealthAi {
 
                     this.message.set('');
                 },
-                error: () => {
-                    this.errorMessage.set(
-                        'Something went wrong while contacting UniHealth AI.',
-                    );
-                },
+                error: () => this.errorKey.set('ai.chat.error'),
             });
-    }
-
-    trackByIndex(index: number): number {
-        return index;
     }
 }

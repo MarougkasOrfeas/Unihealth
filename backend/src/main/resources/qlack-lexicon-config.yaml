@@ -57,7 +57,7 @@ translations:
       - side.health.assistant.conditions: Παθήσεις Α έως Ω
       - side.health.assistant.find-doctor: Εύρεση Υπηρεσιών Υγείας
       - side.health.assistant.care-recommendations: Συστάσεις Φροντίδας
-      - side.health.assistant.urgent-guidance: Επείγουσα Καθοδήγηση
+      - side.health.assistant.ai-chat: Ρωτήστε το UniHealth AI
 
       # Breadcrumb
       - breadcrumb.home: Αρχική
@@ -83,8 +83,29 @@ translations:
       - breadcrumb.find-care.mock: Mock Σελίδα
       - breadcrumb.overview: Επισκόπηση
       - breadcrumb.details: Λεπτομέρειες
-      - breadcrumb.ai.assist: Ζωντανή Υποστήριξη
-      - breadcrumb.ai.unihealth: UniHealth AI
+      - breadcrumb.ai.chat: Ρωτήστε το UniHealth AI
+      # AI assistant - floating bubble
+      - ai.bubble.aria: Άνοιγμα του βοηθού UniHealth AI
+      - ai.bubble.message.1: Καλώς ήρθες! Πώς μπορώ να βοηθήσω σήμερα;
+      - ai.bubble.message.2: Ρώτησέ με για ύπνο, άγχος, διατροφή ή άσκηση.
+      - ai.bubble.message.3: Το προφίλ υγείας σου καθορίζει τα θέματα και τις συμβουλές που βλέπεις.
+      - ai.bubble.message.4: Όσο περισσότερα στοιχεία δίνεις στο προαιρετικό προφίλ, τόσο πιο στοχευμένες οι προτάσεις.
+      - ai.bubble.message.5: Στα Θέματα Υγείας θα βρεις προτάσεις επιλεγμένες με βάση το προφίλ σου.
+      - ai.bubble.message.6: Αποθήκευσε θέματα στα αγαπημένα για να τα βρίσκεις εύκολα.
+      - ai.bubble.message.7: Στις Συμβουλές οι προτάσεις κατατάσσονται από τα στοιχεία του προφίλ σου.
+      - ai.bubble.message.8: Δες τα στατιστικά του προφίλ σου στη σελίδα των Συμβουλών.
+      - ai.bubble.message.9: Ο Έλεγχος Συμπτωμάτων σου δίνει πληροφορίες για συμπτώματα από το Α έως το Ω.
+      - ai.bubble.message.10: Δεν αντικαθιστώ τον γιατρό. Για επείγοντα κάλεσε 112 ή 166.
+      # AI assistant - chat page
+      - ai.chat.subtitle: Κάνε ερωτήσεις για τη φοιτητική υγεία, την ευεξία, τον ύπνο, το άγχος, τη διατροφή και τις υγιεινές συνήθειες.
+      - ai.chat.greeting: Γεια σου, είμαι το UniHealth. Μπορείς να με ρωτήσεις για φοιτητική ευεξία, ύπνο, άγχος, άσκηση, διατροφή και γενικές οδηγίες υγείας.
+      - ai.chat.role.you: Εσύ
+      - ai.chat.role.assistant: UniHealth
+      - ai.chat.placeholder: Γράψε την ερώτησή σου εδώ...
+      - ai.chat.send: Αποστολή
+      - ai.chat.sending: Αποστολή...
+      - ai.chat.error: Κάτι πήγε στραβά κατά την επικοινωνία με το UniHealth AI.
+      - ai.chat.disclaimer: Οι απαντήσεις παράγονται αυτόματα και παρέχονται για ενημερωτικούς σκοπούς. Δεν αποτελούν διάγνωση ούτε αντικαθιστούν επαγγελματική ιατρική συμβουλή. Σε επείγον περιστατικό κάλεσε 112 ή 166.
 
       # Init Base Health Form
       - health.profile.badge: UniHealth
@@ -140,7 +161,6 @@ translations:
       - home.latestNews.previous.tooltip: Μετάβαση στα προηγούμενα νέα
       - home.latestNews.next: Επόμενο
       - home.latestNews.next.tooltip: Μετάβαση στα επόμενα νέα
-      - home.trending.title: ΔΗΜΟΦΙΛΗ
 
       # Paginator
       - paginator.itemsPerPage: "Εγγραφές ανά σελίδα:"
@@ -430,6 +450,8 @@ translations:
       - complete.health.optional.primaryGoal.options.IMPROVE_FITNESS: Βελτίωση φυσικής κατάστασης
       - complete.health.optional.primaryGoal.options.MANAGE_WEIGHT: Διαχείριση βάρους
       - complete.health.optional.primaryGoal.options.SLEEP_BETTER: Καλύτερος ύπνος
+      - complete.health.optional.primaryGoal.options.REDUCE_STRESS: Μείωση άγχους
+      - complete.health.optional.primaryGoal.options.GENERAL_WELLBEING: Γενική ευεξία
       - complete.health.optional.sleepQuality.options.LESS_THAN_6_HOURS: Λιγότερο από 6 ώρες
       - complete.health.optional.sleepQuality.options.ABOUT_6_HOURS: Περίπου 6 ώρες
       - complete.health.optional.sleepQuality.options.ABOUT_8_HOURS: Περίπου 8 ώρες
@@ -521,6 +543,231 @@ translations:
       - unihealth.footer.emergency: "Επείγοντα: 112 | 166"
       - unihealth.footer.copyright-text: "© 2026 UniHealth. Δημιουργήθηκε από το Uniwa."
       - unihealth.footer.version: Έκδοση
+      # Health topics - breadcrumbs
+      - breadcrumb.topics: Θέματα Υγείας
+      - breadcrumb.topics.overview: Επισκόπηση
+      - breadcrumb.topics.all: Όλα τα Θέματα
+      - breadcrumb.advice: Συμβουλές
+      - breadcrumb.advice.overview: Επισκόπηση
+      # Analytics consent - breadcrumb and dialog
+      - breadcrumb.cookies: Πολιτική Cookies
+      - consent.dialog.title: Μας επιτρέπεις να μετράμε τη χρήση;
+      - consent.dialog.intro: Θέλουμε να βελτιώνουμε τις προτάσεις που βλέπεις. Για να γίνει αυτό, θα καταγράφαμε πόση ώρα διαβάζεις περιεχόμενο σχετικό με κάθε θέμα υγείας του προφίλ σου και πόσο συχνά αλληλεπιδράς με αυτό.
+      - consent.dialog.point.what: "Τι μετράμε: δευτερόλεπτα ανάγνωσης και αριθμό αλληλεπιδράσεων, ανά θέμα υγείας."
+      - consent.dialog.point.why: "Γιατί: για να γίνονται πιο σχετικά τα θέματα και οι συμβουλές που σου προτείνουμε."
+      - consent.dialog.point.no-cookies: Δεν χρησιμοποιούμε cookies παρακολούθησης και δεν μοιραζόμαστε τίποτα με τρίτους.
+      - consent.dialog.point.reversible: Μπορείς να αλλάξεις γνώμη όποτε θέλεις από το Προφίλ. Η ανάκληση διαγράφει και όσα έχουν συλλεχθεί.
+      - consent.dialog.policyLink: Διάβασε την Πολιτική Cookies
+      - consent.dialog.accept: Αποδοχή
+      - consent.dialog.reject: Απόρριψη
+      - consent.dialog.save.error: Δεν ήταν δυνατή η αποθήκευση της επιλογής σου. Δοκίμασε ξανά.
+      # Analytics consent - profile preference
+      - profile.preferences.analyticsConsent: Μέτρηση χρήσης για καλύτερες προτάσεις
+      - profile.preferences.analyticsConsent.tooltip: Επιτρέπει τη μέτρηση του χρόνου ανάγνωσης και των αλληλεπιδράσεων ανά θέμα υγείας
+      - profile.preferences.analytics.withdraw.confirm.title: Ανάκληση συγκατάθεσης
+      - profile.preferences.analytics.withdraw.confirm.content: Θα σταματήσουμε να μετράμε τη χρήση και θα διαγράψουμε οριστικά όσα δεδομένα έχουν συλλεχθεί μέχρι τώρα. Θέλεις να συνεχίσεις;
+      - profile.preferences.analytics.withdraw.confirm.confirm: Ανάκληση και διαγραφή
+      # Cookies policy page
+      - cookies.page.eyebrow: ΝΟΜΙΚΑ
+      - cookies.page.title: Πολιτική Cookies και Μετρήσεων Χρήσης
+      - cookies.page.subtitle: Τι αποθηκεύεται στη συσκευή σου, τι μετράμε και πώς το ελέγχεις.
+      - cookies.page.updated: "Τελευταία ενημέρωση: Σεπτέμβριος 2026"
+      - cookies.section.noCookies.title: Δεν χρησιμοποιούμε cookies παρακολούθησης
+      - cookies.section.noCookies.body: Το UniHealth δεν τοποθετεί cookies παρακολούθησης ή διαφήμισης και δεν ενσωματώνει εργαλεία αναλυτικών τρίτων. Η σύνδεσή σου γίνεται με token και όχι με cookie συνεδρίας.
+      - cookies.section.necessary.title: Απολύτως αναγκαία τοπική αποθήκευση
+      - cookies.section.necessary.body: Για να παραμείνεις συνδεδεμένος, αποθηκεύουμε τα token σύνδεσης στον browser σου. Χρησιμοποιούμε επίσης ένα προσωρινό μήνυμα που γράφεται και διαγράφεται αμέσως, ώστε η αποσύνδεση σε μία καρτέλα να ισχύσει και στις υπόλοιπες. Χωρίς αυτά η εφαρμογή δεν λειτουργεί, οπότε δεν απαιτούν συγκατάθεση.
+      - cookies.section.functional.title: Λειτουργική τοπική αποθήκευση
+      - cookies.section.functional.body: Ο βοηθός UniHealth AI θυμάται τοπικά ποιο μήνυμα καλωσορίσματος σου έχει δείξει, για να μην το επαναλαμβάνει. Αυτή η πληροφορία δεν φεύγει ποτέ από τη συσκευή σου και δεν χρησιμοποιείται για παρακολούθηση.
+      - cookies.section.analytics.title: Προαιρετικές μετρήσεις χρήσης
+      - cookies.section.analytics.body: Αν δώσεις τη συγκατάθεσή σου, καταγράφουμε πόσα δευτερόλεπτα διαβάζεις περιεχόμενο σχετικό με κάθε θέμα υγείας του προφίλ σου και πόσες φορές αλληλεπιδράς με αυτό. Τα δεδομένα αποθηκεύονται στον λογαριασμό σου, χρησιμοποιούνται μόνο για να βελτιώνονται οι προτάσεις που βλέπεις, και δεν κοινοποιούνται σε τρίτους. Μετράμε θέματα υγείας, όχι το περιεχόμενο των αναζητήσεών σου.
+      - cookies.section.analytics.optIn: Η μέτρηση είναι απενεργοποιημένη μέχρι να την αποδεχτείς ρητά. Αν την απορρίψεις, δεν καταγράφεται και δεν αποστέλλεται απολύτως τίποτα.
+      - cookies.section.control.title: Ο έλεγχος είναι δικός σου
+      - cookies.section.control.body: Μπορείς να δώσεις ή να ανακαλέσεις τη συγκατάθεσή σου όποτε θέλεις από το Προφίλ, στην ενότητα Προτιμήσεις. Η ανάκληση σταματά αμέσως τη μέτρηση και διαγράφει οριστικά όλα τα δεδομένα χρήσης που έχουν συλλεχθεί για τον λογαριασμό σου.
+      - cookies.section.control.cta: Άνοιγμα προτιμήσεων
+      - cookies.section.contact.title: Ερωτήσεις
+      - cookies.section.contact.body: Για ερωτήματα σχετικά με τα προσωπικά σου δεδομένα, απευθύνσου στις υπηρεσίες φοιτητικής μέριμνας του Πανεπιστημίου Δυτικής Αττικής.
+      # Health topics - page chrome
+      - topics.page.loading: Φόρτωση θεμάτων υγείας...
+      - topics.page.error: Δεν ήταν δυνατή η φόρτωση των θεμάτων υγείας. Δοκιμάστε ξανά αργότερα.
+      - topics.disclaimer: Το περιεχόμενο αυτό παρέχεται για ενημερωτικούς και εκπαιδευτικούς σκοπούς και δεν αντικαθιστά επαγγελματική ιατρική συμβουλή, διάγνωση ή θεραπεία.
+      # Health topics - suggested section
+      - topics.suggested.eyebrow: ΠΡΟΤΑΣΕΙΣ UNIHEALTH
+      - topics.suggested.title: Θέματα που προτείνει το UniHealth για εσάς
+      - topics.suggested.subtitle: Επιλεγμένα με βάση όσα μας δηλώσατε στο προφίλ υγείας σας.
+      - profile.label.because: "Επειδή μας δηλώσατε:"
+      - topics.suggested.matchCount: "Αντιστοιχίστηκαν με {{count}} στοιχεία του προφίλ υγείας σας"
+      - topics.suggested.error: Δεν ήταν δυνατή η φόρτωση των στοιχείων του προφίλ σας, οπότε εμφανίζονται δημοφιλή θέματα.
+      - topics.suggested.fallback.title: Δημοφιλή θέματα για ξεκίνημα
+      - topics.suggested.fallback.subtitle: Τα πιο χρήσιμα θέματα για να ξεκινήσετε την εξερεύνηση.
+      - topics.suggested.completeProfile: Συμπληρώστε το προφίλ υγείας σας για να λαμβάνετε θέματα επιλεγμένα ειδικά για εσάς.
+      - topics.suggested.completeProfile.cta: Συμπλήρωση προφίλ
+      # Health topics - favourites section
+      - topics.favourites.title: Τα αγαπημένα μου θέματα
+      - topics.favourites.subtitle: Τα θέματα που αποθηκεύσατε για να τα διαβάσετε ξανά.
+      - topics.favourites.add.tooltip: Προσθήκη στα αγαπημένα
+      - topics.favourites.remove.tooltip: Αφαίρεση από τα αγαπημένα
+      - topics.favourites.error: Δεν ήταν δυνατή η ενημέρωση των αγαπημένων σας. Δοκιμάστε ξανά.
+      # Health topics - trending section
+      - topics.trending.title: Δημοφιλή θέματα
+      - topics.trending.subtitle: Αυτά που διαβάζουν περισσότερο οι φοιτητές αυτή την περίοδο.
+      # Health topics - more section
+      - topics.more.title: Περισσότερα θέματα
+      - topics.more.subtitle: Εξερευνήστε την υπόλοιπη βιβλιοθήκη υγείας.
+      - topics.more.empty: Είδατε ήδη όλα τα θέματα αυτής της ενότητας. Δείτε ολόκληρη τη βιβλιοθήκη.
+      - topics.viewAll: Προβολή όλων
+      # Health topics - card
+      - topics.card.read: Ανάγνωση θέματος
+      # Health topics - all topics page
+      - topics.all.eyebrow: ΒΙΒΛΙΟΘΗΚΗ ΥΓΕΙΑΣ
+      - topics.all.title: Όλα τα θέματα υγείας
+      - topics.all.subtitle: Αναζητήστε και φιλτράρετε ολόκληρη τη βιβλιοθήκη θεμάτων υγείας.
+      - topics.all.search.label: Αναζήτηση θεμάτων υγείας
+      - topics.all.search.placeholder: Δοκιμάστε ύπνος, άγχος, εξετάσεις...
+      - topics.all.count: "{{count}} θέματα διαθέσιμα"
+      - topics.all.popularTags: Δημοφιλείς αναζητήσεις
+      - topics.all.clearFilters: Καθαρισμός φίλτρων
+      - topics.all.filter.category: Κατηγορία
+      - topics.all.filter.search: Αναζήτηση
+      - topics.all.filter.tags: Ετικέτες
+      - topics.all.combineHint: Οι επιλογές συνδυάζονται με λογικό Ή - εμφανίζονται όλα τα θέματα που ταιριάζουν σε οποιαδήποτε από αυτές.
+      - topics.all.empty.title: Κανένα θέμα δεν ταιριάζει με τα φίλτρα σας
+      - topics.all.empty.subtitle: Δοκιμάστε μια γενικότερη λέξη-κλειδί ή επιλέξτε άλλη κατηγορία.
+      # Health topics - categories
+      - topics.category.All: Όλα
+      - topics.category.PREVENTIVE_CARE: Πρόληψη
+      - topics.category.NUTRITION: Διατροφή
+      - topics.category.MENTAL_HEALTH: Ψυχική Υγεία
+      - topics.category.FITNESS: Άσκηση
+      - topics.category.STUDENT_HEALTH: Φοιτητική Υγεία
+      # Health topics - dialog
+      - topics.dialog.overview: Επισκόπηση
+      - topics.dialog.actions: Προτεινόμενες ενέργειες
+      - topics.dialog.warnings: Πότε να ζητήσετε βοήθεια
+      - topics.dialog.reviewedBy: "Αξιολογήθηκε από:"
+      - topics.dialog.disclaimer: Εκπαιδευτικό περιεχόμενο μόνο. Για προσωπικά ιατρικά ερωτήματα ή επείγοντα συμπτώματα απευθυνθείτε σε ειδικό επαγγελματία υγείας.
+      # Profile labels - second person wording for the "because you told us" chips
+      - profile.label.BMI_UNDERWEIGHT: ο ΔΜΣ σας είναι κάτω από το φυσιολογικό
+      - profile.label.BMI_OVERWEIGHT: ο ΔΜΣ σας είναι πάνω από το φυσιολογικό
+      - profile.label.BMI_OBESE: ο ΔΜΣ σας βρίσκεται στο εύρος της παχυσαρκίας
+      - profile.label.BMI_SEVERELY_OBESE: ο ΔΜΣ σας βρίσκεται στο εύρος της σοβαρής παχυσαρκίας
+      - profile.label.GOAL_SLEEP_BETTER: θέλετε να κοιμάστε καλύτερα
+      - profile.label.GOAL_EAT_HEALTHIER: θέλετε να τρώτε πιο υγιεινά
+      - profile.label.GOAL_REDUCE_STRESS: θέλετε να μειώσετε το άγχος σας
+      - profile.label.GOAL_IMPROVE_FITNESS: θέλετε να βελτιώσετε τη φυσική σας κατάσταση
+      - profile.label.GOAL_MANAGE_WEIGHT: θέλετε να διαχειριστείτε το βάρος σας
+      - profile.label.GOAL_GENERAL_WELLBEING: θέλετε να βελτιώσετε τη γενική σας ευεξία
+      - profile.label.GOAL_ALIGNED_MANAGE_WEIGHT: ο στόχος σας για το βάρος ταιριάζει με το προφίλ σας
+      - profile.label.HAS_CHRONIC_CONDITION: έχετε χρόνια πάθηση
+      - profile.label.HAS_FOOD_ALLERGY: έχετε τροφική αλλεργία
+      - profile.label.OPTIONAL_HIGH_MEDICATION: λαμβάνετε φαρμακευτική αγωγή
+      - profile.label.OPTIONAL_HIGH_SURGERY_HISTORY: έχετε ιστορικό χειρουργείου
+      - profile.label.OPTIONAL_SLEEP_LESS_THAN_6_HOURS: κοιμάστε λιγότερο από 6 ώρες
+      - profile.label.OPTIONAL_SLEEP_ABOUT_6_HOURS: κοιμάστε περίπου 6 ώρες
+      - profile.label.OPTIONAL_COFFEE_TWO_TO_THREE_CUPS: πίνετε 2 με 3 καφέδες την ημέρα
+      - profile.label.OPTIONAL_COFFEE_FOUR_OR_MORE_CUPS: πίνετε 4 ή περισσότερους καφέδες την ημέρα
+      - profile.label.OPTIONAL_SCREEN_TIME_FOUR_TO_SIX_HOURS: περνάτε 4 με 6 ώρες μπροστά σε οθόνη
+      - profile.label.OPTIONAL_SCREEN_TIME_MORE_THAN_6_HOURS: περνάτε πάνω από 6 ώρες μπροστά σε οθόνη
+      - profile.label.OPTIONAL_STUDY_LOAD_TWO_TO_FOUR_HOURS: διαβάζετε 2 με 4 ώρες την ημέρα
+      - profile.label.OPTIONAL_STUDY_LOAD_MORE_THAN_4_HOURS: διαβάζετε πάνω από 4 ώρες την ημέρα
+      - profile.label.OPTIONAL_EXERCISE_NONE: δεν γυμνάζεστε αυτή την περίοδο
+      - profile.label.OPTIONAL_EXERCISE_ONE_TO_TWO_TIMES: γυμνάζεστε 1 με 2 φορές την εβδομάδα
+      - profile.label.OPTIONAL_MEALS_ONE_TO_TWO: τρώτε 1 με 2 γεύματα την ημέρα
+      - profile.label.OPTIONAL_SNACK_DAILY: τσιμπολογάτε καθημερινά
+      - profile.label.OPTIONAL_WATER_ONE_TO_THREE_GLASSES: πίνετε 1 με 3 ποτήρια νερό την ημέρα
+      - profile.label.OPTIONAL_WATER_FOUR_TO_SIX_GLASSES: πίνετε 4 με 6 ποτήρια νερό την ημέρα
+      - profile.label.OPTIONAL_SMOKING_DAILY: καπνίζετε καθημερινά
+      - profile.label.OPTIONAL_DIET_GLUTEN_FREE: ακολουθείτε διατροφή χωρίς γλουτένη
+      - topics.mockNotice: Τα θέματα που ακολουθούν είναι δείγμα δεδομένων που έχει δημιουργηθεί για επίδειξη και δεν αποτελούν πραγματικό ιατρικό περιεχόμενο.
+      - topics.mockNotice.badge: ΔΕΙΓΜΑ ΔΕΔΟΜΕΝΩΝ
+      - profile.label.GOAL_ALIGNED_IMPROVE_FITNESS: ο στόχος σας για τη φυσική κατάσταση ταιριάζει με το προφίλ σας
+      - profile.label.OPTIONAL_DIET_VEGETARIAN: ακολουθείτε χορτοφαγική διατροφή
+      - profile.label.OPTIONAL_DIET_VEGAN: ακολουθείτε vegan διατροφή
+      - profile.label.OPTIONAL_DIET_PESCATARIAN: ακολουθείτε ιχθυοφαγική διατροφή
+      - profile.label.OPTIONAL_EXERCISE_THREE_TO_FIVE_TIMES: γυμνάζεστε 3 με 5 φορές την εβδομάδα
+      - profile.label.OPTIONAL_SMOKING_OCCASIONALLY: καπνίζετε περιστασιακά
+      # Advice and tips - page chrome
+      - advice.page.loading: Φόρτωση συμβουλών...
+      - advice.page.error: Δεν ήταν δυνατή η φόρτωση των συμβουλών. Δοκιμάστε ξανά αργότερα.
+      - advice.mockNotice: Οι συμβουλές που ακολουθούν είναι δείγμα δεδομένων που έχει δημιουργηθεί για επίδειξη και δεν αποτελούν πραγματικό ιατρικό περιεχόμενο.
+      - advice.disclaimer: Το περιεχόμενο αυτό παρέχεται για ενημερωτικούς και εκπαιδευτικούς σκοπούς και δεν αντικαθιστά επαγγελματική ιατρική συμβουλή, διάγνωση ή θεραπεία.
+      - advice.tip.read: Διαβάστε τη συμβουλή
+      # Advice and tips - suggestion hero
+      - advice.suggested.eyebrow: ΠΡΟΤΑΣΕΙΣ UNIHEALTH
+      - advice.suggested.title: Συμβουλές που προτείνει το UniHealth για εσάς
+      - advice.suggested.subtitle: Επιλεγμένες με βάση όσα μας δηλώσατε στο προφίλ υγείας σας.
+      - advice.suggested.matchCount: "Αντιστοιχίστηκαν με {{count}} στοιχεία του προφίλ υγείας σας"
+      - advice.suggested.error: Δεν ήταν δυνατή η φόρτωση των στοιχείων του προφίλ σας, οπότε εμφανίζονται γενικές συμβουλές.
+      - advice.suggested.fallback.title: Καλά σημεία εκκίνησης
+      - advice.suggested.fallback.subtitle: Οι πιο χρήσιμες συμβουλές για να ξεκινήσετε.
+      - advice.suggested.completeProfile: Συμπληρώστε το προφίλ υγείας σας για να λαμβάνετε συμβουλές επιλεγμένες ειδικά για εσάς.
+      - advice.suggested.completeProfile.cta: Συμπλήρωση προφίλ
+      # Advice and tips - statistics
+      - advice.stats.title: Τα στατιστικά του προφίλ σας
+      - advice.stats.subtitle: Υπολογισμένα αποκλειστικά από τις δικές σας απαντήσεις στο προφίλ υγείας.
+      - advice.stats.bmi: Δείκτης μάζας σώματος
+      - advice.stats.completeness: Συμπλήρωση προφίλ
+      - advice.stats.completeness.detail: "{{answered}} από {{total}} ερωτήσεις"
+      - advice.stats.signals: Ενεργά στοιχεία προφίλ
+      - advice.stats.signals.safety: "{{count}} με προτεραιότητα ασφάλειας"
+      - advice.stats.focus.title: Πού συγκεντρώνονται τα στοιχεία σας
+      - advice.stats.focus.caption: Άθροισμα βαρύτητας των στοιχείων του προφίλ σας ανά κατηγορία. Δεν πρόκειται για βαθμολογία υγείας.
+      - advice.stats.focus.dataset: Βαρύτητα στοιχείων
+      - advice.stats.guidance.title: Οι απαντήσεις σας και οι γενικές συστάσεις
+      - advice.stats.guidance.caption: Σύγκριση των δικών σας απαντήσεων με γενικές δημόσιες συστάσεις. Ενδεικτικές, όχι κλινικά όρια.
+      - advice.stats.note: Όλα τα παραπάνω προκύπτουν από τις δικές σας απαντήσεις. Δεν γίνεται σύγκριση με άλλους χρήστες και δεν υπολογίζεται συνολική βαθμολογία υγείας.
+      # Advice and tips - attention comparison
+      - advice.attention.title: Πού πηγαίνει η προσοχή σου
+      - advice.attention.caption: "Οι δύο πλευρές μετρούν διαφορετικά πράγματα: τι δείχνει το προφίλ σου και τι διαβάζεις στην πραγματικότητα. Δεν είναι βαθμολογία, ούτε λάθος να διαφέρουν."
+      - advice.attention.legend.need: Τι δείχνει το προφίλ
+      - advice.attention.legend.read: Τι διαβάζεις
+      - advice.attention.needTooltip: "Βαρύτητα προφίλ: {{weight}}"
+      - advice.attention.readTooltip: "Χρόνος ανάγνωσης: {{seconds}} δευτερόλεπτα"
+      - advice.attention.moreAreas: "+{{count}} ακόμη θεματικές"
+      - advice.attention.empty.noConsent: Ενεργοποίησε τη μέτρηση χρήσης από το Προφίλ για να δεις και τι διαβάζεις στην πραγματικότητα.
+      - advice.attention.empty.noData: Δεν έχουν συλλεχθεί ακόμη αρκετά δεδομένα ανάγνωσης. Διάβασε μερικά θέματα και ξανακοίτα εδώ.
+      - profile.preferences.analytics.viewData: Δες τι έχει καταγραφεί
+      # Advice and tips - guidance status
+      - advice.status.below: Κάτω από τη σύσταση
+      - advice.status.within: Εντός σύστασης
+      - advice.status.above: Πάνω από τη σύσταση
+      # Advice and tips - lifestyle metrics
+      - advice.metric.sleepQuality: Ύπνος
+      - advice.metric.sleepQuality.guidance: "Σύσταση: 7-9 ώρες"
+      - advice.metric.water: Νερό
+      - advice.metric.water.guidance: "Σύσταση: 6-8 ποτήρια"
+      - advice.metric.exercise: Άσκηση
+      - advice.metric.exercise.guidance: "Σύσταση: 3-5 φορές/εβδομάδα"
+      - advice.metric.screenTime: Χρόνος σε οθόνη
+      - advice.metric.screenTime.guidance: "Σύσταση: όσο το δυνατόν λιγότερος εκτός μελέτης"
+      - advice.metric.coffee: Καφεΐνη
+      - advice.metric.coffee.guidance: "Σύσταση: έως 3 καφέδες"
+      - advice.metric.smoking: Κάπνισμα
+      - advice.metric.smoking.guidance: "Σύσταση: καθόλου"
+      # Advice and tips - label groups
+      - advice.labelGroup.age: Ηλικία
+      - advice.labelGroup.gender: Φύλο
+      - advice.labelGroup.height: Ύψος
+      - advice.labelGroup.weight: Βάρος
+      - advice.labelGroup.bmi: Δείκτης μάζας σώματος
+      - advice.labelGroup.goal: Στόχοι
+      - advice.labelGroup.allergy: Αλλεργίες
+      - advice.labelGroup.mixed: Συνδυαστικά
+      - advice.labelGroup.optional_sleep: Ύπνος
+      - advice.labelGroup.optional_nutrition: Διατροφή
+      - advice.labelGroup.optional_activity: Άσκηση
+      - advice.labelGroup.optional_substance: Καφεΐνη και κάπνισμα
+      - advice.labelGroup.optional_context: Μελέτη και οθόνες
+      - advice.labelGroup.optional_preference: Προτιμήσεις περιεχομένου
+      - advice.labelGroup.optional_risk: Ιατρικό ιστορικό
+      # Advice and tips - BMI bands
+      - advice.bmi.band.UNDERWEIGHT: Λιποβαρής
+      - advice.bmi.band.NORMAL: Φυσιολογικό
+      - advice.bmi.band.OVERWEIGHT: Υπέρβαρος
+      - advice.bmi.band.OBESE: Παχυσαρκία
+      - advice.bmi.band.SEVERELY_OBESE: Σοβαρή παχυσαρκία
+      # Advice and tips - themed sections
+      - advice.sections.title: Συμβουλές ανά θεματική
+      - advice.sections.subtitle: Όλες οι συμβουλές που ταιριάζουν στο προφίλ σας, ομαδοποιημένες.
 
 
   ################################################################################:
@@ -572,7 +819,7 @@ translations:
       - side.health.assistant.conditions: Conditions A to Z
       - side.health.assistant.find-doctor: Find Health Services
       - side.health.assistant.care-recommendations: Care Recommendations
-      - side.health.assistant.urgent-guidance: Urgent Guidance
+      - side.health.assistant.ai-chat: Ask UniHealth AI
 
       # Breadcrumb
       - breadcrumb.home: Home
@@ -598,8 +845,29 @@ translations:
       - breadcrumb.find-care.mock: Mock Page
       - breadcrumb.overview: Overview
       - breadcrumb.details: Details
-      - breadcrumb.ai.assist: Live Assist
-      - breadcrumb.ai.unihealth: UniHealth AI
+      - breadcrumb.ai.chat: Ask UniHealth AI
+      # AI assistant - floating bubble
+      - ai.bubble.aria: Open the UniHealth AI assistant
+      - ai.bubble.message.1: Welcome! How can I help today?
+      - ai.bubble.message.2: Ask me about sleep, stress, nutrition or exercise.
+      - ai.bubble.message.3: Your health profile shapes the topics and advice you see.
+      - ai.bubble.message.4: The more detail you add to the optional profile, the sharper the suggestions.
+      - ai.bubble.message.5: Health Topics shows suggestions picked from your own profile.
+      - ai.bubble.message.6: Save topics to your favourites so you can find them again.
+      - ai.bubble.message.7: In Advice, tips are ranked from the signals in your profile.
+      - ai.bubble.message.8: See your profile statistics on the Advice page.
+      - ai.bubble.message.9: The Symptom Checker gives you information on symptoms from A to Z.
+      - ai.bubble.message.10: I am not a substitute for a doctor. In an emergency call 112 or 166.
+      # AI assistant - chat page
+      - ai.chat.subtitle: Ask questions about student health, wellbeing, sleep, stress, nutrition, and healthy habits.
+      - ai.chat.greeting: Hi, I am UniHealth. You can ask me about student wellbeing, sleep, stress, exercise, nutrition, and general health guidance.
+      - ai.chat.role.you: You
+      - ai.chat.role.assistant: UniHealth
+      - ai.chat.placeholder: Type your question here...
+      - ai.chat.send: Send
+      - ai.chat.sending: Sending...
+      - ai.chat.error: Something went wrong while contacting UniHealth AI.
+      - ai.chat.disclaimer: Answers are generated automatically and provided for information only. They are not a diagnosis and do not replace professional medical advice. In an emergency call 112 or 166.
 
       # Init Base Health Form
       - health.profile.badge: UniHealth
@@ -655,7 +923,6 @@ translations:
       - home.latestNews.previous.tooltip: Go to previous news items
       - home.latestNews.next: Next
       - home.latestNews.next.tooltip: Go to next news items
-      - home.trending.title: TRENDING
 
       # Paginator
       - paginator.itemsPerPage: "Records per page:"
@@ -945,6 +1212,8 @@ translations:
       - complete.health.optional.primaryGoal.options.IMPROVE_FITNESS: Improve Fitness
       - complete.health.optional.primaryGoal.options.MANAGE_WEIGHT: Manage Weight
       - complete.health.optional.primaryGoal.options.SLEEP_BETTER: Sleep Better
+      - complete.health.optional.primaryGoal.options.REDUCE_STRESS: Reduce Stress
+      - complete.health.optional.primaryGoal.options.GENERAL_WELLBEING: General Wellbeing
       - complete.health.optional.sleepQuality.options.LESS_THAN_6_HOURS: Less than 6 hours
       - complete.health.optional.sleepQuality.options.ABOUT_6_HOURS: About 6 hours
       - complete.health.optional.sleepQuality.options.ABOUT_8_HOURS: About 8 hours
@@ -1035,4 +1304,229 @@ translations:
       - unihealth.footer.emergency: "Emergency: 112 | 166"
       - unihealth.footer.copyright-text: © 2026 UniHealth. Created by Uniwa.
       - unihealth.footer.version: Version
+      # Health topics - breadcrumbs
+      - breadcrumb.topics: Health Topics
+      - breadcrumb.topics.overview: Overview
+      - breadcrumb.topics.all: All Topics
+      - breadcrumb.advice: Advice & Tips
+      - breadcrumb.advice.overview: Overview
+      # Analytics consent - breadcrumb and dialog
+      - breadcrumb.cookies: Cookies Policy
+      - consent.dialog.title: May we measure how you use the app?
+      - consent.dialog.intro: We want to improve the suggestions you see. To do that, we would record how long you spend reading content related to each health topic in your profile, and how often you interact with it.
+      - consent.dialog.point.what: "What we measure: seconds of reading and number of interactions, per health topic."
+      - consent.dialog.point.why: "Why: so the topics and advice we suggest become more relevant to you."
+      - consent.dialog.point.no-cookies: We use no tracking cookies and share nothing with third parties.
+      - consent.dialog.point.reversible: You can change your mind at any time from your Profile. Withdrawing also deletes whatever was collected.
+      - consent.dialog.policyLink: Read the Cookies Policy
+      - consent.dialog.accept: Accept
+      - consent.dialog.reject: Reject
+      - consent.dialog.save.error: Your choice could not be saved. Please try again.
+      # Analytics consent - profile preference
+      - profile.preferences.analyticsConsent: Measure usage for better suggestions
+      - profile.preferences.analyticsConsent.tooltip: Allows measuring reading time and interactions per health topic
+      - profile.preferences.analytics.withdraw.confirm.title: Withdraw consent
+      - profile.preferences.analytics.withdraw.confirm.content: We will stop measuring usage and permanently delete all data collected so far. Do you want to continue?
+      - profile.preferences.analytics.withdraw.confirm.confirm: Withdraw and delete
+      # Cookies policy page
+      - cookies.page.eyebrow: LEGAL
+      - cookies.page.title: Cookies and Usage Measurement Policy
+      - cookies.page.subtitle: What is stored on your device, what we measure, and how you control it.
+      - cookies.page.updated: "Last updated: September 2026"
+      - cookies.section.noCookies.title: We use no tracking cookies
+      - cookies.section.noCookies.body: UniHealth sets no tracking or advertising cookies and embeds no third-party analytics tools. You sign in with a token, not a session cookie.
+      - cookies.section.necessary.title: Strictly necessary local storage
+      - cookies.section.necessary.body: To keep you signed in, we store your sign-in tokens in your browser. We also use a short-lived message that is written and immediately removed, so that signing out in one tab signs you out in the others. The application cannot work without these, so they do not require consent.
+      - cookies.section.functional.title: Functional local storage
+      - cookies.section.functional.body: The UniHealth AI assistant remembers locally which welcome message it has already shown you, so it does not repeat itself. This never leaves your device and is not used to track anyone.
+      - cookies.section.analytics.title: Optional usage measurement
+      - cookies.section.analytics.body: If you give consent, we record how many seconds you spend reading content related to each health topic in your profile, and how many times you interact with it. The data is stored against your account, used only to improve the suggestions you see, and shared with no one. We measure health topics, not the content of your searches.
+      - cookies.section.analytics.optIn: Measurement stays off until you explicitly accept it. If you reject it, absolutely nothing is recorded or sent.
+      - cookies.section.control.title: You stay in control
+      - cookies.section.control.body: You can give or withdraw consent at any time from your Profile, under Preferences. Withdrawing stops measurement immediately and permanently deletes all usage data collected for your account.
+      - cookies.section.control.cta: Open preferences
+      - cookies.section.contact.title: Questions
+      - cookies.section.contact.body: For questions about your personal data, please contact the student support services of the University of West Attica.
+      # Health topics - page chrome
+      - topics.page.loading: Loading health topics...
+      - topics.page.error: Health topics could not be loaded. Please try again later.
+      - topics.disclaimer: This content is provided for informational and educational purposes only and does not replace professional medical advice, diagnosis, or treatment.
+      # Health topics - suggested section
+      - topics.suggested.eyebrow: UNIHEALTH SUGGESTIONS
+      - topics.suggested.title: UniHealth suggested topics
+      - topics.suggested.subtitle: Picked for you from what you told us in your health profile.
+      - profile.label.because: "Because you told us:"
+      - topics.suggested.matchCount: "Matched against {{count}} signals from your health profile"
+      - topics.suggested.error: Your profile details could not be loaded, so popular topics are shown instead.
+      - topics.suggested.fallback.title: Popular starting points
+      - topics.suggested.fallback.subtitle: The most useful topics to begin exploring.
+      - topics.suggested.completeProfile: Complete your health profile to get topics picked for you.
+      - topics.suggested.completeProfile.cta: Complete profile
+      # Health topics - favourites section
+      - topics.favourites.title: My favourite topics
+      - topics.favourites.subtitle: The topics you saved to read again.
+      - topics.favourites.add.tooltip: Add to favourites
+      - topics.favourites.remove.tooltip: Remove from favourites
+      - topics.favourites.error: Your favourites could not be updated. Please try again.
+      # Health topics - trending section
+      - topics.trending.title: Trending topics
+      - topics.trending.subtitle: What students are reading most this term.
+      # Health topics - more section
+      - topics.more.title: More topics
+      - topics.more.subtitle: Explore the rest of the health library.
+      - topics.more.empty: You have seen every topic in this section. Browse the full library instead.
+      - topics.viewAll: View all
+      # Health topics - card
+      - topics.card.read: Read topic
+      # Health topics - all topics page
+      - topics.all.eyebrow: HEALTH LIBRARY
+      - topics.all.title: All health topics
+      - topics.all.subtitle: Search and filter the complete health topic library.
+      - topics.all.search.label: Search health topics
+      - topics.all.search.placeholder: Try sleep, stress, screening...
+      - topics.all.count: "{{count}} topics available"
+      - topics.all.popularTags: Popular searches
+      - topics.all.clearFilters: Clear filters
+      - topics.all.filter.category: Category
+      - topics.all.filter.search: Search
+      - topics.all.filter.tags: Tags
+      - topics.all.combineHint: Selections combine with OR - every topic matching any of them is shown.
+      - topics.all.empty.title: No topics match your filters
+      - topics.all.empty.subtitle: Try a broader keyword or choose another category.
+      # Health topics - categories
+      - topics.category.All: All
+      - topics.category.PREVENTIVE_CARE: Preventive Care
+      - topics.category.NUTRITION: Nutrition
+      - topics.category.MENTAL_HEALTH: Mental Health
+      - topics.category.FITNESS: Fitness
+      - topics.category.STUDENT_HEALTH: Student Health
+      # Health topics - dialog
+      - topics.dialog.overview: Overview
+      - topics.dialog.actions: Recommended actions
+      - topics.dialog.warnings: When to seek care
+      - topics.dialog.reviewedBy: "Reviewed by:"
+      - topics.dialog.disclaimer: Educational content only. Contact a qualified healthcare professional for personal medical questions or urgent symptoms.
+      # Profile labels - second person wording for the "because you told us" chips
+      - profile.label.BMI_UNDERWEIGHT: your BMI is in the underweight range
+      - profile.label.BMI_OVERWEIGHT: your BMI is in the overweight range
+      - profile.label.BMI_OBESE: your BMI is in the obese range
+      - profile.label.BMI_SEVERELY_OBESE: your BMI is in the severely obese range
+      - profile.label.GOAL_SLEEP_BETTER: you want to sleep better
+      - profile.label.GOAL_EAT_HEALTHIER: you want to eat more healthily
+      - profile.label.GOAL_REDUCE_STRESS: you want to reduce your stress
+      - profile.label.GOAL_IMPROVE_FITNESS: you want to improve your fitness
+      - profile.label.GOAL_MANAGE_WEIGHT: you want to manage your weight
+      - profile.label.GOAL_GENERAL_WELLBEING: you want to improve your general wellbeing
+      - profile.label.GOAL_ALIGNED_MANAGE_WEIGHT: your weight goal matches your profile
+      - profile.label.HAS_CHRONIC_CONDITION: you have a chronic condition
+      - profile.label.HAS_FOOD_ALLERGY: you have a food allergy
+      - profile.label.OPTIONAL_HIGH_MEDICATION: you take regular medication
+      - profile.label.OPTIONAL_HIGH_SURGERY_HISTORY: you have a surgical history
+      - profile.label.OPTIONAL_SLEEP_LESS_THAN_6_HOURS: you sleep less than 6 hours
+      - profile.label.OPTIONAL_SLEEP_ABOUT_6_HOURS: you sleep about 6 hours
+      - profile.label.OPTIONAL_COFFEE_TWO_TO_THREE_CUPS: you drink 2 to 3 coffees a day
+      - profile.label.OPTIONAL_COFFEE_FOUR_OR_MORE_CUPS: you drink 4 or more coffees a day
+      - profile.label.OPTIONAL_SCREEN_TIME_FOUR_TO_SIX_HOURS: you spend 4 to 6 hours on screens
+      - profile.label.OPTIONAL_SCREEN_TIME_MORE_THAN_6_HOURS: you spend more than 6 hours on screens
+      - profile.label.OPTIONAL_STUDY_LOAD_TWO_TO_FOUR_HOURS: you study 2 to 4 hours a day
+      - profile.label.OPTIONAL_STUDY_LOAD_MORE_THAN_4_HOURS: you study more than 4 hours a day
+      - profile.label.OPTIONAL_EXERCISE_NONE: you are not exercising at the moment
+      - profile.label.OPTIONAL_EXERCISE_ONE_TO_TWO_TIMES: you exercise 1 to 2 times a week
+      - profile.label.OPTIONAL_MEALS_ONE_TO_TWO: you eat 1 to 2 meals a day
+      - profile.label.OPTIONAL_SNACK_DAILY: you snack every day
+      - profile.label.OPTIONAL_WATER_ONE_TO_THREE_GLASSES: you drink 1 to 3 glasses of water a day
+      - profile.label.OPTIONAL_WATER_FOUR_TO_SIX_GLASSES: you drink 4 to 6 glasses of water a day
+      - profile.label.OPTIONAL_SMOKING_DAILY: you smoke every day
+      - profile.label.OPTIONAL_DIET_GLUTEN_FREE: you follow a gluten-free diet
+      - topics.mockNotice: The topics below are generated sample data for demonstration and are not real medical content.
+      - topics.mockNotice.badge: SAMPLE DATA
+      - profile.label.GOAL_ALIGNED_IMPROVE_FITNESS: your fitness goal matches your profile
+      - profile.label.OPTIONAL_DIET_VEGETARIAN: you follow a vegetarian diet
+      - profile.label.OPTIONAL_DIET_VEGAN: you follow a vegan diet
+      - profile.label.OPTIONAL_DIET_PESCATARIAN: you follow a pescatarian diet
+      - profile.label.OPTIONAL_EXERCISE_THREE_TO_FIVE_TIMES: you exercise 3 to 5 times a week
+      - profile.label.OPTIONAL_SMOKING_OCCASIONALLY: you smoke occasionally
+      # Advice and tips - page chrome
+      - advice.page.loading: Loading advice...
+      - advice.page.error: Advice could not be loaded. Please try again later.
+      - advice.mockNotice: The tips below are generated sample data for demonstration and are not real medical content.
+      - advice.disclaimer: This content is provided for informational and educational purposes only and does not replace professional medical advice, diagnosis, or treatment.
+      - advice.tip.read: Read tip
+      # Advice and tips - suggestion hero
+      - advice.suggested.eyebrow: UNIHEALTH SUGGESTIONS
+      - advice.suggested.title: UniHealth suggested tips
+      - advice.suggested.subtitle: Picked for you from what you told us in your health profile.
+      - advice.suggested.matchCount: "Matched against {{count}} signals from your health profile"
+      - advice.suggested.error: Your profile details could not be loaded, so general tips are shown instead.
+      - advice.suggested.fallback.title: Good starting points
+      - advice.suggested.fallback.subtitle: The most useful tips to begin with.
+      - advice.suggested.completeProfile: Complete your health profile to get tips picked for you.
+      - advice.suggested.completeProfile.cta: Complete profile
+      # Advice and tips - statistics
+      - advice.stats.title: Your profile statistics
+      - advice.stats.subtitle: Calculated only from your own answers in the health profile.
+      - advice.stats.bmi: Body mass index
+      - advice.stats.completeness: Profile completeness
+      - advice.stats.completeness.detail: "{{answered}} of {{total}} questions"
+      - advice.stats.signals: Active profile signals
+      - advice.stats.signals.safety: "{{count}} ranked for safety"
+      - advice.stats.focus.title: Where your signals concentrate
+      - advice.stats.focus.caption: Summed weight of your profile signals per category. This is not a health score.
+      - advice.stats.focus.dataset: Signal weight
+      - advice.stats.guidance.title: Your answers against general guidance
+      - advice.stats.guidance.caption: Your own answers compared with general public guidance. Indicative bands, not clinical thresholds.
+      - advice.stats.note: Everything above is derived from your own answers. Nothing is compared against other users and no overall health score is calculated.
+      # Advice and tips - attention comparison
+      - advice.attention.title: Where your attention goes
+      - advice.attention.caption: "The two sides measure different things: what your profile indicates, and what you actually read. This is not a score, and a difference is not a mistake."
+      - advice.attention.legend.need: What your profile indicates
+      - advice.attention.legend.read: What you engage with
+      - advice.attention.needTooltip: "Profile weight: {{weight}}"
+      - advice.attention.readTooltip: "Reading time: {{seconds}} seconds"
+      - advice.attention.moreAreas: "+{{count}} more areas"
+      - advice.attention.empty.noConsent: Turn on usage measurement in your Profile to also see what you actually read.
+      - advice.attention.empty.noData: Not enough reading data collected yet. Read a few topics and check back here.
+      - profile.preferences.analytics.viewData: See what has been recorded
+      # Advice and tips - guidance status
+      - advice.status.below: Below guidance
+      - advice.status.within: Within guidance
+      - advice.status.above: Above guidance
+      # Advice and tips - lifestyle metrics
+      - advice.metric.sleepQuality: Sleep
+      - advice.metric.sleepQuality.guidance: "Guidance: 7-9 hours"
+      - advice.metric.water: Water
+      - advice.metric.water.guidance: "Guidance: 6-8 glasses"
+      - advice.metric.exercise: Exercise
+      - advice.metric.exercise.guidance: "Guidance: 3-5 times/week"
+      - advice.metric.screenTime: Screen time
+      - advice.metric.screenTime.guidance: "Guidance: as little as possible outside study"
+      - advice.metric.coffee: Caffeine
+      - advice.metric.coffee.guidance: "Guidance: up to 3 cups"
+      - advice.metric.smoking: Smoking
+      - advice.metric.smoking.guidance: "Guidance: none"
+      # Advice and tips - label groups
+      - advice.labelGroup.age: Age
+      - advice.labelGroup.gender: Gender
+      - advice.labelGroup.height: Height
+      - advice.labelGroup.weight: Weight
+      - advice.labelGroup.bmi: Body mass index
+      - advice.labelGroup.goal: Goals
+      - advice.labelGroup.allergy: Allergies
+      - advice.labelGroup.mixed: Combined signals
+      - advice.labelGroup.optional_sleep: Sleep
+      - advice.labelGroup.optional_nutrition: Nutrition
+      - advice.labelGroup.optional_activity: Exercise
+      - advice.labelGroup.optional_substance: Caffeine and smoking
+      - advice.labelGroup.optional_context: Study and screens
+      - advice.labelGroup.optional_preference: Content preferences
+      - advice.labelGroup.optional_risk: Medical history
+      # Advice and tips - BMI bands
+      - advice.bmi.band.UNDERWEIGHT: Underweight
+      - advice.bmi.band.NORMAL: Normal range
+      - advice.bmi.band.OVERWEIGHT: Overweight
+      - advice.bmi.band.OBESE: Obese
+      - advice.bmi.band.SEVERELY_OBESE: Severely obese
+      # Advice and tips - themed sections
+      - advice.sections.title: Tips by theme
+      - advice.sections.subtitle: Every tip matching your profile, grouped by theme.
 

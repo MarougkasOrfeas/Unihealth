@@ -1,0 +1,129 @@
+// Stacked directly above the health-assistant FAB (`app.scss` — right: 14px, bottom: 50px,
+// 64px square), leaving a 12px gap. Same z-index so the two read as one control group.
+.assistant-bubble-host {
+  position: fixed;
+  right: 14px;
+  bottom: 126px;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.is-hidden {
+  display: none;
+}
+
+.assistant-circle {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px solid #2f5da8;
+  background: #fff;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+  // Mirrors the FAB's hover feel so the pair behave alike.
+  transition: transform var(--sys-motion-duration-base, 200ms) var(--sys-motion-easing-standard, ease),
+              box-shadow var(--sys-motion-duration-base, 200ms) var(--sys-motion-easing-standard, ease);
+  // The codebase's first keyframe animation; everything else uses transitions only.
+  animation: assistant-float 3s ease-in-out infinite;
+
+  img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+  }
+
+  &:hover,
+  &:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+    animation-play-state: paused;
+  }
+}
+
+@keyframes assistant-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-3px); }
+}
+
+.speech-bubble {
+  position: relative;
+  max-width: 250px;
+  padding: 12px 16px;
+  border: 1px solid #d9e2ef;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.16);
+  color: #172026;
+  font-size: 14px;
+  line-height: 1.45;
+
+  // Hidden rather than transparent, so a faded-out bubble cannot swallow clicks.
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(8px);
+  transition: opacity var(--sys-motion-duration-slow, 280ms) var(--sys-motion-easing-emphasized, ease),
+              transform var(--sys-motion-duration-slow, 280ms) var(--sys-motion-easing-emphasized, ease),
+              visibility var(--sys-motion-duration-slow, 280ms);
+
+  // The tail, pointing at the circle.
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -7px;
+    width: 12px;
+    height: 12px;
+    transform: translateY(-50%) rotate(45deg);
+    border-right: 1px solid #d9e2ef;
+    border-top: 1px solid #d9e2ef;
+    background: #fff;
+  }
+}
+
+.speech-bubble.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+}
+
+// Hovering anywhere on the control holds the current message open, so a slow reader is not cut
+// off mid-sentence. Pure CSS, so it needs no extra component state.
+.assistant-bubble-host:hover .speech-bubble,
+.assistant-bubble-host:focus-within .speech-bubble {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+}
+
+// 250px of bubble plus the FAB crowds a phone; keep the circle, drop the speech.
+@media (max-width: 600px) {
+  .speech-bubble {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .assistant-circle {
+    animation: none;
+    transition: none;
+
+    &:hover,
+    &:focus-visible {
+      transform: none;
+    }
+  }
+
+  // The messages still rotate — that is content, not motion — but they swap instantly.
+  .speech-bubble {
+    transform: none;
+    transition: none;
+  }
+
+  .speech-bubble.is-visible {
+    transform: none;
+  }
+}

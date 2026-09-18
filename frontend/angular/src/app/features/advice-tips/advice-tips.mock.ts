@@ -1,213 +1,311 @@
-export type UserLabel = string;
+import {AdviceSection} from './advice-tips.model';
 
-export interface AdviceSection {
-    id: string;
-    title: string;
-    subtitle: string;
-    icon: string;
-    imageClass: string;
-    matchedLabels: UserLabel[];
-    labelWeights: Record<UserLabel, number>;
-    preferenceBoostLabels?: UserLabel[];
-    safetyPenaltyLabels?: UserLabel[];
-    tips: AdviceTip[];
-}
-
-export interface AdviceTip {
-    id: string;
-    title: string;
-    summary: string;
-    content: string;
-}
-
-export interface AdviceTipView extends AdviceTip {
-    icon: string;
-    sectionTitle: string;
-    imageClass: string;
-    recommendationScore: number;
-    matchedLabelCount: number;
-}
-
-export interface AdviceInsight {
-    id: string;
-    title: string;
-    value: string;
-    description: string;
-    icon: string;
-    trend?: string;
-}
-
-export const ADVICE_INSIGHTS: AdviceInsight[] = [
-    {
-        id: 'bmi-status',
-        title: 'Weight category',
-        value: 'Calculated',
-        description: 'BMI-related labels help rank nutrition, activity, and weight-management advice.',
-        icon: 'monitor_weight',
-        trend: 'Scored signal',
-    },
-    {
-        id: 'sleep-duration',
-        title: 'Lifestyle profile',
-        value: 'Optional',
-        description: 'Sleep, screen time, study load, exercise, and hydration labels refine recommendations.',
-        icon: 'bedtime',
-        trend: 'Preference aware',
-    },
-    {
-        id: 'nutrition-safety',
-        title: 'Safety signals',
-        value: 'Prioritized',
-        description: 'Allergy and chronic-condition labels are placed first before general lifestyle labels.',
-        icon: 'health_and_safety',
-        trend: 'Safety first',
-    },
-];
-
+/**
+ * Placeholder advice content until real, citable content is ingested.
+ *
+ * Only `AdviceTipsService` may import this. As with the health topics mock, the text is Greek only
+ * because it is sample data rather than UI chrome, and the `matchedLabels` use the real label codes
+ * the backend calculates (see `FormLabelInitData`).
+ *
+ * Section and tip ids are identifiers, not content, so they stay in English.
+ */
 export const ADVICE_SECTIONS: AdviceSection[] = [
     {
         id: 'nutrition-allergies',
-        title: 'Nutrition & allergies',
-        subtitle: 'Simple food choices based on your nutrition profile.',
+        title: 'Διατροφή και αλλεργίες',
+        subtitle: 'Απλές επιλογές τροφίμων με βάση το διατροφικό σας προφίλ.',
         icon: 'restaurant',
-        imageClass: 'nutrition-bg',
+        accentColor: '#27764f',
+        displayOrder: 1,
+        active: true,
         matchedLabels: [
             'HAS_FOOD_ALLERGY',
-            'ALLERGY_ONION',
-            'ALLERGY_PEANUT',
-            'ALLERGY_TREE_NUT',
-            'ALLERGY_DAIRY',
-            'ALLERGY_GLUTEN',
-            'ALLERGY_EGG',
-            'ALLERGY_FISH',
-            'ALLERGY_SHELLFISH',
-            'NUTRITION_SENSITIVE',
             'GOAL_EAT_HEALTHIER',
             'OPTIONAL_DIET_VEGETARIAN',
             'OPTIONAL_DIET_VEGAN',
             'OPTIONAL_DIET_GLUTEN_FREE',
             'OPTIONAL_MEALS_ONE_TO_TWO',
-            'OPTIONAL_WATER_ONE_TO_THREE_GLASSES',
         ],
         labelWeights: {
-            HAS_FOOD_ALLERGY: 1.25,
-            ALLERGY_ONION: 1.45,
-            ALLERGY_PEANUT: 1.6,
-            ALLERGY_TREE_NUT: 1.6,
-            ALLERGY_DAIRY: 1.45,
-            ALLERGY_GLUTEN: 1.45,
-            ALLERGY_EGG: 1.35,
-            ALLERGY_FISH: 1.35,
-            ALLERGY_SHELLFISH: 1.55,
-            NUTRITION_SENSITIVE: 1.4,
-            GOAL_EAT_HEALTHIER: 1.15,
-            OPTIONAL_DIET_VEGETARIAN: 0.9,
-            OPTIONAL_DIET_VEGAN: 0.9,
-            OPTIONAL_DIET_GLUTEN_FREE: 1.0,
-            OPTIONAL_MEALS_ONE_TO_TWO: 1.0,
-            OPTIONAL_WATER_ONE_TO_THREE_GLASSES: 0.85,
+            HAS_FOOD_ALLERGY: 3,
+            GOAL_EAT_HEALTHIER: 2,
+            OPTIONAL_DIET_VEGETARIAN: 1.5,
+            OPTIONAL_DIET_VEGAN: 1.8,
+            OPTIONAL_DIET_GLUTEN_FREE: 1.8,
+            OPTIONAL_MEALS_ONE_TO_TWO: 1.4,
         },
-        preferenceBoostLabels: ['OPTIONAL_CONTENT_ARTICLES', 'OPTIONAL_CONTENT_SHORT_TIPS'],
+        preferenceBoostLabels: ['GOAL_EAT_HEALTHIER'],
         tips: [
             {
                 id: 'check-ingredients',
-                title: 'Check ingredient lists carefully',
-                summary: 'Look for allergy-related ingredients in sauces, soups, and ready meals.',
-                content: 'Food allergens can appear in seasoning mixes, broths, sauces, and processed foods. Checking labels helps you avoid accidental exposure.',
+                title: 'Ελέγχετε προσεκτικά τις ετικέτες',
+                brief: 'Μια γρήγορη ματιά στα συστατικά αποτρέπει τις περισσότερες τυχαίες εκθέσεις.',
+                content: 'Οι συνταγές των προϊόντων αλλάζουν χωρίς προειδοποίηση, οπότε ένα τρόφιμο που ήταν ασφαλές τον προηγούμενο μήνα μπορεί να μην είναι σήμερα. Διαβάζετε την ετικέτα κάθε φορά που αγοράζετε, όχι μόνο την πρώτη, και δίνετε σημασία στις προειδοποιήσεις για πιθανά ίχνη.',
             },
             {
                 id: 'simple-meals',
-                title: 'Prefer simple meals',
-                summary: 'Choose meals with fewer ingredients when trying new foods.',
-                content: 'Simple meals make it easier to identify what works well for your body and what may trigger discomfort.',
+                title: 'Προτιμήστε απλά γεύματα',
+                brief: 'Όσο λιγότερα τα συστατικά, τόσο ευκολότερος ο έλεγχος και η επανάληψη.',
+                content: 'Ένα γεύμα με τέσσερα ή πέντε αναγνωρίσιμα συστατικά ελέγχεται εύκολα, μαγειρεύεται γρήγορα και επαναλαμβάνεται χωρίς κόπο σε μια πιεσμένη εβδομάδα. Κρατήστε δύο ή τρία τέτοια γεύματα ως σταθερή βάση και αφήστε την ποικιλία για τις ήρεμες ημέρες.',
             },
         ],
     },
     {
         id: 'healthy-weight',
-        title: 'Healthy weight support',
-        subtitle: 'Practical habits to support a healthier weight.',
+        title: 'Υποστήριξη υγιούς βάρους',
+        subtitle: 'Σταθερές συνήθειες αντί για σύντομους, στερητικούς κύκλους.',
         icon: 'monitor_weight',
-        imageClass: 'weight-bg',
+        accentColor: '#1f6f78',
+        displayOrder: 2,
+        active: true,
         matchedLabels: [
+            'GOAL_MANAGE_WEIGHT',
             'BMI_OVERWEIGHT',
             'BMI_OBESE',
             'BMI_SEVERELY_OBESE',
-            'YOUNG_OVERWEIGHT',
-            'WEIGHT_HIGH',
-            'WEIGHT_VERY_HIGH',
-            'GOAL_MANAGE_WEIGHT',
             'GOAL_ALIGNED_MANAGE_WEIGHT',
-            'OPTIONAL_EXERCISE_NONE',
-            'OPTIONAL_EXERCISE_ONE_TO_TWO_TIMES',
+            'OPTIONAL_SNACK_DAILY',
         ],
         labelWeights: {
-            BMI_OVERWEIGHT: 1.35,
-            BMI_OBESE: 1.6,
-            BMI_SEVERELY_OBESE: 1.8,
-            YOUNG_OVERWEIGHT: 1.4,
-            WEIGHT_HIGH: 1.1,
-            WEIGHT_VERY_HIGH: 1.35,
-            GOAL_MANAGE_WEIGHT: 1.25,
-            GOAL_ALIGNED_MANAGE_WEIGHT: 1.35,
-            OPTIONAL_EXERCISE_NONE: 0.85,
-            OPTIONAL_EXERCISE_ONE_TO_TWO_TIMES: 0.65,
+            GOAL_MANAGE_WEIGHT: 2.2,
+            BMI_OVERWEIGHT: 1.8,
+            BMI_OBESE: 2,
+            BMI_SEVERELY_OBESE: 2.2,
+            GOAL_ALIGNED_MANAGE_WEIGHT: 1.5,
+            OPTIONAL_SNACK_DAILY: 1.2,
         },
-        safetyPenaltyLabels: ['CHRONIC_HEART_DISEASE', 'CHRONIC_COPD', 'OPTIONAL_HIGH_SURGERY_HISTORY'],
+        preferenceBoostLabels: ['GOAL_MANAGE_WEIGHT'],
+        safetyPenaltyLabels: ['BMI_UNDERWEIGHT'],
         tips: [
             {
                 id: 'protein-breakfast',
-                title: 'Add protein to breakfast',
-                summary: 'A balanced breakfast can reduce cravings later in the day.',
-                content: 'Try adding eggs, Greek yogurt, cottage cheese, tofu, or another protein source to your morning meal.',
+                title: 'Προσθέστε πρωτεΐνη στο πρωινό',
+                brief: 'Ένα πρωινό με πρωτεΐνη μειώνει το τσιμπολόγημα μέχρι το μεσημέρι.',
+                content: 'Ένα πρωινό βασισμένο μόνο σε υδατάνθρακες αφήνει πείνα μέσα σε δύο ώρες. Η προσθήκη αυγών, γιαουρτιού, τυριού ή ταχινιού σταθεροποιεί την ενέργεια και μειώνει σημαντικά την ανάγκη για σνακ πριν το μεσημεριανό.',
             },
             {
                 id: 'plate-method',
-                title: 'Use the plate method',
-                summary: 'Fill half your plate with vegetables, a quarter with protein, and a quarter with carbs.',
-                content: 'This is a simple visual method that helps with portions without counting calories.',
+                title: 'Χρησιμοποιήστε τη μέθοδο του πιάτου',
+                brief: 'Μισό πιάτο λαχανικά, ένα τέταρτο πρωτεΐνη, ένα τέταρτο δημητριακά.',
+                content: 'Η μέθοδος του πιάτου δίνει ισορροπία χωρίς ζύγισμα ή καταγραφή θερμίδων. Λειτουργεί στο εστιατόριο της σχολής όπως και στο σπίτι, και είναι αρκετά απλή ώστε να την εφαρμόζετε και στις πιο κουραστικές ημέρες.',
             },
         ],
     },
     {
         id: 'sleep-habits',
-        title: 'Sleep & daily habits',
-        subtitle: 'Small daily routines that support energy and consistency.',
+        title: 'Ύπνος και καθημερινές συνήθειες',
+        subtitle: 'Μικρές αλλαγές που βελτιώνουν αισθητά την ποιότητα του ύπνου.',
         icon: 'bedtime',
-        imageClass: 'sleep-bg',
+        accentColor: '#6a5aa8',
+        displayOrder: 3,
+        active: true,
         matchedLabels: [
-            'OPTIONAL_SLEEP_LESS_THAN_6_HOURS',
             'GOAL_SLEEP_BETTER',
-            'SLEEP_WITH_CHRONIC',
-            'OPTIONAL_STUDY_LOAD_MORE_THAN_4_HOURS',
+            'OPTIONAL_SLEEP_LESS_THAN_6_HOURS',
+            'OPTIONAL_SLEEP_ABOUT_6_HOURS',
             'OPTIONAL_SCREEN_TIME_MORE_THAN_6_HOURS',
             'OPTIONAL_COFFEE_FOUR_OR_MORE_CUPS',
-            'OPTIONAL_FREQUENCY_DAILY',
-            'OPTIONAL_CONTENT_ARTICLES',
         ],
         labelWeights: {
-            OPTIONAL_SLEEP_LESS_THAN_6_HOURS: 1.7,
-            GOAL_SLEEP_BETTER: 1.35,
-            SLEEP_WITH_CHRONIC: 1.55,
-            OPTIONAL_STUDY_LOAD_MORE_THAN_4_HOURS: 1.0,
-            OPTIONAL_SCREEN_TIME_MORE_THAN_6_HOURS: 1.0,
-            OPTIONAL_COFFEE_FOUR_OR_MORE_CUPS: 0.9,
-            OPTIONAL_FREQUENCY_DAILY: 0.55,
-            OPTIONAL_CONTENT_ARTICLES: 0.45,
+            GOAL_SLEEP_BETTER: 2.2,
+            OPTIONAL_SLEEP_LESS_THAN_6_HOURS: 2.5,
+            OPTIONAL_SLEEP_ABOUT_6_HOURS: 1.5,
+            OPTIONAL_SCREEN_TIME_MORE_THAN_6_HOURS: 1.4,
+            OPTIONAL_COFFEE_FOUR_OR_MORE_CUPS: 1.4,
         },
-        preferenceBoostLabels: ['OPTIONAL_FREQUENCY_DAILY'],
+        preferenceBoostLabels: ['GOAL_SLEEP_BETTER'],
         tips: [
             {
                 id: 'sleep-routine',
-                title: 'Create a wind-down routine',
-                summary: 'Start relaxing 30 minutes before bedtime.',
-                content: 'Dim lights, avoid heavy meals, and reduce screen time before bed to help your body prepare for sleep.',
+                title: 'Φτιάξτε μια ρουτίνα χαλάρωσης',
+                brief: 'Είκοσι λεπτά χαμηλής έντασης πριν τον ύπνο κάνουν τη διαφορά.',
+                content: 'Ο οργανισμός χρειάζεται σήμα ότι η ημέρα τελείωσε. Είκοσι λεπτά με χαμηλό φωτισμό, χωρίς οθόνες και χωρίς απαιτητικό διάβασμα, λειτουργούν καλύτερα από το να πέφτετε για ύπνο αμέσως μετά από εντατική μελέτη.',
             },
             {
-                id: 'daily-small-step',
-                title: 'Focus on one daily action',
-                summary: 'Choose one small habit to repeat every day.',
-                content: 'Daily consistency works better when the action is small, realistic, and easy to repeat.',
+                id: 'stable-wake-time',
+                title: 'Κρατήστε σταθερή ώρα αφύπνισης',
+                brief: 'Η σταθερή αφύπνιση ρυθμίζει τον ύπνο πιο αποτελεσματικά από τη σταθερή κατάκλιση.',
+                content: 'Το βιολογικό ρολόι ρυθμίζεται κυρίως από την ώρα που ξυπνάτε και βλέπετε φως, όχι από την ώρα που πέφτετε για ύπνο. Κρατήστε την αφύπνιση μέσα στο ίδιο εύρος μίας ώρας, ακόμη και το Σαββατοκύριακο, και ο ύπνος θα ακολουθήσει.',
+            },
+        ],
+    },
+    {
+        id: 'stress-balance',
+        title: 'Άγχος και ισορροπία',
+        subtitle: 'Πρακτικές που μειώνουν την πίεση μέσα στην ακαδημαϊκή ημέρα.',
+        icon: 'self_improvement',
+        accentColor: '#2c62a2',
+        displayOrder: 4,
+        active: true,
+        matchedLabels: [
+            'GOAL_REDUCE_STRESS',
+            'OPTIONAL_STUDY_LOAD_MORE_THAN_4_HOURS',
+            'OPTIONAL_STUDY_LOAD_TWO_TO_FOUR_HOURS',
+            'OPTIONAL_SLEEP_LESS_THAN_6_HOURS',
+        ],
+        labelWeights: {
+            GOAL_REDUCE_STRESS: 2.4,
+            OPTIONAL_STUDY_LOAD_MORE_THAN_4_HOURS: 1.8,
+            OPTIONAL_STUDY_LOAD_TWO_TO_FOUR_HOURS: 1.2,
+            OPTIONAL_SLEEP_LESS_THAN_6_HOURS: 1.3,
+        },
+        preferenceBoostLabels: ['GOAL_REDUCE_STRESS'],
+        tips: [
+            {
+                id: 'one-next-task',
+                title: 'Ένα ορατό επόμενο βήμα',
+                brief: 'Αντικαταστήστε τη λίστα της ημέρας με τη μία επόμενη ενέργεια.',
+                content: 'Μια λίστα δώδεκα εργασιών αυξάνει την πίεση αντί να τη μειώνει. Γράψτε μόνο την επόμενη συγκεκριμένη ενέργεια, ολοκληρώστε την, και μετά γράψτε την επόμενη. Η αίσθηση προόδου είναι αυτό που μειώνει το άγχος.',
+            },
+            {
+                id: 'paced-breathing',
+                title: 'Ρυθμική αναπνοή δύο λεπτών',
+                brief: 'Εισπνοή σε 4 μετρήσεις, εκπνοή σε 6, για δύο λεπτά.',
+                content: 'Η παρατεταμένη εκπνοή ενεργοποιεί το παρασυμπαθητικό σύστημα και μειώνει τους παλμούς μέσα σε λίγα λεπτά. Είναι διακριτική, δεν χρειάζεται τίποτα, και μπορεί να γίνει πριν από μια εξέταση ή μια παρουσίαση.',
+            },
+        ],
+    },
+    {
+        id: 'movement-energy',
+        title: 'Κίνηση και ενέργεια',
+        subtitle: 'Δραστηριότητα που χωράει σε ένα γεμάτο πρόγραμμα.',
+        icon: 'directions_run',
+        accentColor: '#b95745',
+        displayOrder: 5,
+        active: true,
+        matchedLabels: [
+            'GOAL_IMPROVE_FITNESS',
+            'OPTIONAL_EXERCISE_NONE',
+            'OPTIONAL_EXERCISE_ONE_TO_TWO_TIMES',
+            'GOAL_ALIGNED_IMPROVE_FITNESS',
+            'BMI_OVERWEIGHT',
+        ],
+        labelWeights: {
+            GOAL_IMPROVE_FITNESS: 2.2,
+            OPTIONAL_EXERCISE_NONE: 2.4,
+            OPTIONAL_EXERCISE_ONE_TO_TWO_TIMES: 1.5,
+            GOAL_ALIGNED_IMPROVE_FITNESS: 1.5,
+            BMI_OVERWEIGHT: 1.2,
+        },
+        preferenceBoostLabels: ['GOAL_IMPROVE_FITNESS'],
+        safetyPenaltyLabels: ['HAS_CHRONIC_CONDITION'],
+        tips: [
+            {
+                id: 'walk-commute',
+                title: 'Περπατήστε μέρος της διαδρομής',
+                brief: 'Μία στάση νωρίτερα προσθέτει κίνηση χωρίς επιπλέον χρόνο.',
+                content: 'Η μετακίνηση είναι ο ευκολότερος τρόπος να προσθέσετε δραστηριότητα, επειδή δεν απαιτεί ξεχωριστή ώρα στο πρόγραμμά σας. Δέκα με δεκαπέντε λεπτά περπάτημα προς κάθε κατεύθυνση καλύπτουν ήδη ένα αξιόλογο μέρος της εβδομαδιαίας σύστασης.',
+            },
+            {
+                id: 'two-short-sessions',
+                title: 'Δύο σύντομες προπονήσεις',
+                brief: 'Δύο συνεδρίες των 20 λεπτών αποδίδουν περισσότερο από μία μεγάλη.',
+                content: 'Η συνέπεια μετράει περισσότερο από τη διάρκεια. Δύο σύντομες συνεδρίες την εβδομάδα, που τηρούνται σταθερά, φέρνουν καλύτερα αποτελέσματα από ένα φιλόδοξο πρόγραμμα που εγκαταλείπεται μετά από δέκα ημέρες.',
+            },
+        ],
+    },
+    {
+        id: 'screen-focus',
+        title: 'Οθόνες και συγκέντρωση',
+        subtitle: 'Μειώστε την κόπωση από τις πολλές ώρες μπροστά στην οθόνη.',
+        icon: 'devices',
+        accentColor: '#9d6a18',
+        displayOrder: 6,
+        active: true,
+        matchedLabels: [
+            'OPTIONAL_SCREEN_TIME_MORE_THAN_6_HOURS',
+            'OPTIONAL_SCREEN_TIME_FOUR_TO_SIX_HOURS',
+            'OPTIONAL_STUDY_LOAD_MORE_THAN_4_HOURS',
+        ],
+        labelWeights: {
+            OPTIONAL_SCREEN_TIME_MORE_THAN_6_HOURS: 2.4,
+            OPTIONAL_SCREEN_TIME_FOUR_TO_SIX_HOURS: 1.6,
+            OPTIONAL_STUDY_LOAD_MORE_THAN_4_HOURS: 1.4,
+        },
+        tips: [
+            {
+                id: 'twenty-rule',
+                title: 'Ο κανόνας 20-20-20',
+                brief: 'Κάθε 20 λεπτά, κοιτάξτε 20 δευτερόλεπτα κάτι μακρινό.',
+                content: 'Η παρατεταμένη εστίαση σε κοντινή απόσταση κουράζει τους μύες των ματιών. Κάθε είκοσι λεπτά, κοιτάξτε για είκοσι δευτερόλεπτα κάτι που απέχει τουλάχιστον έξι μέτρα. Είναι η απλούστερη παρέμβαση με μετρήσιμο όφελος.',
+            },
+            {
+                id: 'screen-position',
+                title: 'Ρυθμίστε τη θέση της οθόνης',
+                brief: 'Λίγο χαμηλότερα από τα μάτια και σε απόσταση ενός χεριού.',
+                content: 'Όταν η οθόνη είναι πολύ ψηλά, τα μάτια μένουν περισσότερο ανοιχτά και στεγνώνουν, ενώ ο αυχένας επιβαρύνεται. Η πάνω άκρη της οθόνης στο ύψος των ματιών ή ελαφρώς χαμηλότερα, σε απόσταση περίπου ενός χεριού, λύνει και τα δύο.',
+            },
+        ],
+    },
+    {
+        id: 'hydration-nutrition',
+        title: 'Ενυδάτωση μέσα στην ημέρα',
+        subtitle: 'Σταθερή πρόσληψη νερού αντί για αναπλήρωση το βράδυ.',
+        icon: 'water_drop',
+        accentColor: '#1f6f78',
+        displayOrder: 7,
+        active: true,
+        matchedLabels: [
+            'OPTIONAL_WATER_ONE_TO_THREE_GLASSES',
+            'OPTIONAL_WATER_FOUR_TO_SIX_GLASSES',
+            'OPTIONAL_COFFEE_FOUR_OR_MORE_CUPS',
+            'GOAL_EAT_HEALTHIER',
+        ],
+        labelWeights: {
+            OPTIONAL_WATER_ONE_TO_THREE_GLASSES: 2.4,
+            OPTIONAL_WATER_FOUR_TO_SIX_GLASSES: 1.4,
+            OPTIONAL_COFFEE_FOUR_OR_MORE_CUPS: 1.3,
+            GOAL_EAT_HEALTHIER: 1.1,
+        },
+        tips: [
+            {
+                id: 'bottle-on-desk',
+                title: 'Μπουκάλι στο γραφείο',
+                brief: 'Το νερό που είναι ορατό πίνεται· αυτό που είναι στην κουζίνα ξεχνιέται.',
+                content: 'Η ορατότητα είναι το ισχυρότερο εργαλείο εδώ. Ένα επαναγεμιζόμενο μπουκάλι δίπλα στα βιβλία σας αυξάνει την πρόσληψη χωρίς καμία συνειδητή προσπάθεια, ενώ ένα ποτήρι στην κουζίνα απαιτεί απόφαση κάθε φορά.',
+            },
+            {
+                id: 'anchor-drinks',
+                title: 'Συνδέστε το νερό με σταθερά σημεία',
+                brief: 'Ένα ποτήρι σε κάθε μάθημα, κάθε γεύμα, κάθε διάλειμμα.',
+                content: 'Οι νέες συνήθειες κολλάνε όταν συνδέονται με κάτι που ήδη κάνετε. Αντί να στοχεύετε σε έναν αριθμό ποτηριών, συνδέστε το νερό με γεγονότα της ημέρας που επαναλαμβάνονται ούτως ή άλλως.',
+            },
+        ],
+    },
+    {
+        id: 'preventive-habits',
+        title: 'Πρόληψη και παρακολούθηση',
+        subtitle: 'Τι αξίζει να παρακολουθείτε, ειδικά με χρόνια πάθηση ή αγωγή.',
+        icon: 'health_and_safety',
+        accentColor: '#6a5aa8',
+        displayOrder: 8,
+        active: true,
+        matchedLabels: [
+            'HAS_CHRONIC_CONDITION',
+            'OPTIONAL_HIGH_MEDICATION',
+            'OPTIONAL_HIGH_SURGERY_HISTORY',
+            'OPTIONAL_SMOKING_DAILY',
+            'GOAL_GENERAL_WELLBEING',
+        ],
+        labelWeights: {
+            HAS_CHRONIC_CONDITION: 2.8,
+            OPTIONAL_HIGH_MEDICATION: 2,
+            OPTIONAL_HIGH_SURGERY_HISTORY: 1.6,
+            OPTIONAL_SMOKING_DAILY: 1.6,
+            GOAL_GENERAL_WELLBEING: 1.2,
+        },
+        tips: [
+            {
+                id: 'medication-reminders',
+                title: 'Υπενθυμίσεις για τη συνταγή σας',
+                brief: 'Ορίστε την υπενθύμιση μια εβδομάδα πριν εξαντληθεί η αγωγή.',
+                content: 'Οι περισσότερες διακοπές αγωγής στη φοιτητική ζωή δεν οφείλονται σε απόφαση αλλά σε κακό συγχρονισμό: το φάρμακο τελειώνει μέσα στην εξεταστική και το ραντεβού αργεί. Μια υπενθύμιση επτά ημέρες νωρίτερα λύνει σχεδόν όλες τις περιπτώσεις.',
+            },
+            {
+                id: 'personal-health-log',
+                title: 'Κρατήστε προσωπικό αρχείο υγείας',
+                brief: 'Μια σύντομη σημείωση με διάγνωση, αγωγή και εμβόλια.',
+                content: 'Όταν αλλάζετε πόλη ή γιατρό, το ιστορικό σας δεν σας ακολουθεί αυτόματα. Μια σύντομη σημείωση στο κινητό με τη διάγνωση, τη δοσολογία και τους εμβολιασμούς σας εξοικονομεί χρόνο σε κάθε νέα επίσκεψη και είναι κρίσιμη σε επείγον περιστατικό.',
             },
         ],
     },

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,15 +24,28 @@ public class UserProfileLabelsServiceImpl implements UserProfileLabelsService {
   private final UserProfileLabelsRepository repository;
   private final LabelFieldMappingRepository labelFieldMappingRepository;
 
+  /**
+   * The prefixes that decide both ownership and clinical ranking.
+   *
+   * <p>They are load-bearing in three places here — which form owns a label, how it is bucketed by
+   * {@link #finalPrioritize}, and its fallback priority when no active mapping exists — so they are
+   * named rather than repeated as literals.
+   */
+  private static final String CHRONIC_PREFIX = "CHRONIC_";
+  private static final String ALLERGY_PREFIX = "ALLERGY_";
+  private static final String OPTIONAL_HIGH_PREFIX = "OPTIONAL_HIGH_";
+
+  /** Labels derived from the optional health form. The main form can never produce one. */
+  private static final String OPTIONAL_PREFIX = "OPTIONAL_";
+
   @Override
   public void saveForUser(User user, List<String> sortedLabels) {
-    UserProfileLabels entity =
-        repository.findByUserId(user.getId()).orElse(new UserProfileLabels());
-
-    entity.setUser(user);
-    entity.setLabels(finalPrioritize(sortedLabels));
-
-    repository.save(entity);
+    // Retains the optional-form labels, mirroring saveOptionalForUser, which retains the main-form
+    // ones. Without the mirror, any main-profile edit — even a save that changed nothing — erased
+    // every OPTIONAL_* label, because evaluateAndSort works from the main DTO and structurally
+    // cannot re-emit them. The optional answers themselves survived, so the form still looked
+    // complete while the personalisation derived from it had gone.
+    persist(user, sortedLabels, label -> label.startsWith(OPTIONAL_PREFIX));
   }
 
   @Override
@@ -40,27 +54,34 @@ public class UserProfileLabelsServiceImpl implements UserProfileLabelsService {
         .map(UserProfileLabels::getLabels)
         .orElse(List.of());
 
-    Map<String, Integer> priorities =
+    // One lookup for both priority and group, rather than two passes over the same rows.
+    Map<String, LabelFieldMapping> mappings =
         labelFieldMappingRepository.findByLabelCodeInAndActiveTrue(labels).stream()
-            .collect(Collectors.toMap(LabelFieldMapping::getLabelCode, LabelFieldMapping::getPriority));
+            .collect(Collectors.toMap(LabelFieldMapping::getLabelCode, mapping -> mapping,
+                (first, duplicate) -> first));
 
     return labels.stream()
-        .map(label -> new UserProfileLabelDTO(label, priorities.getOrDefault(label,
-            resolveFallbackPriority(label))))
+        .map(label -> {
+          LabelFieldMapping mapping = mappings.get(label);
+          return new UserProfileLabelDTO(
+              label,
+              mapping != null ? mapping.getPriority() : resolveFallbackPriority(label),
+              mapping != null ? mapping.getLabelGroup() : null);
+        })
         .toList();
   }
 
   private int resolveFallbackPriority(String label) {
-    if (label.startsWith("CHRONIC_")) {
+    if (label.startsWith(CHRONIC_PREFIX)) {
       return 1200;
     }
-    if (label.startsWith("ALLERGY_")) {
+    if (label.startsWith(ALLERGY_PREFIX)) {
       return 1000;
     }
-    if (label.startsWith("OPTIONAL_HIGH_")) {
+    if (label.startsWith(OPTIONAL_HIGH_PREFIX)) {
       return 900;
     }
-    if (label.startsWith("OPTIONAL_")) {
+    if (label.startsWith(OPTIONAL_PREFIX)) {
       return 200;
     }
     return 50;
@@ -68,21 +89,32 @@ public class UserProfileLabelsServiceImpl implements UserProfileLabelsService {
 
   @Override
   public void saveOptionalForUser(User user, List<String> sortedOptionalLabels) {
+    persist(user, sortedOptionalLabels, label -> !label.startsWith(OPTIONAL_PREFIX));
+  }
+
+  /**
+   * Replaces the labels the calling form owns, retaining those owned by the other form.
+   *
+   * <p>Each form evaluates only its own questions, so a save must never be read as "these are now
+   * all the labels this user has" — only as "these are this form's labels".
+   *
+   * @param retainExisting picks the already-stored labels belonging to the *other* form, which must
+   *                       survive this write.
+   */
+  private void persist(User user, List<String> incoming, Predicate<String> retainExisting) {
     UserProfileLabels entity =
         repository.findByUserId(user.getId()).orElse(new UserProfileLabels());
 
     entity.setUser(user);
 
     List<String> existingLabels =
-        entity.getLabels() != null ? entity.getLabels() : new ArrayList<>();
+        entity.getLabels() != null ? entity.getLabels() : List.of();
 
-    List<String> mergedLabels = new ArrayList<>();
+    List<String> mergedLabels = new ArrayList<>(incoming);
+    existingLabels.stream().filter(retainExisting).forEach(mergedLabels::add);
 
-    existingLabels.stream().filter(label -> !label.startsWith("OPTIONAL_"))
-        .forEach(mergedLabels::add);
-
-    mergedLabels.addAll(sortedOptionalLabels);
-
+    // The two sets land in disjoint buckets in finalPrioritize, so which one leads here does not
+    // affect the stored order. LinkedHashSet dedups without disturbing it.
     List<String> uniqueLabels = new ArrayList<>(new LinkedHashSet<>(mergedLabels));
 
     entity.setLabels(finalPrioritize(uniqueLabels));
@@ -107,13 +139,13 @@ public class UserProfileLabelsServiceImpl implements UserProfileLabelsService {
     List<String> optional = new ArrayList<>();
 
     for (String label : sortedLabels) {
-      if (label.startsWith("CHRONIC_")) {
+      if (label.startsWith(CHRONIC_PREFIX)) {
         chronic.add(label);
-      } else if (label.startsWith("ALLERGY_")) {
+      } else if (label.startsWith(ALLERGY_PREFIX)) {
         allergies.add(label);
-      } else if (label.startsWith("OPTIONAL_HIGH_")) {
+      } else if (label.startsWith(OPTIONAL_HIGH_PREFIX)) {
         optionalHigh.add(label);
-      } else if (label.startsWith("OPTIONAL_")) {
+      } else if (label.startsWith(OPTIONAL_PREFIX)) {
         optional.add(label);
       } else {
         rest.add(label);

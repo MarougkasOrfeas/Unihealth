@@ -7,6 +7,7 @@ import gr.uniwa.unihealth.backend.model.User;
 import gr.uniwa.unihealth.backend.repository.UserRepository;
 import gr.uniwa.unihealth.backend.service.EmailNotificationService;
 import gr.uniwa.unihealth.backend.service.UserPreferencesService;
+import gr.uniwa.unihealth.backend.service.personalization.UserLabelMetricService;
 import gr.uniwa.unihealth.backend.utils.email.EmailNotificationType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,7 @@ public class UserPreferencesServiceImpl implements UserPreferencesService {
   private final UserRepository userRepository;
   private final AuthenticationContext authenticationContext;
   private final EmailNotificationService emailNotificationService;
+  private final UserLabelMetricService userLabelMetricService;
 
   @Value("${unihealth.app.www.url}")
   private String appUrl;
@@ -46,12 +48,23 @@ public class UserPreferencesServiceImpl implements UserPreferencesService {
     // Re-saving the form while already unsubscribed must not send it again.
     boolean justUnsubscribed = user.isNewsletterSubscribed() && !dto.isNewsletterSubscribed();
 
+    // Same reasoning: only an actual withdrawal deletes. Re-saving while already opted out must
+    // not fire a pointless delete, and a first-time "no" has nothing to delete.
+    boolean justWithdrewConsent = Boolean.TRUE.equals(user.getAnalyticsConsent())
+        && !Boolean.TRUE.equals(dto.getAnalyticsConsent());
+
     user.setNewsletterSubscribed(dto.isNewsletterSubscribed());
     user.setNotificationsEnabled(dto.isNotificationsEnabled());
+    user.setAnalyticsConsent(dto.getAnalyticsConsent());
     userRepository.save(user);
 
     if (justUnsubscribed) {
       sendGoodbye(user);
+    }
+
+    if (justWithdrewConsent) {
+      // Withdrawal means the data goes too, not merely that collection stops.
+      userLabelMetricService.deleteForUser(user.getId());
     }
 
     return toDto(user);
@@ -82,6 +95,7 @@ public class UserPreferencesServiceImpl implements UserPreferencesService {
     UserPreferencesDTO dto = new UserPreferencesDTO();
     dto.setNewsletterSubscribed(user.isNewsletterSubscribed());
     dto.setNotificationsEnabled(user.isNotificationsEnabled());
+    dto.setAnalyticsConsent(user.getAnalyticsConsent());
     return dto;
   }
 }

@@ -38,7 +38,7 @@ export interface RightsMatrix {
 }
 
 /**
- * The email preferences a user manages for themselves under Profile > Preferences.
+ * The preferences a user manages for themselves under Profile > Preferences.
  *
  * Stored positive: the profile screen renders `newsletterSubscribed` inverted as
  * "Unsubscribe from News Feeds", so the persisted value never has to be read as a double negative.
@@ -46,4 +46,9 @@ export interface RightsMatrix {
 export interface UserPreferences {
     newsletterSubscribed: boolean;
     notificationsEnabled: boolean;
+    /**
+     * Consent to usage measurement. `null` means never asked, which is what prompts the consent
+     * dialog — deliberately distinct from `false`, meaning declined. Only `true` permits collection.
+     */
+    analyticsConsent: boolean | null;
 }

@@ -2,8 +2,10 @@ package gr.uniwa.unihealth.backend.service.personalization.util;
 
 import gr.uniwa.unihealth.backend.dto.HealthProfileDTO;
 import gr.uniwa.unihealth.backend.model.LabelFieldMapping;
+import gr.uniwa.unihealth.backend.utils.profile.HealthProfileCalculationUtils;
 import lombok.experimental.UtilityClass;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.HashMap;
@@ -30,10 +32,21 @@ public class LabelEvaluationUtils {
       values.put("age", String.valueOf(age));
     }
 
-    if (dto.getHeightCm() != null && dto.getWeightKg() != null) {
-      double heightM = dto.getHeightCm() / 100.0;
-      double bmi = dto.getWeightKg().doubleValue() / (heightM * heightM);
-      values.put("bmi", String.format("%.2f", bmi));
+    // Reuses the display-side calculator instead of keeping a second implementation. That one
+    // guards heightCm <= 0 and works in BigDecimal, which fixes two faults at once:
+    //
+    //  - a height of 0 divided to Infinity, which parsed cleanly and satisfied "bmi >= 35",
+    //    labelling the user BMI_SEVERELY_OBESE — the highest priority in the system — while the
+    //    profile screen showed no BMI at all, because the display path was already guarded;
+    //  - String.format("%.2f", …) without a Locale follows the JVM default, so on a Greek or any
+    //    comma-decimal locale it produced "24,50" and the very next rule threw
+    //    NumberFormatException, failing every profile save.
+    //
+    // toPlainString() is always dot-decimal, which is what Double.parseDouble expects.
+    BigDecimal bmi =
+        HealthProfileCalculationUtils.calculateBmi(dto.getHeightCm(), dto.getWeightKg());
+    if (bmi != null) {
+      values.put("bmi", bmi.toPlainString());
     }
 
     return values;

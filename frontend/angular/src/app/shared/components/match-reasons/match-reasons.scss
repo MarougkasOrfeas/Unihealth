@@ -1,0 +1,22 @@
+.reason-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.reason-label {
+  color: #245d68;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.reason-chip {
+  padding: 5px 9px;
+  border-radius: 8px;
+  background: rgba(31, 111, 120, 0.12);
+  color: #1f5661;
+  font-size: 12px;
+  font-weight: 700;
+}

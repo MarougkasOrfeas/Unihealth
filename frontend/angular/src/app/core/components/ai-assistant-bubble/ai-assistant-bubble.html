@@ -1,0 +1,15 @@
+<div class="assistant-bubble-host" [class.is-hidden]="suppressed()">
+    <!-- aria-hidden on purpose: copy that swaps itself out on a timer would be announced again
+         each time. The link below carries the accessible name, and it does not change. -->
+    <div class="speech-bubble" [class.is-visible]="visible()" aria-hidden="true">
+        {{ messageKey() | translate }}
+    </div>
+
+    <a class="assistant-circle"
+       [routerLink]="chatRoute"
+       data-testid="ai-assistant-bubble"
+       [attr.aria-label]="'ai.bubble.aria' | translate"
+       [title]="'ai.bubble.aria' | translate">
+        <img src="assets/uniwa-logo-448-336.png" alt="" width="448" height="336"/>
+    </a>
+</div>

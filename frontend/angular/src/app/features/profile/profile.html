@@ -143,6 +143,34 @@
                                 <span class="slider round"></span>
                             </label>
                         </div>
+
+                        <div class="settings-item">
+                            <span>{{ 'profile.preferences.analyticsConsent' | translate }}</span>
+                            <label
+                                class="toggle-switch"
+                                [title]="'profile.preferences.analyticsConsent.tooltip' | translate">
+                                <!-- Compared against true: `null` means never asked, and must
+                                     render off without being treated as a refusal. -->
+                                <input
+                                    type="checkbox"
+                                    data-testid="toggle-analytics-consent"
+                                    data-preference="analytics"
+                                    [disabled]="loadingPreferences() || savingPreferences()"
+                                    [checked]="preferences().analyticsConsent === true"
+                                    (change)="onAnalyticsToggle($event)"/>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+
+                        <!-- Only once there is something to look at. -->
+                        @if (preferences().analyticsConsent === true) {
+                            <a class="settings-link"
+                               routerLink="/advice-tips"
+                               fragment="advice-stats"
+                               data-testid="link-view-usage-data">
+                                {{ 'profile.preferences.analytics.viewData' | translate }}
+                            </a>
+                        }
                     </div>
                 </section>
 

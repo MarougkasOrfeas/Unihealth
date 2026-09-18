@@ -1,0 +1,61 @@
+<div class="consent-dialog">
+    <div class="consent-header">
+        <div class="consent-icon">
+            <mat-icon>insights</mat-icon>
+        </div>
+        <h2 mat-dialog-title>{{ 'consent.dialog.title' | translate }}</h2>
+    </div>
+
+    <mat-dialog-content>
+        <p class="consent-intro">{{ 'consent.dialog.intro' | translate }}</p>
+
+        <ul class="consent-points">
+            <li>
+                <mat-icon>schedule</mat-icon>
+                <span>{{ 'consent.dialog.point.what' | translate }}</span>
+            </li>
+            <li>
+                <mat-icon>tune</mat-icon>
+                <span>{{ 'consent.dialog.point.why' | translate }}</span>
+            </li>
+            <li>
+                <mat-icon>lock</mat-icon>
+                <span>{{ 'consent.dialog.point.no-cookies' | translate }}</span>
+            </li>
+            <li>
+                <mat-icon>undo</mat-icon>
+                <span>{{ 'consent.dialog.point.reversible' | translate }}</span>
+            </li>
+        </ul>
+
+        <a class="consent-policy-link" routerLink="/cookies-policy" mat-dialog-close>
+            {{ 'consent.dialog.policyLink' | translate }}
+            <mat-icon>open_in_new</mat-icon>
+        </a>
+
+        @if (failed()) {
+            <p class="consent-error">{{ 'consent.dialog.save.error' | translate }}</p>
+        }
+    </mat-dialog-content>
+
+    <!-- Equal weight on purpose: consent is not valid if refusing is the harder option. -->
+    <mat-dialog-actions class="consent-actions">
+        <button mat-stroked-button
+                type="button"
+                class="consent-button"
+                data-testid="consent-reject"
+                [disabled]="saving()"
+                (click)="reject()">
+            {{ 'consent.dialog.reject' | translate }}
+        </button>
+
+        <button mat-stroked-button
+                type="button"
+                class="consent-button"
+                data-testid="consent-accept"
+                [disabled]="saving()"
+                (click)="accept()">
+            {{ 'consent.dialog.accept' | translate }}
+        </button>
+    </mat-dialog-actions>
+</div>

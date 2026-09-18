@@ -1,0 +1,32 @@
+<header class="suggestion-hero" [attr.data-testid]="testId()">
+    <div class="hero-copy">
+        <p class="eyebrow">{{ keyPrefix() + '.eyebrow' | translate }}</p>
+
+        <h1>{{ titleKey() | translate }}</h1>
+        <p>{{ subtitleKey() | translate }}</p>
+
+        @if (isPersonalised()) {
+            <p class="match-summary">
+                <mat-icon>insights</mat-icon>
+                {{ keyPrefix() + '.matchCount' | translate: {count: matchedSignalCount()} }}
+            </p>
+        } @else {
+            <div class="profile-cta">
+                <p>{{ keyPrefix() + '.completeProfile' | translate }}</p>
+                <a mat-flat-button routerLink="/profile/form"
+                   [attr.data-testid]="testId() + '-complete-profile'">
+                    <mat-icon>assignment</mat-icon>
+                    {{ keyPrefix() + '.completeProfile.cta' | translate }}
+                </a>
+            </div>
+        }
+
+        @if (hasError()) {
+            <p class="hero-note">{{ keyPrefix() + '.error' | translate }}</p>
+        }
+    </div>
+
+    <div class="hero-items">
+        <ng-content/>
+    </div>
+</header>

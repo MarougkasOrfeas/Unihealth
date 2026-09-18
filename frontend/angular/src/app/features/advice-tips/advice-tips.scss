@@ -1,309 +1,545 @@
+// The suggestion card and its "because you told us" chips live in shared/components, shared with
+// the health topics page.
 .advice-page {
-  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  color: #172026;
 }
 
-.advice-hero {
-  margin-bottom: 24px;
+.page-state {
+  padding: 40px 24px;
+  text-align: center;
+  color: #586673;
+}
 
-  h1 {
-    margin: 4px 0 8px;
-    font-size: clamp(34px, 4vw, 52px);
-    line-height: 1;
-    font-weight: 850;
-  }
+.page-state--error {
+  color: #a3372c;
+}
 
-  p {
-    max-width: 620px;
-    color: #667085;
-    line-height: 1.6;
+// --- suggestion cards inside the hero ---------------------------------------
+
+.tip-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 20px;
+  border: 1px solid #e1e8ee;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.07);
+}
+
+.tip-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tip-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  border-radius: 8px;
+  background: var(--tip-accent);
+  color: #fff;
+
+  mat-icon {
+    width: 25px;
+    height: 25px;
+    font-size: 25px;
   }
 }
 
-.eyebrow {
-  margin: 0;
-  color: #2f6673;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
+.tip-section {
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #f4f7f9;
+  color: #53616e;
   font-size: 12px;
+  font-weight: 800;
+}
+
+.tip-card h3 {
+  margin: 18px 0 8px;
+  font-size: 20px;
+  line-height: 1.25;
+}
+
+.tip-brief {
+  margin: 0 0 16px;
+  color: #586673;
+  line-height: 1.6;
+}
+
+.read-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  margin-top: auto;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #1f5661;
+  font-size: 14px;
+  font-weight: 850;
+  cursor: pointer;
+
+  mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+    transition: transform 0.15s ease;
+  }
+
+  &:hover mat-icon {
+    transform: translateX(3px);
+  }
+}
+
+// --- statistics --------------------------------------------------------------
+
+.snapshot-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.snapshot-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 20px;
+  border: 1px solid #e1e8ee;
+  border-radius: 8px;
+  background: #fff;
+
+  > mat-icon {
+    color: #1f6f78;
+  }
+}
+
+.snapshot-label {
+  margin: 0;
+  color: #65717d;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.snapshot-value {
+  margin: 0;
+  color: #1f5661;
+  font-size: 34px;
+  line-height: 1;
   font-weight: 850;
 }
 
-.today-card,
-.did-you-know-card,
-.rich-tip-card,
-.empty-state {
-  background: #ffffff;
-  border: 1px solid #e4e9f0;
-  border-radius: 28px;
-  box-shadow: 0 18px 44px rgba(16, 24, 40, 0.07);
+.snapshot-badge {
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: #edf8f8;
+  color: #1f5661;
+  font-size: 12px;
+  font-weight: 750;
 }
 
-.today-card {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  padding: 28px;
-  margin-bottom: 18px;
-  background: radial-gradient(circle at 92% 20%, rgba(89, 181, 190, 0.18), transparent 28%),
-  #ffffff;
-
-  h2 {
-    margin: 6px 0 8px;
-    font-size: 28px;
-  }
-
-  p {
-    margin: 0;
-    color: #667085;
-  }
+.snapshot-badge--alert {
+  background: #fdf0ec;
+  color: #a3442f;
 }
 
-.today-icon {
-  width: 58px;
-  height: 58px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 20px;
-  background: #eef9f8;
-
-  mat-icon {
-    color: #24545f;
-  }
-}
-
-.did-you-know-card {
-  padding: 26px 28px;
-  margin-bottom: 34px;
-  background: #f8fbfb;
-
-  h2 {
-    margin: 6px 0 8px;
-    max-width: 720px;
-    font-size: 24px;
-  }
-
-  p {
-    margin: 0;
-    color: #667085;
-    line-height: 1.6;
-  }
-}
-
-.section-heading {
-  margin-bottom: 18px;
-
-  h2 {
-    margin: 4px 0 0;
-    font-size: 32px;
-  }
-}
-
-.rich-tips-grid {
-  display: flex;
-  gap: 22px;
-}
-
-.rich-tip-card {
+.stats-grid {
   display: grid;
-  grid-template-columns: 100px 1fr;
-  min-height: 220px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 180ms ease,
-  box-shadow 180ms ease,
-  border-color 180ms ease;
-
-  &:hover {
-    transform: translateY(-4px);
-    border-color: #b9dfe2;
-    box-shadow: 0 24px 54px rgba(16, 24, 40, 0.12);
-  }
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 18px;
 }
 
-.tip-image {
-  display: grid;
-  place-items: center;
-  min-height: 220px;
-
-  mat-icon {
-    width: 78px;
-    height: 78px;
-    font-size: 78px;
-    color: rgba(20, 58, 66, 0.86);
-  }
-}
-
-.nutrition-bg {
-  background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.7), transparent 30%),
-  linear-gradient(135deg, #e3f8ef, #ccefe5);
-}
-
-.weight-bg {
-  background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.7), transparent 30%),
-  linear-gradient(135deg, #eef4ff, #d8e5ff);
-}
-
-.sleep-bg {
-  background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.7), transparent 30%),
-  linear-gradient(135deg, #eee7ff, #d9d1ff);
-}
-
-.tip-content {
-  padding: 28px 30px;
+.stat-card {
+  padding: 22px;
+  border: 1px solid #e1e8ee;
+  border-radius: 8px;
+  background: #fff;
 
   h3 {
-    margin: 8px 0 12px;
-    font-size: 26px;
-    font-weight: 850;
+    margin: 0 0 4px;
+    font-size: 18px;
   }
+}
 
-  > p:not(.eyebrow) {
-    margin: 0 0 24px;
-    color: #667085;
-    font-size: 16px;
-    line-height: 1.65;
-  }
+.stat-caption {
+  margin: 0 0 18px;
+  color: #65717d;
+  font-size: 13px;
+  line-height: 1.5;
+}
 
-  .score-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 18px;
 
-    span {
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: #f4f7f9;
-      color: #53616e;
-      font-size: 12px;
-      font-weight: 800;
-    }
-  }
+// --- profile need vs. measured engagement ------------------------------------
 
-  button {
+// Spans both columns: two bars per row needs the width, and it is the section's lead card.
+.attention-card {
+  grid-column: 1 / -1;
+}
+
+.attention-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.attention-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: #65717d;
+  font-size: 12px;
+  font-weight: 750;
+
+  li {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    border: 0;
-    border-radius: 999px;
-    padding: 12px 18px;
-    background: #eef9f8;
-    color: #24545f;
-    font-weight: 850;
-    cursor: pointer;
-
-    mat-icon {
-      width: 18px;
-      height: 18px;
-      font-size: 18px;
-    }
+    gap: 6px;
   }
 }
 
-.empty-state {
-  padding: 34px;
-  text-align: center;
+.legend-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
 }
 
-@media (max-width: 760px) {
-  .today-card {
-    align-items: flex-start;
+// One hue, two shades — validated against this card's white surface.
+.legend-swatch--need,
+.metric-fill--need {
+  background: #1f6f78;
+}
+
+.legend-swatch--read,
+.metric-fill--read {
+  background: #5fadb6;
+}
+
+.attention-row {
+  // A 2px surface gap between the two fills, not a border around them.
+  .metric-track + .metric-track {
+    margin-top: 2px;
   }
 
-  .rich-tip-card {
-    grid-template-columns: 1fr;
-  }
-
-  .tip-image {
-    min-height: 150px;
-
-    mat-icon {
-      width: 58px;
-      height: 58px;
-      font-size: 58px;
-    }
+  // The row already carries its own spacing through .metric-list; drop the single-bar margins.
+  .metric-track {
+    margin: 6px 0 0;
   }
 }
 
-.insights-section {
-  margin-top: 2rem;
-}
-
-.insights-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
-}
-
-.insight-card {
-  padding: 1.25rem;
-  border-radius: 1.25rem;
-  background: #fff;
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
-  display: flex;
-  gap: 1rem;
-}
-
-.insight-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 999px;
-  display: grid;
-  place-items: center;
-  background: #eef2ff;
-}
-
-.insight-card h3 {
-  margin: 0.25rem 0;
-  font-size: 1.6rem;
-}
-
-.insight-badge {
+.attention-values {
   display: inline-flex;
-  margin-top: 0.75rem;
-  padding: 0.35rem 0.65rem;
-  border-radius: 999px;
-  background: #f1f5f9;
-  font-size: 0.8rem;
-  font-weight: 600;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 750;
+  // Three numbers that line up row to row, so equal-width digits earn their place here.
+  font-variant-numeric: tabular-nums;
 }
 
-@media (max-width: 900px) {
-  .insights-grid {
-    grid-template-columns: 1fr;
+.attention-need {
+  color: #1f5661;
+}
+
+.attention-read {
+  color: #4a8f97;
+}
+
+// A signed difference is a state, not a series identity, so it takes the status palette.
+.attention-delta {
+  min-width: 34px;
+  text-align: right;
+  font-weight: 850;
+}
+
+.attention-delta--over {
+  color: #0ca30c;
+}
+
+.attention-delta--under {
+  color: #a3442f;
+}
+
+.attention-delta--even {
+  color: #7f8b95;
+}
+
+.attention-more {
+  margin: 14px 0 0;
+  color: #7f8b95;
+  font-size: 12px;
+}
+
+.attention-empty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid #eef2f5;
+  color: #65717d;
+  font-size: 13px;
+  line-height: 1.5;
+
+  mat-icon {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
   }
 }
 
-.stats-section {
-  margin-top: 2rem;
+// --- lifestyle vs guidance ---------------------------------------------------
+
+.metric-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.charts-grid {
+.metric-head,
+.metric-foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.metric-name {
+  font-weight: 800;
+}
+
+.metric-value {
+  color: #1f5661;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.metric-track {
+  height: 8px;
+  margin: 8px 0 6px;
+  border-radius: 999px;
+  background: #eef2f5;
+  overflow: hidden;
+}
+
+// Length reflects distance from guidance, not a score — see profile-stats.util.ts.
+.metric-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.metric-fill--within {
+  background: #27764f;
+}
+
+.metric-fill--below {
+  background: #c8912a;
+}
+
+.metric-fill--above {
+  background: #b95745;
+}
+
+.metric-foot {
+  font-size: 12px;
+}
+
+.metric-status {
+  font-weight: 800;
+}
+
+.metric-status--within {
+  color: #27764f;
+}
+
+.metric-status--below {
+  color: #8a6415;
+}
+
+.metric-status--above {
+  color: #a3442f;
+}
+
+.metric-guidance {
+  color: #7f8b95;
+  text-align: right;
+}
+
+.stats-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 18px 0 0;
+  color: #65717d;
+  font-size: 13px;
+  line-height: 1.5;
+
+  mat-icon {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+  }
+}
+
+// --- themed sections ---------------------------------------------------------
+
+.sections-list {
   display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
 }
 
-.chart-card {
-  min-height: 340px;
-  padding: 1.5rem;
-  border-radius: 1.5rem;
-  background: #ffffff;
-  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.08);
+.advice-section-card {
+  padding: 22px;
+  border: 1px solid #e1e8ee;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
 
   h3 {
-    margin: 0 0 1rem;
-    font-size: 1rem;
+    margin: 0 0 4px;
+    font-size: 19px;
   }
 
-  canvas {
-    max-height: 260px;
+  p {
+    margin: 0;
+    color: #65717d;
+    font-size: 13px;
+    line-height: 1.5;
   }
 }
 
-@media (max-width: 900px) {
-  .charts-grid {
+.section-tips {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.section-tip {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 4px 12px;
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #e7edf1;
+  border-radius: 8px;
+  background: #fafcfd;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+
+  mat-icon {
+    grid-row: span 2;
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+    color: #7f939a;
+  }
+
+  &:hover {
+    border-color: var(--tip-accent);
+    background: #f2f9fa;
+
+    mat-icon {
+      color: var(--tip-accent);
+    }
+  }
+}
+
+.section-tip-title {
+  font-weight: 800;
+}
+
+.section-tip-brief {
+  color: #65717d;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+// --- notices -----------------------------------------------------------------
+
+.education-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 18px;
+  border: 1px solid #e1e8ee;
+  border-radius: 8px;
+  background: #fff;
+  color: #586673;
+  line-height: 1.6;
+
+  p {
+    margin: 0;
+  }
+}
+
+.mock-notice {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 14px 18px;
+  border: 1px solid #e3c06a;
+  border-left: 5px solid #c8912a;
+  border-radius: 8px;
+  background: #fdf6e6;
+  color: #6b4f14;
+  line-height: 1.5;
+
+  mat-icon {
+    flex-shrink: 0;
+    color: #a9761d;
+  }
+
+  p {
+    flex: 1 1 260px;
+    margin: 0;
+  }
+}
+
+.mock-badge {
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: #c8912a;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+@media (max-width: 1100px) {
+  .snapshot-grid,
+  .stats-grid,
+  .sections-list {
     grid-template-columns: 1fr;
   }
 }

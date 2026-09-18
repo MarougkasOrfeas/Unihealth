@@ -1,6 +1,6 @@
 import {Component, DestroyRef, inject, OnInit, signal} from "@angular/core";
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {DatePipe, NgIf} from "@angular/common";
 import {UserService} from "../../shared/services/user.service";
 import {User, UserPreferences} from "../../shared/interfaces/user";
@@ -9,6 +9,7 @@ import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {finalize, take} from "rxjs";
 import {MessageService} from "../../shared/services/message.service";
+import {AnalyticsConsentService} from "../../core/services/analytics-consent.service";
 
 @Component({
     selector: "app-profile",
@@ -17,7 +18,8 @@ import {MessageService} from "../../shared/services/message.service";
         ReactiveFormsModule,
         NgIf,
         DatePipe,
-        TranslatePipe
+        TranslatePipe,
+        RouterLink
     ],
     templateUrl: "./profile.html",
     styleUrl: "./profile.scss",
@@ -27,6 +29,7 @@ export class Profile implements OnInit {
     private fb = inject(FormBuilder);
     private router = inject(Router);
     private userService = inject(UserService);
+    private consent = inject(AnalyticsConsentService);
     protected userId!: string;
     user: User | null = null;
     editMode = false;
@@ -42,6 +45,9 @@ export class Profile implements OnInit {
     private static readonly DEFAULT_PREFERENCES: UserPreferences = {
         newsletterSubscribed: true,
         notificationsEnabled: true,
+        // Never defaulted to true: measurement requires an explicit answer, and `null` renders the
+        // switch off without claiming the user declined.
+        analyticsConsent: null,
     };
 
     /** Never null: the switches always have something coherent to render. */
@@ -177,6 +183,33 @@ export class Profile implements OnInit {
         this.savePreferences({newsletterSubscribed: true}, input);
     }
 
+    /**
+     * Withdrawal is confirmed because it is destructive: the backend deletes every measurement
+     * already collected, not merely stops collecting.
+     */
+    onAnalyticsToggle(event: Event): void {
+        const input = event.target as HTMLInputElement;
+
+        if (!input.checked) {
+            this.messages.confirm({
+                title: this.translate.instant('profile.preferences.analytics.withdraw.confirm.title'),
+                content: this.translate.instant('profile.preferences.analytics.withdraw.confirm.content'),
+                confirmText: 'profile.preferences.analytics.withdraw.confirm.confirm',
+                cancelText: 'global.cancel',
+                isDestructive: true,
+            }).afterClosed().pipe(take(1)).subscribe((confirmed) => {
+                if (confirmed) {
+                    this.savePreferences({analyticsConsent: false}, input);
+                    return;
+                }
+                input.checked = this.preferences().analyticsConsent === true;
+            });
+            return;
+        }
+
+        this.savePreferences({analyticsConsent: true}, input);
+    }
+
     onNotificationsToggle(event: Event): void {
         const input = event.target as HTMLInputElement;
         this.savePreferences({notificationsEnabled: input.checked}, input);
@@ -206,6 +239,9 @@ export class Profile implements OnInit {
                 next: (saved) => {
                     // Trust the response rather than the optimistic value.
                     this.preferences.set(saved);
+                    // Push it to the tracker too: measurement must stop or start now, not on
+                    // the next page load.
+                    this.consent.set(saved.analyticsConsent ?? null);
                     this.messages.success(
                         this.translate.instant('profile.preferences.save.success'));
                 },
@@ -217,10 +253,25 @@ export class Profile implements OnInit {
             });
     }
 
-    /** Puts a checkbox back where the saved state says it should be. */
+    /**
+     * Puts a checkbox back where the saved state says it should be.
+     *
+     * A switch rather than a ternary: with three preferences an `else` branch would silently
+     * restore the wrong one — a failed analytics save would write the notifications value into the
+     * analytics checkbox.
+     */
     private restoreToggle(input: HTMLInputElement, saved: UserPreferences): void {
-        input.checked = input.dataset['preference'] === 'newsletter'
-            ? !saved.newsletterSubscribed
-            : saved.notificationsEnabled;
+        switch (input.dataset['preference']) {
+            case 'newsletter':
+                // The switch reads "unsubscribe", so it shows the inverse of the stored value.
+                input.checked = !saved.newsletterSubscribed;
+                break;
+            case 'notifications':
+                input.checked = saved.notificationsEnabled;
+                break;
+            case 'analytics':
+                input.checked = saved.analyticsConsent === true;
+                break;
+        }
     }
 }

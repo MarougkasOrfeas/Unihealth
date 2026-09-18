@@ -1,135 +1,247 @@
 <section class="advice-page">
-    <header class="advice-hero">
-        <p class="eyebrow">Personalized advice</p>
-        <h1>Recommended for you</h1>
-        <p>Simple tips ranked from your saved health-profile labels and preferences.</p>
-    </header>
 
-    @if (loadingLabels()) {
-        <section class="empty-state">
-            <h2>Loading personalized advice</h2>
-            <p>Your profile labels are being evaluated.</p>
-        </section>
-    } @else if (topTips().length > 0) {
-        <section class="today-card">
-            <div class="today-icon">
-                <mat-icon>auto_awesome</mat-icon>
-            </div>
+    @if (loading()) {
+        <p class="page-state">{{ 'advice.page.loading' | translate }}</p>
+    } @else if (loadError()) {
+        <p class="page-state page-state--error">{{ 'advice.page.error' | translate }}</p>
+    } @else {
 
-            <div>
-                <p class="eyebrow">Today focus</p>
-                <h2>Start with one small action today</h2>
-                <p>
-                    These tips are selected using a label-based recommendation score.
-                </p>
-            </div>
-        </section>
-
-        <aside class="did-you-know-card">
-            <div>
-                <p class="eyebrow">Did you know?</p>
-                <h2>Small daily actions work better than occasional big changes.</h2>
-                <p>
-                    Try choosing one habit and repeating it consistently before adding more.
-                </p>
-            </div>
+        <!-- Stated up front, because the tips below read as real health advice but are not. -->
+        <aside class="mock-notice" data-testid="advice-mock-notice">
+            <mat-icon>science</mat-icon>
+            <span class="mock-badge">{{ 'topics.mockNotice.badge' | translate }}</span>
+            <p>{{ 'advice.mockNotice' | translate }}</p>
         </aside>
 
-        <section class="tips-section">
-            <div class="section-heading">
-                <p class="eyebrow">Tips for you</p>
-                <h2>Good actions to try today</h2>
-            </div>
+        <!-- 1. UniHealth suggested tips, driven by the user's own profiling labels. -->
+        <app-suggestion-hero
+            keyPrefix="advice.suggested"
+            testId="advice-suggested"
+            [isPersonalised]="isPersonalised()"
+            [matchedSignalCount]="matchedSignalCount()"
+            [hasError]="labelsError()">
 
-            <div class="rich-tips-grid">
-                @for (tip of topTips(); track tip.id) {
-                    <article class="rich-tip-card" (click)="openTopTip(tip)">
-                        <div class="tip-image" [class]="tip.imageClass">
+            @for (tip of heroTips(); track tip.id) {
+                <article class="tip-card"
+                         [style.--tip-accent]="tip.accentColor"
+                         [attr.data-testid]="'advice-tip-' + tip.id">
+                    <div class="tip-card-header">
+                        <div class="tip-icon">
                             <mat-icon>{{ tip.icon }}</mat-icon>
                         </div>
+                        <span class="tip-section">{{ tip.sectionTitle }}</span>
+                    </div>
 
-                        <div class="tip-content">
-                            <p class="eyebrow">{{ tip.sectionTitle }}</p>
-                            <h3>{{ tip.title }}</h3>
-                            <p>{{ tip.summary }}</p>
+                    <h3>{{ tip.title }}</h3>
+                    <p class="tip-brief">{{ tip.brief }}</p>
 
-                            <div class="score-row">
-                                <span>{{ tip.recommendationScore }} score</span>
-                                <span>{{ tip.matchedLabelCount }} matched labels</span>
+                    @if (isPersonalised()) {
+                        <app-match-reasons [codes]="tip.matchedUserLabels"/>
+                    }
+
+                    <button type="button" class="read-button" (click)="openTip(tip)">
+                        {{ 'advice.tip.read' | translate }}
+                        <mat-icon>arrow_forward</mat-icon>
+                    </button>
+                </article>
+            }
+        </app-suggestion-hero>
+
+        <!-- 2. Statistics, every one of them derived from this user's own answers. -->
+        @if (hasStatistics()) {
+            <app-topic-section
+                titleKey="advice.stats.title"
+                subtitleKey="advice.stats.subtitle"
+                icon="insights"
+                testId="advice-stats">
+
+                <div class="snapshot-grid">
+                    @if (snapshot().bmi; as bmi) {
+                        <article class="snapshot-card">
+                            <mat-icon>monitor_weight</mat-icon>
+                            <p class="snapshot-label">{{ 'advice.stats.bmi' | translate }}</p>
+                            <p class="snapshot-value">{{ bmi }}</p>
+                            @if (snapshot().bmiBandKey; as bandKey) {
+                                <span class="snapshot-badge">{{ bandKey | translate }}</span>
+                            }
+                        </article>
+                    }
+
+                    <article class="snapshot-card">
+                        <mat-icon>fact_check</mat-icon>
+                        <p class="snapshot-label">{{ 'advice.stats.completeness' | translate }}</p>
+                        <p class="snapshot-value">{{ snapshot().completeness }}%</p>
+                        <span class="snapshot-badge">
+                            {{ 'advice.stats.completeness.detail' | translate:
+                                {answered: snapshot().answeredCount, total: snapshot().totalCount} }}
+                        </span>
+                    </article>
+
+                    <article class="snapshot-card">
+                        <mat-icon>sensors</mat-icon>
+                        <p class="snapshot-label">{{ 'advice.stats.signals' | translate }}</p>
+                        <p class="snapshot-value">{{ snapshot().signalCount }}</p>
+                        @if (snapshot().safetySignalCount > 0) {
+                            <span class="snapshot-badge snapshot-badge--alert">
+                                {{ 'advice.stats.signals.safety' | translate:
+                                    {count: snapshot().safetySignalCount} }}
+                            </span>
+                        }
+                    </article>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card attention-card">
+                        <div class="attention-header">
+                            <div>
+                                <h3>{{ 'advice.attention.title' | translate }}</h3>
+                                <p class="stat-caption">{{ 'advice.attention.caption' | translate }}</p>
                             </div>
 
-                            <button type="button">
-                                Read more
-                                <mat-icon>arrow_forward</mat-icon>
-                            </button>
+                            <!-- Mandatory once two series render: identity must never be colour alone. -->
+                            @if (hasEngagement()) {
+                                <ul class="attention-legend">
+                                    <li>
+                                        <span class="legend-swatch legend-swatch--need"></span>
+                                        {{ 'advice.attention.legend.need' | translate }}
+                                    </li>
+                                    <li>
+                                        <span class="legend-swatch legend-swatch--read"></span>
+                                        {{ 'advice.attention.legend.read' | translate }}
+                                    </li>
+                                </ul>
+                            }
+                        </div>
+
+                        <ul class="metric-list">
+                            @for (row of attentionRows(); track row.group) {
+                                <li class="metric-row attention-row">
+                                    <div class="metric-head">
+                                        <span class="metric-name">{{ row.labelKey | translate }}</span>
+
+                                        <span class="attention-values">
+                                            <span class="attention-need">{{ row.needShare }}%</span>
+                                            @if (hasEngagement()) {
+                                                <span class="attention-read">{{ row.readShare }}%</span>
+                                                <span class="attention-delta"
+                                                      [class]="'attention-delta--' + deltaTone(row)">
+                                                    {{ row.deltaPoints > 0 ? '+' : '' }}{{ row.deltaPoints }}
+                                                </span>
+                                            }
+                                        </span>
+                                    </div>
+
+                                    <div class="metric-track"
+                                         [title]="'advice.attention.needTooltip' | translate: {weight: row.needWeight}">
+                                        <div class="metric-fill metric-fill--need"
+                                             [style.width.%]="row.needShare"></div>
+                                    </div>
+
+                                    @if (hasEngagement()) {
+                                        <div class="metric-track"
+                                             [title]="'advice.attention.readTooltip' | translate: {seconds: row.readSeconds}">
+                                            <div class="metric-fill metric-fill--read"
+                                                 [style.width.%]="row.readShare"></div>
+                                        </div>
+                                    }
+                                </li>
+                            }
+                        </ul>
+
+                        @if (hiddenAreaCount() > 0) {
+                            <p class="attention-more">
+                                {{ 'advice.attention.moreAreas' | translate: {count: hiddenAreaCount()} }}
+                            </p>
+                        }
+
+                        @if (!hasEngagement()) {
+                            <p class="attention-empty">
+                                <mat-icon>info</mat-icon>
+                                {{ (consentGranted() ? 'advice.attention.empty.noData'
+                                                     : 'advice.attention.empty.noConsent') | translate }}
+                            </p>
+                        }
+                    </div>
+
+                    @if (lifestyleMetrics().length > 0) {
+                        <div class="stat-card">
+                            <h3>{{ 'advice.stats.guidance.title' | translate }}</h3>
+                            <p class="stat-caption">{{ 'advice.stats.guidance.caption' | translate }}</p>
+
+                            <ul class="metric-list">
+                                @for (metric of lifestyleMetrics(); track metric.key) {
+                                    <li class="metric-row">
+                                        <div class="metric-head">
+                                            <span class="metric-name">{{ metric.labelKey | translate }}</span>
+                                            <span class="metric-value">{{ metric.valueKey | translate }}</span>
+                                        </div>
+
+                                        <div class="metric-track">
+                                            <div class="metric-fill"
+                                                 [class]="'metric-fill--' + metric.status"
+                                                 [style.width.%]="metric.position"></div>
+                                        </div>
+
+                                        <div class="metric-foot">
+                                            <span class="metric-status"
+                                                  [class]="'metric-status--' + metric.status">
+                                                {{ 'advice.status.' + metric.status | translate }}
+                                            </span>
+                                            <span class="metric-guidance">{{ metric.guidanceKey | translate }}</span>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+
+                <p class="stats-note">
+                    <mat-icon>info</mat-icon>
+                    {{ 'advice.stats.note' | translate }}
+                </p>
+            </app-topic-section>
+        }
+
+        <!-- 3. Everything that matched, grouped by theme. -->
+        <app-topic-section
+            titleKey="advice.sections.title"
+            subtitleKey="advice.sections.subtitle"
+            icon="menu_book"
+            testId="advice-sections">
+
+            <div class="sections-list">
+                @for (section of relevantSections(); track section.id) {
+                    <article class="advice-section-card" [style.--tip-accent]="section.accentColor">
+                        <div class="section-head">
+                            <div class="tip-icon">
+                                <mat-icon>{{ section.icon }}</mat-icon>
+                            </div>
+
+                            <div>
+                                <h3>{{ section.title }}</h3>
+                                <p>{{ section.subtitle }}</p>
+                            </div>
+                        </div>
+
+                        <div class="section-tips">
+                            @for (tip of section.tips; track tip.id) {
+                                <button type="button" class="section-tip"
+                                        (click)="openSectionTip(tip, section)">
+                                    <span class="section-tip-title">{{ tip.title }}</span>
+                                    <span class="section-tip-brief">{{ tip.brief }}</span>
+                                    <mat-icon>arrow_forward</mat-icon>
+                                </button>
+                            }
                         </div>
                     </article>
                 }
             </div>
-        </section>
-    } @else {
-        <section class="empty-state">
-            <h2>No advice available yet</h2>
-            <p>{{ labelsError() ?? 'Complete your profile to receive personalized recommendations.' }}</p>
+        </app-topic-section>
+
+        <section class="education-note">
+            <mat-icon>info</mat-icon>
+            <p>{{ 'advice.disclaimer' | translate }}</p>
         </section>
     }
-</section>
-
-<section class="insights-section">
-    <div class="section-heading">
-        <p class="eyebrow">Profile insights</p>
-        <h2>Your health snapshot</h2>
-    </div>
-
-    <div class="insights-grid">
-        @for (insight of insights(); track insight.id) {
-            <article class="insight-card">
-                <div class="insight-icon">
-                    <mat-icon>{{ insight.icon }}</mat-icon>
-                </div>
-
-                <div>
-                    <p class="eyebrow">{{ insight.title }}</p>
-                    <h3>{{ insight.value }}</h3>
-                    <p>{{ insight.description }}</p>
-
-                    @if (insight.trend) {
-                        <span class="insight-badge">{{ insight.trend }}</span>
-                    }
-                </div>
-            </article>
-        }
-    </div>
-</section>
-
-<section class="stats-section">
-    <div class="section-heading">
-        <p class="eyebrow">Statistics</p>
-        <h2>Your profile insights</h2>
-        <p>These scores are estimated from your selected profile labels.</p>
-    </div>
-
-    <div class="charts-grid">
-        <div class="chart-card">
-            <h3>Health focus score</h3>
-
-            <canvas
-                baseChart
-                [data]="insightChartData"
-                [options]="insightChartOptions"
-                [type]="'bar'">
-            </canvas>
-        </div>
-
-        <div class="chart-card">
-            <h3>Recommendation mix</h3>
-
-            <canvas
-                baseChart
-                [data]="recommendationMixChartData"
-                [options]="recommendationMixChartOptions"
-                [type]="'doughnut'">
-            </canvas>
-        </div>
-    </div>
 </section>

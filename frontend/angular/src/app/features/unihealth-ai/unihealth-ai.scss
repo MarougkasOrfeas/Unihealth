@@ -113,3 +113,13 @@
   cursor: not-allowed;
   opacity: 0.65;
 }
+
+/* Standing notice: answers come from a local language model, not a clinician. */
+.chat-disclaimer {
+  margin: 1rem 0 0;
+  padding-top: 0.9rem;
+  border-top: 1px solid #e7edf1;
+  color: #65717d;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}

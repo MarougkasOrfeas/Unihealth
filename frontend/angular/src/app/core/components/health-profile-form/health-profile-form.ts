@@ -176,4 +176,15 @@ export class HealthProfileFormComponent implements OnInit {
     get f() {
         return this.form.controls;
     }
+
+    /**
+     * Lexicon key for an enum value, e.g. MALE -> complete.health.optional.gender.options.MALE.
+     *
+     * Deliberately the same namespace the optional form uses: both screens offer the same Gender
+     * and PrimaryGoal choices, so sharing the keys keeps one wording instead of two that drift.
+     */
+    getEnumKey(value: string | null | undefined, group: string): string {
+        return value ? `complete.health.optional.${group}.options.${value}` : '-';
+    }
+
 }

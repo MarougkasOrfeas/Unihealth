@@ -1,0 +1,24 @@
+<section class="topic-section" [attr.data-testid]="testId()">
+    <div class="title-container">
+        <div class="title-text">
+            <h2 class="section-title">
+                @if (icon()) {
+                    <mat-icon class="section-icon">{{ icon() }}</mat-icon>
+                }
+                {{ titleKey() | translate }}
+            </h2>
+
+            @if (subtitleKey()) {
+                <p class="section-subtitle">{{ subtitleKey() | translate }}</p>
+            }
+        </div>
+
+        @if (viewAllLink(); as link) {
+            <a class="view-all-link" [routerLink]="link" [attr.data-testid]="testId() + '-view-all'">
+                {{ 'topics.viewAll' | translate }} <span class="arrow">→</span>
+            </a>
+        }
+    </div>
+
+    <ng-content/>
+</section>

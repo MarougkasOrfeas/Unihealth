@@ -1,197 +1,267 @@
-import {Component, computed, signal} from '@angular/core';
+import {Component, computed, DestroyRef, inject, OnInit, signal} from '@angular/core';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {MatDialog} from '@angular/material/dialog';
-import {MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
-import {MatButtonModule} from '@angular/material/button';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
+import {finalize, forkJoin, of} from 'rxjs';
+import {catchError} from 'rxjs/operators';
+import {AnalyticsConsentService} from '../../core/services/analytics-consent.service';
+import {LabelUsage, UsageTrackingService} from '../../core/services/usage-tracking.service';
+import {MatchReasons} from '../../shared/components/match-reasons/match-reasons';
+import {SuggestionHero} from '../../shared/components/suggestion-hero/suggestion-hero';
+import {TopicSection} from '../health-topics/topic-section/topic-section';
+import {HealthProfileViewDTO} from '../../shared/interfaces/health-profile';
+import {OptionalHealthProfile} from '../../shared/interfaces/optional-health-profile';
+import {UserProfileLabel} from '../../shared/interfaces/user-profile-label';
+import {HealthProfileService} from '../../shared/services/health-profile.service';
+import {OptionalHealthProfileService} from '../../shared/services/optional-health-profile.service';
+import {labelPriorityMap, scoreAgainstLabels} from '../../shared/utils/label-match.util';
+import {AdviceTipDialog} from './advice-tip-dialog/advice-tip.dialog';
+import {AdviceSection, AdviceSectionView, AdviceTip, AdviceTipView} from './advice-tips.model';
+import {AdviceTipsService} from './advice-tips.service';
 import {
-    ADVICE_INSIGHTS,
-    ADVICE_SECTIONS,
-    AdviceSection,
-    AdviceTip,
-    AdviceTipView,
-} from "./advice-tips.mock";
-import {AdviceTipDialog} from "./advice-tip-dialog/advice-tip.dialog";
-import {ChartConfiguration} from "chart.js";
-import {BaseChartDirective, provideCharts, withDefaultRegisterables} from "ng2-charts";
-import {HealthProfileService} from "../../shared/services/health-profile.service";
-import {UserProfileLabel} from "../../shared/interfaces/user-profile-label";
+    AttentionRow,
+    buildAttentionComparison,
+    buildLifestyleMetrics,
+    buildSnapshot,
+    LifestyleMetric,
+} from './profile-stats.util';
 
+/** How many suggestions the hero shows, matching the topics page. */
+const SUGGESTION_COUNT = 3;
+
+/**
+ * Advice & tips: suggestions ranked from the user's profiling labels, followed by statistics
+ * derived from their own profile.
+ *
+ * Every figure in the statistics section traces back to a real answer the user gave — see
+ * `profile-stats.util.ts`. There is deliberately no composite score and no comparison against
+ * other users.
+ */
 @Component({
     selector: 'app-advice-tips',
     standalone: true,
-    imports: [MatCardModule, MatIconModule, MatButtonModule, BaseChartDirective],
-    providers: [
-        provideCharts(withDefaultRegisterables())
+    imports: [
+        MatIconModule,
+        TranslatePipe,
+        SuggestionHero,
+        MatchReasons,
+        TopicSection,
     ],
     templateUrl: './advice-tips.html',
     styleUrl: './advice-tips.scss',
 })
-export class AdviceTips {
-    readonly loadingLabels = signal(true);
-    readonly labelsError = signal<string | null>(null);
+export class AdviceTips implements OnInit {
+
+    private readonly destroyRef = inject(DestroyRef);
+    private readonly dialog = inject(MatDialog);
+    private readonly translate = inject(TranslateService);
+    private readonly adviceService = inject(AdviceTipsService);
+    private readonly healthProfileService = inject(HealthProfileService);
+    private readonly optionalProfileService = inject(OptionalHealthProfileService);
+    private readonly usageTracking = inject(UsageTrackingService);
+    private readonly consent = inject(AnalyticsConsentService);
+
+    private readonly sections = signal<AdviceSection[]>([]);
     private readonly userLabels = signal<UserProfileLabel[]>([]);
-    readonly insights = computed(() => ADVICE_INSIGHTS);
-    readonly labelPriorityMap = computed(() =>
-        new Map(this.userLabels().map(label => [label.code, label.priority]))
-    );
+    private readonly profile = signal<HealthProfileViewDTO | null>(null);
+    private readonly optionalProfile = signal<OptionalHealthProfile | null>(null);
+    private readonly usage = signal<LabelUsage[]>([]);
 
-    readonly sections = computed(() =>
-        ADVICE_SECTIONS
-            .map(section => this.toScoredSection(section))
-            .filter(section => section.recommendationScore > 0)
-            .sort((a, b) => b.recommendationScore - a.recommendationScore)
-            .slice(0, 3)
-    );
+    readonly loading = signal(true);
+    readonly loadError = signal(false);
+    readonly labelsError = signal(false);
 
-    readonly topTips = computed<AdviceTipView[]>(() =>
-        this.sections()
+    private readonly priorityMap = computed(() => labelPriorityMap(this.userLabels()));
+
+    /** Sections that match something in this user's profile, best first. */
+    private readonly scoredSections = computed<AdviceSectionView[]>(() => {
+        const priorities = this.priorityMap();
+        if (priorities.size === 0) {
+            return [];
+        }
+
+        return this.sections()
             .map(section => {
-                const tip = section.tips[0];
-
-                return {
-                    ...tip,
-                    icon: section.icon,
-                    sectionTitle: section.title,
-                    imageClass: section.imageClass,
-                    recommendationScore: section.recommendationScore,
-                    matchedLabelCount: section.matchedLabelCount,
-                };
+                const match = scoreAgainstLabels(section, priorities);
+                return {...section, score: match.score, matchedUserLabels: match.matchedLabels};
             })
-            .slice(0, 3)
-    );
+            .filter(section => section.score > 0)
+            .sort((a, b) => b.score - a.score);
+    });
 
-    constructor(
-        private readonly dialog: MatDialog,
-        private readonly healthProfileService: HealthProfileService
-    ) {
-        this.healthProfileService.getMyLabels().subscribe({
-            next: labels => {
-                this.userLabels.set(labels);
-                this.loadingLabels.set(false);
-            },
+    /** One lead tip per matching section, so the hero spans themes instead of repeating one. */
+    private readonly personalisedTips = computed<AdviceTipView[]>(() =>
+        this.scoredSections()
+            .slice(0, SUGGESTION_COUNT)
+            .flatMap(section => section.tips.length
+                ? [{
+                    ...section.tips[0],
+                    icon: section.icon,
+                    accentColor: section.accentColor,
+                    sectionId: section.id,
+                    sectionTitle: section.title,
+                    matchedUserLabels: section.matchedUserLabels,
+                }]
+                : []));
+
+    /**
+     * Shown when personalisation has nothing to work with: a new account, a profile never
+     * completed, or a failed labels request. The hero must never be empty.
+     */
+    private readonly fallbackTips = computed<AdviceTipView[]>(() =>
+        [...this.sections()]
+            .sort((a, b) => a.displayOrder - b.displayOrder)
+            .slice(0, SUGGESTION_COUNT)
+            .flatMap(section => section.tips.length
+                ? [{
+                    ...section.tips[0],
+                    icon: section.icon,
+                    accentColor: section.accentColor,
+                    sectionId: section.id,
+                    sectionTitle: section.title,
+                    matchedUserLabels: [],
+                }]
+                : []));
+
+    readonly isPersonalised = computed(() => this.personalisedTips().length > 0);
+
+    readonly heroTips = computed(() =>
+        this.isPersonalised() ? this.personalisedTips() : this.fallbackTips());
+
+    readonly matchedSignalCount = computed(() =>
+        new Set(this.heroTips().flatMap(tip => tip.matchedUserLabels)).size);
+
+    /**
+     * Everything that matched, for the browsable list under the statistics.
+     *
+     * Explicitly typed so the unscored fallback has to be widened into a view rather than leaking a
+     * bare `AdviceSection` into the template through a union.
+     */
+    readonly relevantSections = computed<AdviceSectionView[]>(() => {
+        const scored = this.scoredSections();
+        if (scored.length) {
+            return scored;
+        }
+
+        return [...this.sections()]
+            .sort((a, b) => a.displayOrder - b.displayOrder)
+            .map(section => ({...section, score: 0, matchedUserLabels: []}));
+    });
+
+    // --- Statistics, all derived from the user's own answers ------------------
+
+    readonly snapshot = computed(() =>
+        buildSnapshot(this.profile(), this.optionalProfile(), this.userLabels()));
+
+    readonly lifestyleMetrics = computed<LifestyleMetric[]>(() =>
+        buildLifestyleMetrics(this.optionalProfile()));
+
+    /**
+     * Profile need against measured engagement, per health area.
+     *
+     * Replaces the old focus-area chart: that chart drew the same summed priorities this does, so
+     * rendering both would show one dataset twice. When no seconds have been recorded the card
+     * falls back to the need side alone rather than disappearing.
+     */
+    private readonly attention = computed(() =>
+        buildAttentionComparison(this.userLabels(), this.usage()));
+
+    readonly attentionRows = computed<AttentionRow[]>(() => this.attention().rows);
+
+    readonly hasEngagement = computed(() => this.attention().hasEngagement);
+
+    readonly hiddenAreaCount = computed(() => this.attention().hiddenCount);
+
+    /** Drives which empty-state line shows: "turn it on" versus "nothing yet". */
+    readonly consentGranted = this.consent.granted;
+
+    readonly hasStatistics = computed(() =>
+        this.snapshot().signalCount > 0
+        || this.lifestyleMetrics().length > 0
+        || this.snapshot().bmi !== null);
+
+    /**
+     * Status tone for the delta figure. A signed difference is a *state*, not a series identity,
+     * so it takes the status palette rather than either bar colour.
+     */
+    deltaTone(row: AttentionRow): string {
+        if (row.deltaPoints > 0) {
+            return 'over';
+        }
+        return row.deltaPoints < 0 ? 'under' : 'even';
+    }
+
+    ngOnInit(): void {
+        this.loadContent();
+        this.loadProfile();
+    }
+
+    openTip(tip: AdviceTipView): void {
+        // A hero tip carries only the labels this user matched; that is the right set to measure.
+        this.openDialog(tip, tip.icon, tip.sectionTitle, tip.matchedUserLabels);
+    }
+
+    openSectionTip(tip: AdviceTip, section: AdviceSection): void {
+        this.openDialog(tip, section.icon, section.title, section.matchedLabels);
+    }
+
+    /**
+     * `sectionLabels` is threaded through because a tip has no labels of its own — they belong to
+     * the section — and the dialog needs them to record what was read.
+     */
+    private openDialog(
+        tip: AdviceTip,
+        icon: string,
+        sectionTitle: string,
+        sectionLabels: string[],
+    ): void {
+        this.dialog.open(AdviceTipDialog, {
+            width: '540px',
+            maxWidth: '94vw',
+            panelClass: 'advice-dialog',
+            data: {...tip, icon, sectionTitle, sectionLabels},
+        });
+    }
+
+    private loadContent(): void {
+        this.adviceService.getSections().pipe(
+            takeUntilDestroyed(this.destroyRef),
+            finalize(() => this.loading.set(false)),
+        ).subscribe({
+            next: sections => this.sections.set(sections),
             error: error => {
+                console.error('Failed to load advice sections', error);
+                this.loadError.set(true);
+            },
+        });
+    }
+
+    /**
+     * One pass for the four profile reads. Each falls back to an empty value rather than failing
+     * the set, so a user who has not filled in the optional form still gets the rest of the page.
+     */
+    private loadProfile(): void {
+        forkJoin({
+            labels: this.healthProfileService.getMyLabels().pipe(catchError(error => {
                 console.error('Failed to load profile labels', error);
-                this.labelsError.set('Personalized labels could not be loaded.');
-                this.loadingLabels.set(false);
-            },
+                this.labelsError.set(true);
+                return of<UserProfileLabel[]>([]);
+            })),
+            profile: this.healthProfileService.getMyProfile().pipe(
+                catchError(() => of(null))),
+            optional: this.optionalProfileService.getMyOptionalProfile().pipe(
+                catchError(() => of(null))),
+            // A failed usage read degrades to the need-only card rather than breaking the page.
+            usage: this.usageTracking.getMyUsage().pipe(
+                catchError(() => of<LabelUsage[]>([]))),
+        }).pipe(
+            takeUntilDestroyed(this.destroyRef),
+        ).subscribe(({labels, profile, optional, usage}) => {
+            this.userLabels.set(labels);
+            this.profile.set(profile);
+            this.optionalProfile.set(optional);
+            this.usage.set(usage);
         });
     }
-
-    private toScoredSection(section: AdviceSection): AdviceSection & {
-        recommendationScore: number;
-        matchedLabelCount: number;
-    } {
-        const priorityMap = this.labelPriorityMap();
-        const matchedLabels = section.matchedLabels.filter(label => priorityMap.has(label));
-
-        const weightedMatchScore = matchedLabels.reduce((score, label) => {
-            const priority = priorityMap.get(label) ?? 0;
-            const weight = section.labelWeights[label] ?? 1;
-            return score + priority * weight;
-        }, 0);
-
-        const preferenceBoost = (section.preferenceBoostLabels ?? [])
-            .filter(label => priorityMap.has(label))
-            .length * 100;
-
-        const safetyPenalty = (section.safetyPenaltyLabels ?? [])
-            .filter(label => priorityMap.has(label))
-            .length * 150;
-
-        return {
-            ...section,
-            recommendationScore: Math.max(0, Math.round(weightedMatchScore + preferenceBoost - safetyPenalty)),
-            matchedLabelCount: matchedLabels.length,
-        };
-    }
-
-    openTip(tip: AdviceTip, icon: string, sectionTitle: string): void {
-        this.dialog.open(AdviceTipDialog, {
-            width: '540px',
-            maxWidth: '94vw',
-            panelClass: 'advice-dialog',
-            data: {
-                ...tip,
-                icon,
-                sectionTitle,
-            },
-        });
-    }
-
-    openTopTip(tip: AdviceTipView): void {
-        this.dialog.open(AdviceTipDialog, {
-            width: '540px',
-            maxWidth: '94vw',
-            panelClass: 'advice-dialog',
-            data: tip,
-        });
-    }
-
-    readonly insightChartData: ChartConfiguration<'bar'>['data'] = {
-        labels: [
-            'Nutrition',
-            'Weight',
-            'Sleep',
-            'Consistency'
-        ],
-        datasets: [
-            {
-                label: 'Focus score',
-                data: [85, 78, 72, 64],
-                borderRadius: 10,
-            },
-        ],
-    };
-
-    readonly insightChartOptions: ChartConfiguration<'bar'>['options'] = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: false,
-            },
-            tooltip: {
-                callbacks: {
-                    label: context => `${context.parsed.y}%`,
-                },
-            },
-        },
-        scales: {
-            y: {
-                min: 0,
-                max: 100,
-                ticks: {
-                    callback: value => `${value}%`,
-                },
-            },
-        },
-    };
-
-    readonly recommendationMixChartData: ChartConfiguration<'doughnut'>['data'] = {
-        labels: [
-            'Nutrition & allergies',
-            'Healthy weight',
-            'Sleep habits'
-        ],
-        datasets: [
-            {
-                data: [40, 35, 25],
-            },
-        ],
-    };
-
-    readonly recommendationMixChartOptions: ChartConfiguration<'doughnut'>['options'] = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                position: 'bottom',
-            },
-            tooltip: {
-                callbacks: {
-                    label: context => `${context.label}: ${context.parsed}%`,
-                },
-            },
-        },
-    };
 }

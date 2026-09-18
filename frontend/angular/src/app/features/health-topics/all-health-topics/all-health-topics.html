@@ -1,0 +1,129 @@
+<section class="all-topics-page">
+
+    <header class="page-heading">
+        <p class="eyebrow">{{ 'topics.all.eyebrow' | translate }}</p>
+        <h1>{{ 'topics.all.title' | translate }}</h1>
+        <p>{{ 'topics.all.subtitle' | translate }}</p>
+    </header>
+
+    @if (loading()) {
+        <p class="page-state">{{ 'topics.page.loading' | translate }}</p>
+    } @else if (loadError()) {
+        <p class="page-state page-state--error">{{ 'topics.page.error' | translate }}</p>
+    } @else {
+
+        <!-- Stated up front, because the content below reads as real health advice but is not. -->
+        <aside class="mock-notice" data-testid="topics-mock-notice">
+            <mat-icon>science</mat-icon>
+            <span class="mock-badge">{{ 'topics.mockNotice.badge' | translate }}</span>
+            <p>{{ 'topics.mockNotice' | translate }}</p>
+        </aside>
+
+        <section class="toolbar-section">
+            <mat-form-field class="search-field">
+                <mat-label>{{ 'topics.all.search.label' | translate }}</mat-label>
+                <mat-icon matPrefix>search</mat-icon>
+                <input
+                    matInput
+                    type="search"
+                    data-testid="topics-search"
+                    [value]="searchTerm()"
+                    (input)="searchTopics($event)"
+                    [placeholder]="'topics.all.search.placeholder' | translate"/>
+            </mat-form-field>
+
+            <div class="category-list">
+                <!-- "All" is a reset, not a selectable value, so it is never combined with the rest. -->
+                <button
+                    type="button"
+                    class="category-button"
+                    [class.active]="noCategorySelected"
+                    [attr.aria-pressed]="noCategorySelected"
+                    data-testid="topics-category-All"
+                    (click)="clearCategories()">
+                    {{ 'topics.category.All' | translate }}
+                </button>
+
+                @for (category of categories; track category) {
+                    <button
+                        type="button"
+                        class="category-button"
+                        [class.active]="isCategoryActive(category)"
+                        [attr.aria-pressed]="isCategoryActive(category)"
+                        [attr.data-testid]="'topics-category-' + category"
+                        (click)="toggleCategory(category)">
+                        @if (isCategoryActive(category)) {
+                            <mat-icon>check</mat-icon>
+                        }
+                        {{ 'topics.category.' + category | translate }}
+                    </button>
+                }
+            </div>
+        </section>
+
+        <section class="quick-tags">
+            <div class="quick-tags-label">
+                <mat-icon>trending_up</mat-icon>
+                <span>{{ 'topics.all.popularTags' | translate }}</span>
+            </div>
+
+            <div class="quick-tags-list">
+                @for (tag of popularTags(); track tag) {
+                    <button
+                        type="button"
+                        class="tag-pill"
+                        [class.active]="isTagActive(tag)"
+                        [attr.aria-pressed]="isTagActive(tag)"
+                        (click)="toggleTag(tag)">
+                        <mat-icon>{{ isTagActive(tag) ? 'check' : 'search' }}</mat-icon>
+                        {{ tag }}
+                    </button>
+                }
+            </div>
+        </section>
+
+        <!-- Selections widen the result, which is not the usual expectation of a filter row. -->
+        @if (activeFilters().length > 1) {
+            <p class="combine-hint">
+                <mat-icon>join_inner</mat-icon>
+                {{ 'topics.all.combineHint' | translate }}
+            </p>
+        }
+
+        <!-- Clearing lives here now, per filter as well as all at once. -->
+        <app-active-filters-toolbar
+            [filters]="activeFilters()"
+            [getValueLabel]="filterValueLabel"
+            (removeFilter)="removeFilter($event)"
+            (clearAll)="clearFilters()"/>
+
+        <section class="library-heading">
+            <h2>{{ 'topics.all.count' | translate: {count: topicCount()} }}</h2>
+        </section>
+
+        @if (filteredTopics().length > 0) {
+            <div class="topics-grid">
+                @for (topic of filteredTopics(); track topic.id) {
+                    <app-topic-card
+                        [topic]="topic"
+                        (open)="openTopic($event)"
+                        (favouriteToggled)="toggleFavourite($event)"/>
+                }
+            </div>
+        } @else {
+            <section class="empty-state">
+                <mat-icon>manage_search</mat-icon>
+                <h2>{{ 'topics.all.empty.title' | translate }}</h2>
+                <p>{{ 'topics.all.empty.subtitle' | translate }}</p>
+                <button mat-flat-button type="button" (click)="clearFilters()">
+                    {{ 'topics.all.clearFilters' | translate }}
+                </button>
+            </section>
+        }
+
+        <section class="education-note">
+            <mat-icon>info</mat-icon>
+            <p>{{ 'topics.disclaimer' | translate }}</p>
+        </section>
+    }
+</section>

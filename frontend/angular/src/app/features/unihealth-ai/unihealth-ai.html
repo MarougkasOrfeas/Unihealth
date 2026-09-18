@@ -1,48 +1,47 @@
 <div class="chat-page">
     <div class="chat-card">
         <div class="chat-header">
+            <!-- The product name, deliberately not a lexicon key: it reads the same in both locales. -->
             <h1>UniHealth AI</h1>
-            <p>
-                Ask questions about student health, wellbeing, sleep, stress,
-                nutrition, and healthy habits.
-            </p>
+            <p>{{ 'ai.chat.subtitle' | translate }}</p>
         </div>
 
         <div class="chat-messages">
-            <div
-                class="chat-message"
-                *ngFor="let msg of messages(); trackBy: trackByIndex"
-                [ngClass]="msg.role"
-            >
-                <div class="chat-bubble">
-                    <div class="chat-role">
-                        {{ msg.role === 'user' ? 'You' : 'UniHealth' }}
-                    </div>
+            @for (msg of messages(); track $index) {
+                <div class="chat-message" [class]="msg.role">
+                    <div class="chat-bubble">
+                        <div class="chat-role">
+                            {{ (msg.role === 'user' ? 'ai.chat.role.you' : 'ai.chat.role.assistant')
+                                | translate }}
+                        </div>
 
-                    <div class="chat-content">
-                        {{ msg.content }}
+                        <div class="chat-content">
+                            {{ msg.contentKey ? (msg.contentKey | translate) : msg.content }}
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
         </div>
 
-        <div *ngIf="errorMessage()" class="chat-error">
-            {{ errorMessage() }}
-        </div>
+        @if (errorKey(); as key) {
+            <div class="chat-error">{{ key | translate }}</div>
+        }
 
         <form class="chat-input-area" (ngSubmit)="sendMessage()">
-      <textarea
-          name="message"
-          [ngModel]="message()"
-          (ngModelChange)="message.set($event)"
-          rows="4"
-          placeholder="Type your question here..."
-          [disabled]="loading()"
-      ></textarea>
+            <textarea
+                name="message"
+                [ngModel]="message()"
+                (ngModelChange)="message.set($event)"
+                rows="4"
+                [placeholder]="'ai.chat.placeholder' | translate"
+                [disabled]="loading()"
+            ></textarea>
 
             <button type="submit" [disabled]="!canSend()">
-                {{ loading() ? 'Sending...' : 'Send' }}
+                {{ (loading() ? 'ai.chat.sending' : 'ai.chat.send') | translate }}
             </button>
         </form>
+
+        <p class="chat-disclaimer">{{ 'ai.chat.disclaimer' | translate }}</p>
     </div>
 </div>

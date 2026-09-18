@@ -82,11 +82,25 @@
     </div>
 </div>
 
-<section class="trending-section">
-    <h3>
-        <mat-icon>trending_up</mat-icon>
-        {{ 'home.trending.title' | translate }}
-    </h3>
+<!-- The user's own saved topics when they have any, otherwise what is trending. Hidden entirely
+     while topics are still loading or if the request failed — this is secondary content. -->
+@if (homeTopics().length > 0) {
+    <div class="container mt-4">
+        <app-topic-section
+            [titleKey]="showingFavourites() ? 'topics.favourites.title' : 'topics.trending.title'"
+            [subtitleKey]="showingFavourites() ? 'topics.favourites.subtitle' : 'topics.trending.subtitle'"
+            [icon]="showingFavourites() ? 'favorite' : 'trending_up'"
+            testId="home-topics">
 
-    <div class="trending-container"></div>
-</section>
+            <div class="home-topics-grid">
+                @for (topic of homeTopics(); track topic.id) {
+                    <app-topic-card
+                        [topic]="topic"
+                        [rank]="showingFavourites() ? null : (topic.trendingRank ?? null)"
+                        (open)="openTopic($event)"
+                        (favouriteToggled)="toggleFavourite($event)"/>
+                }
+            </div>
+        </app-topic-section>
+    </div>
+}

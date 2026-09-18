@@ -422,3 +422,17 @@ input:focus {
     align-items: flex-start;
   }
 }
+
+/* Link through to the usage statistics, shown only once measurement is on. */
+.settings-link {
+  display: inline-block;
+  margin-top: 4px;
+  color: #2f5da8;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.settings-link:hover {
+  text-decoration: underline;
+}

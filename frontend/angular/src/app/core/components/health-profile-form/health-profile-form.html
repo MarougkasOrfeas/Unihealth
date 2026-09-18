@@ -44,7 +44,7 @@
                             [title]="'health.profile.gender.tooltip' | translate">
                             <option [ngValue]="null">{{ 'health.profile.gender.placeholder' | translate }}</option>
                             @for (gender of genders; track gender) {
-                                <option [ngValue]="gender">{{ gender }}</option>
+                                <option [ngValue]="gender">{{ getEnumKey(gender, 'gender') | translate }}</option>
                             }
                         </select>
                         @if (f.gender.touched && f.gender.invalid) {
@@ -164,7 +164,7 @@
                         [title]="'health.profile.primaryGoal.tooltip' | translate">
                         <option [ngValue]="null">{{ 'health.profile.primaryGoal.placeholder' | translate }}</option>
                         @for (goal of primaryGoals; track goal) {
-                            <option [ngValue]="goal">{{ goal }}</option>
+                            <option [ngValue]="goal">{{ getEnumKey(goal, 'primaryGoal') | translate }}</option>
                         }
                     </select>
                     @if (f.primaryGoal.touched && f.primaryGoal.invalid) {

@@ -98,7 +98,28 @@ public class HealthDetailLabelExtractor {
   private static final int FUZZY_THRESHOLD = 2;
 
   private static final Pattern MULTI_SPACE = Pattern.compile("\\s+");
-  private static final Pattern NON_ALNUM_SPACE = Pattern.compile("[^a-z0-9\\s]");
+
+  /**
+   * Punctuation stripper. Keeps Latin, digits and **Greek**.
+   *
+   * <p>This was previously {@code [^a-z0-9\s]}, which silently deleted every Greek character:
+   * "διαβήτης" normalised to the empty string, so a Greek-language entry could never match a
+   * keyword and always fell through to the {@code *_OTHER} fallback. Since this is a Greek
+   * university deployment, that meant free-text extraction was effectively dead for most users.
+   *
+   * <p>The Greek block is {@code Ͱ-Ͽ}; Greek Extended ({@code ἀ-῿}) is not
+   * needed because NFD normalisation plus combining-mark removal has already collapsed polytonic
+   * forms onto their base letters by the time this runs.
+   */
+  private static final Pattern NON_ALNUM_SPACE =
+      Pattern.compile("[^a-z0-9\\u0370-\\u03FF\\s]");
+
+  /**
+   * Word-final sigma folded onto the medial form, so "αλλεργίες" and "αλλεργίεσ" tokenise alike.
+   * Unicode case folding keeps the two distinct, which would otherwise split every Greek word that
+   * happens to end in sigma into two non-matching variants.
+   */
+  private static final Pattern FINAL_SIGMA = Pattern.compile("\\u03C2");
 
   public List<String> extract(HealthProfileDTO dto) {
     Set<String> labels = new HashSet<>();
@@ -113,15 +134,19 @@ public class HealthDetailLabelExtractor {
     boolean chronicMatched =
         extractFromText(dto.getChronicConditionsDetails(), chronicKeywords, labels, "CHRONIC");
 
+    // The descriptions themselves are never logged. They are free-text special-category health
+    // data, and application logs are the wrong place for it — the character count is enough to
+    // tell "the dictionary missed something" apart from "the field was blank".
     if (dto.isHasFoodAllergies() && hasText(dto.getFoodAllergiesDetails()) && !allergyMatched) {
-      log.warn("No allergy mapping found for input: [{}]", dto.getFoodAllergiesDetails());
+      log.warn("No allergy mapping matched a {}-character description",
+          dto.getFoodAllergiesDetails().trim().length());
       labels.add("ALLERGY_OTHER");
     }
 
     if (dto.isHasChronicConditions() && hasText(
         dto.getChronicConditionsDetails()) && !chronicMatched) {
-      log.warn("No chronic-condition mapping found for input: [{}]",
-          dto.getChronicConditionsDetails());
+      log.warn("No chronic-condition mapping matched a {}-character description",
+          dto.getChronicConditionsDetails().trim().length());
       labels.add("CHRONIC_OTHER");
     }
 
@@ -191,7 +216,9 @@ public class HealthDetailLabelExtractor {
     }
 
     if (matched) {
-      log.info("Matched {} input [{}] to labels {}", type, text, labels);
+      // Codes only, never the description, and at debug rather than info: the codes are still
+      // health data, so they should not be sitting in a production log by default.
+      log.debug("Matched {} description to {} label(s)", type, matchedKeywords.size());
     }
 
     return matched;
@@ -239,6 +266,7 @@ public class HealthDetailLabelExtractor {
         .replaceAll("\\p{M}", "")   // remove accents
         .toLowerCase(Locale.ROOT);
 
+    normalized = FINAL_SIGMA.matcher(normalized).replaceAll("σ");
     normalized = NON_ALNUM_SPACE.matcher(normalized).replaceAll(" ");
     normalized = MULTI_SPACE.matcher(normalized).replaceAll(" ").trim();
 
