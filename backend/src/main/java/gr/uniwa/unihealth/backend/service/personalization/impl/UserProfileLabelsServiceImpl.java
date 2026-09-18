@@ -6,6 +6,7 @@ import gr.uniwa.unihealth.backend.model.User;
 import gr.uniwa.unihealth.backend.model.UserProfileLabels;
 import gr.uniwa.unihealth.backend.repository.LabelFieldMappingRepository;
 import gr.uniwa.unihealth.backend.repository.UserProfileLabelsRepository;
+import gr.uniwa.unihealth.backend.service.personalization.LabelPriorityResolver;
 import gr.uniwa.unihealth.backend.service.personalization.UserProfileLabelsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,20 +24,20 @@ public class UserProfileLabelsServiceImpl implements UserProfileLabelsService {
 
   private final UserProfileLabelsRepository repository;
   private final LabelFieldMappingRepository labelFieldMappingRepository;
+  private final LabelPriorityResolver priorityResolver;
 
   /**
-   * The prefixes that decide both ownership and clinical ranking.
+   * The prefixes that decide ownership and bucketing here.
    *
-   * <p>They are load-bearing in three places here — which form owns a label, how it is bucketed by
-   * {@link #finalPrioritize}, and its fallback priority when no active mapping exists — so they are
-   * named rather than repeated as literals.
+   * <p>Shared with {@link LabelPriorityResolver}, which uses the same prefixes to decide ranking, so
+   * that a label's owner and its significance can never be answered from two different lists.
    */
-  private static final String CHRONIC_PREFIX = "CHRONIC_";
-  private static final String ALLERGY_PREFIX = "ALLERGY_";
-  private static final String OPTIONAL_HIGH_PREFIX = "OPTIONAL_HIGH_";
+  private static final String CHRONIC_PREFIX = LabelPriorityResolver.CHRONIC_PREFIX;
+  private static final String ALLERGY_PREFIX = LabelPriorityResolver.ALLERGY_PREFIX;
+  private static final String OPTIONAL_HIGH_PREFIX = LabelPriorityResolver.OPTIONAL_HIGH_PREFIX;
 
   /** Labels derived from the optional health form. The main form can never produce one. */
-  private static final String OPTIONAL_PREFIX = "OPTIONAL_";
+  private static final String OPTIONAL_PREFIX = LabelPriorityResolver.OPTIONAL_PREFIX;
 
   @Override
   public void saveForUser(User user, List<String> sortedLabels) {
@@ -71,20 +72,15 @@ public class UserProfileLabelsServiceImpl implements UserProfileLabelsService {
         .toList();
   }
 
+  /**
+   * The priority to report for a label with no active {@link LabelFieldMapping} row.
+   *
+   * <p>Every specific medical code — {@code CHRONIC_DIABETES}, {@code ALLERGY_PEANUT} and the rest —
+   * falls in here, because those codes come from the free-text dictionary rather than from a form
+   * rule. Delegated so that this answer and the one used when ordering labels cannot drift apart.
+   */
   private int resolveFallbackPriority(String label) {
-    if (label.startsWith(CHRONIC_PREFIX)) {
-      return 1200;
-    }
-    if (label.startsWith(ALLERGY_PREFIX)) {
-      return 1000;
-    }
-    if (label.startsWith(OPTIONAL_HIGH_PREFIX)) {
-      return 900;
-    }
-    if (label.startsWith(OPTIONAL_PREFIX)) {
-      return 200;
-    }
-    return 50;
+    return priorityResolver.priorityOf(label);
   }
 
   @Override

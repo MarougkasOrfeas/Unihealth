@@ -1,0 +1,707 @@
+{
+  "schemaVersion": 1,
+  "datasetVersion": "2026-09-18",
+  "notes": "Bilingual medical term dictionary for free-text label extraction. Label codes are always English UPPER_SNAKE_CASE regardless of the language a student writes in. Greeklish keys ('diavitis') are derived from the Greek terms when this file is loaded, so they are never authored here. Edit this file and restart: the loader compares an MD5 and re-seeds when it changes.",
+  "concepts": [
+    {
+      "conceptId": "peanut",
+      "labelCode": "ALLERGY_PEANUT",
+      "scope": "ALLERGY",
+      "priority": 1050,
+      "source": "EU 1169/2011 Annex II item 5",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "peanut" },
+        { "lang": "en", "type": "SYNONYM", "text": "groundnut" },
+        { "lang": "el", "type": "PREFERRED", "text": "αραχίδα" },
+        { "lang": "el", "type": "SYNONYM", "text": "αράπικο φιστίκι" },
+        { "lang": "el", "type": "WEAK", "text": "φιστίκι",
+          "note": "bare φιστίκι also means pistachio; 'φιστίκι Αιγίνης' under ALLERGY_TREE_NUT is longer and wins by maximal munch" }
+      ]
+    },
+    {
+      "conceptId": "tree-nut",
+      "labelCode": "ALLERGY_TREE_NUT",
+      "scope": "ALLERGY",
+      "priority": 1050,
+      "source": "EU 1169/2011 Annex II item 8",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "tree nut" },
+        { "lang": "en", "type": "SYNONYM", "text": "almond" },
+        { "lang": "en", "type": "SYNONYM", "text": "cashew" },
+        { "lang": "en", "type": "SYNONYM", "text": "walnut" },
+        { "lang": "en", "type": "SYNONYM", "text": "hazelnut" },
+        { "lang": "en", "type": "SYNONYM", "text": "pistachio" },
+        { "lang": "en", "type": "SYNONYM", "text": "pecan" },
+        { "lang": "en", "type": "SYNONYM", "text": "macadamia" },
+        { "lang": "en", "type": "SYNONYM", "text": "brazil nut" },
+        { "lang": "el", "type": "PREFERRED", "text": "ξηροί καρποί",
+          "note": "stems to the bigram 'ξηρ καρπ', which unifies ξηροί/ξηρών/ξηρούς and καρποί/καρπών/καρπούς. The unigram ξηρ is deliberately never a key on its own, so ξηρός λαιμός (dry throat) matches nothing" },
+        { "lang": "el", "type": "SYNONYM", "text": "αμύγδαλο" },
+        { "lang": "el", "type": "SYNONYM", "text": "καρύδι" },
+        { "lang": "el", "type": "SYNONYM", "text": "φουντούκι" },
+        { "lang": "el", "type": "SYNONYM", "text": "κάσιους" },
+        { "lang": "el", "type": "SYNONYM", "text": "φιστίκι Αιγίνης" },
+        { "lang": "el", "type": "SYNONYM", "text": "καρύδι Βραζιλίας" }
+      ]
+    },
+    {
+      "conceptId": "dairy",
+      "labelCode": "ALLERGY_DAIRY",
+      "scope": "BOTH",
+      "priority": 1050,
+      "source": "EU 1169/2011 Annex II item 7",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "dairy" },
+        { "lang": "en", "type": "SYNONYM", "text": "milk" },
+        { "lang": "en", "type": "SYNONYM", "text": "cow milk" },
+        { "lang": "en", "type": "SYNONYM", "text": "milk protein" },
+        { "lang": "en", "type": "SYNONYM", "text": "casein" },
+        { "lang": "en", "type": "SYNONYM", "text": "whey" },
+        { "lang": "en", "type": "SYNONYM", "text": "lactose" },
+        { "lang": "el", "type": "PREFERRED", "text": "γαλακτοκομικά" },
+        { "lang": "el", "type": "SYNONYM", "text": "γάλα" },
+        { "lang": "el", "type": "SYNONYM", "text": "λακτόζη" },
+        { "lang": "el", "type": "SYNONYM", "text": "καζεΐνη" },
+        { "lang": "el", "type": "SYNONYM", "text": "ορός γάλακτος" },
+        { "lang": "el", "type": "SYNONYM", "text": "δυσανεξία στη λακτόζη" }
+      ]
+    },
+    {
+      "conceptId": "gluten",
+      "labelCode": "ALLERGY_GLUTEN",
+      "scope": "BOTH",
+      "priority": 1050,
+      "source": "EU 1169/2011 Annex II item 1",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "gluten" },
+        { "lang": "en", "type": "SYNONYM", "text": "wheat" },
+        { "lang": "en", "type": "SYNONYM", "text": "barley" },
+        { "lang": "en", "type": "ABBREVIATION", "text": "rye",
+          "note": "3 letters: exact only, or it matches 'eye' at one edit" },
+        { "lang": "el", "type": "PREFERRED", "text": "γλουτένη" },
+        { "lang": "el", "type": "SYNONYM", "text": "σιτάρι" },
+        { "lang": "el", "type": "SYNONYM", "text": "κριθάρι" },
+        { "lang": "el", "type": "SYNONYM", "text": "σίκαλη" }
+      ]
+    },
+    {
+      "conceptId": "egg",
+      "labelCode": "ALLERGY_EGG",
+      "scope": "ALLERGY",
+      "priority": 1050,
+      "source": "EU 1169/2011 Annex II item 3",
+      "terms": [
+        { "lang": "en", "type": "ABBREVIATION", "text": "egg",
+          "note": "3 letters: exact only, or it matches 'leg' at one edit" },
+        { "lang": "en", "type": "SYNONYM", "text": "egg white" },
+        { "lang": "en", "type": "SYNONYM", "text": "egg yolk" },
+        { "lang": "el", "type": "PREFERRED", "text": "αυγό" },
+        { "lang": "el", "type": "INFLECTION", "text": "αυγά",
+          "note": "4 letters, below the stemmer's minimum word length, so singular and plural are separate keys" },
+        { "lang": "el", "type": "SYNONYM", "text": "ασπράδι" },
+        { "lang": "el", "type": "SYNONYM", "text": "κρόκος" }
+      ]
+    },
+    {
+      "conceptId": "shellfish",
+      "labelCode": "ALLERGY_SHELLFISH",
+      "scope": "ALLERGY",
+      "priority": 1050,
+      "source": "EU 1169/2011 Annex II items 2 and 14",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "shellfish" },
+        { "lang": "en", "type": "SYNONYM", "text": "shrimp" },
+        { "lang": "en", "type": "SYNONYM", "text": "prawn" },
+        { "lang": "en", "type": "SYNONYM", "text": "crab" },
+        { "lang": "en", "type": "SYNONYM", "text": "lobster" },
+        { "lang": "en", "type": "SYNONYM", "text": "crayfish" },
+        { "lang": "en", "type": "SYNONYM", "text": "mussel" },
+        { "lang": "en", "type": "SYNONYM", "text": "clam" },
+        { "lang": "en", "type": "SYNONYM", "text": "oyster" },
+        { "lang": "en", "type": "SYNONYM", "text": "scallop" },
+        { "lang": "el", "type": "PREFERRED", "text": "οστρακοειδή" },
+        { "lang": "el", "type": "SYNONYM", "text": "γαρίδα" },
+        { "lang": "el", "type": "SYNONYM", "text": "καβούρι" },
+        { "lang": "el", "type": "SYNONYM", "text": "αστακός" },
+        { "lang": "el", "type": "SYNONYM", "text": "μύδια" },
+        { "lang": "el", "type": "SYNONYM", "text": "στρείδια" },
+        { "lang": "el", "type": "SYNONYM", "text": "καραβίδα" },
+        { "lang": "el", "type": "SYNONYM", "text": "θαλασσινά" }
+      ]
+    },
+    {
+      "conceptId": "soy",
+      "labelCode": "ALLERGY_SOY",
+      "scope": "ALLERGY",
+      "priority": 1050,
+      "source": "EU 1169/2011 Annex II item 6",
+      "terms": [
+        { "lang": "en", "type": "ABBREVIATION", "text": "soy",
+          "note": "3 letters: exact only, or it matches 'say' at one edit" },
+        { "lang": "en", "type": "SYNONYM", "text": "soya" },
+        { "lang": "en", "type": "SYNONYM", "text": "soybean" },
+        { "lang": "el", "type": "PREFERRED", "text": "σόγια" }
+      ]
+    },
+    {
+      "conceptId": "fish",
+      "labelCode": "ALLERGY_FISH",
+      "scope": "ALLERGY",
+      "priority": 1050,
+      "source": "EU 1169/2011 Annex II item 4",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "fish" },
+        { "lang": "en", "type": "SYNONYM", "text": "salmon" },
+        { "lang": "en", "type": "SYNONYM", "text": "tuna" },
+        { "lang": "en", "type": "ABBREVIATION", "text": "cod",
+          "note": "3 letters: exact only, or it matches 'cot' and 'cold'. As a whole token inside 'cod liver oil' it still fires, which is intended" },
+        { "lang": "en", "type": "SYNONYM", "text": "sardine" },
+        { "lang": "el", "type": "PREFERRED", "text": "ψάρι" },
+        { "lang": "el", "type": "SYNONYM", "text": "σολομός" },
+        { "lang": "el", "type": "SYNONYM", "text": "τόνος",
+          "note": "stems to a 3-character key, so it is matched on its surface form only. Without that, the definite article «τον» would label every Greek sentence with a fish allergy" },
+        { "lang": "el", "type": "INFLECTION", "text": "τόνο" },
+        { "lang": "el", "type": "SYNONYM", "text": "μπακαλιάρος" },
+        { "lang": "el", "type": "SYNONYM", "text": "σαρδέλα" }
+      ]
+    },
+    {
+      "conceptId": "sesame",
+      "labelCode": "ALLERGY_SESAME",
+      "scope": "ALLERGY",
+      "priority": 1050,
+      "source": "EU 1169/2011 Annex II item 11",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "sesame" },
+        { "lang": "en", "type": "SYNONYM", "text": "sesame seed" },
+        { "lang": "en", "type": "SYNONYM", "text": "tahini" },
+        { "lang": "el", "type": "PREFERRED", "text": "σουσάμι" },
+        { "lang": "el", "type": "SYNONYM", "text": "ταχίνι" }
+      ]
+    },
+    {
+      "conceptId": "mustard",
+      "labelCode": "ALLERGY_MUSTARD",
+      "scope": "ALLERGY",
+      "priority": 1050,
+      "source": "EU 1169/2011 Annex II item 10",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "mustard" },
+        { "lang": "el", "type": "PREFERRED", "text": "μουστάρδα" }
+      ]
+    },
+    {
+      "conceptId": "celery",
+      "labelCode": "ALLERGY_CELERY",
+      "scope": "ALLERGY",
+      "priority": 1050,
+      "source": "EU 1169/2011 Annex II item 9",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "celery",
+          "note": "must never cross-match 'celiac': 3 edits apart, and Jaro-Winkler 0.82 vetoes it independently" },
+        { "lang": "el", "type": "PREFERRED", "text": "σέλινο" }
+      ]
+    },
+    {
+      "conceptId": "sulfite",
+      "labelCode": "ALLERGY_SULFITE",
+      "scope": "ALLERGY",
+      "priority": 1050,
+      "source": "EU 1169/2011 Annex II item 12",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "sulfite" },
+        { "lang": "en", "type": "SYNONYM", "text": "sulphite" },
+        { "lang": "el", "type": "PREFERRED", "text": "θειώδη" },
+        { "lang": "el", "type": "SYNONYM", "text": "θειώδεις ενώσεις" }
+      ]
+    },
+    {
+      "conceptId": "onion",
+      "labelCode": "ALLERGY_ONION",
+      "scope": "ALLERGY",
+      "priority": 950,
+      "source": "manual",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "onion" },
+        { "lang": "el", "type": "PREFERRED", "text": "κρεμμύδι" }
+      ]
+    },
+    {
+      "conceptId": "garlic",
+      "labelCode": "ALLERGY_GARLIC",
+      "scope": "ALLERGY",
+      "priority": 950,
+      "source": "manual",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "garlic" },
+        { "lang": "el", "type": "PREFERRED", "text": "σκόρδο" }
+      ]
+    },
+    {
+      "conceptId": "corn",
+      "labelCode": "ALLERGY_CORN",
+      "scope": "ALLERGY",
+      "priority": 950,
+      "source": "manual",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "corn" },
+        { "lang": "en", "type": "SYNONYM", "text": "maize" },
+        { "lang": "el", "type": "PREFERRED", "text": "καλαμπόκι" },
+        { "lang": "el", "type": "SYNONYM", "text": "αραβόσιτος" }
+      ]
+    },
+    {
+      "conceptId": "tomato",
+      "labelCode": "ALLERGY_TOMATO",
+      "scope": "ALLERGY",
+      "priority": 950,
+      "source": "manual",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "tomato" },
+        { "lang": "el", "type": "PREFERRED", "text": "ντομάτα" },
+        { "lang": "el", "type": "SYNONYM", "text": "τομάτα" }
+      ]
+    },
+    {
+      "conceptId": "chocolate",
+      "labelCode": "ALLERGY_CHOCOLATE",
+      "scope": "ALLERGY",
+      "priority": 950,
+      "source": "manual",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "chocolate" },
+        { "lang": "en", "type": "SYNONYM", "text": "cocoa" },
+        { "lang": "el", "type": "PREFERRED", "text": "σοκολάτα" },
+        { "lang": "el", "type": "SYNONYM", "text": "κακάο" }
+      ]
+    },
+    {
+      "conceptId": "strawberry",
+      "labelCode": "ALLERGY_STRAWBERRY",
+      "scope": "ALLERGY",
+      "priority": 950,
+      "source": "manual",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "strawberry" },
+        { "lang": "el", "type": "PREFERRED", "text": "φράουλα" }
+      ]
+    },
+    {
+      "conceptId": "kiwi",
+      "labelCode": "ALLERGY_KIWI",
+      "scope": "ALLERGY",
+      "priority": 950,
+      "source": "manual",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "kiwi" },
+        { "lang": "el", "type": "PREFERRED", "text": "ακτινίδιο" }
+      ]
+    },
+    {
+      "conceptId": "banana",
+      "labelCode": "ALLERGY_BANANA",
+      "scope": "ALLERGY",
+      "priority": 950,
+      "source": "manual",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "banana" },
+        { "lang": "el", "type": "PREFERRED", "text": "μπανάνα" }
+      ]
+    },
+    {
+      "conceptId": "avocado",
+      "labelCode": "ALLERGY_AVOCADO",
+      "scope": "ALLERGY",
+      "priority": 950,
+      "source": "manual",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "avocado" },
+        { "lang": "el", "type": "PREFERRED", "text": "αβοκάντο" }
+      ]
+    },
+    {
+      "conceptId": "mushroom",
+      "labelCode": "ALLERGY_MUSHROOM",
+      "scope": "ALLERGY",
+      "priority": 950,
+      "source": "manual",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "mushroom" },
+        { "lang": "el", "type": "PREFERRED", "text": "μανιτάρι" }
+      ]
+    },
+
+    {
+      "conceptId": "diabetes",
+      "labelCode": "CHRONIC_DIABETES",
+      "scope": "CHRONIC",
+      "priority": 1350,
+      "source": "ICD-10 E10-E14",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "diabetes" },
+        { "lang": "en", "type": "SYNONYM", "text": "diabetic" },
+        { "lang": "en", "type": "SYNONYM", "text": "type 1 diabetes" },
+        { "lang": "en", "type": "SYNONYM", "text": "type 2 diabetes" },
+        { "lang": "en", "type": "ABBREVIATION", "text": "t1d" },
+        { "lang": "en", "type": "ABBREVIATION", "text": "t2d",
+          "note": "exact only, or 't20' matches at one edit" },
+        { "lang": "el", "type": "PREFERRED", "text": "διαβήτης" },
+        { "lang": "el", "type": "SYNONYM", "text": "σακχαρώδης διαβήτης" },
+        { "lang": "el", "type": "SYNONYM", "text": "διαβητικός" },
+        { "lang": "el", "type": "WEAK", "text": "ζάχαρο",
+          "note": "colloquial «έχω ζάχαρο»; also literally sugar, so it only fires when nothing else matched" }
+      ]
+    },
+    {
+      "conceptId": "heart-disease",
+      "labelCode": "CHRONIC_HEART_DISEASE",
+      "scope": "CHRONIC",
+      "priority": 1350,
+      "source": "ICD-10 I25",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "heart disease" },
+        { "lang": "en", "type": "SYNONYM", "text": "cardiovascular disease" },
+        { "lang": "en", "type": "SYNONYM", "text": "coronary disease" },
+        { "lang": "en", "type": "SYNONYM", "text": "heart condition" },
+        { "lang": "en", "type": "SYNONYM", "text": "cardiac condition" },
+        { "lang": "el", "type": "PREFERRED", "text": "καρδιοπάθεια" },
+        { "lang": "el", "type": "SYNONYM", "text": "καρδιαγγειακή νόσος" },
+        { "lang": "el", "type": "SYNONYM", "text": "στεφανιαία νόσος" },
+        { "lang": "el", "type": "SYNONYM", "text": "καρδιακή πάθηση" }
+      ]
+    },
+    {
+      "conceptId": "copd",
+      "labelCode": "CHRONIC_COPD",
+      "scope": "CHRONIC",
+      "priority": 1350,
+      "source": "ICD-10 J44",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "chronic obstructive pulmonary disease",
+          "note": "four words. Under the old trigram tokeniser this was unreachable by anything but an exact substring match" },
+        { "lang": "en", "type": "ABBREVIATION", "text": "copd" },
+        { "lang": "el", "type": "PREFERRED", "text": "χρόνια αποφρακτική πνευμονοπάθεια" },
+        { "lang": "el", "type": "ABBREVIATION", "text": "ΧΑΠ",
+          "note": "exact only, and short enough that the stemmer leaves it alone. χάπι (pill) must never reach this concept - «παίρνω χάπια» is not COPD" }
+      ]
+    },
+    {
+      "conceptId": "kidney-disease",
+      "labelCode": "CHRONIC_KIDNEY_DISEASE",
+      "scope": "CHRONIC",
+      "priority": 1350,
+      "source": "ICD-10 N18",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "chronic kidney disease" },
+        { "lang": "en", "type": "SYNONYM", "text": "kidney disease" },
+        { "lang": "en", "type": "ABBREVIATION", "text": "ckd" },
+        { "lang": "el", "type": "PREFERRED", "text": "χρόνια νεφρική νόσος" },
+        { "lang": "el", "type": "SYNONYM", "text": "νεφρική νόσος" },
+        { "lang": "el", "type": "SYNONYM", "text": "νεφροπάθεια" }
+      ]
+    },
+    {
+      "conceptId": "liver-disease",
+      "labelCode": "CHRONIC_LIVER_DISEASE",
+      "scope": "CHRONIC",
+      "priority": 1300,
+      "source": "ICD-10 K76",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "liver disease" },
+        { "lang": "en", "type": "SYNONYM", "text": "fatty liver" },
+        { "lang": "en", "type": "ABBREVIATION", "text": "nafld" },
+        { "lang": "el", "type": "PREFERRED", "text": "ηπατική νόσος" },
+        { "lang": "el", "type": "SYNONYM", "text": "λιπώδες ήπαρ" },
+        { "lang": "el", "type": "SYNONYM", "text": "ηπατοπάθεια" }
+      ]
+    },
+    {
+      "conceptId": "epilepsy",
+      "labelCode": "CHRONIC_EPILEPSY",
+      "scope": "CHRONIC",
+      "priority": 1300,
+      "source": "ICD-10 G40",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "epilepsy" },
+        { "lang": "en", "type": "SYNONYM", "text": "seizure disorder" },
+        { "lang": "el", "type": "PREFERRED", "text": "επιληψία" },
+        { "lang": "el", "type": "SYNONYM", "text": "κρίσεις επιληψίας" }
+      ]
+    },
+    {
+      "conceptId": "lupus",
+      "labelCode": "CHRONIC_LUPUS",
+      "scope": "CHRONIC",
+      "priority": 1300,
+      "source": "ICD-10 M32",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "lupus" },
+        { "lang": "el", "type": "PREFERRED", "text": "ερυθηματώδης λύκος" },
+        { "lang": "el", "type": "SYNONYM", "text": "συστηματικός ερυθηματώδης λύκος" },
+        { "lang": "el", "type": "WEAK", "text": "λύκος",
+          "note": "bare λύκος is the animal. Only fires when nothing else matched the field" }
+      ]
+    },
+    {
+      "conceptId": "hypertension",
+      "labelCode": "CHRONIC_HYPERTENSION",
+      "scope": "CHRONIC",
+      "priority": 1280,
+      "source": "ICD-10 I10",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "hypertension" },
+        { "lang": "en", "type": "SYNONYM", "text": "high blood pressure" },
+        { "lang": "en", "type": "ABBREVIATION", "text": "htn" },
+        { "lang": "el", "type": "PREFERRED", "text": "υπέρταση" },
+        { "lang": "el", "type": "INFLECTION", "text": "υπέρτασης" },
+        { "lang": "el", "type": "SYNONYM", "text": "αρτηριακή υπέρταση" },
+        { "lang": "el", "type": "SYNONYM", "text": "υψηλή αρτηριακή πίεση" },
+        { "lang": "el", "type": "SYNONYM", "text": "υψηλή πίεση" },
+        { "lang": "el", "type": "SYNONYM", "text": "αυξημένη πίεση" }
+      ],
+      "note": "The bare terms 'blood pressure' and 'πίεση' are deliberately absent. They used to be here, and they matched 'low blood pressure', 'my blood pressure is fine' and 'χαμηλή πίεση' as readily as the real thing"
+    },
+    {
+      "conceptId": "asthma",
+      "labelCode": "CHRONIC_ASTHMA",
+      "scope": "CHRONIC",
+      "priority": 1280,
+      "source": "ICD-10 J45",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "asthma" },
+        { "lang": "en", "type": "SYNONYM", "text": "asthmatic" },
+        { "lang": "en", "type": "MISSPELLING", "text": "asma",
+          "note": "two edits against a six-letter term, so it is outside the fuzzy budget and has to be listed" },
+        { "lang": "el", "type": "PREFERRED", "text": "άσθμα" },
+        { "lang": "el", "type": "SYNONYM", "text": "ασθματικός" },
+        { "lang": "el", "type": "SYNONYM", "text": "βρογχικό άσθμα" }
+      ]
+    },
+    {
+      "conceptId": "depression",
+      "labelCode": "CHRONIC_DEPRESSION",
+      "scope": "CHRONIC",
+      "priority": 1250,
+      "source": "ICD-10 F32-F33",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "depression" },
+        { "lang": "en", "type": "SYNONYM", "text": "depressive disorder" },
+        { "lang": "en", "type": "SYNONYM", "text": "major depression" },
+        { "lang": "el", "type": "PREFERRED", "text": "κατάθλιψη" },
+        { "lang": "el", "type": "SYNONYM", "text": "καταθλιπτική διαταραχή" }
+      ]
+    },
+    {
+      "conceptId": "celiac",
+      "labelCode": "CHRONIC_CELIAC",
+      "scope": "BOTH",
+      "priority": 1250,
+      "source": "ICD-10 K90.0",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "celiac disease" },
+        { "lang": "en", "type": "SYNONYM", "text": "coeliac disease" },
+        { "lang": "en", "type": "SYNONYM", "text": "celiac" },
+        { "lang": "en", "type": "SYNONYM", "text": "coeliac" },
+        { "lang": "el", "type": "PREFERRED", "text": "κοιλιοκάκη" }
+      ],
+      "note": "scope BOTH: students routinely write this in the allergy box, where it previously could only ever produce ALLERGY_OTHER"
+    },
+    {
+      "conceptId": "crohns",
+      "labelCode": "CHRONIC_CROHNS",
+      "scope": "CHRONIC",
+      "priority": 1250,
+      "source": "ICD-10 K50",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "crohn disease" },
+        { "lang": "en", "type": "SYNONYM", "text": "crohn",
+          "note": "the apostrophe form needs no special case: Crohn's tokenises to [crohn, s] and this unigram catches it. The old dataset carried a literal 'crohn s disease' row to feed a string replace in the normaliser" },
+        { "lang": "en", "type": "SYNONYM", "text": "crohns" },
+        { "lang": "el", "type": "PREFERRED", "text": "νόσος του Κρον" },
+        { "lang": "el", "type": "SYNONYM", "text": "νόσος Κρον" }
+      ]
+    },
+    {
+      "conceptId": "ulcerative-colitis",
+      "labelCode": "CHRONIC_ULCERATIVE_COLITIS",
+      "scope": "CHRONIC",
+      "priority": 1250,
+      "source": "ICD-10 K51",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "ulcerative colitis" },
+        { "lang": "en", "type": "WEAK", "text": "colitis",
+          "note": "bare colitis is not necessarily ulcerative. Kept for recall, demoted so the two-word form always wins" },
+        { "lang": "el", "type": "PREFERRED", "text": "ελκώδης κολίτιδα" },
+        { "lang": "el", "type": "WEAK", "text": "κολίτιδα" }
+      ]
+    },
+    {
+      "conceptId": "thyroid",
+      "labelCode": "CHRONIC_THYROID",
+      "scope": "CHRONIC",
+      "priority": 1200,
+      "source": "ICD-10 E03-E05",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "hypothyroidism" },
+        { "lang": "en", "type": "SYNONYM", "text": "hyperthyroidism" },
+        { "lang": "en", "type": "SYNONYM", "text": "hashimoto" },
+        { "lang": "en", "type": "SYNONYM", "text": "graves disease" },
+        { "lang": "en", "type": "SYNONYM", "text": "thyroid disease" },
+        { "lang": "en", "type": "WEAK", "text": "thyroid",
+          "note": "an organ, not a diagnosis: 'thyroid check', 'family history of thyroid issues', 'thyroid removed' all used to label the user" },
+        { "lang": "el", "type": "PREFERRED", "text": "υποθυρεοειδισμός" },
+        { "lang": "el", "type": "SYNONYM", "text": "υπερθυρεοειδισμός" },
+        { "lang": "el", "type": "SYNONYM", "text": "θυρεοειδίτιδα" },
+        { "lang": "el", "type": "SYNONYM", "text": "Χασιμότο" },
+        { "lang": "el", "type": "WEAK", "text": "θυρεοειδής" }
+      ]
+    },
+    {
+      "conceptId": "anxiety",
+      "labelCode": "CHRONIC_ANXIETY",
+      "scope": "CHRONIC",
+      "priority": 1200,
+      "source": "ICD-10 F41",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "anxiety" },
+        { "lang": "en", "type": "SYNONYM", "text": "anxiety disorder" },
+        { "lang": "en", "type": "SYNONYM", "text": "panic disorder" },
+        { "lang": "el", "type": "PREFERRED", "text": "αγχώδης διαταραχή" },
+        { "lang": "el", "type": "SYNONYM", "text": "διαταραχή πανικού" },
+        { "lang": "el", "type": "WEAK", "text": "άγχος",
+          "note": "everyday stress and an anxiety disorder are the same word in Greek" }
+      ]
+    },
+    {
+      "conceptId": "pcos",
+      "labelCode": "CHRONIC_PCOS",
+      "scope": "CHRONIC",
+      "priority": 1200,
+      "source": "ICD-10 E28.2",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "polycystic ovary syndrome" },
+        { "lang": "en", "type": "ABBREVIATION", "text": "pcos" },
+        { "lang": "el", "type": "PREFERRED", "text": "σύνδρομο πολυκυστικών ωοθηκών" },
+        { "lang": "el", "type": "SYNONYM", "text": "πολυκυστικές ωοθήκες" }
+      ]
+    },
+    {
+      "conceptId": "sleep-apnea",
+      "labelCode": "CHRONIC_SLEEP_APNEA",
+      "scope": "CHRONIC",
+      "priority": 1200,
+      "source": "ICD-10 G47.3",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "sleep apnea" },
+        { "lang": "en", "type": "SYNONYM", "text": "sleep apnoea" },
+        { "lang": "el", "type": "PREFERRED", "text": "υπνική άπνοια" },
+        { "lang": "el", "type": "SYNONYM", "text": "άπνοια ύπνου" }
+      ]
+    },
+    {
+      "conceptId": "anemia",
+      "labelCode": "CHRONIC_ANEMIA",
+      "scope": "CHRONIC",
+      "priority": 1200,
+      "source": "ICD-10 D50-D64",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "anemia" },
+        { "lang": "en", "type": "SYNONYM", "text": "anaemia" },
+        { "lang": "el", "type": "PREFERRED", "text": "αναιμία" },
+        { "lang": "el", "type": "SYNONYM", "text": "σιδηροπενική αναιμία" },
+        { "lang": "el", "type": "SYNONYM", "text": "μεσογειακή αναιμία" }
+      ]
+    },
+    {
+      "conceptId": "arthritis",
+      "labelCode": "CHRONIC_ARTHRITIS",
+      "scope": "CHRONIC",
+      "priority": 1150,
+      "source": "ICD-10 M05-M19",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "arthritis" },
+        { "lang": "en", "type": "SYNONYM", "text": "osteoarthritis" },
+        { "lang": "en", "type": "SYNONYM", "text": "rheumatoid arthritis" },
+        { "lang": "el", "type": "PREFERRED", "text": "αρθρίτιδα" },
+        { "lang": "el", "type": "SYNONYM", "text": "οστεοαρθρίτιδα" },
+        { "lang": "el", "type": "SYNONYM", "text": "ρευματοειδής αρθρίτιδα" }
+      ]
+    },
+    {
+      "conceptId": "ibs",
+      "labelCode": "CHRONIC_IBS",
+      "scope": "CHRONIC",
+      "priority": 1150,
+      "source": "ICD-10 K58",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "irritable bowel syndrome" },
+        { "lang": "en", "type": "ABBREVIATION", "text": "ibs",
+          "note": "the worst offender under the old global edit distance of 2: 'its', 'is', 'abs' and 'ibu' all matched" },
+        { "lang": "el", "type": "PREFERRED", "text": "σύνδρομο ευερέθιστου εντέρου" },
+        { "lang": "el", "type": "SYNONYM", "text": "ευερέθιστο έντερο" },
+        { "lang": "el", "type": "SYNONYM", "text": "σπαστική κολίτιδα" }
+      ]
+    },
+    {
+      "conceptId": "migraine",
+      "labelCode": "CHRONIC_MIGRAINE",
+      "scope": "CHRONIC",
+      "priority": 1150,
+      "source": "ICD-10 G43",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "migraine" },
+        { "lang": "el", "type": "PREFERRED", "text": "ημικρανία" }
+      ]
+    },
+    {
+      "conceptId": "osteoporosis",
+      "labelCode": "CHRONIC_OSTEOPOROSIS",
+      "scope": "CHRONIC",
+      "priority": 1150,
+      "source": "ICD-10 M80-M81",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "osteoporosis" },
+        { "lang": "el", "type": "PREFERRED", "text": "οστεοπόρωση" }
+      ]
+    },
+    {
+      "conceptId": "fibromyalgia",
+      "labelCode": "CHRONIC_FIBROMYALGIA",
+      "scope": "CHRONIC",
+      "priority": 1150,
+      "source": "ICD-10 M79.7",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "fibromyalgia" },
+        { "lang": "el", "type": "PREFERRED", "text": "ινομυαλγία" }
+      ]
+    },
+    {
+      "conceptId": "psoriasis",
+      "labelCode": "CHRONIC_PSORIASIS",
+      "scope": "CHRONIC",
+      "priority": 1100,
+      "source": "ICD-10 L40",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "psoriasis" },
+        { "lang": "el", "type": "PREFERRED", "text": "ψωρίαση" }
+      ]
+    },
+    {
+      "conceptId": "gerd",
+      "labelCode": "CHRONIC_GERD",
+      "scope": "CHRONIC",
+      "priority": 1100,
+      "source": "ICD-10 K21",
+      "terms": [
+        { "lang": "en", "type": "PREFERRED", "text": "gastroesophageal reflux" },
+        { "lang": "en", "type": "ABBREVIATION", "text": "gerd" },
+        { "lang": "en", "type": "SYNONYM", "text": "acid reflux" },
+        { "lang": "en", "type": "MISSPELLING", "text": "reflux",
+          "note": "not a misspelling - listed under this type purely to force exact matching, because 'reflex' is one edit away and would otherwise label anyone describing their reflexes" },
+        { "lang": "el", "type": "PREFERRED", "text": "γαστροοισοφαγική παλινδρόμηση" },
+        { "lang": "el", "type": "SYNONYM", "text": "οξεία παλινδρόμηση" },
+        { "lang": "el", "type": "WEAK", "text": "παλινδρόμηση" }
+      ]
+    }
+  ]
+}

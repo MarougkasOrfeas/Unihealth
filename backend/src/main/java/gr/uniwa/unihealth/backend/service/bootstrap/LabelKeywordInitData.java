@@ -1,213 +1,235 @@
 package gr.uniwa.unihealth.backend.service.bootstrap;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import gr.uniwa.unihealth.backend.config.context.TenantContext;
 import gr.uniwa.unihealth.backend.model.LabelKeywordMapping;
+import gr.uniwa.unihealth.backend.model.ReferenceDataVersion;
 import gr.uniwa.unihealth.backend.repository.LabelKeywordMappingRepository;
+import gr.uniwa.unihealth.backend.repository.ReferenceDataVersionRepository;
+import gr.uniwa.unihealth.backend.service.personalization.resolver.MedicalTermIndex;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Component;
 
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.regex.Pattern;
 
-@Configuration
-@RequiredArgsConstructor
+/**
+ * Loads the bilingual medical term dictionary from {@code data/labels/medical-terms.json}.
+ *
+ * <p>Follows {@link NhsSymptomInitData}: the file is read and parsed once, outside the per-tenant
+ * loop, then projected into each tenant's database. It is deliberately read from the classpath
+ * rather than the network, so a normal start is offline and every machine ends up with the same
+ * rows.
+ *
+ * <p>What changed, and why it matters: this class used to hold 159 keyword rows as Java source,
+ * behind a {@code count() > 0} guard. That guard meant the dictionary could never be corrected once
+ * a database had been seeded — editing the list was a silent no-op everywhere it had already run.
+ * Loading is now gated on a checksum of the file, so editing the JSON and restarting is the entire
+ * workflow.
+ */
 @Slf4j
+@Component
+@RequiredArgsConstructor
 public class LabelKeywordInitData implements ApplicationRunner {
 
+  private static final String RESOURCE = "data/labels/medical-terms.json";
+
+  private static final Pattern LABEL_CODE = Pattern.compile("^(ALLERGY|CHRONIC)_[A-Z0-9_]+$");
+
   private final LabelKeywordMappingRepository repository;
+  private final ReferenceDataVersionRepository versionRepository;
+  private final MedicalTermIndex termIndex;
   private final TenantContext tenantContext;
+
+  /** Configured exactly as {@link NhsSymptomInitData} does, so both snapshots bind alike. */
+  private final ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
 
   @Override
   public void run(ApplicationArguments args) {
-    tenantContext.runForEachTenant(this::initialize, "LabelKeywordInitData.run");
+    MedicalTermDictionary dictionary = readDictionary();
+    String checksum = readChecksum();
+
+    validate(dictionary);
+
+    tenantContext.runForEachTenant(tenantId -> seed(tenantId, dictionary, checksum),
+        "LabelKeywordInitData.run");
   }
 
-  public void initialize(String tenantId) {
-    if (repository.count() > 0)
+  /**
+   * Diverges from {@link NhsSymptomInitData}, which logs a warning and carries on when its snapshot
+   * is missing. The severities are not comparable: an empty symptom A-Z is a blank page, whereas an
+   * empty term dictionary means every health profile silently resolves to {@code ALLERGY_OTHER} and
+   * {@code CHRONIC_OTHER} for every user, with nothing in the UI to suggest anything is wrong.
+   * Better to refuse to start.
+   */
+  MedicalTermDictionary readDictionary() {
+    ClassPathResource resource = new ClassPathResource(RESOURCE);
+    if (!resource.exists()) {
+      throw new IllegalStateException(
+          "Missing medical term dictionary at [" + RESOURCE + "]. Free-text health answers cannot "
+              + "be interpreted without it.");
+    }
+
+    try (InputStream in = resource.getInputStream()) {
+      return objectMapper.readValue(in, MedicalTermDictionary.class);
+    } catch (Exception e) {
+      throw new IllegalStateException("Could not read the medical term dictionary: "
+          + e.getMessage(), e);
+    }
+  }
+
+  private String readChecksum() {
+    try (InputStream in = new ClassPathResource(RESOURCE).getInputStream()) {
+      return DigestUtils.md5Hex(in);
+    } catch (Exception e) {
+      throw new IllegalStateException("Could not checksum the medical term dictionary", e);
+    }
+  }
+
+  private void seed(String tenantId, MedicalTermDictionary dictionary, String checksum) {
+    Optional<ReferenceDataVersion> stored = versionRepository.findById(RESOURCE);
+
+    if (stored.isPresent() && stored.get().getChecksum().equals(checksum)) {
+      log.debug("Medical term dictionary unchanged for tenant [{}]", tenantId);
+      termIndex.rebuild();
       return;
-    log.info("Initializing keyword mappings for tenant [{}]", tenantId);
+    }
 
-    List<LabelKeywordMapping> keywords = new ArrayList<>();
+    List<LabelKeywordMapping> rows = flatten(dictionary);
 
-    // =========================
-    // Allergies
-    // =========================
-    keywords.add(kw("peanut", "ALLERGY_PEANUT", "ALLERGY"));
-    keywords.add(kw("peanuts", "ALLERGY_PEANUT", "ALLERGY"));
-    keywords.add(kw("groundnut", "ALLERGY_PEANUT", "ALLERGY"));
-    keywords.add(kw("groundnuts", "ALLERGY_PEANUT", "ALLERGY"));
-    keywords.add(kw("tree nut", "ALLERGY_TREE_NUT", "ALLERGY"));
-    keywords.add(kw("tree nuts", "ALLERGY_TREE_NUT", "ALLERGY"));
-    keywords.add(kw("almond", "ALLERGY_TREE_NUT", "ALLERGY"));
-    keywords.add(kw("almonds", "ALLERGY_TREE_NUT", "ALLERGY"));
-    keywords.add(kw("cashew", "ALLERGY_TREE_NUT", "ALLERGY"));
-    keywords.add(kw("cashews", "ALLERGY_TREE_NUT", "ALLERGY"));
-    keywords.add(kw("walnut", "ALLERGY_TREE_NUT", "ALLERGY"));
-    keywords.add(kw("walnuts", "ALLERGY_TREE_NUT", "ALLERGY"));
-    keywords.add(kw("hazelnut", "ALLERGY_TREE_NUT", "ALLERGY"));
-    keywords.add(kw("hazelnuts", "ALLERGY_TREE_NUT", "ALLERGY"));
-    keywords.add(kw("pistachio", "ALLERGY_TREE_NUT", "ALLERGY"));
-    keywords.add(kw("pistachios", "ALLERGY_TREE_NUT", "ALLERGY"));
-    keywords.add(kw("pecan", "ALLERGY_TREE_NUT", "ALLERGY"));
-    keywords.add(kw("pecans", "ALLERGY_TREE_NUT", "ALLERGY"));
-    keywords.add(kw("macadamia", "ALLERGY_TREE_NUT", "ALLERGY"));
-    keywords.add(kw("macadamias", "ALLERGY_TREE_NUT", "ALLERGY"));
-    keywords.add(kw("brazil nut", "ALLERGY_TREE_NUT", "ALLERGY"));
-    keywords.add(kw("brazil nuts", "ALLERGY_TREE_NUT", "ALLERGY"));
-    keywords.add(kw("dairy", "ALLERGY_DAIRY", "ALLERGY"));
-    keywords.add(kw("milk", "ALLERGY_DAIRY", "ALLERGY"));
-    keywords.add(kw("cow milk", "ALLERGY_DAIRY", "ALLERGY"));
-    keywords.add(kw("milk protein", "ALLERGY_DAIRY", "ALLERGY"));
-    keywords.add(kw("casein", "ALLERGY_DAIRY", "ALLERGY"));
-    keywords.add(kw("whey", "ALLERGY_DAIRY", "ALLERGY"));
-    keywords.add(kw("lactose", "ALLERGY_DAIRY", "ALLERGY"));
-    keywords.add(kw("gluten", "ALLERGY_GLUTEN", "ALLERGY"));
-    keywords.add(kw("wheat", "ALLERGY_GLUTEN", "ALLERGY"));
-    keywords.add(kw("barley", "ALLERGY_GLUTEN", "ALLERGY"));
-    keywords.add(kw("rye", "ALLERGY_GLUTEN", "ALLERGY"));
-    keywords.add(kw("egg", "ALLERGY_EGG", "ALLERGY"));
-    keywords.add(kw("eggs", "ALLERGY_EGG", "ALLERGY"));
-    keywords.add(kw("egg white", "ALLERGY_EGG", "ALLERGY"));
-    keywords.add(kw("egg yolk", "ALLERGY_EGG", "ALLERGY"));
-    keywords.add(kw("shellfish", "ALLERGY_SHELLFISH", "ALLERGY"));
-    keywords.add(kw("shrimp", "ALLERGY_SHELLFISH", "ALLERGY"));
-    keywords.add(kw("prawn", "ALLERGY_SHELLFISH", "ALLERGY"));
-    keywords.add(kw("prawns", "ALLERGY_SHELLFISH", "ALLERGY"));
-    keywords.add(kw("crab", "ALLERGY_SHELLFISH", "ALLERGY"));
-    keywords.add(kw("lobster", "ALLERGY_SHELLFISH", "ALLERGY"));
-    keywords.add(kw("crayfish", "ALLERGY_SHELLFISH", "ALLERGY"));
-    keywords.add(kw("mussel", "ALLERGY_SHELLFISH", "ALLERGY"));
-    keywords.add(kw("mussels", "ALLERGY_SHELLFISH", "ALLERGY"));
-    keywords.add(kw("clam", "ALLERGY_SHELLFISH", "ALLERGY"));
-    keywords.add(kw("clams", "ALLERGY_SHELLFISH", "ALLERGY"));
-    keywords.add(kw("oyster", "ALLERGY_SHELLFISH", "ALLERGY"));
-    keywords.add(kw("oysters", "ALLERGY_SHELLFISH", "ALLERGY"));
-    keywords.add(kw("scallop", "ALLERGY_SHELLFISH", "ALLERGY"));
-    keywords.add(kw("scallops", "ALLERGY_SHELLFISH", "ALLERGY"));
-    keywords.add(kw("soy", "ALLERGY_SOY", "ALLERGY"));
-    keywords.add(kw("soya", "ALLERGY_SOY", "ALLERGY"));
-    keywords.add(kw("soybean", "ALLERGY_SOY", "ALLERGY"));
-    keywords.add(kw("soybeans", "ALLERGY_SOY", "ALLERGY"));
-    keywords.add(kw("onion", "ALLERGY_ONION", "ALLERGY"));
-    keywords.add(kw("onions", "ALLERGY_ONION", "ALLERGY"));
-    keywords.add(kw("fish", "ALLERGY_FISH", "ALLERGY"));
-    keywords.add(kw("salmon", "ALLERGY_FISH", "ALLERGY"));
-    keywords.add(kw("tuna", "ALLERGY_FISH", "ALLERGY"));
-    keywords.add(kw("cod", "ALLERGY_FISH", "ALLERGY"));
-    keywords.add(kw("sardine", "ALLERGY_FISH", "ALLERGY"));
-    keywords.add(kw("sardines", "ALLERGY_FISH", "ALLERGY"));
-    keywords.add(kw("sesame", "ALLERGY_SESAME", "ALLERGY"));
-    keywords.add(kw("sesame seed", "ALLERGY_SESAME", "ALLERGY"));
-    keywords.add(kw("sesame seeds", "ALLERGY_SESAME", "ALLERGY"));
-    keywords.add(kw("tahini", "ALLERGY_SESAME", "ALLERGY"));
-    keywords.add(kw("mustard", "ALLERGY_MUSTARD", "ALLERGY"));
-    keywords.add(kw("celery", "ALLERGY_CELERY", "ALLERGY"));
-    keywords.add(kw("garlic", "ALLERGY_GARLIC", "ALLERGY"));
-    keywords.add(kw("corn", "ALLERGY_CORN", "ALLERGY"));
-    keywords.add(kw("maize", "ALLERGY_CORN", "ALLERGY"));
-    keywords.add(kw("tomato", "ALLERGY_TOMATO", "ALLERGY"));
-    keywords.add(kw("tomatoes", "ALLERGY_TOMATO", "ALLERGY"));
-    keywords.add(kw("chocolate", "ALLERGY_CHOCOLATE", "ALLERGY"));
-    keywords.add(kw("cocoa", "ALLERGY_CHOCOLATE", "ALLERGY"));
-    keywords.add(kw("strawberry", "ALLERGY_STRAWBERRY", "ALLERGY"));
-    keywords.add(kw("strawberries", "ALLERGY_STRAWBERRY", "ALLERGY"));
-    keywords.add(kw("kiwi", "ALLERGY_KIWI", "ALLERGY"));
-    keywords.add(kw("banana", "ALLERGY_BANANA", "ALLERGY"));
-    keywords.add(kw("bananas", "ALLERGY_BANANA", "ALLERGY"));
-    keywords.add(kw("avocado", "ALLERGY_AVOCADO", "ALLERGY"));
-    keywords.add(kw("avocados", "ALLERGY_AVOCADO", "ALLERGY"));
-    keywords.add(kw("mushroom", "ALLERGY_MUSHROOM", "ALLERGY"));
-    keywords.add(kw("mushrooms", "ALLERGY_MUSHROOM", "ALLERGY"));
-    keywords.add(kw("sulfite", "ALLERGY_SULFITE", "ALLERGY"));
-    keywords.add(kw("sulfites", "ALLERGY_SULFITE", "ALLERGY"));
-    keywords.add(kw("sulphite", "ALLERGY_SULFITE", "ALLERGY"));
-    keywords.add(kw("sulphites", "ALLERGY_SULFITE", "ALLERGY"));
+    log.info("Loading medical term dictionary v{} for tenant [{}]: {} concepts, {} terms",
+        dictionary.datasetVersion(), tenantId, dictionary.concepts().size(), rows.size());
 
-    // =========================
-    // Chronic conditions
-    // =========================
-    keywords.add(kw("asthma", "CHRONIC_ASTHMA", "CHRONIC"));
-    keywords.add(kw("asthmatic", "CHRONIC_ASTHMA", "CHRONIC"));
-    keywords.add(kw("diabetes", "CHRONIC_DIABETES", "CHRONIC"));
-    keywords.add(kw("diabetic", "CHRONIC_DIABETES", "CHRONIC"));
-    keywords.add(kw("type 1 diabetes", "CHRONIC_DIABETES", "CHRONIC"));
-    keywords.add(kw("type 2 diabetes", "CHRONIC_DIABETES", "CHRONIC"));
-    keywords.add(kw("t1d", "CHRONIC_DIABETES", "CHRONIC"));
-    keywords.add(kw("t2d", "CHRONIC_DIABETES", "CHRONIC"));
-    keywords.add(kw("hypertension", "CHRONIC_HYPERTENSION", "CHRONIC"));
-    keywords.add(kw("high blood pressure", "CHRONIC_HYPERTENSION", "CHRONIC"));
-    keywords.add(kw("blood pressure", "CHRONIC_HYPERTENSION", "CHRONIC"));
-    keywords.add(kw("htn", "CHRONIC_HYPERTENSION", "CHRONIC"));
-    keywords.add(kw("heart disease", "CHRONIC_HEART_DISEASE", "CHRONIC"));
-    keywords.add(kw("cardiovascular disease", "CHRONIC_HEART_DISEASE", "CHRONIC"));
-    keywords.add(kw("coronary disease", "CHRONIC_HEART_DISEASE", "CHRONIC"));
-    keywords.add(kw("heart condition", "CHRONIC_HEART_DISEASE", "CHRONIC"));
-    keywords.add(kw("cardiac condition", "CHRONIC_HEART_DISEASE", "CHRONIC"));
-    keywords.add(kw("arthritis", "CHRONIC_ARTHRITIS", "CHRONIC"));
-    keywords.add(kw("osteoarthritis", "CHRONIC_ARTHRITIS", "CHRONIC"));
-    keywords.add(kw("rheumatoid arthritis", "CHRONIC_ARTHRITIS", "CHRONIC"));
-    keywords.add(kw("thyroid", "CHRONIC_THYROID", "CHRONIC"));
-    keywords.add(kw("hypothyroidism", "CHRONIC_THYROID", "CHRONIC"));
-    keywords.add(kw("hyperthyroidism", "CHRONIC_THYROID", "CHRONIC"));
-    keywords.add(kw("hashimoto", "CHRONIC_THYROID", "CHRONIC"));
-    keywords.add(kw("graves disease", "CHRONIC_THYROID", "CHRONIC"));
-    keywords.add(kw("celiac", "CHRONIC_CELIAC", "CHRONIC"));
-    keywords.add(kw("coeliac", "CHRONIC_CELIAC", "CHRONIC"));
-    keywords.add(kw("celiac disease", "CHRONIC_CELIAC", "CHRONIC"));
-    keywords.add(kw("coeliac disease", "CHRONIC_CELIAC", "CHRONIC"));
-    keywords.add(kw("ibs", "CHRONIC_IBS", "CHRONIC"));
-    keywords.add(kw("irritable bowel syndrome", "CHRONIC_IBS", "CHRONIC"));
-    keywords.add(kw("crohn", "CHRONIC_CROHNS", "CHRONIC"));
-    keywords.add(kw("crohns", "CHRONIC_CROHNS", "CHRONIC"));
-    keywords.add(kw("crohn disease", "CHRONIC_CROHNS", "CHRONIC"));
-    keywords.add(kw("crohn s disease", "CHRONIC_CROHNS", "CHRONIC"));
-    keywords.add(kw("depression", "CHRONIC_DEPRESSION", "CHRONIC"));
-    keywords.add(kw("depressive disorder", "CHRONIC_DEPRESSION", "CHRONIC"));
-    keywords.add(kw("major depression", "CHRONIC_DEPRESSION", "CHRONIC"));
-    keywords.add(kw("anxiety", "CHRONIC_ANXIETY", "CHRONIC"));
-    keywords.add(kw("anxiety disorder", "CHRONIC_ANXIETY", "CHRONIC"));
-    keywords.add(kw("panic disorder", "CHRONIC_ANXIETY", "CHRONIC"));
-    keywords.add(kw("copd", "CHRONIC_COPD", "CHRONIC"));
-    keywords.add(kw("chronic obstructive pulmonary disease", "CHRONIC_COPD", "CHRONIC"));
-    keywords.add(kw("gerd", "CHRONIC_GERD", "CHRONIC"));
-    keywords.add(kw("acid reflux", "CHRONIC_GERD", "CHRONIC"));
-    keywords.add(kw("reflux", "CHRONIC_GERD", "CHRONIC"));
-    keywords.add(kw("gastroesophageal reflux", "CHRONIC_GERD", "CHRONIC"));
-    keywords.add(kw("ulcerative colitis", "CHRONIC_ULCERATIVE_COLITIS", "CHRONIC"));
-    keywords.add(kw("colitis", "CHRONIC_ULCERATIVE_COLITIS", "CHRONIC"));
-    keywords.add(kw("chronic kidney disease", "CHRONIC_KIDNEY_DISEASE", "CHRONIC"));
-    keywords.add(kw("kidney disease", "CHRONIC_KIDNEY_DISEASE", "CHRONIC"));
-    keywords.add(kw("ckd", "CHRONIC_KIDNEY_DISEASE", "CHRONIC"));
-    keywords.add(kw("fatty liver", "CHRONIC_LIVER_DISEASE", "CHRONIC"));
-    keywords.add(kw("liver disease", "CHRONIC_LIVER_DISEASE", "CHRONIC"));
-    keywords.add(kw("nafld", "CHRONIC_LIVER_DISEASE", "CHRONIC"));
-    keywords.add(kw("epilepsy", "CHRONIC_EPILEPSY", "CHRONIC"));
-    keywords.add(kw("seizure disorder", "CHRONIC_EPILEPSY", "CHRONIC"));
-    keywords.add(kw("migraine", "CHRONIC_MIGRAINE", "CHRONIC"));
-    keywords.add(kw("migraines", "CHRONIC_MIGRAINE", "CHRONIC"));
-    keywords.add(kw("osteoporosis", "CHRONIC_OSTEOPOROSIS", "CHRONIC"));
-    keywords.add(kw("pcos", "CHRONIC_PCOS", "CHRONIC"));
-    keywords.add(kw("polycystic ovary syndrome", "CHRONIC_PCOS", "CHRONIC"));
-    keywords.add(kw("lupus", "CHRONIC_LUPUS", "CHRONIC"));
-    keywords.add(kw("psoriasis", "CHRONIC_PSORIASIS", "CHRONIC"));
-    keywords.add(kw("fibromyalgia", "CHRONIC_FIBROMYALGIA", "CHRONIC"));
-    keywords.add(kw("sleep apnea", "CHRONIC_SLEEP_APNEA", "CHRONIC"));
-    keywords.add(kw("sleep apnoea", "CHRONIC_SLEEP_APNEA", "CHRONIC"));
-    keywords.add(kw("anemia", "CHRONIC_ANEMIA", "CHRONIC"));
-    keywords.add(kw("anaemia", "CHRONIC_ANEMIA", "CHRONIC"));
-    
-    repository.saveAll(keywords);
+    // runForEachTenant already wraps this in a transaction and a ShedLock, so the delete and the
+    // insert are atomic per tenant even when several instances start at once.
+    repository.deleteAll();
+    repository.saveAll(rows);
+    versionRepository.save(new ReferenceDataVersion(RESOURCE, checksum, rows.size()));
+
+    termIndex.rebuild();
   }
 
-  private LabelKeywordMapping kw(String keyword, String labelCode, String type) {
-    LabelKeywordMapping m = new LabelKeywordMapping();
-    m.setKeyword(keyword);
-    m.setLabelCode(labelCode);
-    m.setKeywordType(type);
-    m.setActive(true);
-    return m;
+  /**
+   * One row per (term, scope). A concept scoped {@code BOTH} produces two rows, because the matcher
+   * only ever considers terms belonging to the field being read.
+   */
+  List<LabelKeywordMapping> flatten(MedicalTermDictionary dictionary) {
+    List<LabelKeywordMapping> rows = new ArrayList<>();
+
+    for (MedicalTermDictionary.Concept concept : dictionary.concepts()) {
+      for (MedicalTermDictionary.Term term : concept.terms()) {
+        for (String scope : scopesOf(concept)) {
+          LabelKeywordMapping row = new LabelKeywordMapping();
+          // Lowercased on the way in, so uq_label_keyword_mapping constrains what it appears to.
+          row.setKeyword(term.text().toLowerCase(Locale.ROOT));
+          row.setLabelCode(concept.labelCode());
+          row.setKeywordType(scope);
+          row.setLang(term.lang());
+          row.setTermType(term.type());
+          row.setConceptId(concept.conceptId());
+          row.setPriority(concept.priority());
+          row.setSource(concept.source());
+          row.setActive(true);
+          rows.add(row);
+        }
+      }
+    }
+
+    return rows;
+  }
+
+  /**
+   * The free-text fields a concept may be matched against.
+   *
+   * <p>{@code BOTH} produces a row per field, because the matcher only ever considers terms
+   * belonging to the field being read. It exists for coeliac, gluten and lactose, which students
+   * routinely write in the allergy box.
+   */
+  private List<String> scopesOf(MedicalTermDictionary.Concept concept) {
+    return "BOTH".equals(concept.scope())
+        ? List.of("ALLERGY", "CHRONIC")
+        : List.of(concept.scope());
+  }
+
+  /**
+   * Fails the start on anything that would produce wrong labels rather than no labels.
+   *
+   * <p>A null priority is the sharpest of these: label sorting unboxes that value, so a single
+   * missing number would throw on every profile save rather than degrading quietly.
+   */
+  void validate(MedicalTermDictionary dictionary) {
+    List<String> problems = new ArrayList<>();
+    Set<String> seenCodes = new HashSet<>();
+    Set<String> seenConcepts = new HashSet<>();
+    Map<String, String> seenTerms = new HashMap<>();
+
+    for (MedicalTermDictionary.Concept concept : dictionary.concepts()) {
+      String at = concept.conceptId() + "/" + concept.labelCode();
+
+      if (!LABEL_CODE.matcher(concept.labelCode()).matches()) {
+        problems.add(at + ": malformed label code");
+      }
+      // Two concepts sharing a label code would silently merge, and the one seeded second would
+      // overwrite the other's priority.
+      if (!seenCodes.add(concept.labelCode())) {
+        problems.add(at + ": duplicate label code");
+      }
+      if (!seenConcepts.add(concept.conceptId())) {
+        problems.add(at + ": duplicate concept id");
+      }
+      if (concept.priority() == null || concept.priority() <= 0) {
+        problems.add(at + ": priority must be a positive number");
+      }
+      if (concept.terms() == null || concept.terms().isEmpty()) {
+        problems.add(at + ": no terms");
+        continue;
+      }
+      if (concept.terms().stream().noneMatch(term -> "en".equals(term.lang()))) {
+        problems.add(at + ": no English term");
+      }
+      if (concept.terms().stream().noneMatch(term -> "el".equals(term.lang()))) {
+        problems.add(at + ": no Greek term");
+      }
+
+      for (MedicalTermDictionary.Term term : concept.terms()) {
+        if (term.text() == null || term.text().isBlank()) {
+          problems.add(at + ": blank term");
+          continue;
+        }
+        if (term.text().length() > 100) {
+          problems.add(at + ": term \"" + term.text() + "\" exceeds the keyword column width");
+        }
+
+        // Mirrors uq_label_keyword_mapping (keyword, keyword_type, lang). Caught here so a
+        // duplicated term reports which two concepts clash, rather than failing mid-insert with a
+        // constraint violation naming neither.
+        for (String scope : scopesOf(concept)) {
+          String key = term.text().toLowerCase(Locale.ROOT) + "|" + scope + "|" + term.lang();
+          String owner = seenTerms.putIfAbsent(key, at);
+          if (owner != null) {
+            problems.add(at + ": term \"" + term.text() + "\" (" + scope + "/" + term.lang()
+                + ") is already claimed by " + owner);
+          }
+        }
+      }
+    }
+
+    if (!problems.isEmpty()) {
+      throw new IllegalStateException("Invalid medical term dictionary:\n  "
+          + String.join("\n  ", problems));
+    }
   }
 }

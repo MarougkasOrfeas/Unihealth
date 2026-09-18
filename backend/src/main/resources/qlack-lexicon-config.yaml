@@ -662,6 +662,55 @@ translations:
       - profile.label.GOAL_ALIGNED_MANAGE_WEIGHT: ο στόχος σας για το βάρος ταιριάζει με το προφίλ σας
       - profile.label.HAS_CHRONIC_CONDITION: έχετε χρόνια πάθηση
       - profile.label.HAS_FOOD_ALLERGY: έχετε τροφική αλλεργία
+      - profile.label.ALLERGY_PEANUT: έχετε αλλεργία στα φιστίκια
+      - profile.label.ALLERGY_TREE_NUT: έχετε αλλεργία στους ξηρούς καρπούς
+      - profile.label.ALLERGY_DAIRY: έχετε αλλεργία στα γαλακτοκομικά
+      - profile.label.ALLERGY_GLUTEN: έχετε αλλεργία στη γλουτένη
+      - profile.label.ALLERGY_EGG: έχετε αλλεργία στα αυγά
+      - profile.label.ALLERGY_SHELLFISH: έχετε αλλεργία στα οστρακοειδή
+      - profile.label.ALLERGY_SOY: έχετε αλλεργία στη σόγια
+      - profile.label.ALLERGY_FISH: έχετε αλλεργία στα ψάρια
+      - profile.label.ALLERGY_SESAME: έχετε αλλεργία στο σουσάμι
+      - profile.label.ALLERGY_MUSTARD: έχετε αλλεργία στη μουστάρδα
+      - profile.label.ALLERGY_CELERY: έχετε αλλεργία στο σέλινο
+      - profile.label.ALLERGY_SULFITE: έχετε αλλεργία στα θειώδη
+      - profile.label.ALLERGY_ONION: έχετε αλλεργία στο κρεμμύδι
+      - profile.label.ALLERGY_GARLIC: έχετε αλλεργία στο σκόρδο
+      - profile.label.ALLERGY_CORN: έχετε αλλεργία στο καλαμπόκι
+      - profile.label.ALLERGY_TOMATO: έχετε αλλεργία στην ντομάτα
+      - profile.label.ALLERGY_CHOCOLATE: έχετε αλλεργία στη σοκολάτα
+      - profile.label.ALLERGY_STRAWBERRY: έχετε αλλεργία στις φράουλες
+      - profile.label.ALLERGY_KIWI: έχετε αλλεργία στο ακτινίδιο
+      - profile.label.ALLERGY_BANANA: έχετε αλλεργία στην μπανάνα
+      - profile.label.ALLERGY_AVOCADO: έχετε αλλεργία στο αβοκάντο
+      - profile.label.ALLERGY_MUSHROOM: έχετε αλλεργία στα μανιτάρια
+      - profile.label.ALLERGY_OTHER: έχετε τροφική αλλεργία που δεν αναγνωρίσαμε
+      - profile.label.CHRONIC_ASTHMA: έχετε άσθμα
+      - profile.label.CHRONIC_DIABETES: έχετε διαβήτη
+      - profile.label.CHRONIC_HYPERTENSION: έχετε υπέρταση
+      - profile.label.CHRONIC_HEART_DISEASE: έχετε καρδιοπάθεια
+      - profile.label.CHRONIC_ARTHRITIS: έχετε αρθρίτιδα
+      - profile.label.CHRONIC_THYROID: έχετε πάθηση του θυρεοειδούς
+      - profile.label.CHRONIC_CELIAC: έχετε κοιλιοκάκη
+      - profile.label.CHRONIC_IBS: έχετε σύνδρομο ευερέθιστου εντέρου
+      - profile.label.CHRONIC_CROHNS: έχετε νόσο του Κρον
+      - profile.label.CHRONIC_DEPRESSION: έχετε κατάθλιψη
+      - profile.label.CHRONIC_ANXIETY: έχετε αγχώδη διαταραχή
+      - profile.label.CHRONIC_COPD: έχετε χρόνια αποφρακτική πνευμονοπάθεια
+      - profile.label.CHRONIC_GERD: έχετε γαστροοισοφαγική παλινδρόμηση
+      - profile.label.CHRONIC_ULCERATIVE_COLITIS: έχετε ελκώδη κολίτιδα
+      - profile.label.CHRONIC_KIDNEY_DISEASE: έχετε χρόνια νεφρική νόσο
+      - profile.label.CHRONIC_LIVER_DISEASE: έχετε ηπατική νόσο
+      - profile.label.CHRONIC_EPILEPSY: έχετε επιληψία
+      - profile.label.CHRONIC_MIGRAINE: έχετε ημικρανίες
+      - profile.label.CHRONIC_OSTEOPOROSIS: έχετε οστεοπόρωση
+      - profile.label.CHRONIC_PCOS: έχετε σύνδρομο πολυκυστικών ωοθηκών
+      - profile.label.CHRONIC_LUPUS: έχετε ερυθηματώδη λύκο
+      - profile.label.CHRONIC_PSORIASIS: έχετε ψωρίαση
+      - profile.label.CHRONIC_FIBROMYALGIA: έχετε ινομυαλγία
+      - profile.label.CHRONIC_SLEEP_APNEA: έχετε υπνική άπνοια
+      - profile.label.CHRONIC_ANEMIA: έχετε αναιμία
+      - profile.label.CHRONIC_OTHER: έχετε χρόνια πάθηση που δεν αναγνωρίσαμε
       - profile.label.OPTIONAL_HIGH_MEDICATION: λαμβάνετε φαρμακευτική αγωγή
       - profile.label.OPTIONAL_HIGH_SURGERY_HISTORY: έχετε ιστορικό χειρουργείου
       - profile.label.OPTIONAL_SLEEP_LESS_THAN_6_HOURS: κοιμάστε λιγότερο από 6 ώρες
@@ -1489,6 +1538,55 @@ translations:
       - profile.label.GOAL_ALIGNED_MANAGE_WEIGHT: your weight goal matches your profile
       - profile.label.HAS_CHRONIC_CONDITION: you have a chronic condition
       - profile.label.HAS_FOOD_ALLERGY: you have a food allergy
+      - profile.label.ALLERGY_PEANUT: you are allergic to peanuts
+      - profile.label.ALLERGY_TREE_NUT: you are allergic to tree nuts
+      - profile.label.ALLERGY_DAIRY: you are allergic to dairy
+      - profile.label.ALLERGY_GLUTEN: you are allergic to gluten
+      - profile.label.ALLERGY_EGG: you are allergic to eggs
+      - profile.label.ALLERGY_SHELLFISH: you are allergic to shellfish
+      - profile.label.ALLERGY_SOY: you are allergic to soy
+      - profile.label.ALLERGY_FISH: you are allergic to fish
+      - profile.label.ALLERGY_SESAME: you are allergic to sesame
+      - profile.label.ALLERGY_MUSTARD: you are allergic to mustard
+      - profile.label.ALLERGY_CELERY: you are allergic to celery
+      - profile.label.ALLERGY_SULFITE: you are allergic to sulfites
+      - profile.label.ALLERGY_ONION: you are allergic to onion
+      - profile.label.ALLERGY_GARLIC: you are allergic to garlic
+      - profile.label.ALLERGY_CORN: you are allergic to corn
+      - profile.label.ALLERGY_TOMATO: you are allergic to tomato
+      - profile.label.ALLERGY_CHOCOLATE: you are allergic to chocolate
+      - profile.label.ALLERGY_STRAWBERRY: you are allergic to strawberries
+      - profile.label.ALLERGY_KIWI: you are allergic to kiwi
+      - profile.label.ALLERGY_BANANA: you are allergic to banana
+      - profile.label.ALLERGY_AVOCADO: you are allergic to avocado
+      - profile.label.ALLERGY_MUSHROOM: you are allergic to mushrooms
+      - profile.label.ALLERGY_OTHER: you have a food allergy we could not identify
+      - profile.label.CHRONIC_ASTHMA: you have asthma
+      - profile.label.CHRONIC_DIABETES: you have diabetes
+      - profile.label.CHRONIC_HYPERTENSION: you have high blood pressure
+      - profile.label.CHRONIC_HEART_DISEASE: you have heart disease
+      - profile.label.CHRONIC_ARTHRITIS: you have arthritis
+      - profile.label.CHRONIC_THYROID: you have a thyroid condition
+      - profile.label.CHRONIC_CELIAC: you have coeliac disease
+      - profile.label.CHRONIC_IBS: you have irritable bowel syndrome
+      - profile.label.CHRONIC_CROHNS: you have Crohn's disease
+      - profile.label.CHRONIC_DEPRESSION: you have depression
+      - profile.label.CHRONIC_ANXIETY: you have an anxiety disorder
+      - profile.label.CHRONIC_COPD: you have chronic obstructive pulmonary disease
+      - profile.label.CHRONIC_GERD: you have acid reflux
+      - profile.label.CHRONIC_ULCERATIVE_COLITIS: you have ulcerative colitis
+      - profile.label.CHRONIC_KIDNEY_DISEASE: you have chronic kidney disease
+      - profile.label.CHRONIC_LIVER_DISEASE: you have liver disease
+      - profile.label.CHRONIC_EPILEPSY: you have epilepsy
+      - profile.label.CHRONIC_MIGRAINE: you get migraines
+      - profile.label.CHRONIC_OSTEOPOROSIS: you have osteoporosis
+      - profile.label.CHRONIC_PCOS: you have polycystic ovary syndrome
+      - profile.label.CHRONIC_LUPUS: you have lupus
+      - profile.label.CHRONIC_PSORIASIS: you have psoriasis
+      - profile.label.CHRONIC_FIBROMYALGIA: you have fibromyalgia
+      - profile.label.CHRONIC_SLEEP_APNEA: you have sleep apnoea
+      - profile.label.CHRONIC_ANEMIA: you have anaemia
+      - profile.label.CHRONIC_OTHER: you have a chronic condition we could not identify
       - profile.label.OPTIONAL_HIGH_MEDICATION: you take regular medication
       - profile.label.OPTIONAL_HIGH_SURGERY_HISTORY: you have a surgical history
       - profile.label.OPTIONAL_SLEEP_LESS_THAN_6_HOURS: you sleep less than 6 hours

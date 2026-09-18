@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd">
+
+    <!-- Migrates the free-text keyword dictionary from hardcoded English terms
+        to a bilingual, file-driven dataset. -->
+    <changeSet id="unihealth_00015" author="uniwa">
+
+        <!-- Legacy rows are incompatible with the new dictionary structure.
+              They are replaced from data/labels/medical-terms.json on next boot. -->
+        <delete tableName="t_label_keyword_mapping"/>
+
+        <addColumn tableName="t_label_keyword_mapping">
+
+            <!-- BCP-47 language code ('en' or 'el').
+                 Greeklish keys are derived at load time and are not persisted. -->
+            <column name="lang" type="varchar(8)" defaultValue="en">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- Controls matching behaviour.
+                 ABBREVIATION, MISSPELLING and WEAK terms are exact-only. -->
+            <column name="term_type" type="varchar(20)" defaultValue="SYNONYM">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- Groups multilingual terms and variants representing the same concept. -->
+            <column name="concept_id" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- Per-concept significance used by recommendation scoring. -->
+            <column name="priority" type="int"/>
+
+            <!-- Citation trail for the dataset. Never read at runtime. -->
+            <column name="source" type="varchar(200)"/>
+        </addColumn>
+
+        <!-- Prevents duplicate terms during re-seeding.
+             Stem/skeleton collisions are validated by the application. -->
+        <addUniqueConstraint tableName="t_label_keyword_mapping"
+                             columnNames="keyword, keyword_type, lang"
+                             constraintName="uq_label_keyword_mapping"/>
+
+        <!-- Tracks the loaded reference-data version by file checksum,
+             allowing dictionary changes to trigger a re-seed. -->
+        <createTable tableName="t_reference_data_version">
+            <column name="resource_name" type="varchar(200)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="checksum" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="loaded_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="row_count" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+    </changeSet>
+
+</databaseChangeLog>

@@ -5,6 +5,7 @@ import gr.uniwa.unihealth.backend.dto.OptionalHealthProfileDTO;
 import gr.uniwa.unihealth.backend.model.LabelFieldMapping;
 import gr.uniwa.unihealth.backend.repository.LabelFieldMappingRepository;
 import gr.uniwa.unihealth.backend.service.personalization.LabelEvaluatorService;
+import gr.uniwa.unihealth.backend.service.personalization.LabelPriorityResolver;
 import gr.uniwa.unihealth.backend.service.personalization.resolver.HealthDetailLabelExtractor;
 import gr.uniwa.unihealth.backend.service.personalization.util.LabelEvaluationUtils;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ public class LabelEvaluatorServiceImpl implements LabelEvaluatorService {
 
   private final LabelFieldMappingRepository repository;
   private final HealthDetailLabelExtractor detailExtractor;
+  private final LabelPriorityResolver priorityResolver;
 
   @Override
   public List<String> evaluateAndSort(HealthProfileDTO dto) {
@@ -66,13 +68,29 @@ public class LabelEvaluatorServiceImpl implements LabelEvaluatorService {
     LabelEvaluationUtils.applyRules(labels, goal, hasChronic, hasAllergy, gender);
   }
 
+  /**
+   * Orders labels by significance, most significant first.
+   *
+   * <p>Form-rule labels carry their priority on {@link LabelFieldMapping}. The specific medical
+   * codes do not — they come from the free-text dictionary, which has no mapping row — so they used
+   * to score zero here and sort last as an undifferentiated block. That made the per-concept
+   * priorities in {@code medical-terms.json} half-wired: reported correctly when the profile was
+   * read back, but ignored when deciding the stored order, so a migraine could sit ahead of
+   * diabetes.
+   */
   private List<String> sortBySignificance(List<String> labelCodes) {
     Map<String, Integer> scoreMap = repository.findByLabelCodeInAndActiveTrue(labelCodes).stream()
-        .collect(Collectors.toMap(LabelFieldMapping::getLabelCode, LabelFieldMapping::getPriority));
+        .collect(Collectors.toMap(LabelFieldMapping::getLabelCode, LabelFieldMapping::getPriority,
+            (first, duplicate) -> first));
 
     return labelCodes.stream()
-        .sorted(Comparator.comparingInt(code -> -scoreMap.getOrDefault(code, 0)))
+        .sorted(Comparator.comparingInt(code -> -significanceOf(code, scoreMap)))
         .collect(Collectors.toList());
+  }
+
+  private int significanceOf(String labelCode, Map<String, Integer> scoreMap) {
+    Integer fromMapping = scoreMap.get(labelCode);
+    return fromMapping != null ? fromMapping : priorityResolver.priorityOf(labelCode);
   }
 
   private List<String> evaluateOptional(OptionalHealthProfileDTO dto) {

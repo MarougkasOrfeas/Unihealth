@@ -28,3 +28,17 @@ backend/src/main/resources/data/nhs/nhs-symptoms.json
 ```
 
 Commit the regenerated snapshot after a deliberate refresh.
+
+## Medical terms
+
+The bilingual dictionary the backend uses to turn free-text health answers into label codes is a
+plain committed data file, with no generation step:
+
+```text
+backend/src/main/resources/data/labels/medical-terms.json
+```
+
+Edit it and restart the backend. The loader compares an MD5 of the file against
+`t_reference_data_version` and re-seeds when it differs, so no migration or manual truncate is
+needed. Malformed entries fail the boot with the offending concept named; two concepts whose terms
+collapse to the same lookup key are reported as an error in the log.
