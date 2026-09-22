@@ -287,6 +287,18 @@ export const routes: Routes = [
         path: 'unihealth-ai',
         loadComponent: () => import('./features/unihealth-ai/unihealth-ai').then((m) => m.UnihealthAi),
         data: {breadcrumb: 'breadcrumb.ai.chat'},
+    },
+    {
+        // The path the home-page «Έρευνα UniHealth» card has always pointed at. It was a dead link
+        // until now, so the spelling is kept rather than corrected to `survey`: renaming it would
+        // mean editing the card and its test id for no gain, and would leave the old path dead.
+        //
+        // Flat and childless, like cookies-policy: wrapping a single page in a '' child makes the
+        // breadcrumb builder emit a crumb for the parent segment as well.
+        path: 'feedback',
+        loadComponent: () => import('./features/survey/survey').then((m) => m.Survey),
+        canDeactivate: [unsavedChangesGuard],
+        data: {breadcrumb: 'breadcrumb.survey'},
     }
 
 ];

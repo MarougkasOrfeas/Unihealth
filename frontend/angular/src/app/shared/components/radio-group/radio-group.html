@@ -1,0 +1,37 @@
+<!--
+  A fieldset with a legend, not a div with a label: that is what makes a screen reader announce the
+  question before each option, instead of reading five unexplained answers.
+-->
+<fieldset class="radio-group" [attr.data-testid]="testId">
+  <legend class="radio-group__legend">
+    @if (number !== undefined) {
+      <!-- aria-hidden: the number is a visual cue for scanning, and reading "four" before every
+           question would just get in the way of hearing the question itself. -->
+      <span class="radio-group__number" aria-hidden="true">{{ number }}</span>
+    }
+    <span class="radio-group__question">
+      {{ label }}@if (required) {<span class="radio-group__required" aria-hidden="true"> *</span>}
+    </span>
+  </legend>
+
+  <mat-radio-group
+    class="radio-group__options"
+    [class.radio-group__options--inline]="layout === 'inline'"
+    [formControl]="control"
+    [attr.aria-required]="required"
+  >
+    @for (opt of options; track opt.key) {
+      <mat-radio-button
+        class="radio-group__option"
+        [value]="opt.key"
+        [attr.data-testid]="testId ? testId + '-' + opt.key : null"
+      >
+        {{ opt.label | translate }}
+      </mat-radio-button>
+    }
+  </mat-radio-group>
+
+  @if (showError('required')) {
+    <p class="radio-group__error" role="alert">{{ 'global.field.required' | translate }}</p>
+  }
+</fieldset>

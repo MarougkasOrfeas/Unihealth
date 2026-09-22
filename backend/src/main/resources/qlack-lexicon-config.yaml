@@ -74,6 +74,7 @@ translations:
       - breadcrumb.departments.edit: Επεξεργασία Τμήματος
       - breadcrumb.profile: Προφίλ
       - breadcrumb.my.exams: Οι Εξετάσεις Μου
+      - breadcrumb.survey: Έρευνα
       - breadcrumb.profile.form: Η Φόρμα Μου
       - breadcrumb.symptoms: Συμπτώματα
       - breadcrumb.symptoms.az: Συμπτώματα A έως Z
@@ -150,6 +151,82 @@ translations:
       - health.profile.submit.saving: Αποθήκευση...
 
       # Home Page
+      # UniHealth survey
+      - survey.page.title: Έρευνα UniHealth
+      - survey.page.subtitle: Δέκα σύντομες ερωτήσεις για το τι να βελτιώσουμε.
+      - survey.page.intro: Οι απαντήσεις σου αποθηκεύονται μαζί με τον λογαριασμό σου. Μπορείς να τις αλλάξεις όποτε θέλεις.
+      - survey.progress: "{{answered}} από {{total}} απαντήσεις"
+      - survey.section.experience: Η εμπειρία σου
+      - survey.section.usage: Τι χρησιμοποιείς
+      - survey.section.tools: Τα εργαλεία
+      - survey.section.trust: Εμπιστοσύνη και επικοινωνία
+      - survey.section.comments: Τα σχόλιά σου
+      - survey.answered.on: "Απάντησες στις {{date}}. Μπορείς να ενημερώσεις τις απαντήσεις σου."
+      - survey.submit: Υποβολή
+      - survey.load.error: Δεν φορτώθηκαν οι προηγούμενες απαντήσεις σου.
+      # UniHealth survey - Q1 overall usefulness
+      - survey.q1.label: Πόσο χρήσιμο σου φαίνεται συνολικά το UniHealth;
+      - survey.q1.option.NOT_AT_ALL: Καθόλου
+      - survey.q1.option.A_LITTLE: Λίγο
+      - survey.q1.option.MODERATELY: Μέτρια
+      - survey.q1.option.QUITE: Αρκετά
+      - survey.q1.option.VERY: Πολύ
+      # UniHealth survey - Q2 ease of finding
+      - survey.q2.label: Πόσο εύκολα βρίσκεις αυτό που ψάχνεις;
+      - survey.q2.option.NOT_AT_ALL: Καθόλου εύκολα
+      - survey.q2.option.A_LITTLE: Με δυσκολία
+      - survey.q2.option.MODERATELY: Μέτρια
+      - survey.q2.option.QUITE: Αρκετά εύκολα
+      - survey.q2.option.VERY: Πολύ εύκολα
+      # UniHealth survey - Q3 most used section
+      - survey.q3.label: Ποια ενότητα χρησιμοποιείς περισσότερο;
+      - survey.q3.option.TOPICS: Θέματα υγείας
+      - survey.q3.option.ADVICE: Συμβουλές
+      - survey.q3.option.SYMPTOMS: Συμπτώματα και παθήσεις
+      - survey.q3.option.AI_CHAT: Βοηθός AI
+      - survey.q3.option.NEWS: Ειδήσεις υγείας
+      - survey.q3.option.MY_TESTS: Οι εξετάσεις μου
+      - survey.q3.option.PROFILE: Το προφίλ μου
+      - survey.q3.option.NONE_YET: Δεν έχω χρησιμοποιήσει κάποια ακόμα
+      # UniHealth survey - Q4 personalised suggestions
+      - survey.q4.label: Το εξατομικευμένο περιεχόμενο του UniHealth, όπως θέματα υγείας, συμβουλές, προτάσεις και email, είναι σχετικό με εσένα;
+      - survey.q4.option.YES_CLOSELY: Ναι, απόλυτα
+      - survey.q4.option.MOSTLY: Σε γενικές γραμμές
+      - survey.q4.option.NOT_REALLY: Όχι ιδιαίτερα
+      - survey.q4.option.NOT_NOTICED: Δεν τις έχω προσέξει
+      # UniHealth survey - Q5 health form length
+      - survey.q5.label: Πόσο μεγάλη σου φάνηκε η προαιρετική φόρμα υγείας;
+      - survey.q5.option.SHORT: Σύντομη
+      - survey.q5.option.ABOUT_RIGHT: Στο σωστό μέγεθος
+      - survey.q5.option.LONG: Μεγάλη
+      - survey.q5.option.TOO_LONG_UNFINISHED: Πολύ μεγάλη
+      # UniHealth survey - Q6 AI assistant
+      - survey.q6.label: Πόσο βοήθησαν οι απαντήσεις του βοηθού AI;
+      - survey.q6.option.VERY: Πολύ
+      - survey.q6.option.QUITE: Αρκετά
+      - survey.q6.option.A_LITTLE: Λίγο
+      - survey.q6.option.NOT_AT_ALL: Καθόλου
+      - survey.q6.option.NOT_USED: Δεν τον έχω χρησιμοποιήσει
+      # UniHealth survey - Q7 language
+      - survey.q7.label: Κάποιες σελίδες (συμπτώματα, παθήσεις, ευεξία) είναι στα Αγγλικά. Σε δυσκολεύει;
+      - survey.q7.option.A_LOT: Ναι, πολύ
+      - survey.q7.option.A_LITTLE: Λίγο
+      - survey.q7.option.NOT_AT_ALL: Καθόλου
+      # UniHealth survey - Q8 comfort with health data
+      - survey.q8.label: Πόσο άνετα νιώθεις να καταχωρείς τα δεδομένα σου στο Unihealth;
+      - survey.q8.option.VERY: Πολύ άνετα
+      - survey.q8.option.QUITE: Αρκετά άνετα
+      - survey.q8.option.A_LITTLE: Λίγο άνετα
+      - survey.q8.option.NOT_AT_ALL: Καθόλου άνετα
+      # UniHealth survey - Q9 email frequency
+      - survey.q9.label: Πόσο συχνά θα ήθελες email από εμάς;
+      - survey.q9.option.NEVER: Ποτέ
+      - survey.q9.option.MONTHLY: Μία φορά τον μήνα
+      - survey.q9.option.WEEKLY: Μία φορά την εβδομάδα
+      - survey.q9.option.REMINDERS_ONLY: Μόνο υπενθυμίσεις, χωρίς ειδήσεις
+      # UniHealth survey - Q10 free text
+      - survey.q10.label: Τι θα άλλαζες πρώτο; (προαιρετικό)
+      - survey.q10.placeholder: Γράψε ό,τι θέλεις με λίγα λόγια.
       - home.feedback.title: Έρευνα UniHealth
       - home.feedback.subtitle: Βοηθήστε μας να βελτιώσουμε την εμπειρία σας μοιράζοντας τα σχόλιά σας.
       - home.feedback.card.tooltip: Πατήστε για να ανοίξετε την έρευνα UniHealth
@@ -236,6 +313,7 @@ translations:
       - global.entity.group: Σχολή
       - global.entity.department: Τμήμα
       - global.entity.examFile: αρχείο εξέτασης
+      - global.entity.survey: έρευνα
 
       # Messages
       - global.message.create.success: Το {{entity}} δημιουργήθηκε.
@@ -951,6 +1029,7 @@ translations:
       - breadcrumb.departments.edit: Edit Department
       - breadcrumb.profile: Profile
       - breadcrumb.my.exams: My Medical Tests
+      - breadcrumb.survey: Survey
       - breadcrumb.profile.form: My Form
       - breadcrumb.symptoms: Symptoms
       - breadcrumb.symptoms.az: Symptoms A to Z
@@ -1027,6 +1106,82 @@ translations:
       - health.profile.submit.saving: Saving...
 
       # Home Page
+      # UniHealth survey
+      - survey.page.title: UniHealth Survey
+      - survey.page.subtitle: Ten short questions about what we should improve.
+      - survey.page.intro: Your answers are saved with your account. You can change them whenever you like.
+      - survey.progress: "{{answered}} of {{total}} answered"
+      - survey.section.experience: Your experience
+      - survey.section.usage: What you use
+      - survey.section.tools: The tools
+      - survey.section.trust: Trust and contact
+      - survey.section.comments: Your comments
+      - survey.answered.on: "You answered on {{date}}. You can update your answers."
+      - survey.submit: Submit
+      - survey.load.error: Your previous answers could not be loaded.
+      # UniHealth survey - Q1 overall usefulness
+      - survey.q1.label: How useful is UniHealth to you overall?
+      - survey.q1.option.NOT_AT_ALL: Not at all
+      - survey.q1.option.A_LITTLE: A little
+      - survey.q1.option.MODERATELY: Moderately
+      - survey.q1.option.QUITE: Quite useful
+      - survey.q1.option.VERY: Very useful
+      # UniHealth survey - Q2 ease of finding
+      - survey.q2.label: How easily do you find what you are looking for?
+      - survey.q2.option.NOT_AT_ALL: Not easily at all
+      - survey.q2.option.A_LITTLE: With difficulty
+      - survey.q2.option.MODERATELY: Reasonably
+      - survey.q2.option.QUITE: Quite easily
+      - survey.q2.option.VERY: Very easily
+      # UniHealth survey - Q3 most used section
+      - survey.q3.label: Which section do you use most?
+      - survey.q3.option.TOPICS: Health topics
+      - survey.q3.option.ADVICE: Advice and tips
+      - survey.q3.option.SYMPTOMS: Symptoms and conditions
+      - survey.q3.option.AI_CHAT: AI assistant
+      - survey.q3.option.NEWS: Health news
+      - survey.q3.option.MY_TESTS: My medical tests
+      - survey.q3.option.PROFILE: My profile
+      - survey.q3.option.NONE_YET: I have not used any of them yet
+      # UniHealth survey - Q4 personalised suggestions
+      - survey.q4.label: Is the personalized content from UniHealth, such as topics, advice, suggestions, and emails, relevant to you?
+      - survey.q4.option.YES_CLOSELY: Yes, closely
+      - survey.q4.option.MOSTLY: Mostly
+      - survey.q4.option.NOT_REALLY: Not really
+      - survey.q4.option.NOT_NOTICED: I have not noticed them
+      # UniHealth survey - Q5 health form length
+      - survey.q5.label: How did the health questionnaire feel?
+      - survey.q5.option.SHORT: Short
+      - survey.q5.option.ABOUT_RIGHT: About right
+      - survey.q5.option.LONG: Long, but I finished it
+      - survey.q5.option.TOO_LONG_UNFINISHED: Too long, I did not finish it
+      # UniHealth survey - Q6 AI assistant
+      - survey.q6.label: How helpful were the AI assistant's answers?
+      - survey.q6.option.VERY: Very helpful
+      - survey.q6.option.QUITE: Quite helpful
+      - survey.q6.option.A_LITTLE: A little
+      - survey.q6.option.NOT_AT_ALL: Not at all
+      - survey.q6.option.NOT_USED: I have not used it
+      # UniHealth survey - Q7 language
+      - survey.q7.label: Some pages (symptoms, conditions, wellness) are in English. Does that get in your way?
+      - survey.q7.option.A_LOT: Yes, a lot
+      - survey.q7.option.A_LITTLE: A little
+      - survey.q7.option.NOT_AT_ALL: Not at all
+      # UniHealth survey - Q8 comfort with health data
+      - survey.q8.label: How comfortable are you entering health data here?
+      - survey.q8.option.VERY: Very comfortable
+      - survey.q8.option.QUITE: Quite comfortable
+      - survey.q8.option.A_LITTLE: Slightly comfortable
+      - survey.q8.option.NOT_AT_ALL: Not comfortable at all
+      # UniHealth survey - Q9 email frequency
+      - survey.q9.label: How often would you want an email from us?
+      - survey.q9.option.NEVER: Never
+      - survey.q9.option.MONTHLY: Once a month
+      - survey.q9.option.WEEKLY: Once a week
+      - survey.q9.option.REMINDERS_ONLY: Reminders only, no news
+      # UniHealth survey - Q10 free text
+      - survey.q10.label: What one thing would you change? (optional)
+      - survey.q10.placeholder: Say it in a sentence or two.
       - home.feedback.title: UniHealth Survey
       - home.feedback.subtitle: Help us improve your experience by sharing your feedback.
       - home.feedback.card.tooltip: Click to open the UniHealth survey
@@ -1113,6 +1268,7 @@ translations:
       - global.entity.group: School
       - global.entity.department: Department
       - global.entity.examFile: medical test file
+      - global.entity.survey: survey
 
       # Messages
       - global.message.create.success: "{{entity}} created."

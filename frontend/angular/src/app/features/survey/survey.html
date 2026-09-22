@@ -1,0 +1,192 @@
+<app-page-header
+    testId="survey-header"
+    [title]="'survey.page.title' | translate"
+    [subtitle]="'survey.page.subtitle' | translate"
+    [backLink]="'/home'"
+    [hasUnsavedChanges]="form.dirty"
+/>
+
+<form class="survey" [formGroup]="form" (ngSubmit)="onSave()">
+
+    <!-- Intro and progress share one blue band. It gives the top of the page some weight, and the
+         counter is the one piece of chrome on a ten-question form that is genuinely useful rather
+         than decorative: it says how much is left. -->
+    <section class="survey-banner" data-testid="survey-banner">
+        <mat-icon class="survey-banner__icon" aria-hidden="true">insights</mat-icon>
+
+        <div class="survey-banner__body">
+            <p class="survey-banner__intro">{{ 'survey.page.intro' | translate }}</p>
+
+            @if (answeredOn()) {
+                <!-- Said plainly, because resubmitting replaces the previous answers rather than
+                     adding to them, and nobody should discover that afterwards. -->
+                <p class="survey-banner__answered" data-testid="survey-answered-on">
+                    {{ 'survey.answered.on' | translate: {date: answeredOn() | date: 'dd-MM-yyyy'} }}
+                </p>
+            }
+
+            <div class="survey-progress">
+                <div class="survey-progress__track">
+                    <!-- Width, not a transform: the bar is a length, and animating the length is
+                         what makes it read as filling up. -->
+                    <div
+                        class="survey-progress__fill"
+                        [style.width.%]="progressPercent()"
+                        role="progressbar"
+                        [attr.aria-valuenow]="answeredCount()"
+                        [attr.aria-valuemin]="0"
+                        [attr.aria-valuemax]="requiredCount"
+                    ></div>
+                </div>
+                <span class="survey-progress__label" data-testid="survey-progress">
+                    {{ 'survey.progress' | translate: {answered: answeredCount(), total: requiredCount} }}
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <section class="survey-section">
+        <h2 class="survey-section__title">{{ 'survey.section.experience' | translate }}</h2>
+
+        <app-radio-group
+            testId="survey-q1"
+            layout="inline"
+            [number]="1"
+            [control]="form.controls.overallUsefulness"
+            [label]="'survey.q1.label' | translate"
+            [options]="usefulnessOptions"
+            [submitted]="submitted()"
+            [required]="true"
+        />
+
+        <app-radio-group
+            testId="survey-q2"
+            layout="inline"
+            [number]="2"
+            [control]="form.controls.easeOfFinding"
+            [label]="'survey.q2.label' | translate"
+            [options]="easeOptions"
+            [submitted]="submitted()"
+            [required]="true"
+        />
+    </section>
+
+    <section class="survey-section">
+        <h2 class="survey-section__title">{{ 'survey.section.usage' | translate }}</h2>
+
+        <!-- Stacked, unlike the two scales above: these options are phrases rather than single
+             words, and a wrapped row of phrases is hard to tell apart. -->
+        <app-radio-group
+            testId="survey-q3"
+            [number]="3"
+            [control]="form.controls.mostUsedSection"
+            [label]="'survey.q3.label' | translate"
+            [options]="sectionOptions"
+            [submitted]="submitted()"
+            [required]="true"
+        />
+
+        <app-radio-group
+            testId="survey-q4"
+            [number]="4"
+            [control]="form.controls.suggestionMatch"
+            [label]="'survey.q4.label' | translate"
+            [options]="suggestionOptions"
+            [submitted]="submitted()"
+            [required]="true"
+        />
+    </section>
+
+    <section class="survey-section">
+        <h2 class="survey-section__title">{{ 'survey.section.tools' | translate }}</h2>
+
+        <app-radio-group
+            testId="survey-q5"
+            [number]="5"
+            [control]="form.controls.formLength"
+            [label]="'survey.q5.label' | translate"
+            [options]="formLengthOptions"
+            [submitted]="submitted()"
+            [required]="true"
+        />
+
+        <app-radio-group
+            testId="survey-q6"
+            [number]="6"
+            [control]="form.controls.aiHelpfulness"
+            [label]="'survey.q6.label' | translate"
+            [options]="aiOptions"
+            [submitted]="submitted()"
+            [required]="true"
+        />
+
+        <app-radio-group
+            testId="survey-q7"
+            layout="inline"
+            [number]="7"
+            [control]="form.controls.languageBarrier"
+            [label]="'survey.q7.label' | translate"
+            [options]="languageOptions"
+            [submitted]="submitted()"
+            [required]="true"
+        />
+    </section>
+
+    <section class="survey-section">
+        <h2 class="survey-section__title">{{ 'survey.section.trust' | translate }}</h2>
+
+        <app-radio-group
+            testId="survey-q8"
+            [number]="8"
+            [control]="form.controls.dataComfort"
+            [label]="'survey.q8.label' | translate"
+            [options]="comfortOptions"
+            [submitted]="submitted()"
+            [required]="true"
+        />
+
+        <app-radio-group
+            testId="survey-q9"
+            [number]="9"
+            [control]="form.controls.emailFrequency"
+            [label]="'survey.q9.label' | translate"
+            [options]="emailOptions"
+            [submitted]="submitted()"
+            [required]="true"
+        />
+    </section>
+
+    <section class="survey-section">
+        <h2 class="survey-section__title">{{ 'survey.section.comments' | translate }}</h2>
+
+        <!-- Numbered by hand to stay in the sequence: this is a textarea, not a radio group, so it
+             cannot borrow the badge from the control. -->
+        <div class="survey-field">
+            <label class="survey-field__label" for="survey-improvement">
+                <span class="survey-field__number" aria-hidden="true">10</span>
+                <span>{{ 'survey.q10.label' | translate }}</span>
+            </label>
+            <textarea
+                id="survey-improvement"
+                class="survey-field__input"
+                formControlName="improvement"
+                rows="4"
+                maxlength="1000"
+                data-testid="survey-q10"
+                [placeholder]="'survey.q10.placeholder' | translate"
+            ></textarea>
+        </div>
+    </section>
+
+    <div class="survey-actions">
+        <app-button buttonStyle="text" testId="btn-survey-cancel" (clicked)="onCancel()">
+            {{ 'global.cancel' | translate }}
+        </app-button>
+
+        <app-save-button
+            label="survey.submit"
+            [disabled]="saving()"
+            (save)="onSave()"
+        />
+    </div>
+</form>

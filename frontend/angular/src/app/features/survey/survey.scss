@@ -1,0 +1,192 @@
+/*
+ * Design tokens only, per the rule in styles.scss.
+ *
+ * The blue is the application's own primary ramp — --sys-primary is #005cbb, with
+ * --sys-primary-container as its pale tint and --sys-on-primary-container as the readable dark step.
+ * Using the ramp rather than picking a blue means the page follows the theme if the theme moves.
+ */
+
+.survey {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sys-spacing-md);
+  /* Capped and centred. Ten questions across a wide monitor leaves the eye travelling a long way
+     between a question and its options, which is what made the page feel empty rather than roomy. */
+  max-width: 52rem;
+  margin: 0 auto;
+}
+
+/* ─── the blue banner at the top ─────────────────────────────────────────── */
+
+.survey-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sys-spacing-md);
+  padding: var(--sys-card-padding);
+  border-radius: var(--sys-radius-md);
+  background: var(--sys-primary-container);
+  color: var(--sys-on-primary-container);
+}
+
+.survey-banner__icon {
+  flex: 0 0 auto;
+  font-size: var(--sys-icon-size-xl);
+  width: var(--sys-icon-size-xl);
+  height: var(--sys-icon-size-xl);
+  color: var(--sys-on-primary-container);
+}
+
+.survey-banner__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sys-spacing-sm);
+  /* Lets the progress track actually fill the remaining width instead of sizing to its content. */
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.survey-banner__intro,
+.survey-banner__answered {
+  margin: 0;
+}
+
+.survey-banner__answered {
+  font-weight: 500;
+}
+
+/* ─── progress ───────────────────────────────────────────────────────────── */
+
+.survey-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--sys-spacing-sm);
+}
+
+.survey-progress__track {
+  flex: 1 1 auto;
+  height: 0.5rem;
+  border-radius: var(--sys-radius-md);
+  /* White rather than a grey token: the track sits on the blue tint, and a neutral would read as a
+     third colour instead of as the unfilled part of the same bar. */
+  background: var(--sys-surface-container-lowest);
+  overflow: hidden;
+}
+
+.survey-progress__fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--sys-primary);
+  transition: width var(--sys-motion-duration-fast) var(--sys-motion-easing-standard);
+}
+
+.survey-progress__label {
+  flex: 0 0 auto;
+  font-weight: 600;
+  /* Reserved so the row does not shift a pixel each time the count crosses a digit. */
+  min-width: 6rem;
+  text-align: right;
+}
+
+/* ─── question groups ────────────────────────────────────────────────────── */
+
+.survey-section {
+  display: flex;
+  flex-direction: column;
+  /* Generous, because ten radio groups packed tightly read as one wall of options and it becomes
+     easy to answer the wrong row. */
+  gap: var(--sys-spacing-lg);
+  padding: var(--sys-card-padding);
+  border: 1px solid var(--sys-border-subtle);
+  /* The blue edge is what ties the cards to the banner; a full blue border would shout. */
+  border-left: 4px solid var(--sys-primary);
+  border-radius: var(--sys-radius-md);
+  background: var(--sys-surface-container-lowest);
+  box-shadow: var(--sys-elevation-1);
+}
+
+.survey-section__title {
+  margin: 0;
+  color: var(--sys-primary);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ─── the free-text question ─────────────────────────────────────────────── */
+
+.survey-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sys-spacing-sm);
+}
+
+.survey-field__label {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sys-spacing-sm);
+  color: var(--sys-text-base);
+  font-weight: 500;
+}
+
+/* Matches .radio-group__number so question ten looks like the other nine. */
+.survey-field__number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  background: var(--sys-primary);
+  color: var(--sys-on-primary);
+  font-weight: 600;
+  transform: translateY(0.35rem);
+}
+
+.survey-field__input {
+  /* Indented to the badge width, matching the option lists above. */
+  margin-left: calc(1.75rem + var(--sys-spacing-sm));
+  padding: var(--sys-spacing-sm);
+  border: 1px solid var(--sys-border-default);
+  border-radius: var(--sys-radius-md);
+  background: var(--sys-surface-container-lowest);
+  color: var(--sys-text-base);
+  font: inherit;
+  resize: vertical;
+
+  &:focus-visible {
+    outline: 2px solid var(--sys-focus-ring);
+    outline-offset: 1px;
+    border-color: var(--sys-primary);
+  }
+}
+
+/* ─── actions ────────────────────────────────────────────────────────────── */
+
+.survey-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--sys-spacing-sm);
+  padding-bottom: var(--sys-spacing-md);
+}
+
+@media (max-width: 768px) {
+  .survey-banner {
+    flex-direction: column;
+  }
+
+  .survey-progress {
+    flex-wrap: wrap;
+  }
+
+  .survey-progress__label {
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .survey-progress__fill {
+    transition: none;
+  }
+}

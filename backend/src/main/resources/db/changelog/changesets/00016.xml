@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd">
+
+    <!-- Stores one survey response per user. Re-submitting the survey updates the existing response instead of creating a new one. -->
+    <changeSet id="unihealth_00016" author="uniwa">
+
+        <!-- Stores one survey response per user. Re-submitting the survey updates the existing response instead of creating a new one. -->
+        <createTable tableName="t_user_survey">
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="created_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- Links the response directly to the user so the survey can be submitted independently of the user's health profile. -->
+            <column name="user_id" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- Survey answers are stored as enum names for simple, direct querying. -->
+            <column name="overall_usefulness" type="varchar(50)"/>
+            <column name="ease_of_finding" type="varchar(50)"/>
+            <column name="most_used_section" type="varchar(50)"/>
+            <column name="suggestion_match" type="varchar(50)"/>
+            <column name="form_length" type="varchar(50)"/>
+            <column name="ai_helpfulness" type="varchar(50)"/>
+            <column name="language_barrier" type="varchar(50)"/>
+            <column name="data_comfort" type="varchar(50)"/>
+            <column name="email_frequency" type="varchar(50)"/>
+
+            <!-- Optional free-text feedback. -->
+            <column name="improvement" type="varchar(1000)"/>
+        </createTable>
+        <!-- Removes the survey response automatically when its user is deleted. -->
+        <addForeignKeyConstraint
+                baseTableName="t_user_survey"
+                baseColumnNames="user_id"
+                constraintName="fk_user_survey_user"
+                referencedTableName="t_user"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+
+        <!-- Ensures each user has at most one survey response. -->
+        <addUniqueConstraint
+                tableName="t_user_survey"
+                columnNames="user_id"
+                constraintName="uq_user_survey_user"/>
+
+    </changeSet>
+
+</databaseChangeLog>

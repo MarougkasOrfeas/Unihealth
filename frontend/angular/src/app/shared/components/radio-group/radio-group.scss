@@ -1,0 +1,73 @@
+/* Design tokens only, per the rule in styles.scss. */
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sys-spacing-sm);
+  /* A fieldset carries a browser border and padding by default. */
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.radio-group__legend {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sys-spacing-sm);
+  /* A legend is not a flex child of the fieldset and ignores the gap above, so it spaces itself. */
+  margin-bottom: var(--sys-spacing-xs);
+  padding: 0;
+  color: var(--sys-text-base);
+}
+
+.radio-group__number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Fixed size with flex-shrink off, so a two-digit number keeps the circle round and the question
+     text stays on one alignment regardless of the count. */
+  flex: 0 0 auto;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  background: var(--sys-primary);
+  color: var(--sys-on-primary);
+  font-weight: 600;
+  /* Nudged off the text baseline: the badge is centred against the first line of the question
+     rather than sitting on it. */
+  transform: translateY(0.35rem);
+}
+
+.radio-group__question {
+  font-weight: 500;
+}
+
+.radio-group__required {
+  color: var(--sys-text-error);
+}
+
+.radio-group__options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sys-spacing-2xs);
+  /* Indented to the width of the badge plus its gap, so the options read as belonging to the
+     numbered question rather than floating beside it. */
+  padding-left: calc(1.75rem + var(--sys-spacing-sm));
+}
+
+.radio-group__options--inline {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--sys-spacing-sm);
+}
+
+.radio-group__option {
+  /* Option text is a short sentence, so it has to be allowed to wrap rather than overflow. */
+  white-space: normal;
+}
+
+.radio-group__error {
+  margin: 0;
+  padding-left: calc(1.75rem + var(--sys-spacing-sm));
+  color: var(--sys-text-error);
+}

@@ -9,7 +9,7 @@ import xyz.capybara.clamav.ClamavClient;
 /**
  * ClamAV client config.
  *
- * @author European Dynamics SA
+ * @author omaro
  */
 @Slf4j
 @Configuration
