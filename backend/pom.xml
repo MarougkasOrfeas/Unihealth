@@ -31,9 +31,10 @@
         <shedlock.version>7.6.0</shedlock.version>
         <rome.version>2.1.0</rome.version>
         <jsoup.version>1.17.2</jsoup.version>
+        <crawler-commons.version>1.6</crawler-commons.version>
         <commons-io.version>2.21.0</commons-io.version>
         <commons-text.version>1.14.0</commons-text.version>
-        <ollama.version>2.0.0-M3</ollama.version>
+        <spring-ai.version>2.0.1</spring-ai.version>
         <tika.version>3.3.1</tika.version>
         <clamav-client.version>2.1.2</clamav-client.version>
         <s3.version>2.54.7</s3.version>
@@ -146,6 +147,19 @@
         </resources>
     </build>
 
+    <!-- Keep all Spring AI dependencies on compatible versions to avoid runtime errors. -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>${spring-ai.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -194,8 +208,31 @@
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-model-ollama</artifactId>
-            <version>${ollama.version}</version>
         </dependency>
+        <!-- SimpleVectorStore. The corpus is 565 chunks; exact brute-force cosine over that is
+             sub-millisecond, so no approximate index (and no pgvector extension) is warranted. -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-vector-store</artifactId>
+        </dependency>
+        <!-- @Tool / ToolCallbacks, so the assistant can call the application's own services. -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-autoconfigure-model-tool</artifactId>
+        </dependency>
+        <!-- Conversation memory is deliberately NOT on the classpath.
+
+             spring-ai-starter-model-chat-memory-repository-jdbc cannot work against this
+             application as it stands. Its autoconfiguration builds the repository by calling
+             JdbcChatMemoryRepositoryDialect.from(dataSource), which reads database metadata at
+             bean-creation time. That asks AbstractRoutingDataSource for a connection while no
+             tenant is bound, and startup dies with "No tenant set in the tenant context" - the
+             same reason pgvector was rejected earlier, arriving through a different door.
+
+             Wiring memory here means constructing JdbcChatMemoryRepository by hand with an
+             explicit PostgresChatMemoryRepositoryDialect, so no metadata probe happens, and only
+             ever touching it inside a request where a tenant is bound. The table itself already
+             exists - see changeset 00017 - so that is the only piece missing. -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
@@ -215,6 +252,14 @@
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
             <version>${jsoup.version}</version>
+        </dependency>
+        <!-- RFC 9309 robots.txt parsing, so the assistant honours what eody.gov.gr, ecdc.europa.eu
+             and who.int say a crawler may read. Same version the nhs-ingest module already uses;
+             that module's PoliteHttpFetcher is where this dependency's usage here came from. -->
+        <dependency>
+            <groupId>com.github.crawler-commons</groupId>
+            <artifactId>crawler-commons</artifactId>
+            <version>${crawler-commons.version}</version>
         </dependency>
         <!-- FilenameUtils, used to strip any directory part from an uploaded file name. Already
              present transitively via Tika, but declared because the code imports it directly and a

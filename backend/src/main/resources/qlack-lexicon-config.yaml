@@ -108,6 +108,45 @@ translations:
       - ai.chat.sending: Αποστολή...
       - ai.chat.error: Κάτι πήγε στραβά κατά την επικοινωνία με το UniHealth AI.
       - ai.chat.disclaimer: Οι απαντήσεις παράγονται αυτόματα και παρέχονται για ενημερωτικούς σκοπούς. Δεν αποτελούν διάγνωση ούτε αντικαθιστούν επαγγελματική ιατρική συμβουλή. Σε επείγον περιστατικό κάλεσε 112 ή 166.
+      # Shown instead of a generated answer when the crisis guard fires. Reviewed wording: the
+      # model never sees these messages and never paraphrases them.
+      - ai.safety.selfHarm: Λυπάμαι που περνάς κάτι τόσο δύσκολο, και χαίρομαι που το είπες. Δεν είμαι ο κατάλληλος για αυτό, αλλά υπάρχουν άνθρωποι που είναι, τώρα. Γραμμή παρέμβασης για την αυτοκτονία 1018 (24 ώρες). Σε άμεσο κίνδυνο κάλεσε 112 ή 166. Αν μπορείς, μίλα και σε κάποιον δίπλα σου απόψε. Η Συμβουλευτική Υπηρεσία του πανεπιστημίου είναι επίσης εκεί για σένα.
+      - ai.safety.emergency: Αυτό που περιγράφεις μπορεί να χρειάζεται άμεση ιατρική βοήθεια. Κάλεσε τώρα 166 (ΕΚΑΒ) ή 112, ή πήγαινε στα επείγοντα του πλησιέστερου νοσοκομείου. Μην περιμένεις να δεις αν θα περάσει και μην οδηγήσεις μόνος σου.
+      - ai.chat.sources: "Πηγές:"
+      # Shown when the corpus is still being embedded on a first boot. The model is not called at
+      # all in that window - it would queue behind every outstanding embedding and time out.
+      - ai.chat.libraryPreparing: Ετοιμάζω τη βιβλιοθήκη υγείας για πρώτη φορά, κάτι που κρατάει λίγα λεπτά. Δοκίμασε ξανά σε λίγο και θα μπορώ να απαντήσω με πηγές.
+      # Shown while the assistant works. A turn takes several seconds on this hardware, so the
+      # student is told what is happening rather than watching a spinner. First person and warm:
+      # these are the only messages that appear while somebody is waiting.
+      - ai.stage.thinking: Το σκέφτομαι...
+      - ai.stage.searchingLibrary: Ψάχνω στη βιβλιοθήκη υγείας...
+      - ai.stage.searchingOnline: Για να δω τι λένε και οι επίσημες πηγές...
+      - ai.stage.readingSources: Διαβάζω τις πιο πρόσφατες ανακοινώσεις...
+      - ai.stage.writing: Ετοιμάζω την απάντησή μου...
+      # Confirmation cards for changes the assistant proposes. It may only ever propose the three
+      # settings below; the wording lives here so the model never phrases a change it is making.
+      - ai.action.title: Επιβεβαίωση αλλαγής
+      - ai.action.notifications: Ειδοποιήσεις
+      - ai.action.newsletter: Ενημερωτικό δελτίο υγείας
+      - ai.action.analyticsConsent: Συλλογή στατιστικών χρήσης
+      - ai.action.on: "Ενεργό"
+      - ai.action.off: "Ανενεργό"
+      - ai.action.confirm: Επιβεβαίωση
+      - ai.action.cancel: Ακύρωση
+      - ai.action.irreversible: "Προσοχή: η απενεργοποίηση διαγράφει οριστικά όλα τα στατιστικά που έχουν ήδη συλλεχθεί."
+      - ai.action.applied: Η αλλαγή αποθηκεύτηκε.
+      - ai.action.cancelled: Δεν έγινε καμία αλλαγή.
+      - ai.action.expired: Η επιβεβαίωση έληξε ή έχει ήδη χρησιμοποιηθεί. Ζήτησε ξανά την αλλαγή.
+      - ai.action.stale: Οι ρυθμίσεις σου άλλαξαν στο μεταξύ, οπότε η αλλαγή δεν εφαρμόστηκε. Ζήτησέ την ξανά.
+      - ai.action.failed: Η αλλαγή δεν ήταν δυνατή. Δοκίμασε από τις Ρυθμίσεις του προφίλ σου.
+
+      # Chat history. Nothing here is sent to the model - these are chats the student rereads.
+      - ai.history.title: Οι συζητήσεις μου
+      - ai.history.new: Νέα συζήτηση
+      - ai.history.empty.title: Δεν έχεις ακόμη συζητήσεις
+      - ai.history.delete: Διαγραφή συζήτησης
+      - ai.history.toggle: Εμφάνιση των συζητήσεών μου
 
       # Init Base Health Form
       - health.profile.badge: UniHealth
@@ -313,6 +352,7 @@ translations:
       - global.entity.group: Σχολή
       - global.entity.department: Τμήμα
       - global.entity.examFile: αρχείο εξέτασης
+      - global.entity.conversation: συζήτηση
       - global.entity.survey: έρευνα
 
       # Messages
@@ -1063,6 +1103,45 @@ translations:
       - ai.chat.sending: Sending...
       - ai.chat.error: Something went wrong while contacting UniHealth AI.
       - ai.chat.disclaimer: Answers are generated automatically and provided for information only. They are not a diagnosis and do not replace professional medical advice. In an emergency call 112 or 166.
+      # Shown instead of a generated answer when the crisis guard fires. Reviewed wording: the
+      # model never sees these messages and never paraphrases them.
+      - ai.safety.selfHarm: I am sorry you are going through something this hard, and I am glad you said it. I am not the right help for this, but there are people who are, right now. Suicide intervention line 1018 (24 hours). If you are in immediate danger call 112 or 166. If you can, tell someone near you tonight. The university counselling service is there for you too.
+      - ai.safety.emergency: What you are describing may need urgent medical care. Call 166 (EKAB) or 112 now, or go to the nearest hospital emergency department. Do not wait to see if it passes, and do not drive yourself.
+      - ai.chat.sources: "Sources:"
+      # Shown when the corpus is still being embedded on a first boot. The model is not called at
+      # all in that window - it would queue behind every outstanding embedding and time out.
+      - ai.chat.libraryPreparing: I am preparing the health library for the first time, which takes a few minutes. Try again shortly and I will be able to answer with sources.
+      # Shown while the assistant works. A turn takes several seconds on this hardware, so the
+      # student is told what is happening rather than watching a spinner. First person and warm:
+      # these are the only messages that appear while somebody is waiting.
+      - ai.stage.thinking: Let me think about this...
+      - ai.stage.searchingLibrary: Looking through the health library...
+      - ai.stage.searchingOnline: Let me check what the official sources say...
+      - ai.stage.readingSources: Reading the most recent announcements...
+      - ai.stage.writing: Putting my answer together...
+      # Confirmation cards for changes the assistant proposes. It may only ever propose the three
+      # settings below; the wording lives here so the model never phrases a change it is making.
+      - ai.action.title: Confirm change
+      - ai.action.notifications: Notifications
+      - ai.action.newsletter: Health news digest
+      - ai.action.analyticsConsent: Usage statistics
+      - ai.action.on: "On"
+      - ai.action.off: "Off"
+      - ai.action.confirm: Confirm
+      - ai.action.cancel: Cancel
+      - ai.action.irreversible: "Note: turning this off permanently deletes all statistics already collected."
+      - ai.action.applied: The change has been saved.
+      - ai.action.cancelled: Nothing was changed.
+      - ai.action.expired: That confirmation expired or was already used. Ask for the change again.
+      - ai.action.stale: Your settings changed in the meantime, so nothing was applied. Please ask again.
+      - ai.action.failed: The change could not be made. Try your profile settings instead.
+
+      # Chat history. Nothing here is sent to the model - these are chats the student rereads.
+      - ai.history.title: My conversations
+      - ai.history.new: New conversation
+      - ai.history.empty.title: No conversations yet
+      - ai.history.delete: Delete conversation
+      - ai.history.toggle: Show my conversations
 
       # Init Base Health Form
       - health.profile.badge: UniHealth
@@ -1268,6 +1347,7 @@ translations:
       - global.entity.group: School
       - global.entity.department: Department
       - global.entity.examFile: medical test file
+      - global.entity.conversation: conversation
       - global.entity.survey: survey
 
       # Messages

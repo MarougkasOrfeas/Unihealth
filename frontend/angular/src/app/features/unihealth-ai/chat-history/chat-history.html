@@ -1,0 +1,60 @@
+<!-- `open` only has an effect below 900px, where the rail becomes an off-canvas drawer. -->
+<aside class="chat-history" [class.open]="open()"
+       [attr.aria-label]="'ai.history.title' | translate">
+
+    <div class="chat-history-header">
+        <h2>{{ 'ai.history.title' | translate }}</h2>
+
+        <!-- `app-button` projects its label and translates its own tooltip and aria-label, so
+             what goes in is a lexicon key, never a translated string. -->
+        <app-button
+            buttonStyle="outlined"
+            size="small"
+            icon="add"
+            testId="btn-new-conversation"
+            (clicked)="startNew.emit()"
+        >{{ 'ai.history.new' | translate }}</app-button>
+    </div>
+
+    @if (!loading() && !conversations().length) {
+        <!-- Only once the list has actually arrived. Rendering this while the request is still in
+             flight tells a returning student they have no history, then contradicts itself. -->
+        <app-empty-state
+            testId="empty-state-conversations"
+            titleKey="ai.history.empty.title"
+        />
+    }
+
+    <ul class="chat-history-list">
+        @for (conversation of conversations(); track conversation.id) {
+            <li class="chat-history-item"
+                [class.selected]="conversation.id === selectedId()">
+
+                <!-- The row and the delete control are siblings, not nested. A button inside a
+                     button is invalid markup and, in practice, one click that fires both. -->
+                <button
+                    type="button"
+                    class="chat-history-open"
+                    [attr.aria-current]="conversation.id === selectedId() ? 'true' : null"
+                    (click)="selected.emit(conversation.id)"
+                >
+                    <span class="chat-history-title">{{ conversation.title }}</span>
+                    <span class="chat-history-date">
+                        {{ conversation.lastMessageOn | date: 'dd/MM/yyyy HH:mm' }}
+                    </span>
+                </button>
+
+                <app-button
+                    icon="delete"
+                    size="compact"
+                    variant="danger"
+                    buttonStyle="text"
+                    ariaLabel="ai.history.delete"
+                    tooltip="ai.history.delete"
+                    [isIconButton]="true"
+                    (clicked)="removed.emit(conversation)"
+                />
+            </li>
+        }
+    </ul>
+</aside>

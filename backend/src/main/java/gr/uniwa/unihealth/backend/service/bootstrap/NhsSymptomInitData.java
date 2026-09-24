@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
@@ -43,6 +44,11 @@ import java.util.Set;
  */
 @Slf4j
 @Component
+// Ordered only so that AiCorpusInitData, which embeds these rows, is guaranteed to run afterwards.
+// Without an explicit order every ApplicationRunner sits at LOWEST_PRECEDENCE and the relative
+// order is undefined, which would let the corpus be embedded from an empty table on a first boot -
+// and the result would look like a working application with an assistant that cites nothing.
+@Order(10)
 @RequiredArgsConstructor
 public class NhsSymptomInitData implements ApplicationRunner {
 

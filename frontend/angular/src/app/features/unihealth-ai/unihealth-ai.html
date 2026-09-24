@@ -1,15 +1,49 @@
 <div class="chat-page">
+    <!-- A rail of past chats. Nothing in it is ever sent to the model: these are conversations the
+         student rereads, not memory the assistant is given. -->
+    <app-chat-history
+        [conversations]="conversations()"
+        [selectedId]="conversationId()"
+        [loading]="historyLoading()"
+        [open]="historyOpen()"
+        (selected)="selectConversation($event)"
+        (startNew)="startNewChat()"
+        (removed)="deleteConversation($event)"
+    />
+
+    <!-- Only visible below 900px, where the rail is off-canvas. Dismisses it on a tap outside. -->
+    @if (historyOpen()) {
+        <button
+            type="button"
+            class="chat-history-scrim"
+            tabindex="-1"
+            [attr.aria-label]="'global.close' | translate"
+            (click)="historyOpen.set(false)"
+        ></button>
+    }
+
     <div class="chat-card">
         <div class="chat-header">
+            <!-- Only below 900px: above it the rail is already on screen and this would be noise. -->
+            <button
+                type="button"
+                class="chat-history-toggle"
+                [attr.aria-expanded]="historyOpen()"
+                [attr.aria-label]="'ai.history.toggle' | translate"
+                (click)="historyOpen.set(!historyOpen())"
+            >&#9776;</button>
+
             <!-- The product name, deliberately not a lexicon key: it reads the same in both locales. -->
             <h1>UniHealth AI</h1>
             <p>{{ 'ai.chat.subtitle' | translate }}</p>
         </div>
 
-        <div class="chat-messages">
+        <!-- The template reference is what `scrollToLatest()` pins: this box has no scroll
+             handling of its own, so a reopened conversation would otherwise start at the top. -->
+        <div class="chat-messages" #messagesPanel>
             @for (msg of messages(); track $index) {
                 <div class="chat-message" [class]="msg.role">
-                    <div class="chat-bubble">
+                    <div class="chat-bubble" [class.safety]="msg.safety">
                         <div class="chat-role">
                             {{ (msg.role === 'user' ? 'ai.chat.role.you' : 'ai.chat.role.assistant')
                                 | translate }}
@@ -17,6 +51,111 @@
 
                         <div class="chat-content">
                             {{ msg.contentKey ? (msg.contentKey | translate) : msg.content }}
+                        </div>
+
+                        <!-- Sources come from the server, never from the model's prose, so a link
+                             here always resolves. Shown as chips rather than inline footnotes so
+                             the answer stays readable at phone width. -->
+                        @if (msg.citations?.length) {
+                            <div class="chat-citations">
+                                <span class="chat-citations-label">
+                                    {{ 'ai.chat.sources' | translate }}
+                                </span>
+
+                                <!-- A live page and a licensed corpus passage are not the same kind
+                                     of claim, so they must not look alike. The `live` class and the
+                                     publication date are what keep that visible. -->
+                                @for (citation of msg.citations; track $index) {
+                                    @if (citation.sourceUrl) {
+                                        <a
+                                            class="chat-citation"
+                                            [class.urgent]="citation.urgent"
+                                            [class.live]="citation.sourceType === 'LIVE_WEB'"
+                                            [href]="citation.sourceUrl"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >{{ citation.sourceType === 'LIVE_WEB'
+                                                ? citation.sourceName + ' · ' + citation.title
+                                                    + ' (' + citation.publishedAt + ')'
+                                                : citation.title + ' — ' + citation.sectionLabel }}</a>
+                                    } @else {
+                                        <span
+                                            class="chat-citation"
+                                            [class.urgent]="citation.urgent"
+                                            [class.live]="citation.sourceType === 'LIVE_WEB'"
+                                        >{{ citation.title }}</span>
+                                    }
+                                }
+                            </div>
+                        }
+
+                        <!-- The card, not the reply text, is what the student should act on: a
+                             small model will sometimes announce a change it has only proposed.
+                             Nothing has been written at this point. -->
+                        @if (msg.pendingAction; as action) {
+                            <div class="chat-action">
+                                <div class="chat-action-title">
+                                    {{ 'ai.action.title' | translate }}
+                                </div>
+
+                                @for (change of action.changes; track $index) {
+                                    <div class="chat-action-change">
+                                        <span class="chat-action-field">
+                                            {{ change.labelKey | translate }}
+                                        </span>
+                                        <span class="chat-action-from">
+                                            {{ (change.from ? 'ai.action.on' : 'ai.action.off')
+                                                | translate }}
+                                        </span>
+                                        <span aria-hidden="true">→</span>
+                                        <span class="chat-action-to">
+                                            {{ (change.to ? 'ai.action.on' : 'ai.action.off')
+                                                | translate }}
+                                        </span>
+                                    </div>
+                                }
+
+                                @if (action.irreversible) {
+                                    <p class="chat-action-warning">
+                                        {{ 'ai.action.irreversible' | translate }}
+                                    </p>
+                                }
+
+                                <div class="chat-action-buttons">
+                                    <button
+                                        type="button"
+                                        class="confirm"
+                                        [disabled]="confirming()"
+                                        (click)="resolveAction(true)"
+                                    >{{ 'ai.action.confirm' | translate }}</button>
+
+                                    <button
+                                        type="button"
+                                        class="cancel"
+                                        [disabled]="confirming()"
+                                        (click)="resolveAction(false)"
+                                    >{{ 'ai.action.cancel' | translate }}</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            <!-- Sits where the answer will appear, so the conversation does not jump when it
+                 arrives. The text is whatever the server last said it was doing — reported as it
+                 happens, not animated on a timer, so it is safe to believe. -->
+            @if (stageKey(); as key) {
+                <div class="chat-message assistant">
+                    <div class="chat-bubble stage" aria-live="polite">
+                        <div class="chat-role">
+                            {{ 'ai.chat.role.assistant' | translate }}
+                        </div>
+
+                        <div class="chat-stage">
+                            <span class="chat-stage-dots" aria-hidden="true">
+                                <span></span><span></span><span></span>
+                            </span>
+                            {{ key | translate }}
                         </div>
                     </div>
                 </div>
@@ -34,7 +173,7 @@
                 (ngModelChange)="message.set($event)"
                 rows="4"
                 [placeholder]="'ai.chat.placeholder' | translate"
-                [disabled]="loading()"
+                [disabled]="loading() || !!pendingAction()"
             ></textarea>
 
             <button type="submit" [disabled]="!canSend()">

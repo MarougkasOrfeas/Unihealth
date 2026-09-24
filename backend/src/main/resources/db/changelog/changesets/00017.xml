@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd">
+
+    <!-- Stores Spring AI chat memory for conversation context. The JDBC chat-memory starter is not used
+    because its autoconfiguration is incompatible with the application's tenant-routing datasource. -->
+    <changeSet id="unihealth_00017" author="uniwa">
+        <!-- Stores user conversations and messages. Replaces Spring AI's chat-memory table,
+         which does not support user-owned conversations and is incompatible with the application's routing datasource. -->
+        <createTable tableName="t_ai_conversation">
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="created_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="user_id" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- Conversation title derived from the first question. -->
+            <column name="title" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+            <!-- Used to sort conversations by most recent activity. -->
+            <column name="last_message_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="t_ai_conversation"
+                baseColumnNames="user_id"
+                constraintName="fk_ai_conversation_user"
+                referencedTableName="t_user"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+
+        <!-- Supports fetching a user's conversations, newest first. -->
+        <createIndex tableName="t_ai_conversation"
+                     indexName="idx_ai_conversation_user_id_last_message_on">
+            <column name="user_id"/>
+            <column name="last_message_on"/>
+        </createIndex>
+
+        <!-- Messages are immutable, so modification and version fields are unnecessary. -->
+        <createTable tableName="t_ai_message">
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="created_by" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="conversation_id" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="varchar(16)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="content" type="text">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- Stores citations so sources remain available when reopening a chat. -->
+            <column name="citations" type="text"/>
+
+            <column name="grounded" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+
+            <!-- Ensures messages are always displayed in the correct order. -->
+            <column name="sequence_no" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="t_ai_message"
+                baseColumnNames="conversation_id"
+                constraintName="fk_ai_message_conversation"
+                referencedTableName="t_ai_conversation"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+
+        <createIndex tableName="t_ai_message"
+                     indexName="idx_ai_message_conversation_id_sequence_no">
+            <column name="conversation_id"/>
+            <column name="sequence_no"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

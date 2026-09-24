@@ -33,6 +33,7 @@ export const UNIHEALTH_CONSTANTS = {
         GROUP: 'global.entity.group',
         DEPARTMENT: 'global.entity.department',
         EXAM_FILE: 'global.entity.examFile',
+        CONVERSATION: 'global.entity.conversation',
         SURVEY: 'global.entity.survey',
     },
 

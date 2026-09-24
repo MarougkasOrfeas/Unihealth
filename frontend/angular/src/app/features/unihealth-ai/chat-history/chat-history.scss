@@ -1,0 +1,124 @@
+/* Design tokens rather than the raw hex the rest of this feature uses. The chat page predates
+   the token convention; matching it would spread the older style further, and rewriting its 327
+   lines is not what this change is for. New surface, current convention. */
+
+/* Without this the host element, not the <aside>, is the flex item in .chat-page - and the fixed
+   positioning in the media query below would then be resolved against the wrong box. */
+:host {
+  display: contents;
+}
+
+.chat-history {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sys-spacing-sm);
+  flex: 0 0 var(--sys-layout-sidebar-width);
+  width: var(--sys-layout-sidebar-width);
+  padding: var(--sys-spacing-sm);
+  background: var(--sys-surface-container-lowest);
+  border-radius: var(--sys-radius-lg);
+  box-shadow: var(--sys-elevation-1);
+  /* Comfortably taller than the 500px .chat-messages box next to it, so the rail is the thing
+     that scrolls when a student has fifty conversations - not the page. */
+  max-height: 700px;
+  overflow-y: auto;
+}
+
+.chat-history-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sys-spacing-xs);
+}
+
+.chat-history-header h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--sys-on-surface);
+}
+
+.chat-history-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sys-spacing-2xs);
+}
+
+.chat-history-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sys-spacing-2xs);
+  border-radius: var(--sys-radius-md);
+}
+
+.chat-history-item:hover {
+  background: var(--sys-surface-hover);
+}
+
+.chat-history-item.selected {
+  background: var(--sys-surface-selected);
+}
+
+.chat-history-open {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--sys-spacing-xs);
+  border: 0;
+  background: none;
+  border-radius: var(--sys-radius-md);
+  text-align: start;
+  cursor: pointer;
+  font: inherit;
+  color: var(--sys-on-surface);
+}
+
+.chat-history-open:focus-visible {
+  outline: 2px solid var(--sys-focus-outline);
+  outline-offset: -2px;
+}
+
+/* One line, clipped. The server already trims the title to 60 characters; this handles the width
+   a 60-character Greek title still overruns. `min-width: 0` above is what lets it shrink at all. */
+.chat-history-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.875rem;
+}
+
+.chat-history-date {
+  font-size: 0.75rem;
+  color: var(--sys-on-surface-variant);
+}
+
+/* Off-canvas below 900px rather than a nested mat-sidenav-container. The shell already renders
+   one and the router outlet lives inside its content; nesting works but collapses without an
+   explicit height, and this page sets none. The page toggles `.open`. */
+@media (max-width: 900px) {
+  .chat-history {
+    position: fixed;
+    inset-block: 0;
+    inset-inline-start: 0;
+    z-index: 10;
+    max-height: none;
+    border-radius: 0;
+    box-shadow: var(--sys-elevation-4);
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+  }
+
+  .chat-history.open {
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-history {
+    transition: none;
+  }
+}

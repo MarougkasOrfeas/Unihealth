@@ -9,6 +9,30 @@ server {
     add_header Content-Security-Policy "default-src 'self'; script-src 'self'; script-src-attr 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self' data: https:; base-uri 'self'; frame-ancestors 'none'; object-src 'none';" always;
   }
 
+  # The assistant streams its progress as newline-delimited JSON so a student on modest hardware can
+  # see what it is doing during a ten-second turn. Two defaults would silently defeat that, and a
+  # longer prefix wins in nginx, so this block must stay above /api.
+  location /api/ai/chat/stream {
+    client_max_body_size ${CLIENT_MAX_BODY_SIZE};
+    proxy_pass           http://${BACKEND_HOST}:${BACKEND_PORT};
+    proxy_set_header     X-Forwarded-Host $host:$server_port;
+    proxy_set_header     X-Forwarded-Server $host;
+    proxy_set_header     X-Real-IP $remote_addr;
+    proxy_set_header     X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header     X-Forwarded-Proto $scheme;
+
+    # Without this nginx holds the whole response until the backend finishes, so every stage line
+    # arrives at once, at the end - which is exactly the silent wait the feature exists to remove.
+    proxy_buffering      off;
+    proxy_cache          off;
+
+    # A local 8B model plus a live source lookup can exceed the 60s default, and the failure looks
+    # like a truncated answer rather than a timeout.
+    proxy_read_timeout   300s;
+
+    chunked_transfer_encoding on;
+  }
+
   location /api {
     client_max_body_size ${CLIENT_MAX_BODY_SIZE};
     proxy_pass           http://${BACKEND_HOST}:${BACKEND_PORT};

@@ -10,3 +10,6 @@ node_modules
 /data/**/target/
 /data/**/generated-output/
 /backend/tools
+/backend/logs
+/frontend/angular/dist
+/backend/data

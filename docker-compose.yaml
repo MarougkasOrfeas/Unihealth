@@ -141,6 +141,10 @@ services:
     hostname: unihealth-ollama
     ports:
       - '11434:11434'
+    environment:
+      # Two models now share the GPU. The default 5m unload means the second question of a session
+      # pays a full cold load again, which on this hardware dwarfs the generation itself.
+      - OLLAMA_KEEP_ALIVE=30m
     volumes:
       - unihealth-ollama:/root/.ollama
     networks:
@@ -208,8 +212,14 @@ configs:
         sleep 2
       done
 
-      echo "Pulling model llama3.1:8b..."
+      echo "Pulling chat model llama3.1:8b..."
       ollama pull llama3.1:8b
+
+      # Retrieval is cross-lingual by requirement: students write Greek, the NHS corpus is English.
+      # bge-m3 is the embedding model in that pair that actually covers Greek - nomic-embed-text is
+      # English-only, and granite-embedding advertises "multilingual" without listing Greek.
+      echo "Pulling embedding model bge-m3..."
+      ollama pull bge-m3
 
       echo "Installed models:"
       ollama list
